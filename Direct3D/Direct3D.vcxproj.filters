@@ -63,6 +63,14 @@
     <ClInclude Include="Utilities\GeometryGenerator.h">
       <Filter>Utilities</Filter>
     </ClInclude>
+    <ClInclude Include="Renders\Gizmo.h">
+      <Filter>Renders</Filter>
+    </ClInclude>
+    <ClInclude Include="Renders\WorldBuffer.h">
+      <Filter>Renders</Filter>
+    </ClInclude>
+    <ClInclude Include="DefineHeader.h" />
+    <ClInclude Include="ModuleHeader.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Renders">
@@ -137,6 +145,9 @@
     </ClCompile>
     <ClCompile Include="Utilities\GeometryGenerator.cpp">
       <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Renders\Gizmo.cpp">
+      <Filter>Renders</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
