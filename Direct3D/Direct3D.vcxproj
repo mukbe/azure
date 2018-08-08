@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -19,13 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
     <ClInclude Include="Utilities\GeometryGenerator.h" />
     <ClInclude Include="View\FreeCamera.h" />
     <ClInclude Include="View\Perspective.h" />
     <ClInclude Include="View\CameraBase.h" />
-=======
->>>>>>> 5924bae00d55eb6d9c4477df600b5f579a23ca79
     <ClInclude Include="Interfaces\ICloneable.h" />
     <ClInclude Include="Program.h" />
     <ClInclude Include="Renders\RenderTargetBuffer.h" />
@@ -46,13 +43,10 @@
     <ClInclude Include="Utilities\String.h" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
     <ClCompile Include="Utilities\GeometryGenerator.cpp" />
     <ClCompile Include="View\FreeCamera.cpp" />
     <ClCompile Include="View\Perspective.cpp" />
     <ClCompile Include="View\CameraBase.cpp" />
-=======
->>>>>>> 5924bae00d55eb6d9c4477df600b5f579a23ca79
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Renders\RenderTargetBuffer.cpp" />
