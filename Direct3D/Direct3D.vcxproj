@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Utilities\GeometryGenerator.h" />
     <ClInclude Include="View\FreeCamera.h" />
     <ClInclude Include="View\Perspective.h" />
     <ClInclude Include="View\CameraBase.h" />
@@ -44,6 +45,7 @@
     <ClInclude Include="Renders\WorldBuffer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Utilities\GeometryGenerator.cpp" />
     <ClCompile Include="View\FreeCamera.cpp" />
     <ClCompile Include="View\Perspective.cpp" />
     <ClCompile Include="View\CameraBase.cpp" />
