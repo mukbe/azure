@@ -25,8 +25,6 @@ private:
 	void CreateVertex();
 	void CreateIndex();
 public:
-	Gizmo();
-	~Gizmo();
 
 	void Line(const D3DXVECTOR3 startPos, const D3DXVECTOR3 endPos, const D3DXCOLOR color);
 	void Circle(D3DXVECTOR3 center, float radius, D3DXVECTOR3 axis, D3DXCOLOR color);

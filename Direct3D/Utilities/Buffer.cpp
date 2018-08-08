@@ -176,7 +176,7 @@ void Buffer::CreateTextureArray(ID3D11ShaderResourceView** pOut, vector<wstring>
 				D3D11CalcSubresource(mipLevel, texElement, texElementDesc.MipLevels),
 				0, mappedTex2D.pData, mappedTex2D.RowPitch, mappedTex2D.DepthPitch);
 
-			_Context->Unmap(srcTex[texElement], mipLevel);
+			D3D::GetDC()->Unmap(srcTex[texElement], mipLevel);
 		}
 	}
 
