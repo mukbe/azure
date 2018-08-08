@@ -161,13 +161,13 @@ void States::Create()
 void States::Delete()
 {
 	for (int i = 0; i < RasterizerStates::RASTERIZER_END; ++i)
-		SAFE_RELEASE(rasterizerStates[i]);
+		SafeRelease(rasterizerStates[i]);
 	for (int i = 0; i < DepthStencilStates::DEPTHSTENCIL_END; ++i)
-		SAFE_RELEASE(depthStencilStates[i]);
+		SafeRelease(depthStencilStates[i]);
 	for (int i = 0; i < SamplerStates::SAMPLER_END; ++i)
-		SAFE_RELEASE(samplerStates[i]);
+		SafeRelease(samplerStates[i]);
 	for (int i = 0; i < BlendStates::BLEND_END; ++i)
-		SAFE_RELEASE(blendStates[i]);
+		SafeRelease(blendStates[i]);
 }
 
 void States::GetRasterizerDesc(D3D11_RASTERIZER_DESC* desc)

@@ -19,7 +19,7 @@ void Keyboard::Create()
 
 void Keyboard::Delete()
 {
-	SAFE_DELETE(instance);
+	SafeDelete(instance);
 }
 
 void Keyboard::Update()

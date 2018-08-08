@@ -48,9 +48,6 @@
     <ClInclude Include="Renders\RenderTargetBuffer.h">
       <Filter>Renders</Filter>
     </ClInclude>
-    <ClInclude Include="Renders\Shader.h">
-      <Filter>Renders</Filter>
-    </ClInclude>
     <ClInclude Include="View\CameraBase.h">
       <Filter>View</Filter>
     </ClInclude>
@@ -76,6 +73,9 @@
     </ClInclude>
     <ClInclude Include="Utilities\Transform.h">
       <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Renders\Shader.h">
+      <Filter>Renders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -137,9 +137,6 @@
     <ClCompile Include="Renders\RenderTargetBuffer.cpp">
       <Filter>Renders</Filter>
     </ClCompile>
-    <ClCompile Include="Renders\Shader.cpp">
-      <Filter>Renders</Filter>
-    </ClCompile>
     <ClCompile Include="View\CameraBase.cpp">
       <Filter>View</Filter>
     </ClCompile>
@@ -160,6 +157,9 @@
     </ClCompile>
     <ClCompile Include="Utilities\Transform.cpp">
       <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Renders\Shader.cpp">
+      <Filter>Renders</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

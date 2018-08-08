@@ -11,6 +11,10 @@ CameraBase::CameraBase()
 	D3D::GetDesc(&desc);
 
 	this->perspective = new Perspective((float)desc.Width, (float)desc.Height);
+
+	this->transform = new Transform;
+	this->transform->SetWorldPosition(0, 0, -20);
+
 	D3DXMatrixLookAtLH(&matView, &transform->GetWorldPosition(), &(transform->GetWorldPosition() + transform->GetForward()), &D3DXVECTOR3(0.f, 1.f, 0.f));
 
 	this->viewProjectionBuffer =new ViewProjectionBuffer;
@@ -18,13 +22,12 @@ CameraBase::CameraBase()
 	this->viewProjectionBuffer->SetProjection(perspective->GetMatrix());
 	this->viewProjectionBuffer->SetVP(matViewProj);
 
-	this->transform = new Transform;
 }
 
 CameraBase::~CameraBase()
 {
-	SAFE_DELETE(perspective);
-	SAFE_DELETE(transform);
+	SafeDelete(perspective);
+	SafeDelete(transform);
 }
 
 

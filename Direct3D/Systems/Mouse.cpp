@@ -17,7 +17,7 @@ void Mouse::Create()
 
 void Mouse::Delete()
 {
-	SAFE_DELETE(instance);
+	SafeDelete(instance);
 }
 
 void Mouse::SetMousePos(int x, int y)

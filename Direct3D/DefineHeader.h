@@ -3,9 +3,9 @@
 #define WinSizeX 1280
 #define WinSizeY 720
 
-#define SAFE_RELEASE(p){ if(p){ (p)->Release(); (p) = NULL; } }
-#define SAFE_DELETE(p){ if(p){ delete (p); (p) = NULL; } }
-#define SAFE_DELETE_ARRAY(p){ if(p){ delete [] (p); (p) = NULL; } }
+#define SafeRelease(p){ if(p){ (p)->Release(); (p) = NULL; } }
+#define SafeDelete(p){ if(p){ delete (p); (p) = NULL; } }
+#define SafeDeleteArray(p){ if(p){ delete [] (p); (p) = NULL; } }
 
 #define ONE_RAD 0.01745328f
 #define IdentityMatrix {D3DXMATRIX(1.f,0.f,0.f,0.f,0.f,1.f,0.f,0.f,0.f,0.f,1.f,0.f,0.f,0.f,0.f,1.f)}

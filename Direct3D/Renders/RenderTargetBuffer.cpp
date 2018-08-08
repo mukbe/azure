@@ -9,9 +9,9 @@ RenderTargetBuffer::RenderTargetBuffer(int width, int height, DXGI_FORMAT format
 
 RenderTargetBuffer::~RenderTargetBuffer()
 {
-	SAFE_RELEASE(renderTargetTexture);
-	SAFE_RELEASE(rtv);
-	SAFE_RELEASE(srv);
+	SafeRelease(renderTargetTexture);
+	SafeRelease(rtv);
+	SafeRelease(srv);
 }
 
 void RenderTargetBuffer::Create()

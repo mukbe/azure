@@ -35,7 +35,7 @@ void Gizmo::CreateVertex()
 	hr = D3D::GetDevice()->CreateBuffer(&desc, &data, &circleVertexBuffer);
 	assert(SUCCEEDED(hr));
 
-	SAFE_DELETE_ARRAY(vertex);
+	SafeDeleteArray(vertex);
 }
 
 void Gizmo::CreateIndex()
@@ -71,8 +71,8 @@ void Gizmo::CreateIndex()
 	(&desc, &data, &circleIndexBuffer);
 	assert(SUCCEEDED(hr));
 
-	SAFE_DELETE_ARRAY(index);
-	SAFE_DELETE_ARRAY(circleIndex);
+	SafeDeleteArray(index);
+	SafeDeleteArray(circleIndex);
 }
 
 Gizmo::Gizmo()
@@ -89,18 +89,18 @@ Gizmo::Gizmo()
 	}
 
 	worldBuffer = new WorldBuffer;
-	shader = new Shader(L"001_Color.hlsl");
+	shader = new Shader(Shaders + L"001_Color.hlsl", Shader::ShaderType::Default);
 }
 
 
 Gizmo::~Gizmo()
 {
-	SAFE_RELEASE(vertexBuffer);
-	SAFE_RELEASE(indexBuffer);
-	SAFE_DELETE(shader);
-	SAFE_DELETE(worldBuffer);
+	SafeRelease(vertexBuffer);
+	SafeRelease(indexBuffer);
+	SafeDelete(shader);
+	SafeDelete(worldBuffer);
 
-	SAFE_DELETE_ARRAY(circleVertices);
+	SafeDeleteArray(circleVertices);
 }
 
 void Gizmo::Line(const D3DXVECTOR3 startPos, const D3DXVECTOR3 endPos, const D3DXCOLOR color)

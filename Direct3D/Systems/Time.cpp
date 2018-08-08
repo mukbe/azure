@@ -50,7 +50,7 @@ void Time::Create()
 
 void Time::Delete()
 {
-	SAFE_DELETE(instance);
+	SafeDelete(instance);
 }
 
 void Time::Update()

@@ -24,7 +24,7 @@ void D3D::Create()
 
 void D3D::Delete()
 {
-	SAFE_DELETE(instance);
+	SafeDelete(instance);
 }
 
 void D3D::SetRenderTarget(ID3D11RenderTargetView * rtv, ID3D11DepthStencilView * dsv)
@@ -84,9 +84,9 @@ D3D::~D3D()
 	if (swapChain != NULL)
 		swapChain->SetFullscreenState(false, NULL);
 
-	SAFE_RELEASE(deviceContext);
-	SAFE_RELEASE(device);
-	SAFE_RELEASE(swapChain);
+	SafeRelease(deviceContext);
+	SafeRelease(device);
+	SafeRelease(swapChain);
 }
 
 void D3D::SetGpuInfo()
@@ -145,12 +145,12 @@ void D3D::SetGpuInfo()
 	gpuMemorySize = adapterDesc.DedicatedVideoMemory / 1024 / 1024;
 	gpuDescription = adapterDesc.Description;
 	
-	SAFE_DELETE_ARRAY(displayModeList);
+	SafeDeleteArray(displayModeList);
 
 	
-	SAFE_RELEASE(adapterOutput);
-	SAFE_RELEASE(adapter);
-	SAFE_RELEASE(factory);
+	SafeRelease(adapterOutput);
+	SafeRelease(adapter);
+	SafeRelease(factory);
 }
 
 void D3D::CreateSwapChainAndDevice()
@@ -247,7 +247,7 @@ void D3D::CreateBackBuffer(float width, float height)
 		hr = D3D::GetDevice()->CreateRenderTargetView(backbufferPointer, NULL, &renderTargetView);
 		assert(SUCCEEDED(hr));
 
-		SAFE_RELEASE(backbufferPointer);
+		SafeRelease(backbufferPointer);
 	}
 	
 	{
@@ -266,7 +266,7 @@ void D3D::CreateBackBuffer(float width, float height)
 
 void D3D::DeleteBackBuffer()
 {
-	SAFE_RELEASE(depthStencilView);
-	SAFE_RELEASE(renderTargetView);
-	SAFE_RELEASE(backBuffer);
+	SafeRelease(depthStencilView);
+	SafeRelease(renderTargetView);
+	SafeRelease(backBuffer);
 }

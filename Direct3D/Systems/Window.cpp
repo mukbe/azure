@@ -44,7 +44,7 @@ WPARAM Window::Run()
 			}
 
 			program->Update();
-			ImGui::Update();
+			//ImGui::Update();
 
 
 			program->PreRender();
@@ -52,12 +52,12 @@ WPARAM Window::Run()
 			{
 				program->Render();
 				program->PostRender();
-				ImGui::Render();
+				//ImGui::Render();
 			}
 			D3D::Get()->Present();
 		}
 	}
-	SAFE_DELETE(program);
+	SafeDelete(program);
 
 	ImGui::Delete();
 	Time::Delete();

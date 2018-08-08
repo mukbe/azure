@@ -14,5 +14,5 @@ public:
 
 	void ResizeScreen();
 private:
-
+	class FreeCamera* freeCamera;
 };

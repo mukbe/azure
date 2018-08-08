@@ -23,6 +23,7 @@
     <ClInclude Include="ModuleHeader.h" />
     <ClInclude Include="Renders\Gizmo.h" />
     <ClInclude Include="Renders\WorldBuffer.h" />
+    <ClInclude Include="Renders\Shader.h" />
     <ClInclude Include="Utilities\Buffer.h" />
     <ClInclude Include="Utilities\GeometryGenerator.h" />
     <ClInclude Include="Utilities\Transform.h" />
@@ -35,7 +36,6 @@
     <ClInclude Include="Renders\ShaderBuffer.h" />
     <ClInclude Include="Renders\States.h" />
     <ClInclude Include="Renders\VertexLayouts.h" />
-    <ClInclude Include="Renders\Shader.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Systems\D3D.h" />
     <ClInclude Include="Systems\Keyboard.h" />
@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Renders\Gizmo.cpp" />
+    <ClCompile Include="Renders\Shader.cpp" />
     <ClCompile Include="Utilities\Buffer.cpp" />
     <ClCompile Include="Utilities\GeometryGenerator.cpp" />
     <ClCompile Include="Utilities\Transform.cpp" />
@@ -60,7 +61,6 @@
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Renders\RenderTargetBuffer.cpp" />
     <ClCompile Include="Renders\States.cpp" />
-    <ClCompile Include="Renders\Shader.cpp" />
     <ClCompile Include="Systems\D3D.cpp" />
     <ClCompile Include="Systems\Keyboard.cpp" />
     <ClCompile Include="Systems\Mouse.cpp" />

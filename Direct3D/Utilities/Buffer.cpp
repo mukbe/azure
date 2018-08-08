@@ -195,8 +195,8 @@ void Buffer::CreateTextureArray(ID3D11ShaderResourceView** pOut, vector<wstring>
 	hr = D3D::GetDevice()->CreateShaderResourceView(texArray, &viewDesc, pOut);
 	assert(SUCCEEDED(hr));
 
-	SAFE_DELETE(texArray);
+	SafeDelete(texArray);
 
 	for (UINT i = 0; i < size; ++i)
-		SAFE_DELETE_ARRAY(srcTex[i]);
+		SafeDeleteArray(srcTex[i]);
 }

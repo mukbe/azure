@@ -56,7 +56,7 @@ protected:
 
 	virtual ~ShaderBuffer()
 	{
-		SAFE_RELEASE(buffer);
+		SafeRelease(buffer);
 	}
 
 private:
