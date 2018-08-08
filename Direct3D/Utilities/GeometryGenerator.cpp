@@ -401,7 +401,8 @@ void GeometryGenerator::CreateGeosphere(float radius, UINT numSubdivisions, Mesh
 		mesh.Vertices[i].Normal = n;
 
 		////	구면 좌표로부터 텍스처 좌표를 구한다
-		//float theta = Math::AngleFromXY(
+		float theta = 0.f;
+		//Math::AngleFromXY(
 		//	mesh.Vertices[i].Position.x,
 		//	mesh.Vertices[i].Position.z);
 
