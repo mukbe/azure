@@ -51,6 +51,18 @@
     <ClInclude Include="Renders\Shader.h">
       <Filter>Renders</Filter>
     </ClInclude>
+    <ClInclude Include="View\CameraBase.h">
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="View\FreeCamera.h">
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="View\Perspective.h">
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\GeometryGenerator.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Renders">
@@ -67,6 +79,9 @@
     </Filter>
     <Filter Include="Renders\Shader">
       <UniqueIdentifier>{2180f539-7f8e-4636-b218-732bd08af41d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View">
+      <UniqueIdentifier>{6fbb8885-db9e-4f5f-b620-4e5ffc53c09c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -110,6 +125,18 @@
     </ClCompile>
     <ClCompile Include="Renders\Shader.cpp">
       <Filter>Renders</Filter>
+    </ClCompile>
+    <ClCompile Include="View\CameraBase.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="View\FreeCamera.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="View\Perspective.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\GeometryGenerator.cpp">
+      <Filter>Utilities</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
