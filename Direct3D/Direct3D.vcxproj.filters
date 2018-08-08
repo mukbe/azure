@@ -65,6 +65,9 @@
     <Filter Include="Interfaces">
       <UniqueIdentifier>{16ceaf6b-dbfb-4761-9902-ff63fdd517f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Renders\Shader">
+      <UniqueIdentifier>{2180f539-7f8e-4636-b218-732bd08af41d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Renders\States.cpp">

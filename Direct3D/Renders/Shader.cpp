@@ -3,7 +3,7 @@
 
 
 
-Shader::Shader()
+Shader::Shader(wstring shaderFile)
 {
 }
 
