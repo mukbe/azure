@@ -20,6 +20,18 @@ void Mouse::Delete()
 	SAFE_DELETE(instance);
 }
 
+void Mouse::SetMousePos(int x, int y)
+{
+	D3DDesc desc;
+	D3D::GetDesc(&desc);
+
+	POINT setMousePos;
+	setMousePos.x = (LONG)x;
+	setMousePos.y = (LONG)y;
+	ClientToScreen(desc.Handle, &setMousePos);
+	SetCursorPos(setMousePos.x, setMousePos.y);
+}
+
 Mouse::Mouse()
 {
 	position = D3DXVECTOR3(0, 0, 0);

@@ -45,9 +45,11 @@ using namespace fbxsdk;
 #pragma comment(lib, "jsoncpp.lib")
 //#pragma warning(disable:4996)
 
-#define SAFE_RELEASE(p){ if(p){ (p)->Release(); (p) = NULL; } }
-#define SAFE_DELETE(p){ if(p){ delete (p); (p) = NULL; } }
-#define SAFE_DELETE_ARRAY(p){ if(p){ delete [] (p); (p) = NULL; } }
+
+#include "./Systems/D3D.h"
+#include "DefineHeader.h"
+#include "ModuleHeader.h"
+
 
 const wstring Assets = L"../_Assets/";
 const wstring Contents = L"../_Contents/";
@@ -55,21 +57,6 @@ const wstring Textures = L"../_Contents/Textures/";
 const wstring BinModels = L"../_Contents/BinModels/";
 const wstring FbxModels = L"../_Contents/FbxModels/";
 const wstring Shaders = L"../_Shaders/";
-
-#include "./Systems/D3D.h"
-#include "./Systems/Keyboard.h"
-#include "./Systems/Mouse.h"
-#include "./Systems/Time.h"
-
-#include "./Renders/VertexLayouts.h"
-#include "./Renders/States.h"
-#include "./Renders/ShaderBuffer.h"
-
-#include "./Utilities/Math.h"
-#include "./Utilities/Json.h"
-#include "./Utilities/String.h"
-#include "./Utilities/Path.h"
-
 
 
 namespace Landscape
