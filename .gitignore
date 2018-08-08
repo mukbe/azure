@@ -19,6 +19,6 @@
 *.out
 *.app
 
-.vs/
-/Debug/
-/Release/
+Direct3D/.vs/
+Direct3D/Debug/
+Direct3D/Release/
