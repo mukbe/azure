@@ -23,7 +23,9 @@
     <ClInclude Include="ModuleHeader.h" />
     <ClInclude Include="Renders\Gizmo.h" />
     <ClInclude Include="Renders\WorldBuffer.h" />
+    <ClInclude Include="Utilities\Buffer.h" />
     <ClInclude Include="Utilities\GeometryGenerator.h" />
+    <ClInclude Include="Utilities\Transform.h" />
     <ClInclude Include="View\FreeCamera.h" />
     <ClInclude Include="View\Perspective.h" />
     <ClInclude Include="View\CameraBase.h" />
@@ -48,7 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Renders\Gizmo.cpp" />
+    <ClCompile Include="Utilities\Buffer.cpp" />
     <ClCompile Include="Utilities\GeometryGenerator.cpp" />
+    <ClCompile Include="Utilities\Transform.cpp" />
     <ClCompile Include="View\FreeCamera.cpp" />
     <ClCompile Include="View\Perspective.cpp" />
     <ClCompile Include="View\CameraBase.cpp" />

@@ -8,7 +8,7 @@ public:
 
 	wstring GetFileName() { return shaderFile; }
 
-	void Render();
+	void Bind();
 	void Release();
 private:
 	void CheckShaderError(HRESULT hr, ID3DBlob* error);

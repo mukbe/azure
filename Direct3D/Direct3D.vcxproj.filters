@@ -71,6 +71,12 @@
     </ClInclude>
     <ClInclude Include="DefineHeader.h" />
     <ClInclude Include="ModuleHeader.h" />
+    <ClInclude Include="Utilities\Buffer.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Transform.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Renders">
@@ -148,6 +154,12 @@
     </ClCompile>
     <ClCompile Include="Renders\Gizmo.cpp">
       <Filter>Renders</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\Buffer.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\Transform.cpp">
+      <Filter>Utilities</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
