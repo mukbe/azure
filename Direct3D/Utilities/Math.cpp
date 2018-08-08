@@ -40,6 +40,7 @@ float Math::Clamp(float value, float min, float max)
 	return value;
 }
 
+
 float Math::Modulo(float val1, float val2)
 {
 	while (val1 - val2 >= 0)

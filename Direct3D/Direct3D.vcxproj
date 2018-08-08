@@ -19,7 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="View\FreeCamera.h" />
+    <ClInclude Include="View\Perspective.h" />
+    <ClInclude Include="View\CameraBase.h" />
     <ClInclude Include="Interfaces\ICloneable.h" />
+    <ClInclude Include="ModuleHeader.h" />
     <ClInclude Include="Program.h" />
     <ClInclude Include="Renders\RenderTargetBuffer.h" />
     <ClInclude Include="Renders\ShaderBuffer.h" />
@@ -31,13 +35,18 @@
     <ClInclude Include="Systems\Mouse.h" />
     <ClInclude Include="Systems\Time.h" />
     <ClInclude Include="Systems\Window.h" />
+    <ClInclude Include="Utilities\Transform.h" />
     <ClInclude Include="Utilities\BinaryFile.h" />
     <ClInclude Include="Utilities\Json.h" />
     <ClInclude Include="Utilities\Math.h" />
     <ClInclude Include="Utilities\Path.h" />
     <ClInclude Include="Utilities\String.h" />
+    <ClInclude Include="Renders\WorldBuffer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="View\FreeCamera.cpp" />
+    <ClCompile Include="View\Perspective.cpp" />
+    <ClCompile Include="View\CameraBase.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Renders\RenderTargetBuffer.cpp" />
@@ -47,11 +56,17 @@
     <ClCompile Include="Systems\Mouse.cpp" />
     <ClCompile Include="Systems\Time.cpp" />
     <ClCompile Include="Systems\Window.cpp" />
+    <ClCompile Include="Utilities\Transform.cpp" />
     <ClCompile Include="Utilities\BinaryFile.cpp" />
     <ClCompile Include="Utilities\Json.cpp" />
     <ClCompile Include="Utilities\Math.cpp" />
     <ClCompile Include="Utilities\Path.cpp" />
     <ClCompile Include="Utilities\String.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DefineHeader.h">
+      <FileType>Document</FileType>
+    </ClInclude>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F89A7778-CBF0-4E22-B019-B7729ABB8281}</ProjectGuid>

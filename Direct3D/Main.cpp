@@ -9,8 +9,8 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR param, int 
 	desc.bFullScreen = false;
 	desc.bVsync = false;
 	desc.Handle = NULL;
-	desc.Width = 1280;
-	desc.Height = 720;
+	desc.Width = WinSizeX;
+	desc.Height = WinSizeY;
 	D3D::SetDesc(desc);
 
 	srand((UINT)time(0));

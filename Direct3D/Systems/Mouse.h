@@ -41,6 +41,8 @@ public:
 		return wheelMoveValue;
 	}
 
+	void SetMousePos(int x, int y);
+
 private:
 	Mouse();
 	~Mouse();
