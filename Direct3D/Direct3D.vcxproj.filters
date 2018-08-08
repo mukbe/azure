@@ -2,6 +2,9 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Renders\ShaderBuffer.h">
+      <Filter>Renders</Filter>
+    </ClInclude>
     <ClInclude Include="Renders\States.h">
       <Filter>Renders</Filter>
     </ClInclude>
@@ -45,25 +48,14 @@
     <ClInclude Include="Renders\RenderTargetBuffer.h">
       <Filter>Renders</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleHeader.h" />
-    <ClInclude Include="Utilities\Transform.h">
-      <Filter>Utilities</Filter>
+    <ClInclude Include="Renders\Shader.h">
+      <Filter>Renders</Filter>
     </ClInclude>
-    <ClInclude Include="Renders\ShaderBuffer.h">
-      <Filter>Renders\ShaderBuffer</Filter>
-    </ClInclude>
-    <ClInclude Include="Renders\WorldBuffer.h">
-      <Filter>Renders\ShaderBuffer</Filter>
-    </ClInclude>
-    <ClInclude Include="View\CameraBase.h">
-      <Filter>View</Filter>
-    </ClInclude>
-    <ClInclude Include="View\Perspective.h">
-      <Filter>View</Filter>
-    </ClInclude>
-    <ClInclude Include="View\FreeCamera.h" />
   </ItemGroup>
   <ItemGroup>
+    <Filter Include="Renders">
+      <UniqueIdentifier>{30f71ca6-86fc-4a07-8c55-3b9b4a221935}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Systems">
       <UniqueIdentifier>{c2abd35d-375a-43b3-ba7e-7b4b24b403bb}</UniqueIdentifier>
     </Filter>
@@ -72,15 +64,6 @@
     </Filter>
     <Filter Include="Interfaces">
       <UniqueIdentifier>{16ceaf6b-dbfb-4761-9902-ff63fdd517f9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Renders">
-      <UniqueIdentifier>{30f71ca6-86fc-4a07-8c55-3b9b4a221935}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Renders\ShaderBuffer">
-      <UniqueIdentifier>{1a1a2638-e0d7-41de-8fd6-e043623b0e18}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="View">
-      <UniqueIdentifier>{08bc0d6d-21ae-4744-99c7-4f9ea3ad871d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -122,18 +105,8 @@
     <ClCompile Include="Renders\RenderTargetBuffer.cpp">
       <Filter>Renders</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities\Transform.cpp">
-      <Filter>Utilities</Filter>
+    <ClCompile Include="Renders\Shader.cpp">
+      <Filter>Renders</Filter>
     </ClCompile>
-    <ClCompile Include="View\CameraBase.cpp">
-      <Filter>View</Filter>
-    </ClCompile>
-    <ClCompile Include="View\Perspective.cpp">
-      <Filter>View</Filter>
-    </ClCompile>
-    <ClCompile Include="View\FreeCamera.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="DefineHeader.h" />
   </ItemGroup>
 </Project>
