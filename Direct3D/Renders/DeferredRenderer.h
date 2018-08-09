@@ -1,13 +1,20 @@
 #pragma once
-#define BufferCount 4
+#define BUFFER_COUNT 4
 class DeferredRenderer
 {
-	//0 == depth;
-	//1 == normal
-	//2 == position
-	//3 == diffuse
+	//0 == normal
+	//1 == position
+	//2 == diffuse
+	//3 == depth;
 private:
-	class RenderTargetBuffer* renderTarget;
+	ID3D11Texture2D * m_renderTargetTextureArray[BUFFER_COUNT];
+	ID3D11RenderTargetView* m_renderTargetViewArray[BUFFER_COUNT];
+	ID3D11ShaderResourceView* m_shaderResourceViewArray[BUFFER_COUNT];
+	ID3D11ShaderResourceView* depthSRV;
+	ID3D11Texture2D* m_depthStencilBuffer;
+	ID3D11DepthStencilView* m_depthStencilView;
+	D3D11_VIEWPORT m_viewport;
+	
 	class Shader* shader;
 	class OrthoWindow* orthoWindow;
 	class ViewProjectionBuffer* viewProj;
@@ -19,9 +26,10 @@ public:
 	void SetRenderTarget();
 	void ClearRenderTarget();
 
-	void Render();
+	bool Create();
 
-	class RenderTargetBuffer* GetGbuffer() { return this->renderTarget; }
+	void Render();
+	void PostRender();
 
 };
 

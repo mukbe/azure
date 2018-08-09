@@ -383,7 +383,7 @@ void DxRenderer::EndShadowDraw()
 void DxRenderer::BeginDraw()
 {
 	pD3dContext->ClearRenderTargetView(pRenderTargetView,
-		D3DXCOLOR(0.49f, 0.49f, 0.49f, 1.0f));
+		D3DXCOLOR(0.f,0.f,0.f, 1.0f));
 
 	pD3dContext->ClearDepthStencilView(pDepthStencilView,
 		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);

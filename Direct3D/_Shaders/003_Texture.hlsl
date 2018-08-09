@@ -12,6 +12,7 @@ cbuffer VS_WorldBuffer : register(b1)
 }
 
 Texture2D _deferredTex[4] : register(t0);
+Texture2D _depth : register(t4);
 SamplerState _samp;
 
 struct VS_INPUT
@@ -39,6 +40,21 @@ PS_INPUT VS(VS_INPUT input)
 
 float4 PS(PS_INPUT input) : SV_Target
 {
-    return _deferredTex[3].Sample(_samp, input.uv);
+    //return _depth.Sample(_samp, input.uv);
+
+    float3 lightDir = float3(1, -1, 0);
+    lightDir = normalize(lightDir);
+    float3 normal = _deferredTex[0].Sample(_samp, input.uv) * 2.0f - 1.0f;
+    float3 worldPos = _deferredTex[1].Sample(_samp,input.uv);
+    float4 color = _deferredTex[2].Sample(_samp, input.uv);
+    float diffuseFactor = saturate(dot(normal, -lightDir));
+    float4 lightColor = float4(1, 1, 1, 1);
+    
+    color = color * lightColor * diffuseFactor;
+
+    return color;
+
+
+    return _deferredTex[0].Sample(_samp, input.uv);
 
 }

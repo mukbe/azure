@@ -28,10 +28,10 @@ struct PS_INPUT
 
 struct PS_OUTPUT
 {
-    float4 depth : SV_Target0;
-    float4 normal : SV_Target1;
-    float4 position : SV_Target2;
-    float4 diffuse : SV_Target3;
+    float4 normal : SV_Target0;
+    float4 position : SV_Target1;
+    float4 diffuse : SV_Target2;
+    float4 depth : SV_Target3;
 };
 
 PS_INPUT VS(VS_INPUT input)
@@ -40,7 +40,7 @@ PS_INPUT VS(VS_INPUT input)
 
     output.position = mul(input.position, _vsWorld);
     output.worldPos = output.position;
-    output.normal = input.normal;
+    output.normal = normalize(mul(input.normal, (float3x3)_vsWorld));
     output.position = mul(output.position, _vsViewProjection);
 
     output.color = input.color;
@@ -51,8 +51,9 @@ PS_INPUT VS(VS_INPUT input)
 PS_OUTPUT PS(PS_INPUT input)
 {
     PS_OUTPUT output;
+    float depth = input.position.z / input.position.w * 10.0f;
 
-    output.depth = float4(0,0,1,1);
+    output.depth = float4(depth, depth, depth, 1.0f);
 
     output.normal = float4((input.normal * 0.5f + 0.5f),1.0f);
     output.position = input.worldPos;
