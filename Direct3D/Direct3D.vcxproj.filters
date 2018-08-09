@@ -11,21 +11,6 @@
     <ClInclude Include="Renders\VertexLayouts.h">
       <Filter>Renders</Filter>
     </ClInclude>
-    <ClInclude Include="Systems\Keyboard.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Systems\Mouse.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Systems\Time.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Systems\Window.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Systems\D3D.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
     <ClInclude Include="Program.h" />
     <ClInclude Include="Utilities\Path.h">
       <Filter>Utilities</Filter>
@@ -77,6 +62,22 @@
     <ClInclude Include="Renders\Shader.h">
       <Filter>Renders</Filter>
     </ClInclude>
+    <ClInclude Include="Figure\Cube.h" />
+    <ClInclude Include="Systems\D3D.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Keyboard.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Mouse.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Time.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Window.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Renders">
@@ -101,21 +102,6 @@
   <ItemGroup>
     <ClCompile Include="Renders\States.cpp">
       <Filter>Renders</Filter>
-    </ClCompile>
-    <ClCompile Include="Systems\Mouse.cpp">
-      <Filter>Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="Systems\Time.cpp">
-      <Filter>Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="Systems\Window.cpp">
-      <Filter>Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="Systems\D3D.cpp">
-      <Filter>Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="Systems\Keyboard.cpp">
-      <Filter>Systems</Filter>
     </ClCompile>
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -160,6 +146,22 @@
     </ClCompile>
     <ClCompile Include="Renders\Shader.cpp">
       <Filter>Renders</Filter>
+    </ClCompile>
+    <ClCompile Include="Figure\Cube.cpp" />
+    <ClCompile Include="Systems\D3D.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Keyboard.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Mouse.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Time.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Window.cpp">
+      <Filter>Systems</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

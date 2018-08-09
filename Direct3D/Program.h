@@ -15,4 +15,5 @@ public:
 	void ResizeScreen();
 private:
 	class FreeCamera* freeCamera;
+	class Cube* cube;
 };

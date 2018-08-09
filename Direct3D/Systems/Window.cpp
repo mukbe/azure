@@ -12,17 +12,20 @@ WPARAM Window::Run()
 	D3D::GetDesc(&desc);
 
 
-	D3D::Create();
+	//D3D::Create();
+	pRenderer->CreateDevice();
+	pRenderer->CreateSwapChain();
 	Keyboard::Create();
 	Mouse::Create();
 
 	Time::Create();
 	Time::Get()->Start();
 
-	ImGui::Create(desc.Handle, D3D::GetDevice(), D3D::GetDC());
+	ImGui::Create(desc.Handle, _Device, _Context);
 	ImGui::StyleColorsDark();
 
 	program = new Program();
+
 	while (true)
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -48,13 +51,13 @@ WPARAM Window::Run()
 
 
 			program->PreRender();
-			D3D::Get()->Clear();
+			pRenderer->BeginDraw();
 			{
 				program->Render();
 				program->PostRender();
 				//ImGui::Render();
 			}
-			D3D::Get()->Present();
+			pRenderer->EndDraw();
 		}
 	}
 	SafeDelete(program);
@@ -63,7 +66,7 @@ WPARAM Window::Run()
 	Time::Delete();
 	Mouse::Delete();
 	Keyboard::Delete();
-	D3D::Delete();
+	pRenderer->Release();
 
 	return msg.wParam;
 }
@@ -170,8 +173,8 @@ LRESULT CALLBACK Window::WndProc(HWND handle, UINT message, WPARAM wParam, LPARA
 				float width = (float)LOWORD(lParam);
 				float height = (float)HIWORD(lParam);
 
-				if (D3D::Get() != NULL)
-					D3D::Get()->ResizeScreen(width, height);
+				if (pRenderer != NULL)
+					//pRenderer->ResizeScreen(width, height);
 				
 				program->ResizeScreen();
 			}		
