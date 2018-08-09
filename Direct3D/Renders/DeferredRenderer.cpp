@@ -2,7 +2,7 @@
 #include "DeferredRenderer.h"
 
 #include "RenderTargetBuffer.h"
-#include "OrthoWindow.h"
+#include "./View/OrthoWindow.h"
 #include "./Renders/WorldBuffer.h"
 
 DeferredRenderer::DeferredRenderer()

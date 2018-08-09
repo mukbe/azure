@@ -54,9 +54,9 @@ PS_OUTPUT PS(PS_INPUT input)
     float depth = input.position.z / input.position.w * 10.0f;
 
     output.depth = float4(depth, depth, depth, 1.0f);
-
     output.normal = float4((input.normal * 0.5f + 0.5f),1.0f);
     output.position = input.worldPos;
+
     output.diffuse = input.color;
    
 

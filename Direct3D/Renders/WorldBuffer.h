@@ -82,3 +82,27 @@ public:
 private:
 	Struct Data;
 };
+
+class SunBuffer : public ShaderBuffer
+{
+public:
+	SunBuffer() : ShaderBuffer(&Data, sizeof(Struct))
+	{
+		Data.direction = D3DXVECTOR3(1, -1, 0);
+		Data.color = D3DXCOLOR(1, 1, 1, 1);
+	}
+
+	struct Struct
+	{
+		D3DXVECTOR3 direction;
+		float padding;
+
+		D3DXCOLOR color;
+
+	};
+
+	void SetDirection(D3DXVECTOR3 pos) { this->Data.direction = pos; }
+	void SetColor(D3DXCOLOR col) { this->Data.color = col; }
+private:
+	Struct Data;
+};

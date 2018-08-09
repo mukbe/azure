@@ -80,8 +80,12 @@
     <ClInclude Include="Figure\Figure.h">
       <Filter>Figure</Filter>
     </ClInclude>
-    <ClInclude Include="Renders\DeferredRenderer.h" />
-    <ClInclude Include="Renders\OrthoWindow.h" />
+    <ClInclude Include="Renders\DeferredRenderer.h">
+      <Filter>Renders</Filter>
+    </ClInclude>
+    <ClInclude Include="View\OrthoWindow.h">
+      <Filter>View</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Renders">
@@ -104,6 +108,9 @@
     </Filter>
     <Filter Include="Figure">
       <UniqueIdentifier>{9acc11cc-ba08-47cd-b2a1-a1cea5ad9379}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Environment">
+      <UniqueIdentifier>{83692fb6-5b85-4bf8-82ae-e0b215cf2de4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -172,14 +179,22 @@
     <ClCompile Include="Figure\Figure.cpp">
       <Filter>Figure</Filter>
     </ClCompile>
-    <ClCompile Include="Renders\DeferredRenderer.cpp" />
-    <ClCompile Include="Renders\OrthoWindow.cpp" />
+    <ClCompile Include="Renders\DeferredRenderer.cpp">
+      <Filter>Renders</Filter>
+    </ClCompile>
+    <ClCompile Include="View\OrthoWindow.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\001_Color.hlsl">
       <Filter>Renders\Shader</Filter>
     </None>
-    <None Include="_Shaders\002_Deferred.hlsl" />
-    <None Include="_Shaders\003_Texture.hlsl" />
+    <None Include="_Shaders\003_Texture.hlsl">
+      <Filter>Renders\Shader</Filter>
+    </None>
+    <None Include="_Shaders\002_Deferred.hlsl">
+      <Filter>Renders\Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>
