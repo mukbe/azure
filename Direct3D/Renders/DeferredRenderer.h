@@ -10,7 +10,6 @@ private:
 	ID3D11Texture2D * renderTargetTexture[BUFFER_COUNT];
 	ID3D11RenderTargetView* renderTargetView[BUFFER_COUNT];
 	ID3D11ShaderResourceView* shaderResourceView[BUFFER_COUNT];
-	ID3D11ShaderResourceView* depthResourceView;
 	ID3D11Texture2D* depthBufferTexture;
 	ID3D11DepthStencilView* depthStencilView;
 	D3D11_VIEWPORT viewport;
@@ -20,7 +19,6 @@ private:
 	class ViewProjectionBuffer* viewProjectionBuffer;
 	D3DXMATRIX matOrtho;
 private:
-	void ClearRenderTarget();
 	void ClearRenderTarget();
 	bool Create();
 public:

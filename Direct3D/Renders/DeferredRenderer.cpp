@@ -28,7 +28,6 @@ DeferredRenderer::~DeferredRenderer()
 		SafeRelease(this->renderTargetTexture[i]);
 	}
 
-	SafeRelease(depthResourceView);
 	SafeRelease(depthBufferTexture);
 	SafeRelease(depthStencilView);
 
@@ -64,7 +63,6 @@ void DeferredRenderer::Render()
 	orthoWindow->Render();
 
 	DeviceContext->PSSetShaderResources(0, 4, &shaderResourceView[0]);
-	DeviceContext->PSSetShaderResources(4, 1, &depthResourceView);
 
 	shader->Render();
 
@@ -168,15 +166,7 @@ bool DeferredRenderer::Create()
 	hr = Device->CreateDepthStencilView(depthBufferTexture, &depthStencilViewDesc, &depthStencilView);
 	assert(SUCCEEDED(hr));
 
-	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-	srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
-	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-	srvDesc.Texture2D.MipLevels = depthBufferDesc.MipLevels;
-
-	hr = Device->CreateShaderResourceView(depthBufferTexture, &srvDesc, &depthResourceView);
-	assert(SUCCEEDED(hr));
-
-	// Setup the viewport for rendering.
+	//viewport¼³Á¤
 	viewport.Width = (float)desc.Width;
 	viewport.Height = (float)desc.Height;
 	viewport.MinDepth = 0.0f;
