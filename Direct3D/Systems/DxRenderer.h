@@ -66,7 +66,7 @@ public:
 	ID3D11Device* GetDevice() { return pD3dDevice; }
 	ID3D11DeviceContext* GetContext() { return pD3dContext; }
 	IDXGISwapChain* GetSwapChain() { return pSwapChain; }
-
+	ID3D11DepthStencilView* GetDepthStencilView()const { return this->pDepthStencilView; }
 	//TODO ResizeScreen func
 };
 

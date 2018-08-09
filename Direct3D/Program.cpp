@@ -3,7 +3,8 @@
 
 #include "./View/FreeCamera.h"
 #include "./Utilities/Transform.h"
-
+#include "./Figure/Figure.h"
+#include "./Renders/DeferredRenderer.h"
 
 Program::Program()
 {
@@ -16,10 +17,21 @@ Program::Program()
 	Json::ReadData(L"LevelEditor.json", jsonRoot);
 
 	freeCamera = new FreeCamera();
+	
+	box = new Figure(Figure::FigureType::Box, 10.0f);
+	box->GetTransform()->SetWorldPosition(50.0f, 5.0f, 50.0f);
+	grid = new Figure(Figure::FigureType::Grid, 100.0f,D3DXCOLOR(0.3f,0.3f,0.3f,1.0f));
+	sphere = new Figure(Figure::FigureType::Sphere, 10.0f, D3DXCOLOR(1.f, 0.f, 0.f, 1.f));
+
+	deferred = new DeferredRenderer;
 }
 
 Program::~Program()
 {
+	SafeDelete(deferred);
+	SafeDelete(sphere);
+	SafeDelete(grid);
+	SafeDelete(box);
 
 	Json::WriteDate(L"LevelEditor.json", jsonRoot);
 	SafeDelete(jsonRoot);
@@ -48,7 +60,14 @@ void Program::PreRender()
 
 void Program::Render()
 {
+	deferred->SetRenderTarget();
+	grid->Render();
+	box->Render();
+	sphere->Render();
 
+	pRenderer->EndShadowDraw();
+	pRenderer->BeginDraw();
+	deferred->Render();
 }
 
 void Program::PostRender()
@@ -79,6 +98,8 @@ void Program::PostRender()
 	(
 		"Camera Rotation : %3.0f, %3.0f", angle.x * 180.f / D3DX_PI, angle.y *180.f / D3DX_PI
 	);
+
+	
 
 	ImGui::Separator();
 	ImGui::End();

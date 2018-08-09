@@ -8,7 +8,7 @@ public:
 
 	ID3D11RenderTargetView* GetRTV() { return rtv; }
 	ID3D11ShaderResourceView* GetSRV() { return srv; }
-
+	ID3D11DepthStencilView* GetDSV() { return dsv; }
 	void SetArraySize(int size) { arraySize = size; }
 	int GetArraySize() { return arraySize; }
 	void SetCubeMap(bool set) { bCubeMap = set; arraySize = 6; }
@@ -31,4 +31,5 @@ private:
 	ID3D11Texture2D* renderTargetTexture;
 	ID3D11RenderTargetView * rtv;
 	ID3D11ShaderResourceView* srv;
+	ID3D11DepthStencilView* dsv;
 };

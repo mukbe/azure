@@ -102,6 +102,37 @@ void RenderTargetBuffer::CreateArrayBuffer()
 	hr = Device->CreateRenderTargetView(renderTargetTexture, &rtvDesc, &rtv);
 	assert(SUCCEEDED(hr));
 
+	// Initialize the description of the depth buffer.
+	D3D11_TEXTURE2D_DESC depthBufferDesc;
+	ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
+
+	// Set up the description of the depth buffer.
+	depthBufferDesc.Width = width;
+	depthBufferDesc.Height = height;
+	depthBufferDesc.MipLevels = 1;
+	depthBufferDesc.ArraySize = 1;
+	depthBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthBufferDesc.SampleDesc.Count = 1;
+	depthBufferDesc.SampleDesc.Quality = 0;
+	depthBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthBufferDesc.CPUAccessFlags = 0;
+	depthBufferDesc.MiscFlags = 0;
+	ID3D11Texture2D* depthStencilBuffer;
+	// Create the texture for the depth buffer using the filled out description.
+	hr = Device->CreateTexture2D(&depthBufferDesc, NULL, &depthStencilBuffer);
+	assert(SUCCEEDED(hr));
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
+	ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
+
+	depthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	depthStencilViewDesc.Texture2D.MipSlice = 0;
+
+	hr = Device->CreateDepthStencilView(depthStencilBuffer, &depthStencilViewDesc, &dsv);
+	assert(SUCCEEDED(hr));
+
 	//溅捞歹 府家胶 轰 积己
 	//D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 	//srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
@@ -132,6 +163,19 @@ void RenderTargetBuffer::CreateCubeBuffer()
 
 	HRESULT hr;
 	hr = Device->CreateTexture2D(&texDesc, 0, &renderTargetTexture);
+	assert(SUCCEEDED(hr));
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
+	ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
+
+	// Set up the depth stencil view description.
+	depthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	depthStencilViewDesc.Texture2D.MipSlice = 0;
+	depthStencilViewDesc.Texture2DArray.ArraySize = 1;
+
+	// Create the depth stencil view.
+	hr = Device->CreateDepthStencilView(renderTargetTexture, &depthStencilViewDesc, &dsv);
 	assert(SUCCEEDED(hr));
 
 	//坊歹 鸥百 轰 积己
