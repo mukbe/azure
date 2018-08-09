@@ -9,12 +9,11 @@ DeferredRenderer::DeferredRenderer()
 {
 	D3DDesc desc;
 	DxRenderer::GetDesc(&desc);
-	
+	D3DXMatrixOrthoLH(&matOrtho, (float)desc.Width, (float)desc.Height, 0.f, 1000.0f);
 
 	this->shader = new Shader(Shaders + L"003_Texture.hlsl");
 	this->orthoWindow = new OrthoWindow(desc.Width, desc.Height);
-	this->viewProj = new ViewProjectionBuffer;
-	D3DXMatrixOrthoLH(&matOrtho, (float)desc.Width, (float)desc.Height, 0.f, 1000.0f);
+	this->viewProjectionBuffer = new ViewProjectionBuffer;
 
 	this->Create();
 }
@@ -22,85 +21,81 @@ DeferredRenderer::DeferredRenderer()
 
 DeferredRenderer::~DeferredRenderer()
 {
-	
+	for (int i = 0; i < BUFFER_COUNT; ++i)
+	{
+		SafeRelease(this->shaderResourceView[i]);
+		SafeRelease(this->renderTargetView[i]);
+		SafeRelease(this->renderTargetTexture[i]);
+	}
+
+	SafeRelease(depthResourceView);
+	SafeRelease(depthBufferTexture);
+	SafeRelease(depthStencilView);
+
+	SafeDelete(shader);
+	SafeDelete(orthoWindow);
+	SafeDelete(viewProjectionBuffer);
 }
 
-void DeferredRenderer::SetRenderTarget()
+void DeferredRenderer::BegindDrawToGBuffer()
 {
-
-	// Bind the render target view array and depth stencil buffer to the output render pipeline.
-	DeviceContext->OMSetRenderTargets(BUFFER_COUNT, m_renderTargetViewArray, m_depthStencilView);
-
-	// Set the viewport. 
-	DeviceContext->RSSetViewports(1, &m_viewport);
+	//렌더타겟을 잡아준다. 
+	DeviceContext->OMSetRenderTargets(BUFFER_COUNT, renderTargetView, depthStencilView);
+	DeviceContext->RSSetViewports(1, &viewport);
 
 	this->ClearRenderTarget();
 }
 
 void DeferredRenderer::ClearRenderTarget()
 {
-	
-	// Clear the render target buffers.
 	for (int i = 0; i<BUFFER_COUNT; i++)
 	{
-		DeviceContext->ClearRenderTargetView(m_renderTargetViewArray[i], D3DXCOLOR(0.0f,0.0f,0.0f,1.f));
+		DeviceContext->ClearRenderTargetView(renderTargetView[i], D3DXCOLOR(0.0f,0.0f,0.0f,1.f));
 	}
 
-	// Clear the depth buffer.
-	DeviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	DeviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
-	return;
 }
 
 
 
 void DeferredRenderer::Render()
 {
-	viewProj->SetProjection(matOrtho);
-	viewProj->SetVSBuffer(0);
-
 	orthoWindow->Render();
 
-	DeviceContext->PSSetShaderResources(0, 4, &m_shaderResourceViewArray[0]);
-	DeviceContext->PSSetShaderResources(4, 1, &depthSRV);
+	DeviceContext->PSSetShaderResources(0, 4, &shaderResourceView[0]);
+	DeviceContext->PSSetShaderResources(4, 1, &depthResourceView);
 
 	shader->Render();
 
-	DeviceContext->DrawIndexed(6,0,0);
+	viewProjectionBuffer->SetProjection(matOrtho);
+	viewProjectionBuffer->SetVSBuffer(0);
+
+	DeviceContext->DrawIndexed(6, 0, 0);
 }
 
 void DeferredRenderer::PostRender()
 {
 	ImGui::Begin("Deferred");
 	{
-		ImGui::ImageButton(m_shaderResourceViewArray[0], ImVec2(200, 150)); ImGui::SameLine();
-		ImGui::ImageButton(m_shaderResourceViewArray[1], ImVec2(200, 150));
-		ImGui::ImageButton(m_shaderResourceViewArray[2], ImVec2(200, 150)); ImGui::SameLine();
-		ImGui::ImageButton(m_shaderResourceViewArray[3], ImVec2(200, 150));
+		ImGui::ImageButton(shaderResourceView[0], ImVec2(200, 150)); ImGui::SameLine();
+		ImGui::ImageButton(shaderResourceView[1], ImVec2(200, 150));
+		ImGui::ImageButton(shaderResourceView[2], ImVec2(200, 150)); ImGui::SameLine();
+		ImGui::ImageButton(shaderResourceView[3], ImVec2(200, 150));
 	}
 	ImGui::End();
 }
 
 bool DeferredRenderer::Create()
 {
-	D3D11_TEXTURE2D_DESC textureDesc;
-	HRESULT result;
-	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
-	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
-	D3D11_TEXTURE2D_DESC depthBufferDesc;
-	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
-	int i;
+	HRESULT hr;
 
 	D3DDesc desc;
 	DxRenderer::GetDesc(&desc);
-	// Store the width and height of the render texture.
-	float m_textureWidth = 2048; desc.Width;
-	float m_textureHeight = 2048; desc.Height;
 
-	// Initialize the render target texture description.
+	//RenderTargetView 를 생성하기 위한 텍스쳐 생성 
+	D3D11_TEXTURE2D_DESC textureDesc;
 	ZeroMemory(&textureDesc, sizeof(textureDesc));
-
-	// Setup the render target texture description.
 	textureDesc.Width = desc.Width;
 	textureDesc.Height = desc.Height;
 	textureDesc.MipLevels = 1;
@@ -112,51 +107,41 @@ bool DeferredRenderer::Create()
 	textureDesc.CPUAccessFlags = 0;
 	textureDesc.MiscFlags = 0;
 
-	// Create the render target textures.
-	for (i = 0; i<BUFFER_COUNT; i++)
+	for (int i = 0; i < BUFFER_COUNT; i++)
 	{
-		result = Device->CreateTexture2D(&textureDesc, NULL, &m_renderTargetTextureArray[i]);
-		if (FAILED(result))
-		{
-			return false;
-		}
+		hr = Device->CreateTexture2D(&textureDesc, NULL, &renderTargetTexture[i]);
+		assert(SUCCEEDED(hr));
 	}
 
-	// Setup the description of the render target view.
+	//RenderTargetViewDesc 설정
+	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
 	renderTargetViewDesc.Format = textureDesc.Format;
 	renderTargetViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 	renderTargetViewDesc.Texture2D.MipSlice = 0;
 
-	// Create the render target views.
-	for (i = 0; i<BUFFER_COUNT; i++)
+	for (int i = 0; i<BUFFER_COUNT; i++)
 	{
-		result = Device->CreateRenderTargetView(m_renderTargetTextureArray[i], &renderTargetViewDesc, &m_renderTargetViewArray[i]);
-		if (FAILED(result))
-		{
-			return false;
-		}
+		hr = Device->CreateRenderTargetView(renderTargetTexture[i], &renderTargetViewDesc, &renderTargetView[i]);
+		assert(SUCCEEDED(hr));
 	}
 
-	// Setup the description of the shader resource view.
+	//ResourceView 설정 
+	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
 	shaderResourceViewDesc.Format = textureDesc.Format;
 	shaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	shaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
 	shaderResourceViewDesc.Texture2D.MipLevels = 1;
 
-	// Create the shader resource views.
-	for (i = 0; i<BUFFER_COUNT; i++)
+	for (int i = 0; i<BUFFER_COUNT; i++)
 	{
-		result = Device->CreateShaderResourceView(m_renderTargetTextureArray[i], &shaderResourceViewDesc, &m_shaderResourceViewArray[i]);
-		if (FAILED(result))
-		{
-			return false;
-		}
+		hr= Device->CreateShaderResourceView(renderTargetTexture[i], &shaderResourceViewDesc, &shaderResourceView[i]);
+		assert(SUCCEEDED(hr));
 	}
 
-	// Initialize the description of the depth buffer.
+	//깊이 버퍼 설정
+	D3D11_TEXTURE2D_DESC depthBufferDesc;
 	ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
 
-	// Set up the description of the depth buffer.
 	depthBufferDesc.Width = desc.Width;
 	depthBufferDesc.Height = desc.Height;
 	depthBufferDesc.MipLevels = 1;
@@ -169,41 +154,35 @@ bool DeferredRenderer::Create()
 	depthBufferDesc.CPUAccessFlags = 0;
 	depthBufferDesc.MiscFlags = 0;
 
-	// Create the texture for the depth buffer using the filled out description.
-	result = Device->CreateTexture2D(&depthBufferDesc, NULL, &m_depthStencilBuffer);
-	assert(SUCCEEDED(result));
+	hr = Device->CreateTexture2D(&depthBufferDesc, NULL, &depthBufferTexture);
+	assert(SUCCEEDED(hr));
 
-	// Initailze the depth stencil view description.
+	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
 	ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
 
-	// Set up the depth stencil view description.
 	depthStencilViewDesc.Flags = 0;
 	depthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	depthStencilViewDesc.Texture2D.MipSlice = 0;
 	
-	// Create the depth stencil view.
-	result = Device->CreateDepthStencilView(m_depthStencilBuffer, &depthStencilViewDesc, &m_depthStencilView);
-	assert(SUCCEEDED(result));
+	hr = Device->CreateDepthStencilView(depthBufferTexture, &depthStencilViewDesc, &depthStencilView);
+	assert(SUCCEEDED(hr));
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 	srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
 	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = depthBufferDesc.MipLevels;
-	srvDesc.Texture2D.MostDetailedMip = 0;
 
-	result = Device->CreateShaderResourceView(m_depthStencilBuffer, &srvDesc, &depthSRV);
-	assert(SUCCEEDED(result));
-
-	SafeRelease(m_depthStencilBuffer);
+	hr = Device->CreateShaderResourceView(depthBufferTexture, &srvDesc, &depthResourceView);
+	assert(SUCCEEDED(hr));
 
 	// Setup the viewport for rendering.
-	m_viewport.Width = (float)desc.Width;
-	m_viewport.Height = (float)desc.Height;
-	m_viewport.MinDepth = 0.0f;
-	m_viewport.MaxDepth = 1.0f;
-	m_viewport.TopLeftX = 0.0f;
-	m_viewport.TopLeftY = 0.0f;
+	viewport.Width = (float)desc.Width;
+	viewport.Height = (float)desc.Height;
+	viewport.MinDepth = 0.0f;
+	viewport.MaxDepth = 1.0f;
+	viewport.TopLeftX = 0.0f;
+	viewport.TopLeftY = 0.0f;
 
 	return true;
 }

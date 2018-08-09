@@ -7,28 +7,29 @@ class DeferredRenderer
 	//2 == diffuse
 	//3 == depth;
 private:
-	ID3D11Texture2D * m_renderTargetTextureArray[BUFFER_COUNT];
-	ID3D11RenderTargetView* m_renderTargetViewArray[BUFFER_COUNT];
-	ID3D11ShaderResourceView* m_shaderResourceViewArray[BUFFER_COUNT];
-	ID3D11ShaderResourceView* depthSRV;
-	ID3D11Texture2D* m_depthStencilBuffer;
-	ID3D11DepthStencilView* m_depthStencilView;
-	D3D11_VIEWPORT m_viewport;
+	ID3D11Texture2D * renderTargetTexture[BUFFER_COUNT];
+	ID3D11RenderTargetView* renderTargetView[BUFFER_COUNT];
+	ID3D11ShaderResourceView* shaderResourceView[BUFFER_COUNT];
+	ID3D11ShaderResourceView* depthResourceView;
+	ID3D11Texture2D* depthBufferTexture;
+	ID3D11DepthStencilView* depthStencilView;
+	D3D11_VIEWPORT viewport;
 	
 	class Shader* shader;
 	class OrthoWindow* orthoWindow;
-	class ViewProjectionBuffer* viewProj;
+	class ViewProjectionBuffer* viewProjectionBuffer;
 	D3DXMATRIX matOrtho;
+private:
+	void ClearRenderTarget();
+	void ClearRenderTarget();
+	bool Create();
 public:
 	DeferredRenderer();
 	~DeferredRenderer();
 
-	void SetRenderTarget();
-	void ClearRenderTarget();
+	void BegindDrawToGBuffer();		//RenderTarget을 잡아주고 이전 내용을 검은색으로 밀어준다.
 
-	bool Create();
-
-	void Render();
+	void Render();					//2D화면상에 GBuffer기반으로 내용 작성
 	void PostRender();
 
 };

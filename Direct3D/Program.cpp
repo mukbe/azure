@@ -61,7 +61,8 @@ void Program::PreRender()
 
 void Program::Render()
 {
-	deferred->SetRenderTarget();
+	deferred->BegindDrawToGBuffer();
+
 	grid->Render();
 	box->Render();
 	sphere->Render();
