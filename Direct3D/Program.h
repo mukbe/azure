@@ -18,4 +18,6 @@ public:
 private:
 	class FreeCamera* freeCamera;
 	class Json::Value* jsonRoot;
+	class Figure* box, *grid, *sphere;
+	class DeferredRenderer* deferred;
 };

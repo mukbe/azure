@@ -77,6 +77,11 @@
     <ClInclude Include="Systems\DxRenderer.h">
       <Filter>Systems</Filter>
     </ClInclude>
+    <ClInclude Include="Figure\Figure.h">
+      <Filter>Figure</Filter>
+    </ClInclude>
+    <ClInclude Include="Renders\DeferredRenderer.h" />
+    <ClInclude Include="Renders\OrthoWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Renders">
@@ -96,6 +101,9 @@
     </Filter>
     <Filter Include="View">
       <UniqueIdentifier>{6fbb8885-db9e-4f5f-b620-4e5ffc53c09c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Figure">
+      <UniqueIdentifier>{9acc11cc-ba08-47cd-b2a1-a1cea5ad9379}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -161,5 +169,17 @@
     <ClCompile Include="Systems\DxRenderer.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
+    <ClCompile Include="Figure\Figure.cpp">
+      <Filter>Figure</Filter>
+    </ClCompile>
+    <ClCompile Include="Renders\DeferredRenderer.cpp" />
+    <ClCompile Include="Renders\OrthoWindow.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\001_Color.hlsl">
+      <Filter>Renders\Shader</Filter>
+    </None>
+    <None Include="_Shaders\002_Deferred.hlsl" />
+    <None Include="_Shaders\003_Texture.hlsl" />
   </ItemGroup>
 </Project>
