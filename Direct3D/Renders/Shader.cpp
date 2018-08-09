@@ -30,21 +30,21 @@ Shader::~Shader()
 
 void Shader::Render()
 {
-	D3D::GetDC()->IASetInputLayout(inputLayout);
+	DeviceContext->IASetInputLayout(inputLayout);
 
-	D3D::GetDC()->VSSetShader(vertexShader, NULL, 0);
-	D3D::GetDC()->PSSetShader(pixelShader, NULL, 0);
+	DeviceContext->VSSetShader(vertexShader, NULL, 0);
+	DeviceContext->PSSetShader(pixelShader, NULL, 0);
 
 	bool b;
 	if (b = ShaderType::useHS & useType)
 	{
-		D3D::GetDC()->HSSetShader(hullShader, NULL, 0);
-		D3D::GetDC()->DSSetShader(domainshader, NULL, 0);
+		DeviceContext->HSSetShader(hullShader, NULL, 0);
+		DeviceContext->DSSetShader(domainshader, NULL, 0);
 	}
 
 	if (b = ShaderType::useGS & useType)
 	{
-		D3D::GetDC()->GSSetShader(geoShader, nullptr, 0);
+		DeviceContext->GSSetShader(geoShader, nullptr, 0);
 	}
 
 }
@@ -93,7 +93,7 @@ void Shader::CreateShaderFromFile(string funcName, ID3DBlob** vsBlob)
 	{
 		CompileFromFile(funcName, "vs_5_0", &blob);
 
-		hr = D3D::GetDevice()->CreateVertexShader
+		hr = Device->CreateVertexShader
 		(
 			blob->GetBufferPointer()
 			, blob->GetBufferSize()
@@ -107,7 +107,7 @@ void Shader::CreateShaderFromFile(string funcName, ID3DBlob** vsBlob)
 	{
 		CompileFromFile(funcName, "ps_5_0", &blob);
 
-		hr = D3D::GetDevice()->CreatePixelShader
+		hr = Device->CreatePixelShader
 		(
 			blob->GetBufferPointer()
 			, blob->GetBufferSize()
@@ -120,7 +120,7 @@ void Shader::CreateShaderFromFile(string funcName, ID3DBlob** vsBlob)
 	{
 		CompileFromFile(funcName, "hs_5_0", &blob);
 
-		hr = D3D::GetDevice()->CreateHullShader
+		hr = Device->CreateHullShader
 		(
 			blob->GetBufferPointer()
 			, blob->GetBufferSize()
@@ -133,7 +133,7 @@ void Shader::CreateShaderFromFile(string funcName, ID3DBlob** vsBlob)
 	{
 		CompileFromFile(funcName, "ds_5_0", &blob);
 
-		hr = D3D::GetDevice()->CreateDomainShader
+		hr = Device->CreateDomainShader
 		(
 			blob->GetBufferPointer()
 			, blob->GetBufferSize()
@@ -146,7 +146,7 @@ void Shader::CreateShaderFromFile(string funcName, ID3DBlob** vsBlob)
 	{
 		CompileFromFile(funcName, "gs_5_0", &blob);
 
-		hr = D3D::GetDevice()->CreateGeometryShader
+		hr = Device->CreateGeometryShader
 		(
 			blob->GetBufferPointer()
 			, blob->GetBufferSize()
@@ -258,7 +258,7 @@ void Shader::CreateInputLayout()
 		inputLayoutDesc.push_back(elementDesc);
 	}
 
-	hr = D3D::GetDevice()->CreateInputLayout
+	hr = Device->CreateInputLayout
 	(
 		&inputLayoutDesc[0]
 		, inputLayoutDesc.size()

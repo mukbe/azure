@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="DefineHeader.h" />
     <ClInclude Include="ModuleHeader.h" />
+    <ClInclude Include="Systems\DxRenderer.h" />
     <ClInclude Include="Renders\Gizmo.h" />
     <ClInclude Include="Renders\WorldBuffer.h" />
     <ClInclude Include="Renders\Shader.h" />
@@ -37,7 +38,6 @@
     <ClInclude Include="Renders\States.h" />
     <ClInclude Include="Renders\VertexLayouts.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Systems\D3D.h" />
     <ClInclude Include="Systems\Keyboard.h" />
     <ClInclude Include="Systems\Mouse.h" />
     <ClInclude Include="Systems\Time.h" />
@@ -49,6 +49,7 @@
     <ClInclude Include="Utilities\String.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Systems\DxRenderer.cpp" />
     <ClCompile Include="Renders\Gizmo.cpp" />
     <ClCompile Include="Renders\Shader.cpp" />
     <ClCompile Include="Utilities\Buffer.cpp" />
@@ -61,7 +62,6 @@
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Renders\RenderTargetBuffer.cpp" />
     <ClCompile Include="Renders\States.cpp" />
-    <ClCompile Include="Systems\D3D.cpp" />
     <ClCompile Include="Systems\Keyboard.cpp" />
     <ClCompile Include="Systems\Mouse.cpp" />
     <ClCompile Include="Systems\Time.cpp" />
@@ -76,7 +76,7 @@
     <ProjectGuid>{F89A7778-CBF0-4E22-B019-B7729ABB8281}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Day1</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

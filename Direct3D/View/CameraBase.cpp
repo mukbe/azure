@@ -8,7 +8,7 @@
 CameraBase::CameraBase()
 {
 	D3DDesc desc;
-	D3D::GetDesc(&desc);
+	DxRenderer::GetDesc(&desc);
 
 	this->perspective = new Perspective((float)desc.Width, (float)desc.Height);
 

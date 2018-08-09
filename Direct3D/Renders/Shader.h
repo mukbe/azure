@@ -38,5 +38,6 @@ private:
 	ID3D11InputLayout* inputLayout;
 
 	ID3D10Blob* vertexBlob;
+
 };
 

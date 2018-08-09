@@ -19,7 +19,7 @@ void Buffer::CreateVertexBuffer(ID3D11Buffer ** buffer, void* vertex, UINT verte
 	D3D11_SUBRESOURCE_DATA data = { 0 };
 	data.pSysMem = vertex;
 
-	HRESULT hr = D3D::GetDevice()->CreateBuffer(&desc, &data, buffer);
+	HRESULT hr = Device->CreateBuffer(&desc, &data, buffer);
 	assert(SUCCEEDED(hr));
 }
 
@@ -33,7 +33,7 @@ void Buffer::CreateIndexBuffer(ID3D11Buffer ** buffer, UINT* index, UINT indexCo
 	D3D11_SUBRESOURCE_DATA data = { 0 };
 	data.pSysMem = index;
 
-	HRESULT hr = D3D::GetDevice()->CreateBuffer(&desc, &data, buffer);
+	HRESULT hr = Device->CreateBuffer(&desc, &data, buffer);
 	assert(SUCCEEDED(hr));
 }
 
@@ -48,7 +48,7 @@ void Buffer::CreateDynamicVertexBuffer(ID3D11Buffer ** buffer, void * vertex, UI
 	D3D11_SUBRESOURCE_DATA data = { 0 };
 	data.pSysMem = vertex;
 
-	HRESULT hr = D3D::GetDevice()->CreateBuffer(&desc, &data, buffer);
+	HRESULT hr = Device->CreateBuffer(&desc, &data, buffer);
 	assert(SUCCEEDED(hr));
 }
 
@@ -62,7 +62,7 @@ void Buffer::CreateDynamicIndexBuffer(ID3D11Buffer ** buffer, void * vertex, UIN
 	D3D11_SUBRESOURCE_DATA data = { 0 };
 	data.pSysMem = vertex;
 
-	HRESULT hr = D3D::GetDevice()->CreateBuffer(&desc, &data, buffer);
+	HRESULT hr = Device->CreateBuffer(&desc, &data, buffer);
 	assert(SUCCEEDED(hr));
 }
 
@@ -76,7 +76,7 @@ void Buffer::CreateShaderBuffer(ID3D11Buffer ** buffer, void * data, UINT buffer
 	desc.MiscFlags = 0;
 	desc.StructureByteStride = 0;
 
-	HRESULT hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, buffer);
+	HRESULT hr = Device->CreateBuffer(&desc, NULL, buffer);
 	assert(SUCCEEDED(hr));
 
 }
@@ -84,19 +84,19 @@ void Buffer::CreateShaderBuffer(ID3D11Buffer ** buffer, void * data, UINT buffer
 void Buffer::UpdateBuffer(ID3D11Buffer**buffer, void * data, UINT dataSize)
 {
 	D3D11_MAPPED_SUBRESOURCE subResource;
-	HRESULT hr = D3D::GetDC()->Map
+	HRESULT hr = DeviceContext->Map
 	(
 		*buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
 	);
 
 	memcpy(subResource.pData, data, dataSize);
-	D3D::GetDC()->Unmap(*buffer, 0);
+	DeviceContext->Unmap(*buffer, 0);
 }
 
 void Buffer::CreateTexture(wstring fileName, ID3D11ShaderResourceView ** outTex)
 {
 	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(
-		D3D::GetDevice(),
+		Device,
 		fileName.c_str(),
 		NULL,
 		NULL,
@@ -129,7 +129,7 @@ void Buffer::CreateTextureArray(ID3D11ShaderResourceView** pOut, vector<wstring>
 		loadInfo.MipFilter = mipFilter;
 		loadInfo.pSrcInfo = 0;
 
-		hr = D3DX11CreateTextureFromFile(D3D::GetDevice(), fileNames[i].c_str(),
+		hr = D3DX11CreateTextureFromFile(Device, fileNames[i].c_str(),
 			&loadInfo, 0, (ID3D11Resource**)&srcTex[i], 0);
 		assert(SUCCEEDED(hr));
 	}
@@ -156,7 +156,7 @@ void Buffer::CreateTextureArray(ID3D11ShaderResourceView** pOut, vector<wstring>
 	texArrayDesc.MiscFlags = 0;
 
 	ID3D11Texture2D* texArray = 0;
-	hr = D3D::GetDevice()->CreateTexture2D(&texArrayDesc, 0, &texArray);
+	hr = Device->CreateTexture2D(&texArrayDesc, 0, &texArray);
 	assert(SUCCEEDED(hr));
 
 	//
@@ -170,13 +170,13 @@ void Buffer::CreateTextureArray(ID3D11ShaderResourceView** pOut, vector<wstring>
 		for (UINT mipLevel = 0; mipLevel < texElementDesc.MipLevels; ++mipLevel)
 		{
 			D3D11_MAPPED_SUBRESOURCE mappedTex2D;
-			hr = D3D::GetDC()->Map(srcTex[texElement], mipLevel, D3D11_MAP_READ, 0, &mappedTex2D);
+			hr = DeviceContext->Map(srcTex[texElement], mipLevel, D3D11_MAP_READ, 0, &mappedTex2D);
 			assert(SUCCEEDED(hr));
-			D3D::GetDC()->UpdateSubresource(texArray,
+			DeviceContext->UpdateSubresource(texArray,
 				D3D11CalcSubresource(mipLevel, texElement, texElementDesc.MipLevels),
 				0, mappedTex2D.pData, mappedTex2D.RowPitch, mappedTex2D.DepthPitch);
 
-			D3D::GetDC()->Unmap(srcTex[texElement], mipLevel);
+			DeviceContext->Unmap(srcTex[texElement], mipLevel);
 		}
 	}
 
@@ -192,7 +192,7 @@ void Buffer::CreateTextureArray(ID3D11ShaderResourceView** pOut, vector<wstring>
 	viewDesc.Texture2DArray.FirstArraySlice = 0;
 	viewDesc.Texture2DArray.ArraySize = size;
 
-	hr = D3D::GetDevice()->CreateShaderResourceView(texArray, &viewDesc, pOut);
+	hr = Device->CreateShaderResourceView(texArray, &viewDesc, pOut);
 	assert(SUCCEEDED(hr));
 
 	SafeDelete(texArray);

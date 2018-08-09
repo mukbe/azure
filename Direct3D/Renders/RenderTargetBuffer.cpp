@@ -47,7 +47,7 @@ void RenderTargetBuffer::CreateBuffer()
 	texDesc.MiscFlags = 0;
 
 	HRESULT hr;
-	hr = D3D::GetDevice()->CreateTexture2D(&texDesc, 0, &renderTargetTexture);
+	hr = Device->CreateTexture2D(&texDesc, 0, &renderTargetTexture);
 	assert(SUCCEEDED(hr));
 
 	//·»´õ Å¸°Ù ºä »ý¼º
@@ -57,7 +57,7 @@ void RenderTargetBuffer::CreateBuffer()
 	rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 	rtvDesc.Texture2D.MipSlice = 0;
 
-	hr = D3D::GetDevice()->CreateRenderTargetView(renderTargetTexture, &rtvDesc, &rtv);
+	hr = Device->CreateRenderTargetView(renderTargetTexture, &rtvDesc, &rtv);
 	assert(SUCCEEDED(hr));
 
 	//½¦ÀÌ´õ ¸®¼Ò½º ºä »ý¼º
@@ -66,7 +66,7 @@ void RenderTargetBuffer::CreateBuffer()
 	srvDesc.Format = format;
 	srvDesc.Texture2D.MipLevels = -1;
 	srvDesc.Texture2D.MostDetailedMip = 0;
-	hr = D3D::GetDevice()->CreateShaderResourceView(renderTargetTexture, &srvDesc, &srv);
+	hr = Device->CreateShaderResourceView(renderTargetTexture, &srvDesc, &srv);
 	assert(SUCCEEDED(hr));
 }
 
@@ -87,7 +87,7 @@ void RenderTargetBuffer::CreateArrayBuffer()
 	texDesc.MiscFlags = 0;
 
 	HRESULT hr;
-	hr = D3D::GetDevice()->CreateTexture2D(&texDesc, 0, &renderTargetTexture);
+	hr = Device->CreateTexture2D(&texDesc, 0, &renderTargetTexture);
 	assert(SUCCEEDED(hr));
 
 	//·»´õ Å¸°Ù ºä »ý¼º
@@ -99,7 +99,7 @@ void RenderTargetBuffer::CreateArrayBuffer()
 	rtvDesc.Texture2DArray.MipSlice = 0;
 	rtvDesc.Texture2DArray.ArraySize = arraySize;
 
-	hr = D3D::GetDevice()->CreateRenderTargetView(renderTargetTexture, &rtvDesc, &rtv);
+	hr = Device->CreateRenderTargetView(renderTargetTexture, &rtvDesc, &rtv);
 	assert(SUCCEEDED(hr));
 
 	//½¦ÀÌ´õ ¸®¼Ò½º ºä »ý¼º
@@ -110,7 +110,7 @@ void RenderTargetBuffer::CreateArrayBuffer()
 	//srvDesc.Texture2DArray.MostDetailedMip = 0;
 	//srvDesc.Texture2DArray.FirstArraySlice = 0;
 	//srvDesc.Texture2DArray.ArraySize = arraySize;
-	hr = D3D::GetDevice()->CreateShaderResourceView(renderTargetTexture, nullptr, &srv);
+	hr = Device->CreateShaderResourceView(renderTargetTexture, nullptr, &srv);
 	assert(SUCCEEDED(hr));
 }
 
@@ -131,7 +131,7 @@ void RenderTargetBuffer::CreateCubeBuffer()
 	texDesc.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
 
 	HRESULT hr;
-	hr = D3D::GetDevice()->CreateTexture2D(&texDesc, 0, &renderTargetTexture);
+	hr = Device->CreateTexture2D(&texDesc, 0, &renderTargetTexture);
 	assert(SUCCEEDED(hr));
 
 	//·»´õ Å¸°Ù ºä »ý¼º
@@ -143,7 +143,7 @@ void RenderTargetBuffer::CreateCubeBuffer()
 	rtvDesc.Texture2DArray.MipSlice = 0;
 	rtvDesc.Texture2DArray.ArraySize = 6;
 
-	hr = D3D::GetDevice()->CreateRenderTargetView(renderTargetTexture, &rtvDesc, &rtv);
+	hr = Device->CreateRenderTargetView(renderTargetTexture, &rtvDesc, &rtv);
 	assert(SUCCEEDED(hr));
 
 	//½¦ÀÌ´õ ¸®¼Ò½º ºä »ý¼º
@@ -152,6 +152,6 @@ void RenderTargetBuffer::CreateCubeBuffer()
 	srvDesc.Format = format;
 	srvDesc.TextureCube.MipLevels = -1;
 	srvDesc.TextureCube.MostDetailedMip = 0;
-	hr = D3D::GetDevice()->CreateShaderResourceView(renderTargetTexture, &srvDesc, &srv);
+	hr = Device->CreateShaderResourceView(renderTargetTexture, &srvDesc, &srv);
 	assert(SUCCEEDED(hr));
 }

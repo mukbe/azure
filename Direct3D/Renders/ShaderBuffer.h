@@ -8,35 +8,35 @@ public:
 	{
 		MapData(data, dataSize);
 
-		D3D::GetDC()->VSSetConstantBuffers(slot, 1, &buffer);
+		DeviceContext->VSSetConstantBuffers(slot, 1, &buffer);
 	}
 
 	void SetPSBuffer(UINT slot)
 	{
 		MapData(data, dataSize);
 
-		D3D::GetDC()->PSSetConstantBuffers(slot, 1, &buffer);
+		DeviceContext->PSSetConstantBuffers(slot, 1, &buffer);
 	}
 
 	void SetHSBuffer(UINT slot)
 	{
 		MapData(data, dataSize);
 
-		D3D::GetDC()->HSSetConstantBuffers(slot, 1, &buffer);
+		DeviceContext->HSSetConstantBuffers(slot, 1, &buffer);
 	}
 
 	void SetDSBuffer(UINT slot)
 	{
 		MapData(data, dataSize);
 
-		D3D::GetDC()->DSSetConstantBuffers(slot, 1, &buffer);
+		DeviceContext->DSSetConstantBuffers(slot, 1, &buffer);
 	}
 
 	void SetCSBuffer(UINT slot)
 	{
 		MapData(data, dataSize);
 
-		D3D::GetDC()->CSSetConstantBuffers(slot, 1, &buffer);
+		DeviceContext->CSSetConstantBuffers(slot, 1, &buffer);
 	}
 
 protected:
@@ -50,7 +50,7 @@ protected:
 		desc.MiscFlags = 0;
 		desc.StructureByteStride = 0;
 
-		HRESULT hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &buffer);
+		HRESULT hr = Device->CreateBuffer(&desc, NULL, &buffer);
 		assert(SUCCEEDED(hr));
 	}
 
@@ -64,14 +64,14 @@ private:
 	{
 		D3D11_MAPPED_SUBRESOURCE subResource;
 
-		HRESULT hr = D3D::GetDC()->Map
+		HRESULT hr = DeviceContext->Map
 		(
 			buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
 		);
 
 		memcpy(subResource.pData, data, dataSize);
 
-		D3D::GetDC()->Unmap(buffer, 0);
+		DeviceContext->Unmap(buffer, 0);
 	}
 
 	D3D11_BUFFER_DESC desc;

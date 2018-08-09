@@ -50,7 +50,7 @@ void FreeCamera::ControlCamera()
 
 		Mouse::Get()->SetMousePos(screenCenterX, screenCenterY);
 	}
-	else if (Keyboard::Get()->Down(VK_LBUTTON))
+	else if (Keyboard::Get()->Press(VK_RBUTTON))
 	{
 		float speed = 300.0f;
 		D3DXVECTOR3 inputVector(0, 0, 0);
@@ -69,9 +69,9 @@ void FreeCamera::ControlCamera()
 			inputVector.x = -speed;
 		else if (KeyCode->Press('D'))
 			inputVector.x = speed;
-		if (KeyCode->Press('Q'))
+		if (KeyCode->Press('E'))
 			inputVector.y = speed;
-		else if (KeyCode->Press('E'))
+		else if (KeyCode->Press('Q'))
 			inputVector.y = -speed;
 
 		if (VECTORZERO(inputVector) == false)
@@ -86,7 +86,7 @@ void FreeCamera::ControlCamera()
 		GetCursorPos(&mousePos);
 
 		D3DDesc desc;
-		D3D::GetDesc(&desc);
+		DxRenderer::GetDesc(&desc);
 
 		ScreenToClient(desc.Handle, &mousePos);
 

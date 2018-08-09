@@ -45,11 +45,9 @@ using namespace fbxsdk;
 #pragma comment(lib, "jsoncpp.lib")
 //#pragma warning(disable:4996)
 
-
-#include "./Systems/D3D.h"
 #include "DefineHeader.h"
+#include "./Systems/DxRenderer.h"
 #include "ModuleHeader.h"
-
 
 const wstring Assets = L"../_Assets/";
 const wstring Contents = L"../_Contents/";

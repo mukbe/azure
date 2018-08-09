@@ -2,60 +2,93 @@
 #include "Program.h"
 
 #include "./View/FreeCamera.h"
+#include "./Utilities/Transform.h"
+
 
 Program::Program()
 {
 	States::Create();
 
 	D3DDesc desc;
-	D3D::GetDesc(&desc);
+	DxRenderer::GetDesc(&desc);
 
+	jsonRoot = new Json::Value();
+	Json::ReadData(L"LevelEditor.json", jsonRoot);
 
-	//values->JsonRoot = new Json::Value();
-	//Json::ReadData(L"LevelEditor.json", values->JsonRoot);
 	freeCamera = new FreeCamera();
-
 }
 
 Program::~Program()
 {
 
-	//Json::WriteDate(L"LevelEditor.json", values->JsonRoot);
-	//SafeDelete(values->JsonRoot);
-
+	Json::WriteDate(L"LevelEditor.json", jsonRoot);
+	SafeDelete(jsonRoot);
 
 	States::Delete();
 }
 
+void Program::PreUpdate()
+{
+}
+
 void Program::Update()
 {
+
+}
+
+void Program::PostUpdate()
+{
 	freeCamera->Update();
-
-
 }
 
 void Program::PreRender()
 {
+	freeCamera->Render();
 }
 
 void Program::Render()
 {
-	freeCamera->Render();
-
-	GizmoRenderer->WireSphere(D3DXVECTOR3(0, 0, 0), 3.f, D3DXCOLOR(1, 1, 0, 1));
-
 
 }
 
 void Program::PostRender()
 {
 
+	ImGui::Begin("System Info");
+	ImGui::Text("Frame Per Second : %4.0f", ImGui::GetIO().Framerate);
+
+	UINT hour = Time::Get()->GetHour();
+	string hourStr = hour < 10 ? "0" + to_string(hour) : to_string(hour);
+
+	UINT minute = Time::Get()->GetMinute();
+	string minuteStr = minute < 10 ? "0" + to_string(minute) : to_string(minute);
+
+	ImGui::Text("%s", (hourStr + ":" + minuteStr).c_str());
+
+	ImGui::Separator();
+
+	D3DXVECTOR3 pos = freeCamera->GetTransform()->GetWorldPosition();
+	ImGui::Text
+	(
+		"Camera Position : %3.0f, %3.0f, %3.0f"
+		, pos.x, pos.y, pos.z
+	);
+	
+	D3DXVECTOR3 angle = freeCamera->GetTransform()->GetAngle();
+	ImGui::Text
+	(
+		"Camera Rotation : %3.0f, %3.0f", angle.x * 180.f / D3DX_PI, angle.y *180.f / D3DX_PI
+	);
+
+	ImGui::Separator();
+	ImGui::End();
+
 }
 
 void Program::ResizeScreen()
 {
 	D3DDesc desc;
-	D3D::GetDesc(&desc);
+	DxRenderer::GetDesc(&desc);
 
 }
 

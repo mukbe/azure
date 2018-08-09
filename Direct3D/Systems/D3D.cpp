@@ -215,6 +215,7 @@ void D3D::CreateSwapChainAndDevice()
 		, &deviceContext
 	);
 	assert(SUCCEEDED(hr));
+
 }
 
 void D3D::CreateBackBuffer(float width, float height)

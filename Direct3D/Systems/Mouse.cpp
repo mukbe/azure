@@ -23,7 +23,7 @@ void Mouse::Delete()
 void Mouse::SetMousePos(int x, int y)
 {
 	D3DDesc desc;
-	D3D::GetDesc(&desc);
+	DxRenderer::GetDesc(&desc);
 
 	POINT setMousePos;
 	setMousePos.x = (LONG)x;

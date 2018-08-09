@@ -9,17 +9,19 @@ WPARAM Window::Run()
 	MSG msg = { 0 };
 
 	D3DDesc desc;
-	D3D::GetDesc(&desc);
+	DxRenderer::GetDesc(&desc);
 
 
-	D3D::Create();
+	pRenderer->CreateDevice();
+	pRenderer->CreateSwapChain();
+
 	Keyboard::Create();
 	Mouse::Create();
 
 	Time::Create();
 	Time::Get()->Start();
 
-	ImGui::Create(desc.Handle, D3D::GetDevice(), D3D::GetDC());
+	ImGui::Create(desc.Handle, Device, DeviceContext);
 	ImGui::StyleColorsDark();
 
 	program = new Program();
@@ -43,18 +45,22 @@ WPARAM Window::Run()
 				Mouse::Get()->Update();
 			}
 
+			program->PreUpdate();
+
 			program->Update();
-			//ImGui::Update();
+			program->PostUpdate();
+
+			ImGui::Update();
 
 
 			program->PreRender();
-			D3D::Get()->Clear();
+			pRenderer->BeginDraw();
 			{
 				program->Render();
 				program->PostRender();
-				//ImGui::Render();
+				ImGui::Render();
 			}
-			D3D::Get()->Present();
+			pRenderer->EndDraw();
 		}
 	}
 	SafeDelete(program);
@@ -63,7 +69,7 @@ WPARAM Window::Run()
 	Time::Delete();
 	Mouse::Delete();
 	Keyboard::Delete();
-	D3D::Delete();
+	pRenderer->Release();
 
 	return msg.wParam;
 }
@@ -71,7 +77,7 @@ WPARAM Window::Run()
 Window::Window()
 {
 	D3DDesc desc;
-	D3D::GetDesc(&desc);
+	DxRenderer::GetDesc(&desc);
 
 	WNDCLASSEX wndClass;
 	wndClass.cbClsExtra = 0;
@@ -118,7 +124,7 @@ Window::Window()
 		, NULL
 	);
 	assert(desc.Handle != NULL);
-	D3D::SetDesc(desc);
+	DxRenderer::SetDesc(desc);
 
 
 	RECT rect = { 0, 0, (LONG)desc.Width, (LONG)desc.Height };
@@ -144,7 +150,7 @@ Window::Window()
 Window::~Window()
 {
 	D3DDesc desc;
-	D3D::GetDesc(&desc);
+	DxRenderer::GetDesc(&desc);
 
 	if (desc.bFullScreen == true)
 		ChangeDisplaySettings(NULL, 0);
@@ -170,8 +176,8 @@ LRESULT CALLBACK Window::WndProc(HWND handle, UINT message, WPARAM wParam, LPARA
 				float width = (float)LOWORD(lParam);
 				float height = (float)HIWORD(lParam);
 
-				if (D3D::Get() != NULL)
-					D3D::Get()->ResizeScreen(width, height);
+				if (pRenderer != NULL)
+					//pRenderer->ResizeScreen(width, height);
 				
 				program->ResizeScreen();
 			}		

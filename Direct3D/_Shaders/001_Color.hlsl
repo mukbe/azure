@@ -13,7 +13,7 @@ cbuffer VS_WorldBuffer : register(b1)
 
 struct VS_INPUT
 {
-    float4 position : POSITION;
+    float4 position : POSITION0;
     float4 color : COLOR0;
 };
 

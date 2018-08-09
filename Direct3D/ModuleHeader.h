@@ -8,6 +8,7 @@
 #include "./Renders/VertexLayouts.h"
 #include "./Renders/States.h"
 #include "./Renders/ShaderBuffer.h"
+#include "./Renders/Shader.h"
 
 #include "./Utilities/Math.h"
 #include "./Utilities/Json.h"

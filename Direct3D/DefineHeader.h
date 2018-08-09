@@ -37,3 +37,33 @@ static ClassName* GetInstance()	\
 
 //제로 벡터 이냐?
 #define VECTORZERO(v)		(FLOATZERO((v).x) && FLOATZERO((v).y)&& FLOATZERO((v).z))
+
+#if defined(DEBUG) | defined(_DEBUG)
+#ifndef HResult
+#define HResult(x)                                       \
+   {                                             \
+      HRESULT hr = (x);                              \
+      if(FAILED(hr))                                 \
+      {                                          \
+         LPWSTR output;                              \
+         FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS |            \
+         FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),   \
+            (LPTSTR)&output, 0, NULL);                                             \
+            MessageBox(NULL, output, L"Error", MB_OK);                                 \
+      }                                                                     \
+   }
+#endif
+
+#else
+#ifndef HResult
+#define HResult(x) (x)
+#endif
+#endif 
+
+#ifndef Assert
+#if defined(DEBUG) || defined(_DEBUG)
+#define Assert(b) do {if (!(b)) {OutputDebugStringA("Assert : " #b "\n"); }} while (0)
+#else
+#define Assert(b)
+#endif   //   DEBUG || _DEBUG
+#endif

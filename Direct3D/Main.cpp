@@ -11,7 +11,7 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR param, int 
 	desc.Handle = NULL;
 	desc.Width = WinSizeX;
 	desc.Height = WinSizeY;
-	D3D::SetDesc(desc);
+	DxRenderer::SetDesc(desc);
 
 	srand((UINT)time(0));
 

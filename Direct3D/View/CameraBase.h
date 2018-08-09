@@ -2,7 +2,7 @@
 class CameraBase
 {
 protected:
-	class Transform* transform;
+	Synthesize(class Transform*, transform, Transform)
 	class Frustum* frustum;
 	class Perspective* perspective;
 	Synthesize(D3DXMATRIX, matView, ViewMatrix)
