@@ -50,7 +50,7 @@ void FreeCamera::ControlCamera()
 
 		Mouse::Get()->SetMousePos(screenCenterX, screenCenterY);
 	}
-	else if (Keyboard::Get()->Press(VK_RBUTTON))
+	else if (Keyboard::Get()->Down(VK_LBUTTON))
 	{
 		float speed = 300.0f;
 		D3DXVECTOR3 inputVector(0, 0, 0);

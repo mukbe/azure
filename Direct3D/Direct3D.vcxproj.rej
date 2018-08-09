@@ -1,9 +1,0 @@
-diff a/Direct3D/Direct3D.vcxproj b/Direct3D/Direct3D.vcxproj	(rejected hunks)
-@@ -19,6 +19,7 @@
-     </ProjectConfiguration>
-   </ItemGroup>
-   <ItemGroup>
-+    <ClInclude Include="Figure\Cube.h" />
-     <ClInclude Include="DefineHeader.h" />
-     <ClInclude Include="ModuleHeader.h" />
-     <ClInclude Include="Renders\Gizmo.h" />

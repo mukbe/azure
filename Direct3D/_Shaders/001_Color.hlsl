@@ -13,7 +13,7 @@ cbuffer VS_WorldBuffer : register(b1)
 
 struct VS_INPUT
 {
-    float4 position : POSITION0;
+    float4 position : POSITION;
     float4 color : COLOR0;
 };
 
@@ -28,8 +28,7 @@ PS_INPUT VS(VS_INPUT input)
     PS_INPUT output;
 
     output.position = mul(input.position, _vsWorld);
-    output.position = mul(output.position, _vsView);
-    output.position = mul(output.position, _vsProjection);
+    output.position = mul(output.position, _vsViewProjection);
 
     output.color = input.color;
 

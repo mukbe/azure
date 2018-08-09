@@ -19,7 +19,7 @@ void Gizmo::CreateVertex()
 
 	D3D11_SUBRESOURCE_DATA data = { 0 };
 	data.pSysMem = vertex;
-	HRESULT hr = _Device->CreateBuffer(&desc, &data, &vertexBuffer);
+	HRESULT hr = D3D::GetDevice()->CreateBuffer(&desc, &data, &vertexBuffer);
 	assert(SUCCEEDED(hr));
 
 	circleVertices = new VertexColor[CIRCLEGIZMO_SEGMENTS + 1];
@@ -32,7 +32,7 @@ void Gizmo::CreateVertex()
 
 	data = { 0 };
 	data.pSysMem = circleVertices;
-	hr = _Device->CreateBuffer(&desc, &data, &circleVertexBuffer);
+	hr = D3D::GetDevice()->CreateBuffer(&desc, &data, &circleVertexBuffer);
 	assert(SUCCEEDED(hr));
 
 	SafeDeleteArray(vertex);
@@ -52,7 +52,7 @@ void Gizmo::CreateIndex()
 
 	D3D11_SUBRESOURCE_DATA data = { 0 };
 	data.pSysMem = index;
-	HRESULT hr = _Device->CreateBuffer
+	HRESULT hr = D3D::GetDevice()->CreateBuffer
 	(&desc, &data, &indexBuffer);
 	assert(SUCCEEDED(hr));
 
@@ -67,7 +67,7 @@ void Gizmo::CreateIndex()
 
 	data = { 0 };
 	data.pSysMem = circleIndex;
-	hr = _Device->CreateBuffer
+	hr = D3D::GetDevice()->CreateBuffer
 	(&desc, &data, &circleIndexBuffer);
 	assert(SUCCEEDED(hr));
 
@@ -89,7 +89,7 @@ Gizmo::Gizmo()
 	}
 
 	worldBuffer = new WorldBuffer;
-	shader = new Shader(Shaders + L"001_Color.hlsl");
+	shader = new Shader(Shaders + L"001_Color.hlsl", Shader::ShaderType::Default);
 }
 
 
@@ -106,7 +106,7 @@ Gizmo::~Gizmo()
 void Gizmo::Line(const D3DXVECTOR3 startPos, const D3DXVECTOR3 endPos, const D3DXCOLOR color)
 {
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	HRESULT hr = _Context->Map
+	HRESULT hr = D3D::GetDC()->Map
 	(
 		vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource
 	);
@@ -118,23 +118,20 @@ void Gizmo::Line(const D3DXVECTOR3 startPos, const D3DXVECTOR3 endPos, const D3D
 		buffer[0].color = color;
 		buffer[1].color = color;
 	}
-	_Context->Unmap(vertexBuffer, NULL);
+	D3D::GetDC()->Unmap(vertexBuffer, NULL);
 
 	UINT stride = sizeof(VertexColor);
 	UINT offset = 0;
 
-	_Context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-	_Context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	_Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	D3D::GetDC()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	D3D::GetDC()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	D3D::GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
-	D3DXMATRIX mat;
-	D3DXMatrixIdentity(&mat);
-
-	worldBuffer->SetMatrix(mat);
+	worldBuffer->SetMatrix(IdentityMatrix);
 	worldBuffer->SetVSBuffer(1);
 	shader->Render();
 
-	_Context->DrawIndexed(indexCount, 0, 0);
+	D3D::GetDC()->DrawIndexed(indexCount, 0, 0);
 }
 
 void Gizmo::Circle(D3DXVECTOR3 center, float radius, D3DXVECTOR3 axis, D3DXCOLOR color)
@@ -179,14 +176,14 @@ void Gizmo::Circle(D3DXVECTOR3 center, float radius, D3DXVECTOR3 axis, D3DXCOLOR
 	UINT stride = sizeof(VertexColor);
 	UINT offset = 0;
 
-	_Context->IASetVertexBuffers(0, 1, &circleVertexBuffer, &stride, &offset);
-	_Context->IASetIndexBuffer(circleIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	_Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
+	D3D::GetDC()->IASetVertexBuffers(0, 1, &circleVertexBuffer, &stride, &offset);
+	D3D::GetDC()->IASetIndexBuffer(circleIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	D3D::GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
 
 	worldBuffer->SetMatrix(matWorld);
 	worldBuffer->SetVSBuffer(1);
 	shader->Render();
-	_Context->DrawIndexed((CIRCLEGIZMO_SEGMENTS + 1), 0, 0);
+	D3D::GetDC()->DrawIndexed((CIRCLEGIZMO_SEGMENTS + 1), 0, 0);
 }
 
 void Gizmo::WireSphere(D3DXVECTOR3 center, float radius, D3DXCOLOR color)

@@ -22,7 +22,7 @@ void Mouse::Delete()
 
 void Mouse::SetMousePos(int x, int y)
 {
-	struct D3DDesc desc;
+	D3DDesc desc;
 	D3D::GetDesc(&desc);
 
 	POINT setMousePos;

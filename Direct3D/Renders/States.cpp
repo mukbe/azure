@@ -27,7 +27,7 @@
 //{
 //	HRESULT hr;
 //
-//	hr = _Device->CreateRasterizerState(desc, state);
+//	hr = D3D::GetDevice()->CreateRasterizerState(desc, state);
 //	assert(SUCCEEDED(hr));
 //}
 //
@@ -40,7 +40,7 @@
 //{
 //	HRESULT hr;
 //
-//	hr = _Device->CreateDepthStencilState(desc, state);
+//	hr = D3D::GetDevice()->CreateDepthStencilState(desc, state);
 //	assert(SUCCEEDED(hr));
 //}
 //
@@ -53,7 +53,7 @@
 //{
 //	HRESULT hr;
 //
-//	hr = _Device->CreateSamplerState(desc, state);
+//	hr = D3D::GetDevice()->CreateSamplerState(desc, state);
 //	assert(SUCCEEDED(hr));
 //}
 //
@@ -66,7 +66,7 @@
 //{
 //	HRESULT hr;
 //
-//	hr = _Device->CreateBlendState(desc, state);
+//	hr = D3D::GetDevice()->CreateBlendState(desc, state);
 //	assert(SUCCEEDED(hr));
 //}
 //
@@ -179,18 +179,18 @@ void States::CreateRasterizer(D3D11_RASTERIZER_DESC* desc, ID3D11RasterizerState
 {
 	HRESULT hr;
 
-	hr = _Device->CreateRasterizerState(desc, state);
+	hr = D3D::GetDevice()->CreateRasterizerState(desc, state);
 	assert(SUCCEEDED(hr));
 }
 
 void States::SetRasterizer(ID3D11RasterizerState * state)
 {
-	_Context->RSSetState(state);
+	D3D::GetDC()->RSSetState(state);
 }
 
 void States::SetRasterizer(RasterizerStates state)
 {
-	_Context->RSSetState(rasterizerStates[state]);
+	D3D::GetDC()->RSSetState(rasterizerStates[state]);
 }
 
 void States::GetDepthStencilDesc(D3D11_DEPTH_STENCIL_DESC* desc)
@@ -202,18 +202,18 @@ void States::CreateDepthStencil(D3D11_DEPTH_STENCIL_DESC * desc, ID3D11DepthSten
 {
 	HRESULT hr;
 
-	hr = _Device->CreateDepthStencilState(desc, state);
+	hr = D3D::GetDevice()->CreateDepthStencilState(desc, state);
 	assert(SUCCEEDED(hr));
 }
 
 void States::SetDepthStencil(ID3D11DepthStencilState * state)
 {
-	_Context->OMSetDepthStencilState(state, 1);
+	D3D::GetDC()->OMSetDepthStencilState(state, 1);
 }
 
 void States::SetDepthStencil(DepthStencilStates state)
 {
-	_Context->OMSetDepthStencilState(depthStencilStates[state], 1);
+	D3D::GetDC()->OMSetDepthStencilState(depthStencilStates[state], 1);
 }
 
 void States::GetSamplerDesc(D3D11_SAMPLER_DESC * desc)
@@ -225,18 +225,18 @@ void States::CreateSampler(D3D11_SAMPLER_DESC * desc, ID3D11SamplerState ** stat
 {
 	HRESULT hr;
 
-	hr = _Device->CreateSamplerState(desc, state);
+	hr = D3D::GetDevice()->CreateSamplerState(desc, state);
 	assert(SUCCEEDED(hr));
 }
 
 void States::SetSampler(UINT slot, UINT count, ID3D11SamplerState * state)
 {
-	_Context->PSSetSamplers(slot, count, &state);
+	D3D::GetDC()->PSSetSamplers(slot, count, &state);
 }
 
 void States::SetSampler(UINT slot, SamplerStates state)
 {
-	_Context->PSSetSamplers(slot, 1, &samplerStates[state]);
+	D3D::GetDC()->PSSetSamplers(slot, 1, &samplerStates[state]);
 }
 
 ID3D11SamplerState * States::GetSampler(SamplerStates state)
@@ -252,18 +252,18 @@ void States::GetBlendDesc(D3D11_BLEND_DESC * desc)
 void States::CreateBlend(D3D11_BLEND_DESC * desc, ID3D11BlendState ** state)
 {
 	HRESULT hr;
-	hr = _Device->CreateBlendState(desc, state);
+	hr = D3D::GetDevice()->CreateBlendState(desc, state);
 	assert(SUCCEEDED(hr));
 }
 
 void States::SetBlend(ID3D11BlendState * state)
 {
-	_Context->OMSetBlendState(state, NULL, 0xFFFFFF);
+	D3D::GetDC()->OMSetBlendState(state, NULL, 0xFFFFFF);
 }
 
 void States::SetBlend(BlendStates state)
 {
-	_Context->OMSetBlendState(blendStates[state], NULL, 0xFFFFFF);
+	D3D::GetDC()->OMSetBlendState(blendStates[state], NULL, 0xFFFFFF);
 }
 
 void States::CreateRasterizerDesc()

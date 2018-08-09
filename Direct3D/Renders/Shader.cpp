@@ -1,73 +1,74 @@
 #include "stdafx.h"
 #include "Shader.h"
 
-void Shader::Render()
+Shader::Shader(wstring shaderFile, ShaderType type , string funcName)
+	:shaderFile(shaderFile), useType(type), reflection(nullptr), inputLayout(nullptr),
+	vertexShader(nullptr), pixelShader(nullptr),hullShader(nullptr), domainshader(nullptr), geoShader(nullptr) , vertexBlob(nullptr)
 {
-	_Context->IASetInputLayout(inputLayout);
-	_Context->VSSetShader(vertexShader, NULL, 0);
-	_Context->PSSetShader(pixelShader, NULL, 0);
-}
-
-Shader::Shader(wstring shaderFile)
-	: shaderFile(shaderFile)
-{
-	CreateVertexShader();
-	CreatePixelShader();
+	CreateShaderFromFile(funcName + "VS", &vertexBlob);
+	CreateShaderFromFile(funcName + "PS");
 	CreateInputLayout();
+
+	bool b;
+	
+	if (b = ShaderType::useHS & type)
+	{
+		CreateShaderFromFile(funcName + "HS");
+		CreateShaderFromFile(funcName + "DS");
+	}
+
+	if (b = ShaderType::useGS & type)
+	{
+		CreateShaderFromFile(funcName + "GS");
+	}
 }
 
 Shader::~Shader()
 {
+	Release();
+}
+
+void Shader::Render()
+{
+	D3D::GetDC()->IASetInputLayout(inputLayout);
+
+	D3D::GetDC()->VSSetShader(vertexShader, NULL, 0);
+	D3D::GetDC()->PSSetShader(pixelShader, NULL, 0);
+
+	bool b;
+	if (b = ShaderType::useHS & useType)
+	{
+		D3D::GetDC()->HSSetShader(hullShader, NULL, 0);
+		D3D::GetDC()->DSSetShader(domainshader, NULL, 0);
+	}
+
+	if (b = ShaderType::useGS & useType)
+	{
+		D3D::GetDC()->GSSetShader(geoShader, nullptr, 0);
+	}
+
+}
+
+void Shader::Release()
+{
 	SafeRelease(reflection);
-
 	SafeRelease(inputLayout);
-	SafeRelease(vertexBlob);
+
 	SafeRelease(vertexShader);
-
-	SafeRelease(pixelBlob);
 	SafeRelease(pixelShader);
-}
+	SafeRelease(vertexBlob);
 
-void Shader::CreateVertexShader()
-{
-	ID3D10Blob* error;
-	HRESULT hr = D3DX11CompileFromFile
-	(
-		shaderFile.c_str(), NULL, NULL, "VS", "vs_5_0"
-		, D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL
-		, &vertexBlob, &error, NULL
-	);
-	CheckShaderError(hr, error);
+	bool b;
+	if (b = ShaderType::useHS & useType)
+	{
+		SafeRelease(hullShader);
+		SafeRelease(domainshader);
+	}
 
-	hr = _Device->CreateVertexShader
-	(
-		vertexBlob->GetBufferPointer()
-		, vertexBlob->GetBufferSize()
-		, NULL
-		, &vertexShader
-	);
-	assert(SUCCEEDED(hr));
-}
-
-void Shader::CreatePixelShader()
-{
-	ID3D10Blob* error;
-	HRESULT hr = D3DX11CompileFromFile
-	(
-		shaderFile.c_str(), NULL, NULL, "PS", "ps_5_0"
-		, D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL
-		, &pixelBlob, &error, NULL
-	);
-	CheckShaderError(hr, error);
-
-	hr = _Device->CreatePixelShader
-	(
-		pixelBlob->GetBufferPointer()
-		, pixelBlob->GetBufferSize()
-		, NULL
-		, &pixelShader
-	);
-	assert(SUCCEEDED(hr));
+	if (b = ShaderType::useGS & useType)
+	{
+		SafeRelease(geoShader);
+	}
 }
 
 void Shader::CheckShaderError(HRESULT hr, ID3DBlob * error)
@@ -76,11 +77,112 @@ void Shader::CheckShaderError(HRESULT hr, ID3DBlob * error)
 	{
 		if (error != NULL)
 		{
-			string str = static_cast<const char*>(error->GetBufferPointer());
+			string str = (const char *)error->GetBufferPointer();
 			MessageBoxA(NULL, str.c_str(), "Shader Error", MB_OK);
 		}
 		assert(false);
 	}
+}
+
+void Shader::CreateShaderFromFile(string funcName, ID3DBlob** vsBlob)
+{
+	ID3DBlob* blob;
+	HRESULT hr;
+
+	if (strstr(funcName.c_str(), "VS"))
+	{
+		CompileFromFile(funcName, "vs_5_0", &blob);
+
+		hr = D3D::GetDevice()->CreateVertexShader
+		(
+			blob->GetBufferPointer()
+			, blob->GetBufferSize()
+			, NULL
+			, &vertexShader
+		);
+		assert(SUCCEEDED(hr));
+
+	}
+	else if (strstr(funcName.c_str(), "PS"))
+	{
+		CompileFromFile(funcName, "ps_5_0", &blob);
+
+		hr = D3D::GetDevice()->CreatePixelShader
+		(
+			blob->GetBufferPointer()
+			, blob->GetBufferSize()
+			, NULL
+			, &pixelShader
+		);
+		assert(SUCCEEDED(hr));
+	}
+	else if (strstr(funcName.c_str(), "HS"))
+	{
+		CompileFromFile(funcName, "hs_5_0", &blob);
+
+		hr = D3D::GetDevice()->CreateHullShader
+		(
+			blob->GetBufferPointer()
+			, blob->GetBufferSize()
+			, NULL
+			, &hullShader
+		);
+		assert(SUCCEEDED(hr));
+	}
+	else if (strstr(funcName.c_str(), "DS"))
+	{
+		CompileFromFile(funcName, "ds_5_0", &blob);
+
+		hr = D3D::GetDevice()->CreateDomainShader
+		(
+			blob->GetBufferPointer()
+			, blob->GetBufferSize()
+			, NULL
+			, &domainshader
+		);
+		assert(SUCCEEDED(hr));
+	}
+	else if (strstr(funcName.c_str(), "GS"))
+	{
+		CompileFromFile(funcName, "gs_5_0", &blob);
+
+		hr = D3D::GetDevice()->CreateGeometryShader
+		(
+			blob->GetBufferPointer()
+			, blob->GetBufferSize()
+			, NULL
+			, &geoShader
+		);
+		assert(SUCCEEDED(hr));
+	}
+
+	if (vsBlob)
+		*vsBlob = blob;
+	else
+		SafeRelease(blob);
+
+
+		
+
+}
+
+void Shader::CompileFromFile(string funcName, LPCSTR pProfile, ID3DBlob ** ppBlob)
+{
+	ID3D10Blob* error;
+	HRESULT hr;
+
+	hr = D3DX11CompileFromFile
+	(
+		shaderFile.c_str(), NULL, NULL, funcName.c_str(), pProfile
+		, D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL
+		, ppBlob, &error, NULL
+	);
+
+	CheckShaderError(hr, error);
+	assert(SUCCEEDED(hr));
+
+	SafeRelease(error);
+
 }
 
 void Shader::CreateInputLayout()
@@ -156,7 +258,7 @@ void Shader::CreateInputLayout()
 		inputLayoutDesc.push_back(elementDesc);
 	}
 
-	hr = _Device->CreateInputLayout
+	hr = D3D::GetDevice()->CreateInputLayout
 	(
 		&inputLayoutDesc[0]
 		, inputLayoutDesc.size()
@@ -164,6 +266,6 @@ void Shader::CreateInputLayout()
 		, vertexBlob->GetBufferSize()
 		, &inputLayout
 	);
-
 	assert(SUCCEEDED(hr));
+
 }

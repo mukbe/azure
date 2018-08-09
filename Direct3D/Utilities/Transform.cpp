@@ -83,9 +83,9 @@ void Transform::Reset(int resetFlag)
 	}
 	if (resetFlag & RESET_SCALE)
 	{
-		this->scale.x = 1.f;
-		this->scale.y = 1.f;
-		this->scale.z = 1.f;
+		this->scale.x = 0.f;
+		this->scale.y = 0.f;
+		this->scale.z = 0.f;
 	}
 
 	this->UpdateTransform();

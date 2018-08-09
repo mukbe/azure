@@ -13,11 +13,11 @@ CameraBase::CameraBase()
 	this->perspective = new Perspective((float)desc.Width, (float)desc.Height);
 
 	this->transform = new Transform;
-	//this->transform->SetWorldPosition(0.f, 0.f, -20.0f);
+	this->transform->SetWorldPosition(0, 0, -20);
 
 	D3DXMatrixLookAtLH(&matView, &transform->GetWorldPosition(), &(transform->GetWorldPosition() + transform->GetForward()), &D3DXVECTOR3(0.f, 1.f, 0.f));
 
-	this->viewProjectionBuffer = new ViewProjectionBuffer;
+	this->viewProjectionBuffer =new ViewProjectionBuffer;
 	this->viewProjectionBuffer->SetView(matView);
 	this->viewProjectionBuffer->SetProjection(perspective->GetMatrix());
 	this->viewProjectionBuffer->SetVP(matViewProj);
