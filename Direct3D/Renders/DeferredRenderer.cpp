@@ -7,13 +7,12 @@
 
 DeferredRenderer::DeferredRenderer()
 {
-	D3DDesc desc;
-	DxRenderer::GetDesc(&desc);
-	D3DXMatrixOrthoLH(&matOrtho, (float)desc.Width, (float)desc.Height, 0.f, 1000.0f);
 
 	this->shader = new Shader(Shaders + L"003_Texture.hlsl");
+
+	D3DDesc desc;
+	DxRenderer::GetDesc(&desc);
 	this->orthoWindow = new OrthoWindow(desc.Width, desc.Height);
-	this->viewProjectionBuffer = new ViewProjectionBuffer;
 
 	this->Create();
 }
@@ -33,7 +32,6 @@ DeferredRenderer::~DeferredRenderer()
 
 	SafeDelete(shader);
 	SafeDelete(orthoWindow);
-	SafeDelete(viewProjectionBuffer);
 }
 
 void DeferredRenderer::BegindDrawToGBuffer()
@@ -66,8 +64,6 @@ void DeferredRenderer::Render()
 
 	shader->Render();
 
-	viewProjectionBuffer->SetProjection(matOrtho);
-	viewProjectionBuffer->SetVSBuffer(0);
 
 	DeviceContext->DrawIndexed(6, 0, 0);
 }

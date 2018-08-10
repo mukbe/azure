@@ -1,5 +1,7 @@
 #pragma once
-class OrthoWindow
+#include "Projection.h"
+
+class OrthoWindow : public Projection
 {
 private:
 	VertexType(VertexTexture)
