@@ -96,6 +96,9 @@ OrthoWindow::OrthoWindow(int windowWidth, int windowHeight)
 
 	delete[] indices;
 	indices = 0;
+
+	D3DXMatrixOrthoLH(&projection, (float)windowWidth, (float)windowHeight, 0.f, 1000.0f);
+	viewProjectionBuffer->SetProjection(projection);
 }
 
 OrthoWindow::~OrthoWindow()
@@ -118,4 +121,6 @@ void OrthoWindow::Render()
 
 	// 이 꼭지점 버퍼에서 렌더링되어야하는 프리미티브 유형을 설정합니다.이 경우에는 삼각형입니다.
 	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	viewProjectionBuffer->SetVSBuffer(0);
 }

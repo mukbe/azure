@@ -107,6 +107,6 @@ void FreeCamera::ControlCamera()
 void FreeCamera::UpdateView()
 {
 	D3DXMatrixLookAtLH(&matView, &transform->GetWorldPosition(), &(transform->GetWorldPosition() + transform->GetForward()), &transform->GetUp());
+	perspective->SetView(matView);
 
-	D3DXMatrixMultiply(&matViewProj, &matView, &perspective->GetMatrix());
 }

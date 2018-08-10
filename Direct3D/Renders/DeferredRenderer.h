@@ -16,8 +16,6 @@ private:
 	
 	class Shader* shader;
 	class OrthoWindow* orthoWindow;
-	class ViewProjectionBuffer* viewProjectionBuffer;
-	D3DXMATRIX matOrtho;
 private:
 	void ClearRenderTarget();
 	bool Create();

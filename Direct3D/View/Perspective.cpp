@@ -1,18 +1,14 @@
-#include "../stdafx.h"
+#include "stdafx.h"
 #include "Perspective.h"
 
 Perspective::Perspective(float width, float height, float fov, float zn, float zf)
 {
 	Set(width, height, fov, zn, zf);
+	viewProjectionBuffer->SetProjection(projection);
 }
 
 Perspective::~Perspective()
 {
-}
-
-void Perspective::GetMatrix(D3DXMATRIX * mat)
-{
-	memcpy(mat, &projection, sizeof(D3DXMATRIX));
 }
 
 void Perspective::Set(float width, float height, float fov, float zn, float zf)
@@ -25,4 +21,17 @@ void Perspective::Set(float width, float height, float fov, float zn, float zf)
 	this->zf = zf;
 
 	D3DXMatrixPerspectiveFovLH(&projection, fov, aspect, zn, zf);
+}
+
+void Perspective::Render()
+{
+	viewProjectionBuffer->SetVSBuffer(0);
+}
+
+void Perspective::SetView(D3DXMATRIX v)
+{
+	viewProjectionBuffer->SetView(v);
+
+	D3DXMatrixMultiply(&matViewProj, &v, &projection);
+	viewProjectionBuffer->SetVP(matViewProj);
 }

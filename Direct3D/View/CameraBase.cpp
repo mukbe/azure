@@ -17,10 +17,8 @@ CameraBase::CameraBase()
 
 	D3DXMatrixLookAtLH(&matView, &transform->GetWorldPosition(), &(transform->GetWorldPosition() + transform->GetForward()), &D3DXVECTOR3(0.f, 1.f, 0.f));
 
-	this->viewProjectionBuffer =new ViewProjectionBuffer;
-	this->viewProjectionBuffer->SetView(matView);
-	this->viewProjectionBuffer->SetProjection(perspective->GetMatrix());
-	this->viewProjectionBuffer->SetVP(matViewProj);
+	perspective->SetView(matView);
+
 
 }
 
@@ -45,9 +43,5 @@ void CameraBase::Update()
 
 void CameraBase::Render()
 {
-	this->viewProjectionBuffer->SetView(matView);
-	this->viewProjectionBuffer->SetProjection(perspective->GetMatrix());
-	this->viewProjectionBuffer->SetVP(matViewProj);
-
-	this->viewProjectionBuffer->SetVSBuffer(0);
+	perspective->Render();
 }

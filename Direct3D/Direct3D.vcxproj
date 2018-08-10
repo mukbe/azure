@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="View\Projection.h" />
     <ClInclude Include="View\OrthoWindow.h" />
     <ClInclude Include="Renders\DeferredRenderer.h" />
     <ClInclude Include="DefineHeader.h" />
