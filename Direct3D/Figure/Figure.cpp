@@ -78,6 +78,8 @@ Figure::Figure(FigureType type, float radius,D3DXCOLOR color)
 	shader = new Shader(Shaders + L"002_Deferred.hlsl");
 	worldBuffer = new WorldBuffer;
 	transform = new Transform;
+
+	shadowShader = new Shader(Shaders + L"004_Shadow.hlsl");
 }
 
 Figure::~Figure()
@@ -100,6 +102,23 @@ void Figure::Render()
 	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	shader->Render();
+
+	worldBuffer->SetMatrix(transform->GetFinalMatrix());
+	worldBuffer->SetVSBuffer(1);
+
+	DeviceContext->DrawIndexed(indexCount, 0, 0);
+}
+
+void Figure::ShadowRender()
+{
+	UINT stride = sizeof VertexType;
+	UINT offset = 0;
+
+	DeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	DeviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	shadowShader->Render();
 
 	worldBuffer->SetMatrix(transform->GetFinalMatrix());
 	worldBuffer->SetVSBuffer(1);

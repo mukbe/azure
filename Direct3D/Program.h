@@ -10,6 +10,7 @@ public:
 	void Update();
 	void PostUpdate();
 
+	void ShadowRender();
 	void PreRender();
 	void Render();
 	void PostRender();
@@ -20,4 +21,7 @@ private:
 	class Json::Value* jsonRoot;
 	class Figure* box, *grid, *sphere;
 	class DeferredRenderer* deferred;
+
+	class ShadowRenderer* shadowRenderer;
+	class DirectionalLight* directionalLight;
 };

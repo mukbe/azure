@@ -12,10 +12,12 @@ private:
 	UINT indexCount;
 	class WorldBuffer* worldBuffer;
 	class Shader* shader;
+	class Shader* shadowShader;
 public:
 	Figure(FigureType type, float radius,D3DXCOLOR color = D3DXCOLOR(0.f,0.f,1.f,1.f));
 	~Figure();
 
 	void Render();
+	void ShadowRender();
 };
 

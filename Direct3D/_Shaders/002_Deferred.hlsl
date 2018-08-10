@@ -1,15 +1,6 @@
 
-cbuffer VS_ViewProjection : register(b0)
-{
-    matrix _vsView;
-    matrix _vsProjection;
-    matrix _vsViewProjection;
-}
+#include "000_Header.hlsl"
 
-cbuffer VS_WorldBuffer : register(b1)
-{
-    matrix _vsWorld;
-}
 
 struct VS_INPUT
 {

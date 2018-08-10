@@ -86,6 +86,8 @@
     <ClInclude Include="View\OrthoWindow.h">
       <Filter>View</Filter>
     </ClInclude>
+    <ClInclude Include="Renders\ShadowRenderer.h" />
+    <ClInclude Include="Testing\DirectionalLight.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Renders">
@@ -185,6 +187,8 @@
     <ClCompile Include="View\OrthoWindow.cpp">
       <Filter>View</Filter>
     </ClCompile>
+    <ClCompile Include="Renders\ShadowRenderer.cpp" />
+    <ClCompile Include="Testing\DirectionalLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\001_Color.hlsl">
@@ -196,5 +200,7 @@
     <None Include="_Shaders\002_Deferred.hlsl">
       <Filter>Renders\Shader</Filter>
     </None>
+    <None Include="_Shaders\000_Header.hlsl" />
+    <None Include="_Shaders\004_Shadow.hlsl" />
   </ItemGroup>
 </Project>

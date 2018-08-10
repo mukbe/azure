@@ -6,6 +6,9 @@
 #include "./Figure/Figure.h"
 #include "./Renders/DeferredRenderer.h"
 
+#include "./Renders/ShadowRenderer.h"
+#include "./Testing/DirectionalLight.h"
+
 Program::Program()
 {
 	States::Create();
@@ -25,6 +28,10 @@ Program::Program()
 	sphere = new Figure(Figure::FigureType::Sphere, 10.0f, D3DXCOLOR(1.f, 0.f, 0.f, 1.f));
 
 	deferred = new DeferredRenderer;
+
+	this->shadowRenderer = new ShadowRenderer;
+	//this->shadowRenderer->SetRenderFunc([this]() {this->ShadowRender(); });
+	this->directionalLight = new DirectionalLight;
 }
 
 Program::~Program()
@@ -54,28 +61,53 @@ void Program::PostUpdate()
 	freeCamera->Update();
 }
 
+void Program::ShadowRender()
+{
+	States::SetRasterizer(States::SHADOW);
+	grid->ShadowRender();
+	box->ShadowRender();
+	sphere->ShadowRender();
+	States::SetRasterizer(States::SOLID_CULL_ON);
+}
+
 void Program::PreRender()
 {
-	freeCamera->Render();
+	//freeCamera->Render();
 }
 
 void Program::Render()
 {
-	deferred->BegindDrawToGBuffer();
+	{
+		directionalLight->UpdateView();
+		shadowRenderer->SetViewProjection(0, directionalLight->GetView(), directionalLight->GetProj());
+		shadowRenderer->RenderDirectionalMap();
+		this->ShadowRender();
+	}
+	{
+		deferred->BegindDrawToGBuffer();
+		freeCamera->Render();
+		grid->Render();
+		box->Render();
+		sphere->Render();
 
-	grid->Render();
-	box->Render();
-	sphere->Render();
-
-	pRenderer->EndShadowDraw();
-	pRenderer->BeginDraw();
-	deferred->Render();
+		GizmoRenderer->WireSphere(directionalLight->GetPos(), 10.0f, D3DXCOLOR(0.f, 1.f, 0.f, 1.f));
+	}
+	{
+		pRenderer->EndShadowDraw();
+		pRenderer->BeginDraw();
+		deferred->Render();
+	}
 }
 
 void Program::PostRender()
 {
 	deferred->PostRender();
 
+
+	ImGui::Begin("ShadowMap");
+	ImGui::ImageButton(shadowRenderer->GetDirectionalSRV(), ImVec2(500, 500));
+	ImGui::DragFloat3("pos", directionalLight->GetPosPtr());
+	ImGui::End();
 
 	ImGui::Begin("System Info");
 	ImGui::Text("Frame Per Second : %4.0f", ImGui::GetIO().Framerate);
@@ -106,6 +138,7 @@ void Program::PostRender()
 	
 
 	ImGui::Separator();
+
 	ImGui::End();
 
 }

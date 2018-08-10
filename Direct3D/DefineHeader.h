@@ -8,7 +8,7 @@
 #define SafeDeleteArray(p){ if(p){ delete [] (p); (p) = NULL; } }
 
 #define ONE_RAD 0.01745328f
-#define IdentityMatrix {D3DXMATRIX(1.f,0.f,0.f,0.f,0.f,1.f,0.f,0.f,0.f,0.f,1.f,0.f,0.f,0.f,0.f,1.f)}
+#define IdentityMatrix D3DXMATRIX(1.f,0.f,0.f,0.f,0.f,1.f,0.f,0.f,0.f,0.f,1.f,0.f,0.f,0.f,0.f,1.f)
 #define VertexType(t) using VertexType = t;
 
 #define Synthesize(VarType, VarName, FuncName)	\

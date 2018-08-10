@@ -67,6 +67,7 @@ public:
 	ID3D11DeviceContext* GetContext() { return pD3dContext; }
 	IDXGISwapChain* GetSwapChain() { return pSwapChain; }
 	ID3D11DepthStencilView* GetDepthStencilView()const { return this->pDepthStencilView; }
+	D3D_FEATURE_LEVEL GetFeatureLevel()const { return this->mFeatureLevel; }
 	//TODO ResizeScreen func
 };
 

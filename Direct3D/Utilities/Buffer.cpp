@@ -200,3 +200,88 @@ void Buffer::CreateTextureArray(ID3D11ShaderResourceView** pOut, vector<wstring>
 	for (UINT i = 0; i < size; ++i)
 		SafeDeleteArray(srcTex[i]);
 }
+
+void Buffer::CreateDepthStencilSurface(ID3D11Texture2D ** ppDepthStencilTexture, ID3D11ShaderResourceView ** ppDepthStencilSRV, ID3D11DepthStencilView ** ppDepthStencilView, DXGI_FORMAT DSFormat, DXGI_FORMAT SRVFormat, UINT uWidth, UINT uHeight, UINT uSampleCount)
+{
+	HRESULT hr;
+	DXGI_FORMAT TextureFormat;
+
+	if (ppDepthStencilTexture)
+	{
+		switch (DSFormat)
+		{
+		case DXGI_FORMAT_D32_FLOAT:
+			TextureFormat = DXGI_FORMAT_R32_TYPELESS;
+			break;
+
+		case DXGI_FORMAT_D24_UNORM_S8_UINT:
+			TextureFormat = DXGI_FORMAT_R24G8_TYPELESS;
+			break;
+
+		case DXGI_FORMAT_D16_UNORM:
+			TextureFormat = DXGI_FORMAT_R16_TYPELESS;
+			break;
+
+		default:
+			TextureFormat = DXGI_FORMAT_UNKNOWN;
+			break;
+		}
+		assert(TextureFormat != DXGI_FORMAT_UNKNOWN);
+
+		// Create depth stencil texture
+		D3D11_TEXTURE2D_DESC descDepth;
+		descDepth.Width = uWidth;
+		descDepth.Height = uHeight;
+		descDepth.MipLevels = 1;
+		descDepth.ArraySize = 1;
+		descDepth.Format = TextureFormat;
+		descDepth.SampleDesc.Count = uSampleCount;
+		descDepth.SampleDesc.Quality = 0;//( uSampleCount > 1 ) ? ( D3D10_STANDARD_MULTISAMPLE_PATTERN ) : ( 0 );
+		descDepth.Usage = D3D11_USAGE_DEFAULT;
+		descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+
+		if (NULL != ppDepthStencilSRV)
+		{
+			if ((descDepth.SampleDesc.Count == 1) || (pRenderer->GetFeatureLevel() >= D3D_FEATURE_LEVEL_10_1))
+			{
+				descDepth.BindFlags |= D3D11_BIND_SHADER_RESOURCE;
+			}
+		}
+
+		descDepth.CPUAccessFlags = 0;
+		descDepth.MiscFlags = 0;
+		hr = Device->CreateTexture2D(&descDepth, NULL, ppDepthStencilTexture);
+		assert(SUCCEEDED(hr));
+
+		if (NULL != ppDepthStencilView)
+		{
+			D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+			descDSV.Format = DSFormat;
+			if (descDepth.SampleDesc.Count > 1)
+			{
+				descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+			}
+			else
+			{
+				descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+			}
+			descDSV.Texture2D.MipSlice = 0;
+			descDSV.Flags = 0;
+
+			hr = Device->CreateDepthStencilView(*ppDepthStencilTexture, &descDSV, ppDepthStencilView);
+			assert(SUCCEEDED(hr));
+		}
+
+		if (NULL != ppDepthStencilSRV)
+		{
+			D3D11_SHADER_RESOURCE_VIEW_DESC SRDesc;
+			SRDesc.Format = SRVFormat;
+			SRDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+			SRDesc.Texture2D.MostDetailedMip = 0;
+			SRDesc.Texture2D.MipLevels = 1;
+
+			hr = Device->CreateShaderResourceView(*ppDepthStencilTexture, &SRDesc, ppDepthStencilSRV);
+			assert(SUCCEEDED(hr));
+		}
+	}
+}

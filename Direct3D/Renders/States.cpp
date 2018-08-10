@@ -300,6 +300,14 @@ void States::CreateRasterizerDesc()
 
 	desc.CullMode = D3D11_CULL_NONE;
 	States::CreateRasterizer(&desc, &rasterizerStates[WIRE_CULL_OFF]);
+
+	ZeroMemory(&desc, sizeof D3D11_RASTERIZER_DESC);
+	desc.FillMode = D3D11_FILL_SOLID;
+	desc.CullMode = D3D11_CULL_BACK;
+	desc.DepthBias = 10000;
+	desc.DepthBiasClamp = 0.0f;
+	desc.SlopeScaledDepthBias = 1.0f;
+	States::CreateRasterizer(&desc, &rasterizerStates[SHADOW]);
 }
 
 void States::CreateDepthStencilDesc()

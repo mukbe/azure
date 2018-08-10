@@ -1,15 +1,5 @@
 
-cbuffer VS_ViewProjection : register(b0)
-{
-    matrix _vsView;
-    matrix _vsProjection;
-    matrix _vsViewProjection;
-}
-
-cbuffer VS_WorldBuffer : register(b1)
-{
-    matrix _vsWorld;
-}
+#include "000_Header.hlsl"
 
 Texture2D _deferredTex[4] : register(t0);
 Texture2D _depth : register(t4);
@@ -49,7 +39,7 @@ float4 PS(PS_INPUT input) : SV_Target
     float4 color = _deferredTex[2].Sample(_samp, input.uv);
     float diffuseFactor = saturate(dot(normal, -lightDir));
     float4 lightColor = float4(1, 1, 1, 1);
-    
+
     color = color * lightColor * diffuseFactor;
 
     return color;
