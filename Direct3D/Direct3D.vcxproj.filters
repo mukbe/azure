@@ -89,7 +89,6 @@
     <ClInclude Include="Renders\ShadowRenderer.h" />
     <ClInclude Include="Testing\DirectionalLight.h" />
       <Filter>View</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Renders">
