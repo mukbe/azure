@@ -46,7 +46,7 @@ void ShadowRenderer::RenderDirectionalMap()
 	DeviceContext->ClearDepthStencilView(directionalDSV, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	ID3D11RenderTargetView* nullRenderTarget = NULL;
 	DeviceContext->OMSetRenderTargets(1, &nullRenderTarget,directionalDSV);
-	this->UpdateViewProjection(0);
+	//this->UpdateViewProjection(0);
 
 	if (this->renderFunc != NULL)
 		this->renderFunc();
@@ -54,6 +54,7 @@ void ShadowRenderer::RenderDirectionalMap()
 
 void ShadowRenderer::RenderPointMap()
 {
+	
 }
 
 void ShadowRenderer::SetViewProjection(UINT index, D3DXMATRIX view, D3DXMATRIX projection)

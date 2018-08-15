@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "OrthoWindow.h"
 
+#include "./Renders/WorldBuffer.h"
 
 OrthoWindow::OrthoWindow(int windowWidth, int windowHeight)
 {
@@ -98,7 +99,10 @@ OrthoWindow::OrthoWindow(int windowWidth, int windowHeight)
 	indices = 0;
 
 	D3DXMatrixOrthoLH(&projection, (float)windowWidth, (float)windowHeight, 0.f, 1000.0f);
-	viewProjectionBuffer->SetOrtho(projection);
+	//viewProjectionBuffer->SetOrtho(projection);
+
+	orthoBuffer = new OrthoBuffer;
+	orthoBuffer->SetMatrix(projection);
 }
 
 OrthoWindow::~OrthoWindow()
@@ -122,6 +126,8 @@ void OrthoWindow::Render()
 	// 이 꼭지점 버퍼에서 렌더링되어야하는 프리미티브 유형을 설정합니다.이 경우에는 삼각형입니다.
 	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	viewProjectionBuffer->SetVSBuffer(0);
-	viewProjectionBuffer->SetPSBuffer(0);
+	//viewProjectionBuffer->SetVSBuffer(0);
+	//viewProjectionBuffer->SetPSBuffer(0);
+
+	orthoBuffer->SetVSBuffer(2);
 }

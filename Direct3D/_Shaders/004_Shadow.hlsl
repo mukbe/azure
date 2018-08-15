@@ -6,12 +6,12 @@ struct PixelInput
 };
 
 
-PixelInput ColorShadowMapVS(VertexColorNormal input)
+PixelInput VS(VertexColorNormal input)
 {
     PixelInput output;
 
     output.position = mul(input.position, _world);
-    output.position = mul(output.position, _viewProjection);
+    output.position = mul(output.position, _lightViewProjection);
 
     return output;
 }
@@ -21,14 +21,14 @@ PixelInput TextureShadowVS(VertexTextureNormal input)
     PixelInput output;
 
     output.position = mul(input.position, _world);
-    output.position = mul(output.position, _viewProjection);
+    output.position = mul(output.position, _lightViewProjection);
 
     return output;
 }
 
 
 //ShadowMapPS
-void ColorShadowMapPS(PixelInput input)
+void PS(PixelInput input)
 {
 
 }
