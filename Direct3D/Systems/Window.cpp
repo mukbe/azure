@@ -58,6 +58,7 @@ WPARAM Window::Run()
 			{
 				program->Render();
 				program->PostRender();
+				program->UIRender();
 				ImGui::Render();
 			}
 			pRenderer->EndDraw();
