@@ -2,65 +2,112 @@
 000_Header.hlsl
 */
 
-
-cbuffer VS_ViewProjection : register(b0)
+cbuffer ViewProjectionBuffer : register(b0)
 {
-    matrix _vsView;
-    matrix _vsProjection;
-    matrix _vsViewProjection;
+    matrix _view;
+    matrix _projection;
+    matrix _viewProjection;
+    matrix _invView;
+    matrix _invProjection;
+    matrix _invViewProjection;
 }
 
-cbuffer VS_World : register(b1)
+cbuffer WorldBuffer : register(b1)
 {
-    matrix _vsWorld;
+    matrix _world;
 }
 
-cbuffer _ps_Lihgt : register(b2)
+cbuffer OrthoBuffer : register(b2)
 {
-    float3 _lightDir;
-    float _lightPadding;
+    matrix _ortho;
 }
 
-Texture2D _deferredNormalTex : register(t0);
-Texture2D _deferredPositonTex : register(t1);
-Texture2D _deferredAlbedoTex : register(t2);
-Texture2D _deferredDepthTex : register(t3);
-Texture2D _directionalLightMap : register(t4);
+cbuffer CameraBuffer : register(b3)
+{
+    float3 _cameraPos;
+    float _cameraPadding;
+}
+
+cbuffer SunBuffer : register(b4)
+{
+    float3 _sunPosition;
+    float _sunIntensity;
+    float3 _sunDir;
+    float _sunPadding;
+    float4 _sunColor;
+}
+
+cbuffer LightViewProjectionBuffer : register(b5)
+{
+    matrix _lightView;
+    matrix _lightProjection;
+    matrix _lightViewProjection;
+    matrix _shadowMatrix;
+}
+
+Texture2D _deferredNormal : register(t0);
+Texture2D _deferredAlbedo : register(t1);
+Texture2D _deferredSpecular : register(t2);
+Texture2D _deferredWorld : register(t3);
+
+Texture2D _sunLightsahdowMap : register(t4);
+
+Texture2D _diffuseTex : register(t5);
+Texture2D _specularTex : register(t6);
 
 SamplerState _basicSampler : register(s0);
-SamplerComparisonState _shadowSampler : register(s1);
 
 /*************************************************************
-CalcShadowFactor
+Struct
 **************************************************************/
 
-float CalcShadowFactor(float4 depthPosition, Texture2D shadowTex, SamplerComparisonState shadowSampler, uint pcfOn)
+struct VertexColor
 {
-    float2 uv;
-     //3D 공간에서 UV공간으로 정규화 
-    float3 shadowPos = depthPosition.xyz / depthPosition.w;
-    uv.x = shadowPos.x * 0.5f + 0.5f;
-    uv.y = shadowPos.y * -0.5f + 0.5f;
+    float4 position : POSITION0;
+    float4 color : COLOR0;
+};
 
-    float shadow = 0.0f;
-    float offset = 1.0f / 2048.0f;
+struct VertexColorNormal
+{
+    float4 position : POSITION0;
+    float3 normal : NORMAL0;
+    float4 color : COLOR0;
+};
 
-    //PCF 미적용
-    if (pcfOn > 0)
-    {
-        return shadowTex.SampleCmpLevelZero(shadowSampler, uv, shadowPos.z).r;
-    }
-    //PCF 적용
-    else
-    {
-        for (int i = -1; i < 2; ++i)
-        {
-            for (int j = -1; j < 2; ++j)
-            {
-                shadow += shadowTex.SampleCmpLevelZero(shadowSampler, uv + float2(offset * j, offset * i), shadowPos.z).r;
-            }
-        }
-        return shadow / 9.0f;
-    }
 
+
+struct VertexTexture
+{
+    float4 position : POSITION0;
+    float2 uv : TEXCOORD0;
+};
+
+struct VertexTextureNormal
+{
+    float4 position : POSITION0;
+    float2 uv : TEXCOORD0;
+    float3 normal : NORMAL0;
+};
+
+struct G_Buffer
+{
+    float4 normal : SV_Target0;
+    float4 diffuse : SV_Target1;
+    float4 spec : SV_Target2;
+    float4 worldPos : SV_Target3;
+};
+
+
+/*************************************************************
+Func
+**************************************************************/
+
+float3 normalPacking(in float3 normal)
+{
+    return normal * 0.5f + 0.5f;
+}
+
+float3 normalUnpacking(in float3 normal)
+{
+    return normal * 2.0f - 1.0f;
 }

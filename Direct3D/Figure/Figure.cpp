@@ -75,11 +75,11 @@ Figure::Figure(FigureType type, float radius,D3DXCOLOR color)
 	}
 
 
-	shader = new Shader(Shaders + L"002_Deferred.hlsl");
+	shader = new Shader(Shaders + L"001_GBuffer.hlsl",Shader::ShaderType::Default,"ColorDeferred");
 	worldBuffer = new WorldBuffer;
 	transform = new Transform;
 
-	shadowShader = new Shader(Shaders + L"004_Shadow.hlsl");
+	shadowShader = new Shader(Shaders + L"004_Shadow.hlsl",Shader::ShaderType::Default," ColorShadowMap");
 }
 
 Figure::~Figure()

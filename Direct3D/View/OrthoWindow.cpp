@@ -98,7 +98,7 @@ OrthoWindow::OrthoWindow(int windowWidth, int windowHeight)
 	indices = 0;
 
 	D3DXMatrixOrthoLH(&projection, (float)windowWidth, (float)windowHeight, 0.f, 1000.0f);
-	viewProjectionBuffer->SetProjection(projection);
+	viewProjectionBuffer->SetOrtho(projection);
 }
 
 OrthoWindow::~OrthoWindow()
@@ -123,4 +123,5 @@ void OrthoWindow::Render()
 	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	viewProjectionBuffer->SetVSBuffer(0);
+	viewProjectionBuffer->SetPSBuffer(0);
 }

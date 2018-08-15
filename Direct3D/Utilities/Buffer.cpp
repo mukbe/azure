@@ -221,7 +221,9 @@ void Buffer::CreateDepthStencilSurface(ID3D11Texture2D ** ppDepthStencilTexture,
 		case DXGI_FORMAT_D16_UNORM:
 			TextureFormat = DXGI_FORMAT_R16_TYPELESS;
 			break;
-
+		case  DXGI_FORMAT_R8G8B8A8_UINT :
+			TextureFormat = DXGI_FORMAT_R8G8B8A8_UINT;
+			break;
 		default:
 			TextureFormat = DXGI_FORMAT_UNKNOWN;
 			break;

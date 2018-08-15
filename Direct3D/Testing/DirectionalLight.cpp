@@ -2,57 +2,86 @@
 #include "DirectionalLight.h"
 
 #include "../Utilities/Transform.h"
-
+#include "./Renders/WorldBuffer.h"
 DirectionalLight::DirectionalLight()
 {
-	D3DXVECTOR3 direction(1.f, -1.f, 0.f);
-	D3DXVec3Normalize(&direction, &direction);
+	this->sunBuffer = new SunBuffer;
+	this->lightViewBuffer = new LightViewProj;
 
-	D3DXVECTOR3 origin = D3DXVECTOR3(0.f, 0.f, 0.f) - direction * 30.0f;
-	D3DXVECTOR3 up;
-	D3DXVec3Cross(&up, &D3DXVECTOR3(1.f,0.f,0.f), &direction);
+	this->UpdateView();
 
-	D3DXMatrixLookAtLH(&view, &origin, &(origin + direction), &up);
-	D3DXMatrixOrthoLH(&ortho, WinSizeX, WinSizeY, 0.f, 1000.f);
-
-	this->pos = origin;
+	D3D11_SAMPLER_DESC desc;
+	ZeroMemory(&desc, sizeof D3D11_SAMPLER_DESC);
+	desc.ComparisonFunc = D3D11_COMPARISON_LESS_EQUAL;
+	desc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+	desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	desc.MaxAnisotropy = 1;
+	Device->CreateSamplerState(&desc, &shadowSampler);
 }
 
 
 DirectionalLight::~DirectionalLight()
 {
-	
+	SafeDelete(sunBuffer);
+	SafeDelete(lightViewBuffer);
 }
 
-D3DXMATRIX DirectionalLight::GetView()
-{
-	return view;
-}
-
-D3DXMATRIX DirectionalLight::GetProj()
-{
-	return ortho;
-}
 
 void DirectionalLight::UpdateView()
 {
-	D3DXVECTOR3 direction = D3DXVECTOR3(0.f, 0.f, 0.f) - pos;
-	D3DXVec3Normalize(&direction, &direction);
+	D3DXMATRIX view;
+	D3DXVECTOR3 origin, dir;
+	D3DXVECTOR3 center(50, 0, 50);
+	origin = sunBuffer->GetPos();
+	dir = center - origin;
+	D3DXVec3Normalize(&dir, &dir);
+	sunBuffer->SetDirection(dir);
+
 	D3DXVECTOR3 up;
-	D3DXVec3Cross(&up, &D3DXVECTOR3(1.f, 0.f, 0.f), &direction);
-	this->dir = direction;
-	D3DXMatrixLookAtLH(&view, &this->pos, &(this->pos + direction), &D3DXVECTOR3(0.f,1.f,0.f));
+	D3DXVec3Cross(&up, &D3DXVECTOR3(1.f, 0.f, 0.f), &dir);
+
+	D3DXMatrixLookAtLH(&view, &origin, &(origin + dir), &D3DXVECTOR3(0.f,1.f,0.f));
+	//D3DXMATRIX ortho;
 	//D3DXMatrixOrthoLH(&ortho, WinSizeX, WinSizeY, 0.f, 1000.f);
 
-	D3DXVECTOR3 center(0, 0, 0);
-	float radius = D3DXVec3Length(&(pos - center));
+	
+	float radius = D3DXVec3Length(&(origin - center));
 	float l = center.x - radius;
 	float b = center.y - radius;
 	float n = center.z - radius;
 	float r = center.x + radius;
 	float t = center.y + radius;
 	float f = center.z + radius;
-
+	
 	D3DXMatrixOrthoOffCenterLH(&this->ortho, l, r, b, t, n, f);
 
+	D3DXMATRIX viewProj;
+	D3DXMatrixMultiply(&viewProj, &view, &ortho);
+
+	//set special texture matrix for shadow mapping
+	float fOffsetX = 0.5f + (0.5f / (float)WinSizeX);
+	float fOffsetY = 0.5f + (0.5f / (float)WinSizeY);
+
+
+	D3DXMATRIX toViewport = D3DXMATRIX(0.5f, 0.0f, 0.0f, 0.0f,
+								0.0f, -0.5f, 0.0f, 0.0f,
+								0.0f, 0.0f, 1.0f, 0.0f,
+								fOffsetX, fOffsetY, 0.0f, 1.0f);
+
+	D3DXMatrixMultiply(&shadowMatrix, &viewProj, &toViewport);
+
+	this->lightViewBuffer->SetShadowMatrix(shadowMatrix);
+	this->lightViewBuffer->SetViewProj(viewProj);
+
 }
+
+void DirectionalLight::SetBuffer()
+{
+	sunBuffer->SetPSBuffer(2);
+	lightViewBuffer->SetVSBuffer(3);
+	lightViewBuffer->SetPSBuffer(3);
+	DeviceContext->PSSetSamplers(1, 1, &shadowSampler);
+}
+

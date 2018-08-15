@@ -7,8 +7,7 @@
 
 DeferredRenderer::DeferredRenderer()
 {
-
-	this->shader = new Shader(Shaders + L"003_Texture.hlsl");
+	this->shader = new Shader(Shaders + L"002_Deferred.hlsl",Shader::ShaderType::Default,"BasicDeferred");
 
 	D3DDesc desc;
 	DxRenderer::GetDesc(&desc);
@@ -47,7 +46,7 @@ void DeferredRenderer::ClearRenderTarget()
 {
 	for (int i = 0; i<BUFFER_COUNT; i++)
 	{
-		DeviceContext->ClearRenderTargetView(renderTargetView[i], D3DXCOLOR(0.0f,0.0f,0.0f,1.f));
+		DeviceContext->ClearRenderTargetView(renderTargetView[i], D3DXCOLOR(0.f, 0.f, 0.f,1.f));
 	}
 
 	DeviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
@@ -59,12 +58,8 @@ void DeferredRenderer::ClearRenderTarget()
 void DeferredRenderer::Render()
 {
 	orthoWindow->Render();
-
-	DeviceContext->PSSetShaderResources(0, 4, &shaderResourceView[0]);
-
+	DeviceContext->PSSetShaderResources(0, BUFFER_COUNT, &shaderResourceView[0]);
 	shader->Render();
-
-
 	DeviceContext->DrawIndexed(6, 0, 0);
 }
 
@@ -75,7 +70,6 @@ void DeferredRenderer::PostRender()
 		ImGui::ImageButton(shaderResourceView[0], ImVec2(200, 150)); ImGui::SameLine();
 		ImGui::ImageButton(shaderResourceView[1], ImVec2(200, 150));
 		ImGui::ImageButton(shaderResourceView[2], ImVec2(200, 150)); ImGui::SameLine();
-		ImGui::ImageButton(shaderResourceView[3], ImVec2(200, 150));
 	}
 	ImGui::End();
 }
@@ -150,6 +144,8 @@ bool DeferredRenderer::Create()
 
 	hr = Device->CreateTexture2D(&depthBufferDesc, NULL, &depthBufferTexture);
 	assert(SUCCEEDED(hr));
+
+
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
 	ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));

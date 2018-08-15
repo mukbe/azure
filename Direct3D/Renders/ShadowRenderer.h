@@ -1,5 +1,6 @@
 #pragma once
 #include <functional>
+
 class ShadowRenderer
 {
 private:
@@ -16,7 +17,7 @@ private:
 	vector<pair<D3DXMATRIX, D3DXMATRIX>>		viewProjectionDataContext;
 
 	class ViewProjectionBuffer*					viewProjectionBuffer;
-	D3D11_VIEWPORT	viewport;
+	D3D11_VIEWPORT								viewport;
 private:
 	void CreatePointRenderer();
 	void CreateDirectionalRenderer();

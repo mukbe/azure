@@ -1,21 +1,47 @@
 #pragma once
-
+#include "./Renders/ShaderBuffer.h"
 class DirectionalLight
 {
 private:
 	D3DXMATRIX view;
 	D3DXMATRIX ortho;
-	D3DXVECTOR3 pos;
-	D3DXVECTOR3 dir;
+	D3DXMATRIX shadowMatrix;
+	class SunBuffer* sunBuffer;
+	class LightViewProj* lightViewBuffer;
+	ID3D11SamplerState* shadowSampler;
 public:
 	DirectionalLight();
 	~DirectionalLight();
 	
-	D3DXMATRIX GetView();
-	D3DXMATRIX GetProj();
-	D3DXVECTOR3 GetPos() { return this->pos; }
-	float* GetPosPtr() { return &pos.x; }
 	void UpdateView();
-	D3DXVECTOR3 GetDir() { return this->dir; }
+	void SetBuffer();
+};
+
+class LightViewProj : public ShaderBuffer
+{
+	struct Data
+	{
+		D3DXMATRIX lightViewProj;
+		D3DXMATRIX shadowMatrix;
+	}data;
+
+public:
+	LightViewProj()
+		:ShaderBuffer(&data, sizeof Data)
+	{
+
+	}
+
+	void SetViewProj(D3DXMATRIX mat)
+	{
+		this->data.lightViewProj = mat;
+		D3DXMatrixTranspose(&data.lightViewProj, &data.lightViewProj);
+	}
+
+	void SetShadowMatrix(D3DXMATRIX mat)
+	{
+		this->data.shadowMatrix = mat;
+		D3DXMatrixTranspose(&data.shadowMatrix, &data.shadowMatrix);
+	}
 };
 

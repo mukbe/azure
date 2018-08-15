@@ -48,8 +48,8 @@ void ShadowRenderer::RenderDirectionalMap()
 	DeviceContext->OMSetRenderTargets(1, &nullRenderTarget,directionalDSV);
 	this->UpdateViewProjection(0);
 
-	//if (this->renderFunc != NULL)
-		//this->renderFunc();
+	if (this->renderFunc != NULL)
+		this->renderFunc();
 }
 
 void ShadowRenderer::RenderPointMap()

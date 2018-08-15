@@ -52,6 +52,7 @@
     <ClInclude Include="Utilities\Math.h" />
     <ClInclude Include="Utilities\Path.h" />
     <ClInclude Include="Utilities\String.h" />
+    <ClInclude Include="View\Projection.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Testing\DirectionalLight.cpp" />
@@ -83,17 +84,12 @@
     <ClCompile Include="Utilities\String.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="_Shaders\001_Color.hlsl">
+    <None Include="_Shaders\001_GBuffer.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\002_Deferred.hlsl">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="_Shaders\003_Texture.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

@@ -1,58 +1,52 @@
-
 #include "000_Header.hlsl"
 
-
-struct VS_INPUT
-{
-    float4 position : POSITION0;
-    float4 color : COLOR0;
-    float3 normal : NORMAL0;
-};
-
-struct PS_INPUT
+struct BasicPixelInput
 {
     float4 position : SV_POSITION;
-    float4 worldPos : POSITION0;
-    float3 normal : NORMAL0;
-    float4 color : COLOR0;
+    float2 uv : TEXCOORD0;
 };
 
-struct PS_OUTPUT
+BasicPixelInput BasicDeferredVS(VertexTexture input)
 {
-    float4 normal : SV_Target0;
-    float4 position : SV_Target1;
-    float4 diffuse : SV_Target2;
-    float4 depth : SV_Target3;
-};
+    BasicPixelInput output;
 
-PS_INPUT VS(VS_INPUT input)
-{
-    PS_INPUT output;
-
-    output.position = mul(input.position, _vsWorld);
-    output.worldPos = output.position;
-    output.normal = normalize(mul(input.normal, (float3x3)_vsWorld));
-    output.position = mul(output.position, _vsViewProjection);
-
-    output.color = input.color;
+    output.position = mul(input.position, _ortho);
+    output.uv = input.uv;
 
     return output;
 }
 
-PS_OUTPUT PS(PS_INPUT input)
+float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
 {
-    PS_OUTPUT output;
-    float depth = input.position.z / input.position.w * 10.0f;
+    //GetGBufferData
+    float4 worldPos = _deferredWorld.Sample(_basicSampler, input.uv);
+    float3 worldNormal = normalUnpacking(_deferredNormal.Sample(_basicSampler, input.uv).xyz);
+    float4 albedo = _deferredAlbedo.Sample(_basicSampler, input.uv);
+    float4 specPower = _deferredSpecular.Sample(_basicSampler, input.uv);
 
-    output.depth = float4(depth, depth, depth, 1.0f);
-    output.normal = float4((input.normal * 0.5f + 0.5f),1.0f);
-    output.position = input.worldPos;
+    //GizmoRendering
+    if (specPower.w > 1.5f)
+        return albedo;
 
-    output.diffuse = input.color;
-   
+    //CalcMainShadow
+    float4 posLight = mul(worldPos, _shadowMatrix);
+    float2 samplingShadowData = _sunLightsahdowMap.Sample(_basicSampler, posLight.xy).xw;
+    float shadowMapDepth = samplingShadowData.x / samplingShadowData.y;
 
-    return output;
+    float4 projectionToLight = mul(worldPos, _lightViewProjection);
+    float pixelDepth = projectionToLight.x / projectionToLight.w;
 
+    //CalcLighting
+    float diffuseFactor = saturate(dot(worldNormal.xyz, -_sunDir));
+    float4 diffuseColor = albedo * diffuseFactor * _sunColor;
+ 
+    //if in Shadow
+    if (shadowMapDepth < pixelDepth)
+    {
+        return diffuseColor * shadowMapDepth;
+    }
+    else
+    {
+        return diffuseColor;
+    }
 }
-
-

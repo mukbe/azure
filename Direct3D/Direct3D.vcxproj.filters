@@ -1,207 +1,74 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Renders\ShaderBuffer.h">
-      <Filter>Renders</Filter>
-    </ClInclude>
-    <ClInclude Include="Renders\States.h">
-      <Filter>Renders</Filter>
-    </ClInclude>
-    <ClInclude Include="Renders\VertexLayouts.h">
-      <Filter>Renders</Filter>
-    </ClInclude>
-    <ClInclude Include="Systems\Keyboard.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Systems\Mouse.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Systems\Time.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Systems\Window.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Program.h" />
-    <ClInclude Include="Utilities\Path.h">
-      <Filter>Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="Utilities\String.h">
-      <Filter>Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="Utilities\BinaryFile.h">
-      <Filter>Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="Utilities\Math.h">
-      <Filter>Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="Interfaces\ICloneable.h">
-      <Filter>Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="Utilities\Json.h">
-      <Filter>Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="Renders\RenderTargetBuffer.h">
-      <Filter>Renders</Filter>
-    </ClInclude>
-    <ClInclude Include="View\CameraBase.h">
-      <Filter>View</Filter>
-    </ClInclude>
-    <ClInclude Include="View\FreeCamera.h">
-      <Filter>View</Filter>
-    </ClInclude>
-    <ClInclude Include="View\Perspective.h">
-      <Filter>View</Filter>
-    </ClInclude>
-    <ClInclude Include="Utilities\GeometryGenerator.h">
-      <Filter>Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="Renders\Gizmo.h">
-      <Filter>Renders</Filter>
-    </ClInclude>
-    <ClInclude Include="Renders\WorldBuffer.h">
-      <Filter>Renders</Filter>
-    </ClInclude>
-    <ClInclude Include="DefineHeader.h" />
-    <ClInclude Include="ModuleHeader.h" />
-    <ClInclude Include="Utilities\Buffer.h">
-      <Filter>Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="Utilities\Transform.h">
-      <Filter>Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="Renders\Shader.h">
-      <Filter>Renders</Filter>
-    </ClInclude>
-    <ClInclude Include="Systems\DxRenderer.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Figure\Figure.h">
-      <Filter>Figure</Filter>
-    </ClInclude>
-    <ClInclude Include="Renders\DeferredRenderer.h">
-      <Filter>Renders</Filter>
-    </ClInclude>
-    <ClInclude Include="View\OrthoWindow.h">
-      <Filter>View</Filter>
-    </ClInclude>
-    <ClInclude Include="Renders\ShadowRenderer.h" />
-    <ClInclude Include="Testing\DirectionalLight.h" />
-      <Filter>View</Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Renders">
-      <UniqueIdentifier>{30f71ca6-86fc-4a07-8c55-3b9b4a221935}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Systems">
-      <UniqueIdentifier>{c2abd35d-375a-43b3-ba7e-7b4b24b403bb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utilities">
-      <UniqueIdentifier>{409d6f39-6218-4c24-9e39-1646a0cde279}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Interfaces">
-      <UniqueIdentifier>{16ceaf6b-dbfb-4761-9902-ff63fdd517f9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Renders\Shader">
-      <UniqueIdentifier>{2180f539-7f8e-4636-b218-732bd08af41d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="View">
-      <UniqueIdentifier>{6fbb8885-db9e-4f5f-b620-4e5ffc53c09c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Figure">
-      <UniqueIdentifier>{9acc11cc-ba08-47cd-b2a1-a1cea5ad9379}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Environment">
-      <UniqueIdentifier>{83692fb6-5b85-4bf8-82ae-e0b215cf2de4}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Renders\States.cpp">
-      <Filter>Renders</Filter>
-    </ClCompile>
-    <ClCompile Include="Systems\Mouse.cpp">
-      <Filter>Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="Systems\Time.cpp">
-      <Filter>Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="Systems\Window.cpp">
-      <Filter>Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="Systems\Keyboard.cpp">
-      <Filter>Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="Program.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Utilities\Path.cpp">
-      <Filter>Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="Utilities\String.cpp">
-      <Filter>Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="Utilities\BinaryFile.cpp">
-      <Filter>Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="Utilities\Math.cpp">
-      <Filter>Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="Utilities\Json.cpp">
-      <Filter>Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="Renders\RenderTargetBuffer.cpp">
-      <Filter>Renders</Filter>
-    </ClCompile>
-    <ClCompile Include="View\CameraBase.cpp">
-      <Filter>View</Filter>
-    </ClCompile>
-    <ClCompile Include="View\FreeCamera.cpp">
-      <Filter>View</Filter>
-    </ClCompile>
-    <ClCompile Include="View\Perspective.cpp">
-      <Filter>View</Filter>
-    </ClCompile>
-    <ClCompile Include="Utilities\GeometryGenerator.cpp">
-      <Filter>Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="Renders\Gizmo.cpp">
-      <Filter>Renders</Filter>
-    </ClCompile>
-    <ClCompile Include="Utilities\Buffer.cpp">
-      <Filter>Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="Utilities\Transform.cpp">
-      <Filter>Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="Renders\Shader.cpp">
-      <Filter>Renders</Filter>
-    </ClCompile>
-    <ClCompile Include="Systems\DxRenderer.cpp">
-      <Filter>Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="Figure\Figure.cpp">
-      <Filter>Figure</Filter>
-    </ClCompile>
-    <ClCompile Include="Renders\DeferredRenderer.cpp">
-      <Filter>Renders</Filter>
-    </ClCompile>
-    <ClCompile Include="View\OrthoWindow.cpp">
-      <Filter>View</Filter>
-    </ClCompile>
-    <ClCompile Include="Renders\ShadowRenderer.cpp" />
     <ClCompile Include="Testing\DirectionalLight.cpp" />
+    <ClCompile Include="Renders\ShadowRenderer.cpp" />
+    <ClCompile Include="View\OrthoWindow.cpp" />
+    <ClCompile Include="Renders\DeferredRenderer.cpp" />
+    <ClCompile Include="Figure\Figure.cpp" />
+    <ClCompile Include="Systems\DxRenderer.cpp" />
+    <ClCompile Include="Renders\Gizmo.cpp" />
+    <ClCompile Include="Renders\Shader.cpp" />
+    <ClCompile Include="Utilities\Buffer.cpp" />
+    <ClCompile Include="Utilities\GeometryGenerator.cpp" />
+    <ClCompile Include="Utilities\Transform.cpp" />
+    <ClCompile Include="View\FreeCamera.cpp" />
+    <ClCompile Include="View\Perspective.cpp" />
+    <ClCompile Include="View\CameraBase.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Program.cpp" />
+    <ClCompile Include="Renders\RenderTargetBuffer.cpp" />
+    <ClCompile Include="Renders\States.cpp" />
+    <ClCompile Include="Systems\Keyboard.cpp" />
+    <ClCompile Include="Systems\Mouse.cpp" />
+    <ClCompile Include="Systems\Time.cpp" />
+    <ClCompile Include="Systems\Window.cpp" />
+    <ClCompile Include="Utilities\BinaryFile.cpp" />
+    <ClCompile Include="Utilities\Json.cpp" />
+    <ClCompile Include="Utilities\Math.cpp" />
+    <ClCompile Include="Utilities\Path.cpp" />
+    <ClCompile Include="Utilities\String.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="_Shaders\001_Color.hlsl">
-      <Filter>Renders\Shader</Filter>
-    </None>
-    <None Include="_Shaders\003_Texture.hlsl">
-      <Filter>Renders\Shader</Filter>
-    </None>
-    <None Include="_Shaders\002_Deferred.hlsl">
-      <Filter>Renders\Shader</Filter>
-    </None>
+    <ClInclude Include="Testing\DirectionalLight.h" />
+    <ClInclude Include="Renders\ShadowRenderer.h" />
+    <ClInclude Include="View\OrthoWindow.h" />
+    <ClInclude Include="Renders\DeferredRenderer.h" />
+    <ClInclude Include="DefineHeader.h" />
+    <ClInclude Include="Figure\Figure.h" />
+    <ClInclude Include="ModuleHeader.h" />
+    <ClInclude Include="Systems\DxRenderer.h" />
+    <ClInclude Include="Renders\Gizmo.h" />
+    <ClInclude Include="Renders\WorldBuffer.h" />
+    <ClInclude Include="Renders\Shader.h" />
+    <ClInclude Include="Utilities\Buffer.h" />
+    <ClInclude Include="Utilities\GeometryGenerator.h" />
+    <ClInclude Include="Utilities\Transform.h" />
+    <ClInclude Include="View\FreeCamera.h" />
+    <ClInclude Include="View\Perspective.h" />
+    <ClInclude Include="View\CameraBase.h" />
+    <ClInclude Include="Interfaces\ICloneable.h" />
+    <ClInclude Include="Program.h" />
+    <ClInclude Include="Renders\RenderTargetBuffer.h" />
+    <ClInclude Include="Renders\ShaderBuffer.h" />
+    <ClInclude Include="Renders\States.h" />
+    <ClInclude Include="Renders\VertexLayouts.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Systems\Keyboard.h" />
+    <ClInclude Include="Systems\Mouse.h" />
+    <ClInclude Include="Systems\Time.h" />
+    <ClInclude Include="Systems\Window.h" />
+    <ClInclude Include="Utilities\BinaryFile.h" />
+    <ClInclude Include="Utilities\Json.h" />
+    <ClInclude Include="Utilities\Math.h" />
+    <ClInclude Include="Utilities\Path.h" />
+    <ClInclude Include="Utilities\String.h" />
+    <ClInclude Include="View\Projection.h" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />
     <None Include="_Shaders\004_Shadow.hlsl" />
+    <None Include="_Shaders\001_GBuffer.hlsl" />
+    <None Include="_Shaders\002_Deferred.hlsl" />
   </ItemGroup>
 </Project>

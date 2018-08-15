@@ -9,6 +9,8 @@
 #include "./Renders/ShadowRenderer.h"
 #include "./Testing/DirectionalLight.h"
 
+#include "./Renders/WorldBuffer.h"
+
 Program::Program()
 {
 	States::Create();
@@ -28,10 +30,9 @@ Program::Program()
 	sphere = new Figure(Figure::FigureType::Sphere, 10.0f, D3DXCOLOR(1.f, 0.f, 0.f, 1.f));
 
 	deferred = new DeferredRenderer;
-
-	this->shadowRenderer = new ShadowRenderer;
-	//this->shadowRenderer->SetRenderFunc([this]() {this->ShadowRender(); });
-	this->directionalLight = new DirectionalLight;
+	directionalLight = new DirectionalLight;
+	shadow = new ShadowRenderer;
+	shadow->SetRenderFunc([this]() {this->ShadowRender(); });
 }
 
 Program::~Program()
@@ -63,6 +64,7 @@ void Program::PostUpdate()
 
 void Program::ShadowRender()
 {
+	freeCamera->Render();
 	States::SetRasterizer(States::SHADOW);
 	grid->ShadowRender();
 	box->ShadowRender();
@@ -72,16 +74,15 @@ void Program::ShadowRender()
 
 void Program::PreRender()
 {
-	//freeCamera->Render();
+	
 }
 
 void Program::Render()
 {
 	{
 		directionalLight->UpdateView();
-		shadowRenderer->SetViewProjection(0, directionalLight->GetView(), directionalLight->GetProj());
-		shadowRenderer->RenderDirectionalMap();
-		this->ShadowRender();
+		directionalLight->SetBuffer();
+		shadow->RenderDirectionalMap();
 	}
 	{
 		deferred->BegindDrawToGBuffer();
@@ -89,12 +90,16 @@ void Program::Render()
 		grid->Render();
 		box->Render();
 		sphere->Render();
-
-		GizmoRenderer->WireSphere(directionalLight->GetPos(), 10.0f, D3DXCOLOR(0.f, 1.f, 0.f, 1.f));
 	}
 	{
+		ID3D11ShaderResourceView* view = shadow->GetDirectionalSRV();
+		DeviceContext->PSSetShaderResources(4, 1, &view);
+		
 		pRenderer->EndShadowDraw();
 		pRenderer->BeginDraw();
+		freeCamera->Render();
+		directionalLight->SetBuffer();
+		States::SetSampler(1, States::LINEAR);
 		deferred->Render();
 	}
 }
@@ -103,10 +108,10 @@ void Program::PostRender()
 {
 	deferred->PostRender();
 
-
 	ImGui::Begin("ShadowMap");
-	ImGui::ImageButton(shadowRenderer->GetDirectionalSRV(), ImVec2(500, 500));
-	ImGui::DragFloat3("pos", directionalLight->GetPosPtr());
+	{
+		ImGui::ImageButton(shadow->GetDirectionalSRV(), ImVec2(200, 200));
+	}
 	ImGui::End();
 
 	ImGui::Begin("System Info");
@@ -134,8 +139,6 @@ void Program::PostRender()
 	(
 		"Camera Rotation : %3.0f, %3.0f", angle.x * 180.f / D3DX_PI, angle.y *180.f / D3DX_PI
 	);
-
-	
 
 	ImGui::Separator();
 

@@ -26,6 +26,7 @@ void Perspective::Set(float width, float height, float fov, float zn, float zf)
 void Perspective::Render()
 {
 	viewProjectionBuffer->SetVSBuffer(0);
+	viewProjectionBuffer->SetPSBuffer(0);
 }
 
 void Perspective::SetView(D3DXMATRIX v)

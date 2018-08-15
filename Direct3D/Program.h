@@ -21,7 +21,6 @@ private:
 	class Json::Value* jsonRoot;
 	class Figure* box, *grid, *sphere;
 	class DeferredRenderer* deferred;
-
-	class ShadowRenderer* shadowRenderer;
+	class ShadowRenderer* shadow;
 	class DirectionalLight* directionalLight;
 };
