@@ -79,9 +79,9 @@ void DirectionalLight::UpdateView()
 
 void DirectionalLight::SetBuffer()
 {
-	sunBuffer->SetPSBuffer(2);
-	lightViewBuffer->SetVSBuffer(3);
-	lightViewBuffer->SetPSBuffer(3);
+	sunBuffer->SetPSBuffer(4);
+	lightViewBuffer->SetVSBuffer(5);
+	lightViewBuffer->SetPSBuffer(5);
 	DeviceContext->PSSetSamplers(1, 1, &shadowSampler);
 }
 

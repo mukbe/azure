@@ -17,10 +17,14 @@ public:
 	void SetBuffer();
 };
 
+
+
 class LightViewProj : public ShaderBuffer
 {
 	struct Data
 	{
+		D3DXMATRIX lightView;
+		D3DXMATRIX lightProj;
 		D3DXMATRIX lightViewProj;
 		D3DXMATRIX shadowMatrix;
 	}data;

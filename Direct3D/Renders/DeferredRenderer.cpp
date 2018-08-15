@@ -26,6 +26,8 @@ DeferredRenderer::~DeferredRenderer()
 		SafeRelease(this->renderTargetTexture[i]);
 	}
 
+	
+	SafeRelease(depthSRV);
 	SafeRelease(depthBufferTexture);
 	SafeRelease(depthStencilView);
 
@@ -38,18 +40,18 @@ void DeferredRenderer::BegindDrawToGBuffer()
 	//렌더타겟을 잡아준다. 
 	DeviceContext->OMSetRenderTargets(BUFFER_COUNT, renderTargetView, depthStencilView);
 	DeviceContext->RSSetViewports(1, &viewport);
-
+	//DeviceContext->OMSetDepthStencilState(depthStencilState, 2);
 	this->ClearRenderTarget();
 }
 
 void DeferredRenderer::ClearRenderTarget()
 {
-	for (int i = 0; i<BUFFER_COUNT; i++)
+	for (int i = 0; i < BUFFER_COUNT; i++)
 	{
 		DeviceContext->ClearRenderTargetView(renderTargetView[i], D3DXCOLOR(0.f, 0.f, 0.f,1.f));
 	}
 
-	DeviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	DeviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 }
 
@@ -130,23 +132,20 @@ bool DeferredRenderer::Create()
 	//깊이 버퍼 텍스쳐 Desc
 	D3D11_TEXTURE2D_DESC depthBufferDesc =
 	{
-		(UINT)desc.Width,			//UINT Width;
-		(UINT)desc.Height,		//UINT Height;
-		1,					//UINT MipLevels;
-		1,					//UINT ArraySize;
-		DXGI_FORMAT_UNKNOWN, //DXGI_FORMAT Format;
-		1,						//DXGI_SAMPLE_DESC SampleDesc;
+		(UINT)desc.Width,						//UINT Width;
+		(UINT)desc.Height,						//UINT Height;
+		1,										//UINT MipLevels;
+		1,										//UINT ArraySize;
+		DXGI_FORMAT_R24G8_TYPELESS,				 //DXGI_FORMAT Format;
+		1,										//DXGI_SAMPLE_DESC SampleDesc;
 		0,
-		D3D11_USAGE_DEFAULT,	//D3D11_USAGE Usage;
-		D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE,//UINT BindFlags;
-		0,//UINT CPUAccessFlags;
-		0//UINT MiscFlags;    
+		D3D11_USAGE_DEFAULT,					//D3D11_USAGE Usage;
+		D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE ,//UINT BindFlags;
+		0,										//UINT CPUAccessFlags;
+		0										//UINT MiscFlags;    
 	};
-
 	hr = Device->CreateTexture2D(&depthBufferDesc, NULL, &depthBufferTexture);
 	assert(SUCCEEDED(hr));
-
-
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
 	ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
@@ -168,6 +167,19 @@ bool DeferredRenderer::Create()
 	};
 	depthSRVDesc.Texture2D.MipLevels = 1;
 	hr = Device->CreateShaderResourceView(depthBufferTexture, &depthSRVDesc, &depthSRV);
+	assert(SUCCEEDED(hr));
+
+	D3D11_DEPTH_STENCIL_DESC descDepth;
+	descDepth.DepthEnable = TRUE;
+	descDepth.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	descDepth.DepthFunc = D3D11_COMPARISON_LESS;
+	descDepth.StencilEnable = TRUE;
+	descDepth.StencilReadMask = D3D11_DEFAULT_STENCIL_READ_MASK;
+	descDepth.StencilWriteMask = D3D11_DEFAULT_STENCIL_WRITE_MASK;
+	const D3D11_DEPTH_STENCILOP_DESC stencilMarkOp = { D3D11_STENCIL_OP_REPLACE, D3D11_STENCIL_OP_REPLACE, D3D11_STENCIL_OP_REPLACE, D3D11_COMPARISON_ALWAYS };
+	descDepth.FrontFace = stencilMarkOp;
+	descDepth.BackFace = stencilMarkOp;
+	hr = Device->CreateDepthStencilState(&descDepth, &this->depthStencilState);
 	assert(SUCCEEDED(hr));
 
 	//viewport설정

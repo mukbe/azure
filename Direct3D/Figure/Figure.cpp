@@ -79,7 +79,7 @@ Figure::Figure(FigureType type, float radius,D3DXCOLOR color)
 	worldBuffer = new WorldBuffer;
 	transform = new Transform;
 
-	shadowShader = new Shader(Shaders + L"004_Shadow.hlsl",Shader::ShaderType::Default," ColorShadowMap");
+	shadowShader = new Shader(Shaders + L"004_Shadow.hlsl",Shader::ShaderType::Default);
 }
 
 Figure::~Figure()

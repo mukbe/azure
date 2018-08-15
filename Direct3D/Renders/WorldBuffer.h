@@ -131,3 +131,22 @@ public:
 private:
 	Struct Data;
 };
+
+
+class OrthoBuffer : public ShaderBuffer
+{
+private:
+	struct Struct
+	{
+		D3DXMATRIX ortho;
+	}data;
+public:
+	OrthoBuffer()
+		:ShaderBuffer(&data, sizeof Struct) {}
+
+	void SetMatrix(D3DXMATRIX mat)
+	{
+		data.ortho = mat;
+		D3DXMatrixTranspose(&data.ortho, &data.ortho);
+	}
+};

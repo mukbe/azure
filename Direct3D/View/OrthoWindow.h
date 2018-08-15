@@ -15,5 +15,5 @@ public:
 	Synthesize(ID3D11Buffer*, indexBuffer, IndexBuffer)
 	Synthesize(UINT, vertexCount, vertexCount)
 	Synthesize(UINT, indexCount, IndexCount)
-
+	Synthesize(class OrthoBuffer*, orthoBuffer,orthoBuffer)
 };

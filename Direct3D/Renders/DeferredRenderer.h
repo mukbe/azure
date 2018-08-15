@@ -1,5 +1,5 @@
 #pragma once
-#define BUFFER_COUNT 3
+#define BUFFER_COUNT 4
 class DeferredRenderer
 {
 	//0 == normal
@@ -13,6 +13,7 @@ private:
 	ID3D11Texture2D* depthBufferTexture;
 	ID3D11ShaderResourceView* depthSRV;
 	ID3D11DepthStencilView* depthStencilView;
+	ID3D11DepthStencilState* depthStencilState;
 	D3D11_VIEWPORT viewport;
 	
 	class Shader* shader;
