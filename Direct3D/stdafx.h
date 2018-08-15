@@ -54,7 +54,7 @@ const wstring Contents = L"../_Contents/";
 const wstring Textures = L"../_Contents/Textures/";
 const wstring BinModels = L"../_Contents/BinModels/";
 const wstring FbxModels = L"../_Contents/FbxModels/";
-const wstring Shaders = L"_Shaders/";
+const wstring ShaderPath = L"_Shaders/";
 
 
 namespace Landscape

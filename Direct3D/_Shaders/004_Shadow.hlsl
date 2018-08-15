@@ -6,7 +6,7 @@ struct PixelInput
 };
 
 
-PixelInput VS(VertexColorNormal input)
+PixelInput ColorShadowVS(VertexColorNormal input)
 {
     PixelInput output;
 

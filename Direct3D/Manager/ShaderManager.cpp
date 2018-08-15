@@ -5,12 +5,23 @@
 
 ShaderManager::ShaderManager()
 {
+
 }
 
 
 ShaderManager::~ShaderManager()
 {
+	ShadersIter Iter = shaders.begin();
+
+	for (Iter; Iter != shaders.end(); ++Iter)
+	{
+		SafeDelete(Iter->second);
+	}
+
+	shaders.clear();
 }
+
+
 Shader * ShaderManager::CreateShader(string key, wstring fileName, Shader::ShaderType type, string funcName)
 {
 	Shader* shader;
@@ -18,7 +29,7 @@ Shader * ShaderManager::CreateShader(string key, wstring fileName, Shader::Shade
 
 	if (shader == nullptr)
 	{
-		shader = new Shader(Shaders + fileName, type, funcName);
+		shader = new Shader(ShaderPath + fileName, type, funcName);
 	}
 
 	return shader;
@@ -57,6 +68,13 @@ void ShaderManager::Release()
 	for (Iter; Iter != shaders.end(); ++Iter)
 	{
 		Iter->second->ReleaseShader();
+		
 	}
 
+}
+
+void ShaderManager::Init()
+{
+	this->CreateShader("colorGBuffer", ShaderPath + L"001_GBuffer.hlsl", Shader::ShaderType::Default, "ColorDeferred");
+	this->CreateShader("colorShadow", ShaderPath + L"004_Shadow.hlsl", Shader::ShaderType::Default, "ColorShadow");
 }

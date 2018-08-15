@@ -11,6 +11,7 @@ public:
 	void ReleaseShader();
 public:
 	void Release();
+	void Init();
 
 private:
 	typedef map<string, Shader*> ShadersContain;
@@ -20,4 +21,3 @@ private:
 	ShadersContain shaders;
 	Shader* currentShader;
 };
-

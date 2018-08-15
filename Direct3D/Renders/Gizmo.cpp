@@ -89,7 +89,7 @@ Gizmo::Gizmo()
 	}
 
 	worldBuffer = new WorldBuffer;
-	shader = new Shader(Shaders + L"001_GBuffer.hlsl", Shader::ShaderType::Default,"GizmoDeferred");
+	shader = new Shader(ShaderPath + L"001_GBuffer.hlsl", Shader::ShaderType::Default,"GizmoDeferred");
 }
 
 

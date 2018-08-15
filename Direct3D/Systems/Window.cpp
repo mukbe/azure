@@ -21,6 +21,8 @@ WPARAM Window::Run()
 	Time::Create();
 	Time::Get()->Start();
 
+	Shaders->Init();
+
 	ImGui::Create(desc.Handle, Device, DeviceContext);
 	ImGui::StyleColorsDark();
 
@@ -74,6 +76,8 @@ WPARAM Window::Run()
 	Mouse::Delete();
 	Keyboard::Delete();
 	pRenderer->Release();
+
+
 
 	return msg.wParam;
 }

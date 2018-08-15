@@ -16,7 +16,9 @@
 #include "./Utilities/Path.h"
 
 #include "./Renders/Gizmo.h"
+#include "./Manager/ShaderManager.h"
 
 #define KeyCode Keyboard::Get()
 #define GameMouse Mouse::Get()
 #define DeltaTime Time::Delta()
+#define Shaders ShaderManager::GetInstance()
