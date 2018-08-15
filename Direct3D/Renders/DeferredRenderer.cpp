@@ -7,7 +7,7 @@
 
 DeferredRenderer::DeferredRenderer()
 {
-	this->shader = new Shader(Shaders + L"002_Deferred.hlsl",Shader::ShaderType::Default,"BasicDeferred");
+	this->shader = new Shader(ShaderPath + L"002_Deferred.hlsl",Shader::ShaderType::Default,"BasicDeferred");
 
 	D3DDesc desc;
 	DxRenderer::GetDesc(&desc);

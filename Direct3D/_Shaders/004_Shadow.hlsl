@@ -28,7 +28,7 @@ PixelInput TextureShadowVS(VertexTextureNormal input)
 
 
 //ShadowMapPS
-void PS(PixelInput input)
+void ColorShadowPS(PixelInput input)
 {
 
 }

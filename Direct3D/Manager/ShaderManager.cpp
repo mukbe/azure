@@ -30,6 +30,7 @@ Shader * ShaderManager::CreateShader(string key, wstring fileName, Shader::Shade
 	if (shader == nullptr)
 	{
 		shader = new Shader(ShaderPath + fileName, type, funcName);
+		shaders.insert(make_pair(key, shader));
 	}
 
 	return shader;
@@ -75,6 +76,6 @@ void ShaderManager::Release()
 
 void ShaderManager::Init()
 {
-	this->CreateShader("colorGBuffer", ShaderPath + L"001_GBuffer.hlsl", Shader::ShaderType::Default, "ColorDeferred");
-	this->CreateShader("colorShadow", ShaderPath + L"004_Shadow.hlsl", Shader::ShaderType::Default, "ColorShadow");
+	this->CreateShader("colorGBuffer",  L"001_GBuffer.hlsl", Shader::ShaderType::Default, "ColorDeferred");
+	this->CreateShader("colorShadow",  L"004_Shadow.hlsl", Shader::ShaderType::Default, "ColorShadow");
 }
