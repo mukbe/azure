@@ -61,6 +61,8 @@ void DeferredRenderer::Render()
 {
 	orthoWindow->Render();
 	DeviceContext->PSSetShaderResources(0, BUFFER_COUNT, &shaderResourceView[0]);
+	DeviceContext->PSSetShaderResources(4, 1, &depthSRV);
+
 	shader->Render();
 	DeviceContext->DrawIndexed(6, 0, 0);
 }
@@ -72,7 +74,7 @@ void DeferredRenderer::UIRender()
 		ImGui::ImageButton(shaderResourceView[0], ImVec2(200, 150)); ImGui::SameLine();
 		ImGui::ImageButton(shaderResourceView[1], ImVec2(200, 150));
 		ImGui::ImageButton(shaderResourceView[3], ImVec2(200, 150)); ImGui::SameLine();
-		ImGui::ImageButton(depthSRV, ImVec2(200, 150));
+		ImGui::ImageButton(depthSRV, ImVec2(200, 150));		
 	}
 	ImGui::End();
 }
