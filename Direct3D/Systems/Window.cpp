@@ -46,17 +46,20 @@ WPARAM Window::Run()
 			}
 
 			program->PreUpdate();
-
 			program->Update();
 			program->PostUpdate();
-
 			ImGui::Update();
 
 
 			program->PreRender();
+
 			pRenderer->BeginDraw();
 			{
 				program->Render();
+			}
+			pRenderer->SetScreenRTV();
+			pRenderer->BeginDraw();
+			{
 				program->PostRender();
 				program->UIRender();
 				ImGui::Render();

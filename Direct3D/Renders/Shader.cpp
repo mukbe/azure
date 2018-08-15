@@ -71,6 +71,27 @@ void Shader::Release()
 	}
 }
 
+void Shader::ReleaseShader()
+{
+	ID3D11DeviceChild* nullshader = {};
+
+	DeviceContext->VSSetShader((ID3D11VertexShader*)nullshader, NULL, 0);
+	DeviceContext->PSSetShader((ID3D11PixelShader*)nullshader, NULL, 0);
+
+	bool b;
+	if (b = ShaderType::useHS & useType)
+	{
+		DeviceContext->HSSetShader((ID3D11HullShader*)nullshader, NULL, 0);
+		DeviceContext->DSSetShader((ID3D11DomainShader*)nullshader, NULL, 0);
+	}
+
+	if (b = ShaderType::useGS & useType)
+	{
+		DeviceContext->GSSetShader((ID3D11GeometryShader*)nullshader, nullptr, 0);
+	}
+
+}
+
 void Shader::CheckShaderError(HRESULT hr, ID3DBlob * error)
 {
 	if (FAILED(hr))

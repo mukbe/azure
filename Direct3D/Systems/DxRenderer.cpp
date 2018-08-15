@@ -373,7 +373,7 @@ void DxRenderer::Release()
 	SafeRelease(pD3dDevice);
 }
 
-void DxRenderer::EndShadowDraw()
+void DxRenderer::SetScreenRTV()
 {
 	pD3dContext->OMSetRenderTargets(1, &pRenderTargetView, pDepthStencilView);
 	pD3dContext->RSSetViewports(1, &ScreenViewPort);

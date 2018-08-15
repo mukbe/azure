@@ -65,6 +65,7 @@ void Program::PostUpdate()
 
 void Program::ShadowRender()
 {
+	//
 	freeCamera->Render();
 	States::SetRasterizer(States::SHADOW);
 	grid->ShadowRender();
@@ -84,23 +85,21 @@ void Program::PreRender()
 }
 
 void Program::Render()
-{
-	{
-		deferred->BegindDrawToGBuffer();
-		freeCamera->Render();
-		grid->Render();
-		box->Render();
-		sphere->Render();
-	}
+{	
+	deferred->BegindDrawToGBuffer();
+	freeCamera->Render();
+	grid->Render();
+	box->Render();
+	sphere->Render();
+	
 }
 
 void Program::PostRender()
 {
+	//bind ShadowMap
 	ID3D11ShaderResourceView* view = shadow->GetDirectionalSRV();
 	DeviceContext->PSSetShaderResources(4, 1, &view);
 
-	pRenderer->EndShadowDraw();
-	pRenderer->BeginDraw();
 	freeCamera->Render();
 	directionalLight->SetBuffer();
 	States::SetSampler(1, States::LINEAR);

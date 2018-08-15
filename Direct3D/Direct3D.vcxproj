@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Manager\ShaderManager.h" />
     <ClInclude Include="Testing\DirectionalLight.h" />
     <ClInclude Include="Renders\ShadowRenderer.h" />
     <ClInclude Include="View\OrthoWindow.h" />
@@ -55,6 +56,7 @@
     <ClInclude Include="View\Projection.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Manager\ShaderManager.cpp" />
     <ClCompile Include="Testing\DirectionalLight.cpp" />
     <ClCompile Include="Renders\ShadowRenderer.cpp" />
     <ClCompile Include="View\OrthoWindow.cpp" />
