@@ -4,7 +4,8 @@ class DeferredRenderer
 {
 	//0 == normal
 	//1 == diffuse
-	//2 == depth;
+	//2 == spec
+	//3 == world;
 private:
 	ID3D11Texture2D * renderTargetTexture[BUFFER_COUNT];
 	ID3D11RenderTargetView* renderTargetView[BUFFER_COUNT];
@@ -26,7 +27,7 @@ public:
 	void BegindDrawToGBuffer();		//RenderTarget을 잡아주고 이전 내용을 검은색으로 밀어준다.
 
 	void Render();					//2D화면상에 GBuffer기반으로 내용 작성
-	void PostRender();
+	void UIRender();
 
 };
 

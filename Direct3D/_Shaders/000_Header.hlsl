@@ -49,8 +49,9 @@ Texture2D _deferredNormal : register(t0);
 Texture2D _deferredAlbedo : register(t1);
 Texture2D _deferredSpecular : register(t2);
 Texture2D _deferredWorld : register(t3);
+Texture2D _deferredDepth : register(t4);
 
-Texture2D _sunLightsahdowMap : register(t4);
+Texture2D _sunLightsahdowMap : register(t5);
 
 Texture2D _diffuseTex : register(t5);
 Texture2D _specularTex : register(t6);
@@ -70,8 +71,8 @@ struct VertexColor
 struct VertexColorNormal
 {
     float4 position : POSITION0;
-    float3 normal : NORMAL0;
     float4 color : COLOR0;
+    float3 normal : NORMAL0;
 };
 
 
