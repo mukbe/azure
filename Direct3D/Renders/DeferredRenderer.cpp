@@ -63,13 +63,14 @@ void DeferredRenderer::Render()
 	DeviceContext->DrawIndexed(6, 0, 0);
 }
 
-void DeferredRenderer::PostRender()
+void DeferredRenderer::UIRender()
 {
 	ImGui::Begin("Deferred");
 	{
 		ImGui::ImageButton(shaderResourceView[0], ImVec2(200, 150)); ImGui::SameLine();
 		ImGui::ImageButton(shaderResourceView[1], ImVec2(200, 150));
-		ImGui::ImageButton(shaderResourceView[2], ImVec2(200, 150)); ImGui::SameLine();
+		ImGui::ImageButton(shaderResourceView[3], ImVec2(200, 150)); ImGui::SameLine();
+		ImGui::ImageButton(depthSRV, ImVec2(200, 150));
 	}
 	ImGui::End();
 }
@@ -126,21 +127,21 @@ bool DeferredRenderer::Create()
 		assert(SUCCEEDED(hr));
 	}
 
-	//깊이 버퍼 설정
-	D3D11_TEXTURE2D_DESC depthBufferDesc;
-	ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
-
-	depthBufferDesc.Width = desc.Width;
-	depthBufferDesc.Height = desc.Height;
-	depthBufferDesc.MipLevels = 1;
-	depthBufferDesc.ArraySize = 1;
-	depthBufferDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
-	depthBufferDesc.SampleDesc.Count = 1;
-	depthBufferDesc.SampleDesc.Quality = 0;
-	depthBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;;
-	depthBufferDesc.CPUAccessFlags = 0;
-	depthBufferDesc.MiscFlags = 0;
+	//깊이 버퍼 텍스쳐 Desc
+	D3D11_TEXTURE2D_DESC depthBufferDesc =
+	{
+		(UINT)desc.Width,			//UINT Width;
+		(UINT)desc.Height,		//UINT Height;
+		1,					//UINT MipLevels;
+		1,					//UINT ArraySize;
+		DXGI_FORMAT_UNKNOWN, //DXGI_FORMAT Format;
+		1,						//DXGI_SAMPLE_DESC SampleDesc;
+		0,
+		D3D11_USAGE_DEFAULT,	//D3D11_USAGE Usage;
+		D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE,//UINT BindFlags;
+		0,//UINT CPUAccessFlags;
+		0//UINT MiscFlags;    
+	};
 
 	hr = Device->CreateTexture2D(&depthBufferDesc, NULL, &depthBufferTexture);
 	assert(SUCCEEDED(hr));
@@ -156,6 +157,17 @@ bool DeferredRenderer::Create()
 	depthStencilViewDesc.Texture2D.MipSlice = 0;
 	
 	hr = Device->CreateDepthStencilView(depthBufferTexture, &depthStencilViewDesc, &depthStencilView);
+	assert(SUCCEEDED(hr));
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC depthSRVDesc =
+	{
+		DXGI_FORMAT_R24_UNORM_X8_TYPELESS,
+		D3D11_SRV_DIMENSION_TEXTURE2D,
+		0,
+		0
+	};
+	depthSRVDesc.Texture2D.MipLevels = 1;
+	hr = Device->CreateShaderResourceView(depthBufferTexture, &depthSRVDesc, &depthSRV);
 	assert(SUCCEEDED(hr));
 
 	//viewport설정
