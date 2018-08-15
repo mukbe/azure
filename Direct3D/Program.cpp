@@ -32,7 +32,8 @@ Program::Program()
 	deferred = new DeferredRenderer;
 	directionalLight = new DirectionalLight;
 	shadow = new ShadowRenderer;
-	shadow->SetRenderFunc([this]() {this->ShadowRender(); });
+
+	shadow->SetRenderFunc(bind(&Program::ShadowRender,this));
 }
 
 Program::~Program()
@@ -74,16 +75,16 @@ void Program::ShadowRender()
 
 void Program::PreRender()
 {
-	
+	directionalLight->UpdateView();
+	directionalLight->SetBuffer();
+
+	//Program::ShodowRender
+	shadow->RenderDirectionalMap();
+
 }
 
 void Program::Render()
 {
-	{
-		directionalLight->UpdateView();
-		directionalLight->SetBuffer();
-		shadow->RenderDirectionalMap();
-	}
 	{
 		deferred->BegindDrawToGBuffer();
 		freeCamera->Render();
@@ -91,22 +92,24 @@ void Program::Render()
 		box->Render();
 		sphere->Render();
 	}
-	{
-		ID3D11ShaderResourceView* view = shadow->GetDirectionalSRV();
-		DeviceContext->PSSetShaderResources(4, 1, &view);
-		
-		pRenderer->EndShadowDraw();
-		pRenderer->BeginDraw();
-		freeCamera->Render();
-		directionalLight->SetBuffer();
-		States::SetSampler(1, States::LINEAR);
-		deferred->Render();
-	}
 }
 
 void Program::PostRender()
 {
-	deferred->PostRender();
+	ID3D11ShaderResourceView* view = shadow->GetDirectionalSRV();
+	DeviceContext->PSSetShaderResources(4, 1, &view);
+
+	pRenderer->EndShadowDraw();
+	pRenderer->BeginDraw();
+	freeCamera->Render();
+	directionalLight->SetBuffer();
+	States::SetSampler(1, States::LINEAR);
+	deferred->Render();
+}
+
+void Program::UIRender()
+{
+	deferred->UIRender();
 
 	ImGui::Begin("ShadowMap");
 	{
@@ -133,7 +136,7 @@ void Program::PostRender()
 		"Camera Position : %3.0f, %3.0f, %3.0f"
 		, pos.x, pos.y, pos.z
 	);
-	
+
 	D3DXVECTOR3 angle = freeCamera->GetTransform()->GetAngle();
 	ImGui::Text
 	(

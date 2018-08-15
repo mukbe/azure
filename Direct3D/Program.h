@@ -14,6 +14,7 @@ public:
 	void PreRender();
 	void Render();
 	void PostRender();
+	void UIRender();
 
 	void ResizeScreen();
 private:
