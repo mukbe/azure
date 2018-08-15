@@ -28,6 +28,7 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
     if (specPower.w > 1.5f)
         return albedo;
 
+
     //CalcMainShadow
     float4 posLight = mul(worldPos, _shadowMatrix);
     float2 samplingShadowData = _sunLightsahdowMap.Sample(_basicSampler, posLight.xy).xw;
@@ -36,14 +37,17 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
     float4 projectionToLight = mul(worldPos, _lightViewProjection);
     float pixelDepth = projectionToLight.x / projectionToLight.w;
 
+
     //CalcLighting
     float diffuseFactor = saturate(dot(worldNormal.xyz, -_sunDir));
     float4 diffuseColor = albedo * diffuseFactor * _sunColor;
  
     //if in Shadow
-    if (shadowMapDepth < pixelDepth)
+    if (shadowMapDepth > pixelDepth)
     {
+        //TODO ºû°è»ê
         return diffuseColor * shadowMapDepth;
+
     }
     else
     {

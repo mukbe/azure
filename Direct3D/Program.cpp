@@ -68,7 +68,7 @@ void Program::ShadowRender()
 	//
 	freeCamera->Render();
 	States::SetRasterizer(States::SHADOW);
-	grid->ShadowRender();
+	//grid->ShadowRender();
 	box->ShadowRender();
 	sphere->ShadowRender();
 	States::SetRasterizer(States::SOLID_CULL_ON);
@@ -98,7 +98,7 @@ void Program::PostRender()
 {
 	//bind ShadowMap
 	ID3D11ShaderResourceView* view = shadow->GetDirectionalSRV();
-	DeviceContext->PSSetShaderResources(4, 1, &view);
+	DeviceContext->PSSetShaderResources(5, 1, &view);
 
 	freeCamera->Render();
 	directionalLight->SetBuffer();
