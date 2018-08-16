@@ -2,6 +2,7 @@
 #include "BoundingBox.h"
 
 #include "Ray.h"
+#include "Bounding.h"
 #include "BoundingSphere.h"
 #include "BoundingCapsule.h"
 #include "BoundingFrustum.h"
@@ -147,7 +148,7 @@ bool BoundingBox::Intersects(BoundingFrustum frustum)
 
 PlaneIntersectionType BoundingBox::Intersects(D3DXPLANE plane)
 {
-
+	return PlaneIntersectionType_Front;
 
 }
 

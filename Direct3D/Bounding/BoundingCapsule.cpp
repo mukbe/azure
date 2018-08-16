@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "BoundingCapsule.h"
 
-
+#include "Bounding.h"
 
 BoundingCapsule::BoundingCapsule()
 	:center(0.f,0.f,0.f),direction(0.f,0.f,0.f),height(0.f),radius(0.f)

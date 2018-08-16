@@ -6,7 +6,7 @@
 #include "BoundingCapsule.h"
 #include "BoundingFrustum.h"
 #include "../Utilities/Math.h"
-
+#include "Bounding.h"
 
 BoundingSphere::BoundingSphere()
 	:center(0.f,0.f,0.f), radius(0.f)
