@@ -18,6 +18,8 @@ DepthVis::DepthVis()
 
 DepthVis::~DepthVis()
 {
+	SafeDelete(shader);
+	SafeDelete(depth);
 }
 
 void DepthVis::CalcuDepth(ID3D11ShaderResourceView * depthView)
