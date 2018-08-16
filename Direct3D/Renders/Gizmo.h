@@ -30,6 +30,7 @@ public:
 	void Circle(D3DXVECTOR3 center, float radius, D3DXVECTOR3 axis, D3DXCOLOR color);
 	void WireSphere(D3DXVECTOR3 center, float radius, D3DXCOLOR color);
 	void AABB(const D3DXVECTOR3 minPos, const D3DXVECTOR3 maxPos, const D3DXCOLOR color);
+	void OBB(vector<D3DXVECTOR3>& corners, const D3DXCOLOR color);
 	void LocalGizmo(D3DXVECTOR3 center, float radius, D3DXVECTOR3 right, D3DXVECTOR3 up, D3DXVECTOR3 forward);
 };
 

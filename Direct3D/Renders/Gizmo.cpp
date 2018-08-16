@@ -211,6 +211,32 @@ void Gizmo::AABB(const D3DXVECTOR3 minPos, const D3DXVECTOR3 maxPos, const D3DXC
 	this->Line(D3DXVECTOR3(minPos.x, maxPos.y, minPos.z), D3DXVECTOR3(minPos.x, maxPos.y, maxPos.z), color);
 }
 
+void Gizmo::OBB(vector<D3DXVECTOR3>& corners, const D3DXCOLOR color)
+{
+	//   0-------1
+	//  /|      /|
+	// 4-------5 |
+	// | 3-----|-2
+	// |/      |/
+	// 7-------6 
+
+	this->Line(corners[0], corners[1], color);
+	this->Line(corners[1], corners[2], color);
+	this->Line(corners[2], corners[3], color);
+	this->Line(corners[3], corners[0], color);
+
+	this->Line(corners[4], corners[5], color);
+	this->Line(corners[5], corners[6], color);
+	this->Line(corners[6], corners[7], color);
+	this->Line(corners[7], corners[4], color);
+
+	this->Line(corners[0], corners[4], color);
+	this->Line(corners[1], corners[5], color);
+	this->Line(corners[3], corners[7], color);
+	this->Line(corners[2], corners[6], color);
+
+}
+
 void Gizmo::LocalGizmo(D3DXVECTOR3 center, float radius, D3DXVECTOR3 right, D3DXVECTOR3 up, D3DXVECTOR3 forward)
 {
 	//pRenderer->ChangeZBuffer(false);
