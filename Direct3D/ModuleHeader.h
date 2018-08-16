@@ -4,7 +4,6 @@
 #include "./Systems/Mouse.h"
 #include "./Systems/Time.h"
 
-
 #include "./Renders/VertexLayouts.h"
 #include "./Renders/States.h"
 #include "./Renders/ShaderBuffer.h"
@@ -17,8 +16,9 @@
 
 #include "./Renders/Gizmo.h"
 #include "./Manager/ShaderManager.h"
+#include "./Manager/BufferManager.h"
 
 #define KeyCode Keyboard::Get()
 #define GameMouse Mouse::Get()
 #define DeltaTime Time::Delta()
-#define Shaders ShaderManager::GetInstance()
+

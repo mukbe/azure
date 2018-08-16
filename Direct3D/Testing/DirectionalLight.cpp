@@ -5,8 +5,8 @@
 #include "./Renders/WorldBuffer.h"
 DirectionalLight::DirectionalLight()
 {
-	this->sunBuffer = new SunBuffer;
-	this->lightViewBuffer = new LightViewProj;
+	this->sunBuffer = Buffers->FindShaderBuffer<SunBuffer>();
+	this->lightViewBuffer = Buffers->FindShaderBuffer<LightViewProj>();
 
 	this->UpdateView();
 

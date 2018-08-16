@@ -1,5 +1,5 @@
 #pragma once
-
+#include "DefineHeader.h"
 class ShaderManager
 {
 	Singleton(ShaderManager)
@@ -21,3 +21,5 @@ private:
 	ShadersContain shaders;
 	Shader* currentShader;
 };
+
+#define Shaders ShaderManager::GetInstance()

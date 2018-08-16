@@ -76,7 +76,7 @@ Figure::Figure(FigureType type, float radius,D3DXCOLOR color)
 
 
 	shader = Shaders->FindShader("colorGBuffer");
-	worldBuffer = new WorldBuffer;
+	worldBuffer = Buffers->FindShaderBuffer<WorldBuffer>();
 	transform = new Transform;
 
 	shadowShader = Shaders->FindShader("colorShadow");
@@ -84,7 +84,6 @@ Figure::Figure(FigureType type, float radius,D3DXCOLOR color)
 
 Figure::~Figure()
 {
-	SafeDelete(worldBuffer);
 	SafeDelete(transform);
 
 	SafeRelease(vertexBuffer);

@@ -1,8 +1,6 @@
 #pragma once
 #include "./Renders/ShaderBuffer.h"
 
-#pragma once
-
 class WorldBuffer : public ShaderBuffer
 {
 public:
@@ -24,6 +22,8 @@ public:
 
 private:
 	Struct Data;
+
+	ShaderBuffer_Mecro(WorldBuffer)
 };
 
 class ViewProjectionBuffer : public ShaderBuffer
@@ -77,6 +77,8 @@ public:
 
 private:
 	Struct Data;
+
+	ShaderBuffer_Mecro(ViewProjectionBuffer)
 };
 
 class CameraBuffer : public ShaderBuffer
@@ -97,6 +99,8 @@ public:
 
 private:
 	Struct Data;
+
+	ShaderBuffer_Mecro(CameraBuffer)
 };
 
 class SunBuffer : public ShaderBuffer
@@ -130,6 +134,8 @@ public:
 	D3DXVECTOR3 GetDir() { return this->Data.dir; }
 private:
 	Struct Data;
+
+	ShaderBuffer_Mecro(SunBuffer)
 };
 
 
@@ -169,4 +175,34 @@ public:
 		D3DXMatrixTranspose(&data.ViewInv, &data.ViewInv);
 	}
 
+	ShaderBuffer_Mecro(TestBuffer)
+};
+
+class MaterialBuffer : public ShaderBuffer
+{
+public:
+	MaterialBuffer()
+		: ShaderBuffer(&Data, sizeof(Data))
+	{
+		Data.Diffuse = D3DXCOLOR(1, 1, 1, 1);
+		Data.Specular = D3DXCOLOR(1, 1, 1, 1);
+		Data.Emissive = D3DXCOLOR(0, 0, 0, 1);
+
+		Data.Shininess = 1;
+		Data.DetailFactor = 1;
+	}
+
+	struct Struct
+	{
+		D3DXCOLOR Diffuse;
+		D3DXCOLOR Specular;
+		D3DXCOLOR Emissive;
+
+		float Shininess;
+		float DetailFactor;
+
+		float Padding[2];
+	}Data;
+
+	ShaderBuffer_Mecro(MaterialBuffer)
 };

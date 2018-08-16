@@ -19,7 +19,7 @@ Program::Program()
 	DxRenderer::GetDesc(&desc);
 
 	jsonRoot = new Json::Value();
-	Json::ReadData(L"LevelEditor.json", jsonRoot);
+	JsonHelper::ReadData(L"LevelEditor.json", jsonRoot);
 
 	freeCamera = new FreeCamera();
 	
@@ -45,7 +45,7 @@ Program::~Program()
 	SafeDelete(grid);
 	SafeDelete(box);
 
-	Json::WriteDate(L"LevelEditor.json", jsonRoot);
+	JsonHelper::WriteData(L"LevelEditor.json", jsonRoot);
 	SafeDelete(jsonRoot);
 
 	States::Delete();

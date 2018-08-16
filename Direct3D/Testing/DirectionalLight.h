@@ -20,7 +20,6 @@ public:
 };
 
 
-
 class LightViewProj : public ShaderBuffer
 {
 	struct Data
@@ -49,5 +48,7 @@ public:
 		this->data.shadowMatrix = mat;
 		D3DXMatrixTranspose(&data.shadowMatrix, &data.shadowMatrix);
 	}
+
+	ShaderBuffer_Mecro(LightViewProj)
 };
 

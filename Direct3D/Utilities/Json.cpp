@@ -2,64 +2,77 @@
 #include "Json.h"
 #include <fstream>
 
-void Json::GetValue(Json::Value & parent, string name, bool & vec)
+void JsonHelper::GetValue(Json::Value & parent, string name, bool & vec)
 {
 	vec = parent[name.c_str()].asBool();
 
 }
 
-void Json::SetValue(Json::Value & parent, string name, bool & vec)
+void JsonHelper::SetValue(Json::Value & parent, string name, bool & vec)
 {
 	parent[name.c_str()] = vec;
 }
 
-void Json::GetValue(Json::Value & parent, string name, float & vec)
+void JsonHelper::GetValue(Json::Value & parent, string name, float & vec)
 {
 	vec = parent[name.c_str()].asFloat();
 }
 
-void Json::SetValue(Json::Value & parent, string name, float & vec)
+void JsonHelper::SetValue(Json::Value & parent, string name, float & vec)
 {
 	parent[name.c_str()] = vec;
 }
 
-void Json::GetValue(Json::Value & parent, string name, D3DXVECTOR2 & vec)
+void JsonHelper::GetValue(Json::Value & parent, string name, D3DXVECTOR2 & vec)
 {
 	for (int i = 0; i < 2; i++)
 		vec[i] = parent[name.c_str()][i].asFloat();
 }
 
-void Json::SetValue(Json::Value & parent, string name, D3DXVECTOR2 & vec)
+void JsonHelper::SetValue(Json::Value & parent, string name, D3DXVECTOR2 & vec)
 {
 	for (int i = 0; i < 2; i++)
 		parent[name.c_str()].append(vec[i]);
 }
 
-void Json::GetValue(Json::Value & parent, string name, D3DXVECTOR3 & vec)
+void JsonHelper::GetValue(Json::Value & parent, string name, D3DXVECTOR3 & vec)
 {
 	for (int i = 0; i < 3; i++)
 		vec[i] = parent[name.c_str()][i].asFloat();
 }
 
-void Json::SetValue(Json::Value & parent, string name, D3DXVECTOR3 & vec)
+void JsonHelper::SetValue(Json::Value & parent, string name, D3DXVECTOR3 & vec)
 {
 	for (int i = 0; i < 3; i++)
 		parent[name.c_str()].append(vec[i]);
 }
 
-void Json::GetValue(Json::Value & parent, string name, D3DXCOLOR & vec)
+void JsonHelper::GetValue(Json::Value & parent, string name, D3DXCOLOR & vec)
 {
 	for (int i = 0; i < 4; i++)
 		vec[i] = parent[name.c_str()][i].asFloat();
 }
 
-void Json::SetValue(Json::Value & parent, string name, D3DXCOLOR & vec)
+void JsonHelper::SetValue(Json::Value & parent, string name, D3DXCOLOR & vec)
 {
 	for (int i = 0; i < 4; i++)
 		parent[name.c_str()].append(vec[i]);
 }
 
-void Json::ReadData(wstring file, Json::Value * root)
+void JsonHelper::GetValue(Json::Value & parent, string name, string & value)
+{
+	value = "";
+
+	for (size_t i = 0; i < parent[name.c_str()].size(); i++)
+		value.append(parent[name.c_str()][i].asString());
+}
+
+void JsonHelper::SetValue(Json::Value & parent, string name, string & value)
+{
+	parent[name.c_str()].append(value);
+}
+
+void JsonHelper::ReadData(wstring file, Json::Value * root)
 {
 	ifstream stream;
 
@@ -71,7 +84,7 @@ void Json::ReadData(wstring file, Json::Value * root)
 	stream.close();
 }
 
-void Json::WriteDate(wstring file, Json::Value * root)
+void JsonHelper::WriteData(wstring file, Json::Value * root)
 {
 	ofstream stream;
 

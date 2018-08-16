@@ -7,6 +7,8 @@ public:
 	static bool ExistFile(string path);
 	static bool ExistFile(wstring path);
 
+	static bool ExistDirectory(wstring path);
+
 	static string Combine(string path1, string path2);
 	static wstring Combine(wstring path1, wstring path2);
 

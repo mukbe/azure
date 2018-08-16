@@ -13,7 +13,7 @@ ShadowRenderer::ShadowRenderer()
 
 	this->CreateDirectionalRenderer();
 
-	this->viewProjectionBuffer = new ViewProjectionBuffer;
+	this->viewProjectionBuffer = Buffers->FindShaderBuffer<ViewProjectionBuffer>();
 
 	viewport.TopLeftX = 0.0f;
 	viewport.TopLeftY = 0.0f;
@@ -26,7 +26,6 @@ ShadowRenderer::ShadowRenderer()
 
 ShadowRenderer::~ShadowRenderer()
 {
-	SafeDelete(viewProjectionBuffer);
 
 	SafeRelease(this->pointSRV);
 	SafeRelease(this->pointDSV);

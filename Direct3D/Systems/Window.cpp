@@ -75,6 +75,7 @@ WPARAM Window::Run()
 	Time::Delete();
 	Mouse::Delete();
 	Keyboard::Delete();
+	Buffers->Release();
 	pRenderer->Release();
 
 

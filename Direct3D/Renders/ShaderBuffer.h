@@ -3,6 +3,8 @@
 
 class ShaderBuffer
 {
+private:
+	friend class BufferManager;
 public:
 	void SetVSBuffer(UINT slot)
 	{
@@ -80,3 +82,5 @@ private:
 	void* data;
 	UINT dataSize;
 };
+
+#define ShaderBuffer_Mecro(className) public : static string GetCode(){return typeid(className).name(); }

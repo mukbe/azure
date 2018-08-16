@@ -5,10 +5,7 @@
 class Projection
 {
 public:
-	Projection() 
-	{
-		this->viewProjectionBuffer = new ViewProjectionBuffer;
-	}
+	Projection();
 	~Projection() {}
 
 	virtual void Render() = 0;
