@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Json
+namespace JsonHelper
 {
 	void GetValue(Json::Value& parent, string name, bool& vec);
 	void SetValue(Json::Value& parent, string name, bool& vec);
@@ -17,6 +17,9 @@ namespace Json
 	void GetValue(Json::Value& parent, string name, D3DXCOLOR& vec);
 	void SetValue(Json::Value& parent, string name, D3DXCOLOR& vec);
 
+	void GetValue(Json::Value& parent, string name, string& value);
+	void SetValue(Json::Value& parent, string name, string& value);
+
 	void ReadData(wstring file, Json::Value* root);
-	void WriteDate(wstring file, Json::Value* root);
+	void WriteData(wstring file, Json::Value* root);
 }

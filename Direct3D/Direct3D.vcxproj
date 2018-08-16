@@ -24,6 +24,9 @@
     <ClInclude Include="Bounding\BoundingBox.h" />
     <ClInclude Include="Bounding\BoundingSphere.h" />
     <ClInclude Include="Bounding\Bounding.h" />
+    <ClInclude Include="FBX\Exporter.h" />
+    <ClInclude Include="FBX\FbxUtility.h" />
+    <ClInclude Include="FBX\BoneWeights.h" />
     <ClInclude Include="FBX\Type.h" />
     <ClInclude Include="Manager\BufferManager.h" />
     <ClInclude Include="Manager\ShaderManager.h" />
@@ -69,6 +72,8 @@
     <ClCompile Include="Bounding\BoundingCapsule.cpp" />
     <ClCompile Include="Bounding\BoundingBox.cpp" />
     <ClCompile Include="Bounding\BoundingSphere.cpp" />
+    <ClCompile Include="FBX\Exporter.cpp" />
+    <ClCompile Include="FBX\FbxUtility.cpp" />
     <ClCompile Include="Manager\BufferManager.cpp" />
     <ClCompile Include="Manager\ShaderManager.cpp" />
     <ClCompile Include="Bounding\Ray.cpp" />

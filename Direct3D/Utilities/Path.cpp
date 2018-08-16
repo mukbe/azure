@@ -25,6 +25,16 @@ wstring Path::Combine(wstring path1, wstring path2)
 	return path1 + path2;
 }
 
+bool Path::ExistDirectory(wstring path)
+{
+	DWORD attribute = GetFileAttributes(path.c_str());
+
+	BOOL temp = (attribute != INVALID_FILE_ATTRIBUTES &&
+		(attribute & FILE_ATTRIBUTE_DIRECTORY));
+
+	return temp == TRUE;
+}
+
 string Path::Combine(vector<string> paths)
 {
 	string temp = "";
