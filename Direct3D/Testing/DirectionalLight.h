@@ -3,8 +3,6 @@
 class DirectionalLight
 {
 private:
-	D3DXMATRIX view;
-	D3DXMATRIX ortho;
 	D3DXMATRIX shadowMatrix;
 	class SunBuffer* sunBuffer;
 	class LightViewProj* lightViewBuffer;
@@ -15,6 +13,10 @@ public:
 	
 	void UpdateView();
 	void SetBuffer();
+
+	D3DXMATRIX view;
+	D3DXMATRIX ortho;
+
 };
 
 

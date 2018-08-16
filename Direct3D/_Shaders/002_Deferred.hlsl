@@ -10,7 +10,7 @@ BasicPixelInput BasicDeferredVS(VertexTexture input)
 {
     BasicPixelInput output;
 
-    output.position = mul(input.position, _ortho);
+    output.position = float4(input.position.xy, 0.0f,1.0f);
     output.uv = input.uv;
 
     return output;
@@ -18,15 +18,22 @@ BasicPixelInput BasicDeferredVS(VertexTexture input)
 
 float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
 {
+    GBuffer_Data data = UnpackGBuffer_Loc(input.position.xy);
+
     //GetGBufferData
-    float4 worldPos = _deferredWorld.Sample(_basicSampler, input.uv);
-    float3 worldNormal = normalUnpacking(_deferredNormal.Sample(_basicSampler, input.uv).xyz);
-    float4 albedo = _deferredAlbedo.Sample(_basicSampler, input.uv);
-    float4 specPower = _deferredSpecular.Sample(_basicSampler, input.uv);
+    //float4 worldPos = _deferredWorld.Sample(_basicSampler, input.uv);
+    //float3 worldNormal = normalUnpacking(_deferredNormal.Sample(_basicSampler, input.uv).xyz);
+    //float4 albedo = _deferredAlbedo.Sample(_basicSampler, input.uv);
+    //float4 specPower = _deferredSpecular.Sample(_basicSampler, input.uv);
+
+    float4 worldPos = float4(CalcWorldPos(input.uv, data.LinearDepth), 1.0f);
+    float3 worldNormal = data.Normal;
+    float3 albedo = data.Color;
+    float specPower = data.SpecPow;
 
     //GizmoRendering
-    if (specPower.w > 1.5f)
-        return albedo;
+    //if (specPower.w > 1.5f)
+    //    return albedo;
 
 
     //CalcMainShadow
@@ -40,17 +47,17 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
 
     //CalcLighting
     float diffuseFactor = saturate(dot(worldNormal.xyz, -_sunDir));
-    float4 diffuseColor = albedo * diffuseFactor * _sunColor;
+    float3 diffuseColor = albedo * diffuseFactor * _sunColor.rgb;
  
     //if in Shadow
     if (shadowMapDepth > pixelDepth)
     {
         //TODO ºû°è»ê
-        return diffuseColor * shadowMapDepth;
+        return float4(diffuseColor * shadowMapDepth, 1.0f);
 
     }
     else
     {
-        return diffuseColor;
+        return float4(diffuseColor , 1.0f);;
     }
 }

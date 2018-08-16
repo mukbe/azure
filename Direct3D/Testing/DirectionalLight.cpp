@@ -31,7 +31,6 @@ DirectionalLight::~DirectionalLight()
 
 void DirectionalLight::UpdateView()
 {
-	D3DXMATRIX view;
 	D3DXVECTOR3 origin, dir;
 	D3DXVECTOR3 center(50, 0, 50);
 	origin = sunBuffer->GetPos();

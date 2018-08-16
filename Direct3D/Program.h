@@ -24,4 +24,6 @@ private:
 	class DeferredRenderer* deferred;
 	class ShadowRenderer* shadow;
 	class DirectionalLight* directionalLight;
+
+	class TestBuffer* buffer;
 };

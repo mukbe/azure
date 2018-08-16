@@ -4,6 +4,21 @@
 /***************************************************************
 Basic Deferred Shading 
 ****************************************************************/
+G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float SpecIntensity, float SpecPower)
+{
+    G_Buffer Out = buffer;
+
+	// Normalize the specular power
+    float SpecPowerNorm = max(0.0001, (SpecPower - g_SpecPowerRange.x) / g_SpecPowerRange.y);
+
+	// Pack all the data into the GBuffer structure
+    Out.diffuse = float4(diffuse.rgb, SpecIntensity);
+    Out.normal = float4(normal * 0.5 + 0.5, 0.0);
+    Out.spec = float4(SpecPowerNorm, 0.0, 0.0, 0.0);
+
+    return Out;
+
+}
 
 struct BasicPixelInput
 {
@@ -34,8 +49,9 @@ G_Buffer BasicDeferredPS(BasicPixelInput input)
 
     output.worldPos = input.worldPos;
     output.diffuse = _diffuseTex.Sample(_basicSampler, input.uv);
+    output = PackGBuffer(output, input.normal, output.diffuse.rgb, 0.25f, 250.0f);
+
     output.spec = _specularTex.Sample(_basicSampler, input.uv);
-    output.normal = float4(normalPacking(input.normal), 1.0f);
 
     return output;
 
@@ -77,8 +93,7 @@ G_Buffer ColorDeferredPS(ColorNormalPixelInput input)
 
     output.worldPos = input.worldPos;
     output.diffuse = input.color;
-    output.spec = float4(1, 1, 1, 1);
-    output.normal = float4(normalPacking(input.normal), 1);
+    output = PackGBuffer(output, input.normal, output.diffuse.rgb, 1.0f, 250.0f);
 
     return output;
 }

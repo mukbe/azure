@@ -150,3 +150,23 @@ public:
 		D3DXMatrixTranspose(&data.ortho, &data.ortho);
 	}
 };
+
+class TestBuffer : public ShaderBuffer
+{
+public:
+	struct Struct
+	{
+		D3DXVECTOR4 PerspectiveValues;
+		D3DXMATRIX ViewInv;
+	}data;
+public:
+	TestBuffer()
+		:ShaderBuffer(&data, sizeof Struct) {}
+
+	void SetMatrix(D3DXMATRIX mat)
+	{
+		data.ViewInv = mat;
+		D3DXMatrixTranspose(&data.ViewInv, &data.ViewInv);
+	}
+
+};

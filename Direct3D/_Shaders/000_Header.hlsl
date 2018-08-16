@@ -17,15 +17,16 @@ cbuffer WorldBuffer : register(b1)
     matrix _world;
 }
 
+cbuffer cbGBufferUnpack : register(b8)
+{
+    float4 PerspectiveValues;
+    matrix ViewInv;
+}
+
+
 cbuffer OrthoBuffer : register(b2)
 {
     matrix _ortho;
-}
-
-cbuffer CameraBuffer : register(b3)
-{
-    float3 _cameraPos;
-    float _cameraPadding;
 }
 
 cbuffer SunBuffer : register(b4)
@@ -97,21 +98,34 @@ struct G_Buffer
     float4 spec : SV_Target2;
     float4 worldPos : SV_Target3;
 };
+struct GBuffer_Data
+{
+    float LinearDepth;
+    float3 Color;
+    float3 Normal;
+    float SpecPow;
+    float SpecIntensity;
+};
 
+
+#define EyePosition (_invView[3].xyz)
+
+static const float2 g_SpecPowerRange = { 10.0, 250.0 };
 
 /*************************************************************
 Func
 **************************************************************/
 
-float3 normalPacking(in float3 normal)
-{
-    return normal * 0.5f + 0.5f;
-}
 
-float3 normalUnpacking(in float3 normal)
-{
-    return normal * 2.0f - 1.0f;
-}
+//float3 normalPacking(in float3 normal)
+//{
+//    return normal * 0.5f + 0.5f;
+//}
+
+//float3 normalUnpacking(in float3 normal)
+//{
+//    return normal * 2.0f - 1.0f;
+//}
 
 //카메라 위치 계산
 float3 GetCameraPosition()
@@ -177,4 +191,54 @@ float GetFogFactor(float start, float end, float3 viewPosition)
 float4 GetFogColor(float4 diffuse, float4 color, float factor)
 {
     return factor * diffuse + (1.0f - factor) * color;
+}
+
+float ConvertZToLinearDepth(float depth)
+{
+    float linearDepth = PerspectiveValues.z / (depth + PerspectiveValues.w);
+    return linearDepth;
+}
+
+GBuffer_Data UnpackGBuffer(float2 uv)
+{
+    GBuffer_Data Out;
+
+    float depth = _deferredDepth.Sample(_basicSampler, uv.xy).x;
+    Out.LinearDepth = ConvertZToLinearDepth(depth);
+    float4 baseColorSpecInt = _deferredAlbedo.Sample(_basicSampler, uv.xy);
+    Out.Color = baseColorSpecInt.xyz;
+    Out.SpecIntensity = baseColorSpecInt.w;
+    Out.Normal = _deferredNormal.Sample(_basicSampler, uv.xy).xyz;
+    Out.Normal = normalize(Out.Normal * 2.0 - 1.0);
+    Out.SpecPow = _deferredSpecular.Sample(_basicSampler, uv.xy).x;
+
+    return Out;
+}
+
+GBuffer_Data UnpackGBuffer_Loc(int2 location)
+{
+    GBuffer_Data Out;
+    int3 location3 = int3(location, 0);
+
+    float depth = _deferredDepth.Load(location3).x;
+    Out.LinearDepth = ConvertZToLinearDepth(depth);
+    float4 baseColorSpecInt = _deferredAlbedo.Load(location3);
+    Out.Color = baseColorSpecInt.xyz;
+    Out.SpecIntensity = baseColorSpecInt.w;
+    Out.Normal = _deferredNormal.Load(location3).xyz;
+    Out.Normal = normalize(Out.Normal * 2.0 - 1.0);
+    Out.SpecPow = _deferredSpecular.Load(location3).x;
+
+    return Out;
+}
+
+float3 CalcWorldPos(float2 csPos, float depth)
+{
+    float4 position;
+
+    position.xy = csPos.xy * PerspectiveValues.xy * depth;
+    position.z = depth;
+    position.w = 1.0;
+	
+    return mul(position, ViewInv).xyz;
 }

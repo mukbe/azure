@@ -10,7 +10,7 @@
 #include "./Testing/DirectionalLight.h"
 
 #include "./Renders/WorldBuffer.h"
-
+#include "./View/Perspective.h"
 Program::Program()
 {
 	States::Create();
@@ -34,6 +34,8 @@ Program::Program()
 	shadow = new ShadowRenderer;
 
 	shadow->SetRenderFunc(bind(&Program::ShadowRender,this));
+
+	buffer = new TestBuffer;
 }
 
 Program::~Program()
@@ -102,6 +104,20 @@ void Program::PostRender()
 
 	freeCamera->Render();
 	directionalLight->SetBuffer();
+
+	//D3DXMATRIX mat = freeCamera->GetViewMatrix();
+	D3DXMATRIX mat = directionalLight->view;
+
+	D3DXMatrixInverse(&mat, nullptr, &mat);
+	buffer->data.ViewInv = mat;
+
+	//D3DXMATRIX proj = freeCamera->GetPerspective()->GetMatrix();
+	D3DXMATRIX proj = directionalLight->ortho;
+	buffer->data.PerspectiveValues.x = 1.0f / proj.m[0][0];
+	buffer->data.PerspectiveValues.y = 1.0f / proj.m[1][1];
+	buffer->data.PerspectiveValues.z = proj.m[3][2];
+	buffer->data.PerspectiveValues.w = -proj.m[2][2];
+	buffer->SetPSBuffer(8);
 	States::SetSampler(1, States::LINEAR);
 	deferred->Render();
 }
