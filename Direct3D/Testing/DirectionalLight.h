@@ -18,7 +18,6 @@ public:
 };
 
 
-
 class LightViewProj : public ShaderBuffer
 {
 	struct Data

@@ -157,3 +157,32 @@ public:
 	}
 	ShaderBuffer_Mecro(OrthoBuffer)
 };
+
+class MaterialBuffer : public ShaderBuffer
+{
+public:
+	MaterialBuffer()
+		: ShaderBuffer(&Data, sizeof(Data))
+	{
+		Data.Diffuse = D3DXCOLOR(1, 1, 1, 1);
+		Data.Specular = D3DXCOLOR(1, 1, 1, 1);
+		Data.Emissive = D3DXCOLOR(0, 0, 0, 1);
+
+		Data.Shininess = 1;
+		Data.DetailFactor = 1;
+	}
+
+	struct Struct
+	{
+		D3DXCOLOR Diffuse;
+		D3DXCOLOR Specular;
+		D3DXCOLOR Emissive;
+
+		float Shininess;
+		float DetailFactor;
+
+		float Padding[2];
+	}Data;
+
+	ShaderBuffer_Mecro(MaterialBuffer)
+};

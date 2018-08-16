@@ -22,11 +22,17 @@ cbuffer OrthoBuffer : register(b2)
     matrix _ortho;
 }
 
-cbuffer CameraBuffer : register(b3)
+cbuffer MaterialBuffer : register(b3)
 {
-    float3 _cameraPos;
-    float _cameraPadding;
+    float4 _diffuseColor;
+    float4 _specColor;
+    float4 _emissiveColor;
+
+    float _shiness;
+    float _detailFactor;
+    float2 _materialPadding;
 }
+
 
 cbuffer SunBuffer : register(b4)
 {
@@ -55,6 +61,9 @@ Texture2D _sunLightsahdowMap : register(t5);
 
 Texture2D _diffuseTex : register(t5);
 Texture2D _specularTex : register(t6);
+Texture2D _emissiveTex : register(t7);
+Texture2D _normalTex : register(t8);
+Texture2D _detailTex : register(t9);
 
 SamplerState _basicSampler : register(s0);
 

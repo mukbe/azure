@@ -1,5 +1,5 @@
 #pragma once
-
+#include "DefineHeader.h"
 #define CIRCLEGIZMO_SEGMENTS 36
 
 class Gizmo 
@@ -34,5 +34,5 @@ public:
 	void LocalGizmo(D3DXVECTOR3 center, float radius, D3DXVECTOR3 right, D3DXVECTOR3 up, D3DXVECTOR3 forward);
 };
 
-#define GizmoRenderer Gizmo::GetInstance()
 
+#define GizmoRenderer Gizmo::GetInstance()

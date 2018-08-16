@@ -88,7 +88,8 @@ Gizmo::Gizmo()
 		circlPosition[i] = D3DXVECTOR3(cos(angle), sin(angle), 0);
 	}
 
-	worldBuffer = new WorldBuffer;
+	worldBuffer = Buffers->FindShaderBuffer<WorldBuffer>();
+	
 	shader = new Shader(ShaderPath + L"001_GBuffer.hlsl", Shader::ShaderType::Default,"GizmoDeferred");
 }
 
@@ -98,7 +99,6 @@ Gizmo::~Gizmo()
 	SafeRelease(vertexBuffer);
 	SafeRelease(indexBuffer);
 	SafeDelete(shader);
-	SafeDelete(worldBuffer);
 
 	SafeDeleteArray(circleVertices);
 }

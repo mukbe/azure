@@ -24,9 +24,11 @@
     <ClInclude Include="Bounding\BoundingBox.h" />
     <ClInclude Include="Bounding\BoundingSphere.h" />
     <ClInclude Include="Bounding\Bounding.h" />
+    <ClInclude Include="FBX\Type.h" />
     <ClInclude Include="Manager\BufferManager.h" />
     <ClInclude Include="Manager\ShaderManager.h" />
     <ClInclude Include="Bounding\Ray.h" />
+    <ClInclude Include="Renders\Material.h" />
     <ClInclude Include="Testing\DirectionalLight.h" />
     <ClInclude Include="Renders\ShadowRenderer.h" />
     <ClInclude Include="View\OrthoWindow.h" />
@@ -70,6 +72,7 @@
     <ClCompile Include="Manager\BufferManager.cpp" />
     <ClCompile Include="Manager\ShaderManager.cpp" />
     <ClCompile Include="Bounding\Ray.cpp" />
+    <ClCompile Include="Renders\Material.cpp" />
     <ClCompile Include="Testing\DirectionalLight.cpp" />
     <ClCompile Include="Renders\ShadowRenderer.cpp" />
     <ClCompile Include="View\OrthoWindow.cpp" />
@@ -97,6 +100,7 @@
     <ClCompile Include="Utilities\Math.cpp" />
     <ClCompile Include="Utilities\Path.cpp" />
     <ClCompile Include="Utilities\String.cpp" />
+    <ClCompile Include="View\Projection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\001_GBuffer.hlsl">
