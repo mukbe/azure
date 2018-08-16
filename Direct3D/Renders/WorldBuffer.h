@@ -1,8 +1,6 @@
 #pragma once
 #include "./Renders/ShaderBuffer.h"
 
-#pragma once
-
 class WorldBuffer : public ShaderBuffer
 {
 public:
@@ -24,6 +22,8 @@ public:
 
 private:
 	Struct Data;
+
+	ShaderBuffer_Mecro(WorldBuffer)
 };
 
 class ViewProjectionBuffer : public ShaderBuffer
@@ -77,6 +77,8 @@ public:
 
 private:
 	Struct Data;
+
+	ShaderBuffer_Mecro(ViewProjectionBuffer)
 };
 
 class CameraBuffer : public ShaderBuffer
@@ -97,6 +99,8 @@ public:
 
 private:
 	Struct Data;
+
+	ShaderBuffer_Mecro(CameraBuffer)
 };
 
 class SunBuffer : public ShaderBuffer
@@ -130,6 +134,8 @@ public:
 	D3DXVECTOR3 GetDir() { return this->Data.dir; }
 private:
 	Struct Data;
+
+	ShaderBuffer_Mecro(SunBuffer)
 };
 
 
@@ -149,4 +155,5 @@ public:
 		data.ortho = mat;
 		D3DXMatrixTranspose(&data.ortho, &data.ortho);
 	}
+	ShaderBuffer_Mecro(OrthoBuffer)
 };

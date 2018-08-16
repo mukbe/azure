@@ -17,8 +17,10 @@
 
 #include "./Renders/Gizmo.h"
 #include "./Manager/ShaderManager.h"
+#include "./Manager/BufferManager.h"
 
 #define KeyCode Keyboard::Get()
 #define GameMouse Mouse::Get()
 #define DeltaTime Time::Delta()
 #define Shaders ShaderManager::GetInstance()
+#define Buffers BufferManager::GetInstance()

@@ -49,6 +49,19 @@ float Math::Modulo(float val1, float val2)
 	return val1;
 }
 
+float Math::Angle(D3DXVECTOR3 v1, D3DXVECTOR3 v2)
+{
+	float angle = 0;
+
+	float dot = D3DXVec3Dot(&v1, &v2);
+	float length1 = D3DXVec3Length(&v1);
+	float length2 = D3DXVec3Length(&v2);
+
+	angle = acosf(dot / (length1 * length2));
+
+	return angle;
+}
+
 int Math::Random(int r1, int r2)
 {
 	return (int)(rand() % (r2 - r1 + 1)) + r1;
