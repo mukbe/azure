@@ -25,5 +25,4 @@ private:
 	class ShadowRenderer* shadow;
 	class DirectionalLight* directionalLight;
 
-	class TestBuffer* buffer;
 };

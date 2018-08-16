@@ -46,6 +46,7 @@ public:
 	void SetProjection(D3DXMATRIX mat)
 	{
 		Data.Projection = mat;
+		SetPerspectiveValues();
 		D3DXMatrixInverse(&Data.InvProjection, NULL, &Data.Projection);
 		D3DXMatrixTranspose(&Data.InvProjection, &Data.InvProjection);
 		D3DXMatrixTranspose(&Data.Projection, &Data.Projection);
@@ -58,11 +59,6 @@ public:
 		D3DXMatrixTranspose(&Data.ViewProjection, &Data.ViewProjection);
 	}
 
-	void SetOrtho(D3DXMATRIX  mat)
-	{
-		Data.ortho = mat;
-		D3DXMatrixTranspose(&Data.ortho, &Data.ortho);
-	}
 
 	struct Struct
 	{
@@ -72,35 +68,22 @@ public:
 		D3DXMATRIX InvView;
 		D3DXMATRIX InvProjection;
 		D3DXMATRIX InvViewProjection;
-		D3DXMATRIX ortho;
+
+		D3DXVECTOR4 PerspectiveValues;
 	};
 
 private:
 	Struct Data;
 
-	ShaderBuffer_Mecro(ViewProjectionBuffer)
-};
-
-class CameraBuffer : public ShaderBuffer
-{
-public:
-	CameraBuffer() : ShaderBuffer(&Data, sizeof(Struct))
+	void SetPerspectiveValues()
 	{
-		Data.cameraPos = D3DXVECTOR3(0.f, 0.f, 0.f);
+		Data.PerspectiveValues.x = 1.0f / Data.Projection.m[0][0];
+		Data.PerspectiveValues.y = 1.0f / Data.Projection.m[1][1];
+		Data.PerspectiveValues.z = Data.Projection.m[3][2];
+		Data.PerspectiveValues.w = -Data.Projection.m[2][2];
 	}
 
-	struct Struct
-	{
-		D3DXVECTOR3 cameraPos;
-		float padding;
-	};
-
-	void SetCameraPosition(D3DXVECTOR3 pos) { this->Data.cameraPos = pos; }
-
-private:
-	Struct Data;
-
-	ShaderBuffer_Mecro(CameraBuffer)
+	ShaderBuffer_Mecro(ViewProjectionBuffer)
 };
 
 class SunBuffer : public ShaderBuffer
@@ -136,46 +119,6 @@ private:
 	Struct Data;
 
 	ShaderBuffer_Mecro(SunBuffer)
-};
-
-
-class OrthoBuffer : public ShaderBuffer
-{
-private:
-	struct Struct
-	{
-		D3DXMATRIX ortho;
-	}data;
-public:
-	OrthoBuffer()
-		:ShaderBuffer(&data, sizeof Struct) {}
-
-	void SetMatrix(D3DXMATRIX mat)
-	{
-		data.ortho = mat;
-		D3DXMatrixTranspose(&data.ortho, &data.ortho);
-	}
-};
-
-class TestBuffer : public ShaderBuffer
-{
-public:
-	struct Struct
-	{
-		D3DXVECTOR4 PerspectiveValues;
-		D3DXMATRIX ViewInv;
-	}data;
-public:
-	TestBuffer()
-		:ShaderBuffer(&data, sizeof Struct) {}
-
-	void SetMatrix(D3DXMATRIX mat)
-	{
-		data.ViewInv = mat;
-		D3DXMatrixTranspose(&data.ViewInv, &data.ViewInv);
-	}
-
-	ShaderBuffer_Mecro(TestBuffer)
 };
 
 class MaterialBuffer : public ShaderBuffer

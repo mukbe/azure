@@ -29,6 +29,19 @@
     <ClCompile Include="Utilities\Path.cpp" />
     <ClCompile Include="Utilities\String.cpp" />
     <ClCompile Include="Manager\ShaderManager.cpp" />
+    <ClCompile Include="Bounding\BoundingFrustum.cpp" />
+    <ClCompile Include="Bounding\BoundingCapsule.cpp" />
+    <ClCompile Include="Bounding\BoundingBox.cpp" />
+    <ClCompile Include="Bounding\BoundingSphere.cpp" />
+    <ClCompile Include="FBX\Exporter.cpp" />
+    <ClCompile Include="FBX\FbxUtility.cpp" />
+    <ClCompile Include="Manager\BufferManager.cpp" />
+    <ClCompile Include="Bounding\Ray.cpp" />
+    <ClCompile Include="Renders\Material.cpp" />
+    <ClCompile Include="View\Projection.cpp" />
+    <ClCompile Include="ComputeShader\ComputeResource.cpp" />
+    <ClCompile Include="ComputeShader\ComputeShader.cpp" />
+    <ClCompile Include="Renders\DepthVis.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Testing\DirectionalLight.h" />
@@ -66,6 +79,21 @@
     <ClInclude Include="Utilities\String.h" />
     <ClInclude Include="View\Projection.h" />
     <ClInclude Include="Manager\ShaderManager.h" />
+    <ClInclude Include="Bounding\BoundingFrustum.h" />
+    <ClInclude Include="Bounding\BoundingCapsule.h" />
+    <ClInclude Include="Bounding\BoundingBox.h" />
+    <ClInclude Include="Bounding\BoundingSphere.h" />
+    <ClInclude Include="Bounding\Bounding.h" />
+    <ClInclude Include="FBX\Exporter.h" />
+    <ClInclude Include="FBX\FbxUtility.h" />
+    <ClInclude Include="FBX\BoneWeights.h" />
+    <ClInclude Include="FBX\Type.h" />
+    <ClInclude Include="Manager\BufferManager.h" />
+    <ClInclude Include="Bounding\Ray.h" />
+    <ClInclude Include="Renders\Material.h" />
+    <ClInclude Include="ComputeShader\ComputeResource.h" />
+    <ClInclude Include="ComputeShader\ComputeShader.h" />
+    <ClInclude Include="Renders\DepthVis.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />

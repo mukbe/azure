@@ -102,8 +102,6 @@ OrthoWindow::OrthoWindow(int windowWidth, int windowHeight)
 	D3DXMatrixOrthoLH(&projection, (float)windowWidth, (float)windowHeight, 0.f, 1000.0f);
 	//viewProjectionBuffer->SetOrtho(projection);
 
-	orthoBuffer = new OrthoBuffer;
-	orthoBuffer->SetMatrix(projection);
 }
 
 OrthoWindow::~OrthoWindow()
@@ -130,5 +128,4 @@ void OrthoWindow::Render()
 	//viewProjectionBuffer->SetVSBuffer(0);
 	//viewProjectionBuffer->SetPSBuffer(0);
 
-	orthoBuffer->SetVSBuffer(2);
 }

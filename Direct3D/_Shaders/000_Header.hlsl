@@ -10,6 +10,8 @@ cbuffer ViewProjectionBuffer : register(b0)
     matrix _invView;
     matrix _invProjection;
     matrix _invViewProjection;
+
+    float4 _perspectiveValues;
 }
 
 cbuffer WorldBuffer : register(b1)
@@ -17,17 +19,6 @@ cbuffer WorldBuffer : register(b1)
     matrix _world;
 }
 
-cbuffer cbGBufferUnpack : register(b8)
-{
-    float4 PerspectiveValues;
-    matrix ViewInv;
-}
-
-
-cbuffer OrthoBuffer : register(b2)
-{
-    matrix _ortho;
-}
 cbuffer MaterialBuffer : register(b3)
 {
     float4 _diffuseColor;
@@ -210,7 +201,7 @@ float4 GetFogColor(float4 diffuse, float4 color, float factor)
 
 float ConvertZToLinearDepth(float depth)
 {
-    float linearDepth = PerspectiveValues.z / (depth + PerspectiveValues.w);
+    float linearDepth = _perspectiveValues.z / (depth + _perspectiveValues.w);
     return linearDepth;
 }
 
@@ -218,14 +209,15 @@ GBuffer_Data UnpackGBuffer(float2 uv)
 {
     GBuffer_Data Out;
 
-    float depth = _deferredDepth.Sample(_basicSampler, uv.xy).x;
+    float depth = _deferredDepth.Sample(_basicSampler, uv).x;
     Out.LinearDepth = ConvertZToLinearDepth(depth);
-    float4 baseColorSpecInt = _deferredAlbedo.Sample(_basicSampler, uv.xy);
+    float4 baseColorSpecInt = _deferredAlbedo.Sample(_basicSampler, uv);
     Out.Color = baseColorSpecInt.xyz;
     Out.SpecIntensity = baseColorSpecInt.w;
-    Out.Normal = _deferredNormal.Sample(_basicSampler, uv.xy).xyz;
+    Out.Normal = _deferredNormal.Sample(_basicSampler, uv).xyz;
     Out.Normal = normalize(Out.Normal * 2.0 - 1.0);
-    Out.SpecPow = _deferredSpecular.Sample(_basicSampler, uv.xy).x;
+    Out.SpecPow = _deferredSpecular.Sample(_basicSampler, uv).x;
+    Out.WorldPosition = _deferredWorld.Sample(_basicSampler, uv);
 
     return Out;
 }
@@ -252,9 +244,9 @@ float3 CalcWorldPos(float2 csPos, float depth)
 {
     float4 position;
 
-    position.xy = csPos.xy * PerspectiveValues.xy * depth;
+    position.xy = csPos.xy * _perspectiveValues.xy * depth;
     position.z = depth;
     position.w = 1.0;
 	
-    return mul(position, ViewInv).xyz;
+    return mul(position, _invView).xyz;
 }
