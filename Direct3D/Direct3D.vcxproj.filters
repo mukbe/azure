@@ -100,5 +100,6 @@
     <None Include="_Shaders\004_Shadow.hlsl" />
     <None Include="_Shaders\001_GBuffer.hlsl" />
     <None Include="_Shaders\002_Deferred.hlsl" />
+    <None Include="_Shaders\DepthVis.hlsl" />
   </ItemGroup>
 </Project>

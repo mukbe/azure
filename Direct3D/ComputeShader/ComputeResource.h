@@ -20,6 +20,8 @@ public:
 	virtual void BindResource(int slot);
 	virtual void ReleaseResource(int slot);
 
+	virtual ID3D11ShaderResourceView* GetSRV() { return srv; }
+
 protected:
 	ID3D11ShaderResourceView *srv;
 	ID3D11UnorderedAccessView *uav;

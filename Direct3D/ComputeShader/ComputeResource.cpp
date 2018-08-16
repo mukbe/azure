@@ -11,54 +11,54 @@ IComputeResource::IComputeResource()
 
 IComputeResource::~IComputeResource()
 {
-	SAFE_RELEASE(uav);
-	SAFE_RELEASE(srv);
+	SafeRelease(uav);
+	SafeRelease(srv);
 }
 
 void IComputeResource::BindCSShaderResourceView(int slot)
 {
-	D3D::GetDC()->CSSetShaderResources(slot, 1, &srv);
+	DeviceContext->CSSetShaderResources(slot, 1, &srv);
 }
 void IComputeResource::ReleaseCSshaderResorceView(int slot)
 {
 	ID3D11ShaderResourceView* nullSRV[1] = { 0 };
 
-	D3D::GetDC()->CSSetShaderResources(slot, 1, nullSRV);
+	DeviceContext->CSSetShaderResources(slot, 1, nullSRV);
 }
 
 void IComputeResource::BindPSShaderResourceView(int slot)
 {
-	D3D::GetDC()->PSSetShaderResources(slot, 1, &srv);
+	DeviceContext->PSSetShaderResources(slot, 1, &srv);
 }
 
 void IComputeResource::ReleaseShaderResourceView(int slot)
 {
 	ID3D11ShaderResourceView* nullSRV[1] = { 0 };
 
-	D3D::GetDC()->PSSetShaderResources(slot, 1, nullSRV);
+	DeviceContext->PSSetShaderResources(slot, 1, nullSRV);
 }
 
 void IComputeResource::BindDSShaderResourceView(int slot)
 {
-	D3D::GetDC()->DSSetShaderResources(slot, 1, &srv);
+	DeviceContext->DSSetShaderResources(slot, 1, &srv);
 }
 
 void IComputeResource::ReleaseDSshaderResorceView(int slot)
 {
 	ID3D11ShaderResourceView* nullSRV[1] = { 0 };
 
-	D3D::GetDC()->DSSetShaderResources(slot, 1, nullSRV);
+	DeviceContext->DSSetShaderResources(slot, 1, nullSRV);
 }
 
 void IComputeResource::BindResource(int slot)
 {
-	D3D::GetDC()->CSSetUnorderedAccessViews(slot, 1, &uav, nullptr);
+	DeviceContext->CSSetUnorderedAccessViews(slot, 1, &uav, nullptr);
 }
 
 void IComputeResource::ReleaseResource(int slot)
 {
 	ID3D11UnorderedAccessView* nullUAV[1] = { 0 };
-	D3D::GetDC()->CSSetUnorderedAccessViews(slot, 1, nullUAV, nullptr);
+	DeviceContext->CSSetUnorderedAccessViews(slot, 1, nullUAV, nullptr);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,8 +74,8 @@ CResource1D::CResource1D(UINT elementSize, UINT count, void * pInitData)
 
 CResource1D::~CResource1D()
 {
-	SAFE_RELEASE(readBuffer);
-	SAFE_RELEASE(rwBuffer);
+	SafeRelease(readBuffer);
+	SafeRelease(rwBuffer);
 }
 
 void CResource1D::CreateBufferForGPU(UINT elementSize, UINT count, void * pInitData, ID3D11Buffer* buffer)
@@ -97,9 +97,9 @@ void CResource1D::CreateBufferForGPU(UINT elementSize, UINT count, void * pInitD
 		InitData.pSysMem = pInitData;
 		
 		if(pInitData != nullptr)
-			hr = D3D::GetDevice()->CreateBuffer(&desc, &InitData, &rwBuffer);
+			hr = Device->CreateBuffer(&desc, &InitData, &rwBuffer);
 		else 
-			hr = D3D::GetDevice()->CreateBuffer(&desc, nullptr, &rwBuffer);
+			hr = Device->CreateBuffer(&desc, nullptr, &rwBuffer);
 	}
 	else
 	{
@@ -108,7 +108,7 @@ void CResource1D::CreateBufferForGPU(UINT elementSize, UINT count, void * pInitD
 		desc.ByteWidth = elementSize * count;
 		desc.StructureByteStride = elementSize;
 
-		hr = D3D::GetDevice()->CreateBuffer(&desc, nullptr, &readBuffer);
+		hr = Device->CreateBuffer(&desc, nullptr, &readBuffer);
 	}
 	assert(SUCCEEDED(hr));
 }
@@ -139,7 +139,7 @@ void CResource1D::CreateSRV()
 		desc.Format = DXGI_FORMAT_UNKNOWN;
 		desc.BufferEx.NumElements = bufDesc.ByteWidth / bufDesc.StructureByteStride;
 	}
-	HRESULT hr = D3D::GetDevice()->CreateShaderResourceView(rwBuffer, &desc, &srv);
+	HRESULT hr = Device->CreateShaderResourceView(rwBuffer, &desc, &srv);
 	assert(SUCCEEDED(hr));
 
 }
@@ -174,21 +174,21 @@ void CResource1D::CreateUAV()
 
 
 
-	HRESULT hr = D3D::GetDevice()->CreateUnorderedAccessView(rwBuffer, &desc, &uav);
+	HRESULT hr = Device->CreateUnorderedAccessView(rwBuffer, &desc, &uav);
 	assert(SUCCEEDED(hr));
 
 }
 void CResource1D::GetDatas(void * datas)
 {
 
-	D3D::GetDC()->CopyResource(readBuffer, rwBuffer);
+	DeviceContext->CopyResource(readBuffer, rwBuffer);
 
 	D3D11_MAPPED_SUBRESOURCE dat = { 0 };
-	D3D::GetDC()->Map(readBuffer, 0, D3D11_MAP_READ, 0, &dat);
+	DeviceContext->Map(readBuffer, 0, D3D11_MAP_READ, 0, &dat);
 	{
 		memcpy(datas, dat.pData, byteWidth);
 	}
-	D3D::GetDC()->Unmap(readBuffer, 0);
+	DeviceContext->Unmap(readBuffer, 0);
 
 }
 
@@ -212,7 +212,7 @@ void CResource2D::GetDatas(vector<vector<D3DXCOLOR>>& colors)
 {
 	ID3D11Resource* result;
 	uav->GetResource(&result);
-	D3D::GetDC()->CopyResource(readBuffer, result);
+	DeviceContext->CopyResource(readBuffer, result);
 
 	D3D11_TEXTURE2D_DESC desc;
 	ZeroMemory(&desc, sizeof(D3D11_TEXTURE2D_DESC));
@@ -222,13 +222,13 @@ void CResource2D::GetDatas(vector<vector<D3DXCOLOR>>& colors)
 	UINT w = 0;
 	float* pixels = nullptr;
 	UINT formatSize = sizeof(float);
-	D3D::GetDC()->Map(readBuffer, 0, D3D11_MAP_READ, 0, &dat);
+	DeviceContext->Map(readBuffer, 0, D3D11_MAP_READ, 0, &dat);
 	{
 		w = dat.RowPitch / formatSize;
 		pixels = new float[w * desc.Height * 4];
 		memcpy(pixels, dat.pData, w * desc.Height * 4);
 	}
-	D3D::GetDC()->Unmap(readBuffer, 0);
+	DeviceContext->Unmap(readBuffer, 0);
 
 	vector<D3DXCOLOR> tempX;
 	tempX.assign(desc.Width, D3DXCOLOR(0, 0, 0, 0));
@@ -256,7 +256,7 @@ void CResource2D::SavePNG(wstring path)
 {
 	HRESULT hr = D3DX11SaveTextureToFile
 	(
-		D3D::GetDC(), readBuffer, D3DX11_IFF_PNG, path.c_str()
+		DeviceContext, readBuffer, D3DX11_IFF_PNG, path.c_str()
 	);
 	assert(SUCCEEDED(hr));
 }
@@ -265,7 +265,7 @@ void CResource2D::UpdateSRV()
 {
 	ID3D11Resource* result;
 	uav->GetResource(&result);
-	D3D::GetDC()->CopyResource(readBuffer, result);
+	DeviceContext->CopyResource(readBuffer, result);
 	D3D11_TEXTURE2D_DESC desc;
 	ZeroMemory(&desc, sizeof(D3D11_TEXTURE2D_DESC));
 	readBuffer->GetDesc(&desc);
@@ -277,7 +277,7 @@ void CResource2D::UpdateSRV()
 	srvDesc.Texture2D.MipLevels = desc.MipLevels;
 	srvDesc.Texture2D.MostDetailedMip = 0;
 
-	HRESULT hr = D3D::GetDevice()->CreateShaderResourceView(rwBuffer, &srvDesc, &srv);
+	HRESULT hr = Device->CreateShaderResourceView(rwBuffer, &srvDesc, &srv);
 
 }
 
@@ -299,14 +299,14 @@ void CResource2D::CreateBufferForGPU(UINT width, UINT height, void * pInitData, 
 	{
 		desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
 
-		hr = D3D::GetDevice()->CreateTexture2D(&desc, nullptr, &rwBuffer);
+		hr = Device->CreateTexture2D(&desc, nullptr, &rwBuffer);
 	}
 	else
 	{
 		desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
 		desc.Usage = D3D11_USAGE_STAGING;
 
-		hr = D3D::GetDevice()->CreateTexture2D(&desc, nullptr, &readBuffer);
+		hr = Device->CreateTexture2D(&desc, nullptr, &readBuffer);
 	}
 	assert(SUCCEEDED(hr));
 }
@@ -325,7 +325,7 @@ void CResource2D::CreateSRV()
 	srvDesc.Texture2D.MipLevels = bufDesc.MipLevels;
 	srvDesc.Texture2D.MostDetailedMip = 0;
 
-	HRESULT hr = D3D::GetDevice()->CreateShaderResourceView(rwBuffer, &srvDesc, &srv);
+	HRESULT hr = Device->CreateShaderResourceView(rwBuffer, &srvDesc, &srv);
 	assert(SUCCEEDED(hr));
 
 }
@@ -342,7 +342,7 @@ void CResource2D::CreateUAV()
 	viewDesc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2D;
 	viewDesc.Texture2D.MipSlice = 0;
 	
-	HRESULT hr = D3D::GetDevice()->CreateUnorderedAccessView(rwBuffer, &viewDesc, &uav);
+	HRESULT hr = Device->CreateUnorderedAccessView(rwBuffer, &viewDesc, &uav);
 
 	assert(SUCCEEDED(hr));
 }
@@ -359,20 +359,20 @@ CAppendResource1D::CAppendResource1D(UINT elementSize, UINT count, void * pInitD
 
 CAppendResource1D::~CAppendResource1D()
 {
-	SAFE_RELEASE(readBuffer);
-	SAFE_RELEASE(rwBuffer);
+	SafeRelease(readBuffer);
+	SafeRelease(rwBuffer);
 }
 
 void CAppendResource1D::GetDatas(void * datas)
 {
-	D3D::GetDC()->CopyResource(readBuffer, rwBuffer);
+	DeviceContext->CopyResource(readBuffer, rwBuffer);
 
 	D3D11_MAPPED_SUBRESOURCE dat = { 0 };
-	D3D::GetDC()->Map(readBuffer, 0, D3D11_MAP_READ, 0, &dat);
+	DeviceContext->Map(readBuffer, 0, D3D11_MAP_READ, 0, &dat);
 	{
 		memcpy(datas, dat.pData, byteWidth);
 	}
-	D3D::GetDC()->Unmap(readBuffer, 0);
+	DeviceContext->Unmap(readBuffer, 0);
 }
 
 void CAppendResource1D::SetDatas(void * datas)
@@ -380,7 +380,7 @@ void CAppendResource1D::SetDatas(void * datas)
 	D3D11_SUBRESOURCE_DATA InitData = { 0 };
 	InitData.pSysMem = datas;
 
-	D3D::GetDC()->UpdateSubresource(rwBuffer, 0, nullptr, datas, byteWidth, 0);
+	DeviceContext->UpdateSubresource(rwBuffer, 0, nullptr, datas, byteWidth, 0);
 }
 
 void CAppendResource1D::CreateBufferForGPU(UINT elementSize, UINT count, void * pInitData, ID3D11Buffer * buffer)
@@ -402,9 +402,9 @@ void CAppendResource1D::CreateBufferForGPU(UINT elementSize, UINT count, void * 
 		InitData.pSysMem = pInitData;
 
 		if (pInitData != nullptr)
-			hr = D3D::GetDevice()->CreateBuffer(&desc, &InitData, &rwBuffer);
+			hr = Device->CreateBuffer(&desc, &InitData, &rwBuffer);
 		else
-			hr = D3D::GetDevice()->CreateBuffer(&desc, nullptr, &rwBuffer);
+			hr = Device->CreateBuffer(&desc, nullptr, &rwBuffer);
 	}
 	else
 	{
@@ -413,7 +413,7 @@ void CAppendResource1D::CreateBufferForGPU(UINT elementSize, UINT count, void * 
 		desc.ByteWidth = elementSize * count;
 		desc.StructureByteStride = elementSize;
 
-		hr = D3D::GetDevice()->CreateBuffer(&desc, nullptr, &readBuffer);
+		hr = Device->CreateBuffer(&desc, nullptr, &readBuffer);
 	}
 	assert(SUCCEEDED(hr));
 }
@@ -444,7 +444,7 @@ void CAppendResource1D::CreateSRV()
 		desc.Format = DXGI_FORMAT_UNKNOWN;
 		desc.BufferEx.NumElements = bufDesc.ByteWidth / bufDesc.StructureByteStride;
 	}
-	HRESULT hr = D3D::GetDevice()->CreateShaderResourceView(rwBuffer, &desc, &srv);
+	HRESULT hr = Device->CreateShaderResourceView(rwBuffer, &desc, &srv);
 	assert(SUCCEEDED(hr));
 }
 
@@ -478,7 +478,7 @@ void CAppendResource1D::CreateUAV()
 
 
 
-	HRESULT hr = D3D::GetDevice()->CreateUnorderedAccessView(rwBuffer, &desc, &uav);
+	HRESULT hr = Device->CreateUnorderedAccessView(rwBuffer, &desc, &uav);
 	assert(SUCCEEDED(hr));
 
 }

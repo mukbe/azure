@@ -5,6 +5,8 @@
 #include "./View/OrthoWindow.h"
 #include "./Renders/WorldBuffer.h"
 
+#include "./Renders/DepthVis.h"
+
 DeferredRenderer::DeferredRenderer()
 {
 	this->shader = new Shader(ShaderPath + L"002_Deferred.hlsl",Shader::ShaderType::Default,"BasicDeferred");
@@ -14,6 +16,7 @@ DeferredRenderer::DeferredRenderer()
 	this->orthoWindow = new OrthoWindow(2,2);
 
 	this->Create();
+	depthVis = new DepthVis;
 }
 
 
@@ -65,6 +68,8 @@ void DeferredRenderer::Render()
 
 	shader->Render();
 	DeviceContext->DrawIndexed(6, 0, 0);
+
+	depthVis->CalcuDepth(depthSRV);
 }
 
 void DeferredRenderer::UIRender()
@@ -74,7 +79,8 @@ void DeferredRenderer::UIRender()
 		ImGui::ImageButton(shaderResourceView[0], ImVec2(200, 150)); ImGui::SameLine();
 		ImGui::ImageButton(shaderResourceView[1], ImVec2(200, 150));
 		ImGui::ImageButton(shaderResourceView[3], ImVec2(200, 150)); ImGui::SameLine();
-		ImGui::ImageButton(depthSRV, ImVec2(200, 150));		
+
+		ImGui::ImageButton(depthVis->GetSRV(), ImVec2(200, 150));
 	}
 	ImGui::End();
 }

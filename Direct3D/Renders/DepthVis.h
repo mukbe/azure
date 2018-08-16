@@ -3,11 +3,15 @@
 class DepthVis
 {
 public:
-	DepthVis(ID3D11ShaderResourceView* depthView);
+	DepthVis();
 	~DepthVis();
+
+	void CalcuDepth(ID3D11ShaderResourceView* depthView);
+	ID3D11ShaderResourceView* GetSRV();
+
 private:
-	ComputeShader * shader;
-	CResource2D* depth;
+	class ComputeShader * shader;
+	class CResource2D* depth;
 
 	
 };

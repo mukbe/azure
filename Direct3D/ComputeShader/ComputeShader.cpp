@@ -4,12 +4,12 @@
 
 void ComputeShader::BindShader()
 {
-	D3D::GetDC()->CSSetShader(computeShader, NULL,	0);
+	DeviceContext->CSSetShader(computeShader, NULL,	0);
 }
 
 void ComputeShader::Dispatch(int x, int y, int z)
 {
-	D3D::GetDC()->Dispatch(x, y, z);
+	DeviceContext->Dispatch(x, y, z);
 }
 
 
@@ -30,7 +30,7 @@ ComputeShader::ComputeShader(wstring shaderPath, string entryPoint)
 	);
 	CheckShaderError(hr, error);
 
-	hr = D3D::GetDevice()->CreateComputeShader
+	hr = Device->CreateComputeShader
 	(
 		blobVS->GetBufferPointer()
 		, blobVS->GetBufferSize()
@@ -43,8 +43,8 @@ ComputeShader::ComputeShader(wstring shaderPath, string entryPoint)
 
 ComputeShader::~ComputeShader()
 {
-	SAFE_RELEASE(blobVS);
-	SAFE_RELEASE(computeShader);
+	SafeRelease(blobVS);
+	SafeRelease(computeShader);
 }
 
 void ComputeShader::CheckShaderError(HRESULT hr, ID3D10Blob* error)

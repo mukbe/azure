@@ -18,6 +18,7 @@ private:
 	
 	class Shader* shader;
 	class OrthoWindow* orthoWindow;
+	class DepthVis* depthVis;
 private:
 	void ClearRenderTarget();
 	bool Create();
