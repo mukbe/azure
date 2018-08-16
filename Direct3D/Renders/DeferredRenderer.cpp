@@ -11,7 +11,7 @@ DeferredRenderer::DeferredRenderer()
 
 	D3DDesc desc;
 	DxRenderer::GetDesc(&desc);
-	this->orthoWindow = new OrthoWindow(desc.Width, desc.Height);
+	this->orthoWindow = new OrthoWindow(2,2);
 
 	this->Create();
 }

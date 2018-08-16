@@ -28,10 +28,10 @@ OrthoWindow::OrthoWindow(int windowWidth, int windowHeight)
 
 
 	// 인덱스 배열을 만듭니다.
-	unsigned long* indices = new unsigned long[indexCount];
+	UINT* indices = new UINT[indexCount];
 
 	// 정점 배열에 데이터를로드합니다.
-	// 첫 번째 삼각형.
+	//// 첫 번째 삼각형.
 	vertices[0].position = D3DXVECTOR3(left, top, 0.0f);  // 왼쪽 위
 	vertices[0].uv = D3DXVECTOR2(0.0f, 0.0f);
 
@@ -50,6 +50,7 @@ OrthoWindow::OrthoWindow(int windowWidth, int windowHeight)
 
 	vertices[5].position = D3DXVECTOR3(right, bottom, 0.0f);  // 오른쪽 아래
 	vertices[5].uv = D3DXVECTOR2(1.0f, 1.0f);
+
 
 	// 데이터로 인덱스 배열을로드합니다.
 	for (int i = 0; i<indexCount; i++)
@@ -77,7 +78,7 @@ OrthoWindow::OrthoWindow(int windowWidth, int windowHeight)
 	// 정적 인덱스 버퍼의 설명을 설정합니다.
 	D3D11_BUFFER_DESC indexBufferDesc;
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = sizeof(unsigned long) * indexCount;
+	indexBufferDesc.ByteWidth = sizeof(UINT) * indexCount;
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indexBufferDesc.CPUAccessFlags = 0;
 	indexBufferDesc.MiscFlags = 0;

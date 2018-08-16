@@ -70,7 +70,7 @@ void Program::ShadowRender()
 	//
 	freeCamera->Render();
 	States::SetRasterizer(States::SHADOW);
-	//grid->ShadowRender();
+	grid->ShadowRender();
 	box->ShadowRender();
 	sphere->ShadowRender();
 	States::SetRasterizer(States::SOLID_CULL_ON);
@@ -105,14 +105,12 @@ void Program::PostRender()
 	freeCamera->Render();
 	directionalLight->SetBuffer();
 
-	//D3DXMATRIX mat = freeCamera->GetViewMatrix();
-	D3DXMATRIX mat = directionalLight->view;
+	D3DXMATRIX mat = freeCamera->GetViewMatrix();
 
 	D3DXMatrixInverse(&mat, nullptr, &mat);
 	buffer->data.ViewInv = mat;
 
-	//D3DXMATRIX proj = freeCamera->GetPerspective()->GetMatrix();
-	D3DXMATRIX proj = directionalLight->ortho;
+	D3DXMATRIX proj = freeCamera->GetPerspective()->GetMatrix();
 	buffer->data.PerspectiveValues.x = 1.0f / proj.m[0][0];
 	buffer->data.PerspectiveValues.y = 1.0f / proj.m[1][1];
 	buffer->data.PerspectiveValues.z = proj.m[3][2];

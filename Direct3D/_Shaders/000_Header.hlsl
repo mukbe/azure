@@ -115,6 +115,7 @@ struct G_Buffer
 struct GBuffer_Data
 {
     float LinearDepth;
+    float4 WorldPosition;
     float3 Color;
     float3 Normal;
     float SpecPow;
@@ -242,6 +243,7 @@ GBuffer_Data UnpackGBuffer_Loc(int2 location)
     Out.Normal = _deferredNormal.Load(location3).xyz;
     Out.Normal = normalize(Out.Normal * 2.0 - 1.0);
     Out.SpecPow = _deferredSpecular.Load(location3).x;
+    Out.WorldPosition = _deferredWorld.Load(location3);
 
     return Out;
 }

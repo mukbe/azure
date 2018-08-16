@@ -13,8 +13,8 @@ G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float SpecI
 
 	// Pack all the data into the GBuffer structure
     Out.diffuse = float4(diffuse.rgb, SpecIntensity);
-    Out.normal = float4(normal * 0.5 + 0.5, 0.0);
-    Out.spec = float4(SpecPowerNorm, 0.0, 0.0, 0.0);
+    Out.normal = float4(normal * 0.5f + 0.5f, 1.0f);
+    Out.spec = float4(SpecPowerNorm, 0.0f, 0.0f, 1.0f);
 
     return Out;
 
