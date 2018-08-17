@@ -62,27 +62,28 @@ void Material::BindBuffer()
 	this->buffer->SetPSBuffer(3);
 
 	if (this->diffuseMap)
-		DeviceContext->PSSetShaderResources(5,1,&this->diffuseMap);
+		DeviceContext->PSSetShaderResources(0,1,&this->diffuseMap);
 	if (this->specularMap)
-		DeviceContext->PSSetShaderResources(6,1,&this->specularMap);
+		DeviceContext->PSSetShaderResources(1,1,&this->specularMap);
 	if (this->emissiveMap)
-		DeviceContext->PSSetShaderResources(7,1,&this->emissiveMap);
+		DeviceContext->PSSetShaderResources(2,1,&this->emissiveMap);
 	if (this->normalMap)
-		DeviceContext->PSSetShaderResources(8,1,&this->normalMap);
+		DeviceContext->PSSetShaderResources(3,1,&this->normalMap);
 	if (this->detailMap)
-		DeviceContext->PSSetShaderResources(9,1,&this->detailMap);
+		DeviceContext->PSSetShaderResources(4,1,&this->detailMap);
 }
 
 void Material::UnBindBuffer()
 {
+	ID3D11ShaderResourceView* nullView[1] = { nullptr };
 	if (this->diffuseMap)
-		DeviceContext->PSSetShaderResources(5, 1, NULL);
+		DeviceContext->PSSetShaderResources(0, 1, nullView);
 	if (this->specularMap)
-		DeviceContext->PSSetShaderResources(6, 1, NULL);
+		DeviceContext->PSSetShaderResources(1, 1, nullView);
 	if (this->emissiveMap)
-		DeviceContext->PSSetShaderResources(7, 1, NULL);
+		DeviceContext->PSSetShaderResources(2, 1, nullView);
 	if (this->normalMap)
-		DeviceContext->PSSetShaderResources(8, 1, NULL);
+		DeviceContext->PSSetShaderResources(3, 1, nullView);
 	if (this->detailMap)
-		DeviceContext->PSSetShaderResources(9, 1, NULL);
+		DeviceContext->PSSetShaderResources(4, 1, nullView);
 }

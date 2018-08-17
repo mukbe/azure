@@ -3,7 +3,7 @@
 
 class ModelMeshPart : public ICloneable
 {
-	VertexType(VertexTextureNormalBlend)
+	VertexType(VertexTextureBlendNT)
 public:
 	friend class Model;
 	friend class ModelMesh;

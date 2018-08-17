@@ -25,7 +25,7 @@ namespace Fbx
 		int ControlPoint;
 		string MaterialName;
 
-		VertexTextureNormalBlend Vertex;
+		VertexTextureBlendNT Vertex;
 	};
 
 
@@ -44,7 +44,7 @@ namespace Fbx
 	{
 		string MaterialName;
 
-		vector<VertexTextureNormalBlend> Vertices;
+		vector<VertexTextureBlendNT> Vertices;
 		vector<UINT> Indices;
 	};
 

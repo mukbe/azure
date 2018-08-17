@@ -8,6 +8,7 @@
 #include "./Utilities/String.h"
 #include "./Utilities/Path.h"
 #include "./Utilities/Json.h"
+#include "./Utilities/Math.h"
 
 
 Fbx::Exporter::Exporter(wstring file)
@@ -210,10 +211,7 @@ void Fbx::Exporter::ReadBoneData(FbxNode * node, int index, int parent)
 
 void Fbx::Exporter::ReadMeshData(FbxNode * node, int parentBone)
 {
-
 	FbxMesh* mesh = node->GetMesh();
-
-
 
 	vector<FbxVertex *> vertices;
 	for (int p = 0; p < mesh->GetPolygonCount(); p++)
@@ -267,8 +265,6 @@ void Fbx::Exporter::ReadSkinData()
 	for (FbxMeshData* meshData : meshDatas)
 	{
 		FbxMesh* mesh = meshData->Mesh;
-
-
 
 		///////////////////////////////////////////////////////////////////////////////////////
 
@@ -343,12 +339,16 @@ void Fbx::Exporter::ReadSkinData()
 
 			for (FbxVertex* temp : gather)
 			{
-				VertexTextureNormalBlend vertex;
+				VertexTextureBlendNT vertex;
 				vertex = temp->Vertex;
 
 				meshPart->Vertices.push_back(vertex);
 				meshPart->Indices.push_back(meshPart->Indices.size());
 			}
+
+			//TODO 추후 normal매핑에 문제가 있다면 이쪽도 확인해볼 것.
+			//Tangent와Binormal을 계산
+			Math::ComputeTangentAngBinormal(meshPart->Vertices, meshPart->Indices, meshPart->Indices.size() / 3, meshPart->Vertices.size());
 
 			//UINT count = 0;
 			//for (int i = 0; i < mesh->GetPolygonCount(); i++)
@@ -396,7 +396,7 @@ void Fbx::Exporter::WriteMeshData(wstring saveFolder, wstring saveName)
 			w->String(part->MaterialName);
 
 			w->UInt(part->Vertices.size());
-			w->Byte(&part->Vertices[0], sizeof(VertexTextureNormalBlend) * part->Vertices.size());
+			w->Byte(&part->Vertices[0], sizeof(VertexTextureBlendNT) * part->Vertices.size());
 
 			w->UInt(part->Indices.size());
 			w->Byte(&part->Indices[0], sizeof(UINT) * part->Indices.size());

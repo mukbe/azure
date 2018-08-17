@@ -49,6 +49,13 @@ float Math::Modulo(float val1, float val2)
 	return val1;
 }
 
+
+int Math::Random(int r1, int r2)
+{
+	return (int)(rand() % (r2 - r1 + 1)) + r1;
+}
+
+
 float Math::Angle(D3DXVECTOR3 v1, D3DXVECTOR3 v2)
 {
 	float angle = 0;
@@ -62,7 +69,109 @@ float Math::Angle(D3DXVECTOR3 v1, D3DXVECTOR3 v2)
 	return angle;
 }
 
-int Math::Random(int r1, int r2)
+void Math::ComputeTangentAngBinormal(vector<VertexTextureBlendNT>& vertexDatas, vector<UINT> inputIndicis, DWORD NumTris, DWORD NumVertices)
 {
-	return (int)(rand() % (r2 - r1 + 1)) + r1;
+	
+	//임시 Tangent Binormal 배열
+	vector<D3DXVECTOR3> tangents, binormals;
+	tangents.assign(NumVertices, D3DXVECTOR3(0.f,0.f,0.f));
+	binormals.assign(NumVertices, D3DXVECTOR3(0.f,0.f,0.f));
+
+	//일단 삼각형 수대로....
+	for (DWORD a = 0; a < NumTris; a++)
+	{
+		//해당 삼각형의 인덱스
+		DWORD i0 = inputIndicis[a * 3 + 0];
+		DWORD i1 = inputIndicis[a * 3 + 1];
+		DWORD i2 = inputIndicis[a * 3 + 2];
+
+		//해당 삼각형의 정점위치
+		D3DXVECTOR3 p0 = vertexDatas[i0].position;
+		D3DXVECTOR3 p1 = vertexDatas[i1].position;
+		D3DXVECTOR3 p2 = vertexDatas[i2].position;
+
+		//해당 삼각형의 UV
+		D3DXVECTOR2 uv0 = vertexDatas[i0].uv;
+		D3DXVECTOR2 uv1 = vertexDatas[i1].uv;
+		D3DXVECTOR2 uv2 = vertexDatas[i2].uv;
+
+		//각변의 Edge
+		D3DXVECTOR3 edge1 = p1 - p0;
+		D3DXVECTOR3 edge2 = p2 - p0;
+
+		//UV Edge
+		D3DXVECTOR2 uvEdge1 = uv1 - uv0;
+		D3DXVECTOR2 uvEdge2 = uv2 - uv0;
+
+		// 위의 정보로 다음과 같은 공식이 성립
+		// edge1 = ( uvEdge1.x ) * Tangent + ( uvEdge1.y ) * Binormal;
+		// edge2 = ( uvEdge2.x ) * Tangent + ( uvEdge2.y ) * Binormal;
+
+		// 다음과 같이 치환
+		// E1 = edge1;
+		// E2 = edge2;
+		// U1 = uvEdge1.x;
+		// V1 = uvEdge1.y;
+		// U2 = uvEdge2.x;
+		// V2 = uvEdge2.y;
+		// T = Tangent;
+		// B = Binormal;
+
+		// E1 = U1 * T + V1 * B;
+		// E2 = U2 * T + V2 * B;
+
+		// | E1 |   | U1 , V1 | | T |
+		// |    | = |         | |   |
+		// | E2 |   | U2 , V2 | | B |
+
+		// | T |          1        |  V2 , -V1 | | E1 |
+		// |   | = --------------- |           | |    |
+		// | B |    U1*V2 - V1*U2  | -U2 ,  U1 | | E2 |
+
+		// R = 1 / U1*V2 - V1*U2;
+
+		// T = ( ( E1 * V2 ) + ( E2 * -V1 ) ) * R
+		// B = ( ( E1 * -U2 ) + ( E2 * U1 ) ) * R
+
+		float r = 1.0f / ((uvEdge1.x * uvEdge2.y) - (uvEdge1.y * uvEdge2.x));
+
+		//Tangent
+		D3DXVECTOR3 t = ((edge1 * uvEdge2.y) + (edge2 * -uvEdge1.y)) * r;
+		D3DXVec3Normalize(&t, &t);
+
+		//Binormal 
+		D3DXVECTOR3 b = ((edge1 * -uvEdge2.x) + (edge2 * uvEdge1.x)) * r;
+		D3DXVec3Normalize(&b, &b);
+
+		//탄젠트 바이노말 임시 배열에 추가
+		tangents[i0] += t;
+		tangents[i1] += t;
+		tangents[i2] += t;
+		binormals[i0] += b;
+		binormals[i1] += b;
+		binormals[i2] += b;
+	}
+
+
+
+	//Binormal Tangent 노말에 직교화
+	for (int i = 0; i < NumVertices; i++) {
+
+		D3DXVECTOR3 n = vertexDatas[i].normal;
+
+		//Tangent 그람슈미트 직교
+		D3DXVECTOR3 t = tangents[i] -
+			(D3DXVec3Dot(&tangents[i], &n) * n);
+		D3DXVec3Normalize(&t, &t);
+
+		//노말과 직교화된 T 와 외적하여 B
+		D3DXVECTOR3 b;
+		D3DXVec3Cross(&b, &n, &t);
+		D3DXVec3Normalize(&b, &b);
+
+		vertexDatas[i].tangent = t;
+	}
+
+	tangents.clear();
+	binormals.clear();
 }

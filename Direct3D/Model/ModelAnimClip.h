@@ -1,6 +1,6 @@
 #pragma once
 #include "../Interfaces/ICloneable.h"
-
+#include <unordered_map>
 struct ModelKeyframeData
 {
 	D3DXMATRIX Transform;
@@ -47,7 +47,7 @@ public:
 	int TotalFrame() { return totalFrame; }
 	float FrameRate() { return frameRate; }
 	void SetName(wstring name) { this->name = name; }
-	ModelKeyframe* Keyframe(wstring name){ return keyframeMap[name]; }
+	class ModelKeyframe* Keyframe(wstring name){ return keyframeMap[name]; }
 
 private:
 	ModelAnimClip();
@@ -63,5 +63,5 @@ private:
 	// 키프레임: [ 현재 클립의 각 프레임별 Bone의 Transform 정보 ]
 	// keyframeMap[boneName] => ModelKeyframe
 	// ModelKeyframe[10] => 현재 클립에서 해당 Bone의 10프레임의 Transform 정보
-	unordered_map<wstring, ModelKeyframe*> keyframeMap;
+	unordered_map<wstring,class ModelKeyframe*> keyframeMap;
 };

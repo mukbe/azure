@@ -10,7 +10,7 @@
 #include "../Renders/Material.h"
 #include "../Utilities/String.h"
 #include "../Utilities/Path.h"
-
+#include "../Utilities/Buffer.h"
 #include <unordered_map>
 
 void Model::ReadMaterial(wstring file)
@@ -138,23 +138,31 @@ void Models::LoadMaterial(wstring file, vector<class Material*> * materials)
 			string textureFile;
 			string directory = "";//Path::GetDirectoryName(StringHelper::WStringToString(file));
 
-			//JsonHelper::GetValue(value, "DiffuseFile", textureFile);
-			//if (textureFile.length() > 0)
-			//	material->SetDiffuseMap(directory + textureFile);
-			//
+			JsonHelper::GetValue(value, "DiffuseFile", textureFile);
+			if (textureFile.length() > 0)
+			{
+				ID3D11ShaderResourceView* resource = NULL;
+				Buffer::CreateTexture(String::StringToWString(textureFile), &resource);
+				material->SetDiffuseMap(resource);
+			}
+			
+			//TODO 추후 자원관리 클래스 나오면 작업.
 			//JsonHelper::GetValue(value, "SpecularFile", textureFile);
 			//if (textureFile.length() > 0)
 			//	material->SetSpecularMap(directory + textureFile);
-			//
+			
 			//JsonHelper::GetValue(value, "EmissiveFile", textureFile);
 			//if (textureFile.length() > 0)
 			//	material->SetEmissiveMap(directory + textureFile);
-			//
-			//JsonHelper::GetValue(value, "NormalFile", textureFile);
-			//if (textureFile.length() > 0)
-			//	material->SetNormalMap(directory + textureFile);
+			
+			JsonHelper::GetValue(value, "NormalFile", textureFile);
+			if (textureFile.length() > 0)
+			{
+				ID3D11ShaderResourceView* resource = NULL;
+				Buffer::CreateTexture(String::StringToWString(textureFile), &resource);
+				material->SetNormalMap(resource);
+			}
 
-			//TODO 추후 자원관리 클래스 나오면 작업.
 		
 
 			srcMaterials.push_back(material);
@@ -238,10 +246,10 @@ void Models::ReadMeshData(wstring file)
 			//VertexData
 			{
 				UINT count = r->UInt();
-				meshPart->vertices.assign(count, VertexTextureNormalBlend());
+				meshPart->vertices.assign(count, VertexTextureBlendNT());
 
 				void* ptr = (void *)&(meshPart->vertices[0]);
-				r->Byte(&ptr, sizeof(VertexTextureNormalBlend) * count);
+				r->Byte(&ptr, sizeof(VertexTextureBlendNT) * count);
 			}
 
 			//IndexData

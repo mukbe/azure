@@ -166,6 +166,7 @@ ModelPixelInput ModelDeferredVS(VertexTextureBlendNT input)
     transform += mul(input.blendWeights.w, _modelBones[(uint) input.blendIndices.w]);
 
     output.position = output.worldPos = mul(input.position, transform);
+    //output.position = output.worldPos = input.position;
    
     output.normal = mul(input.normal, (float3x3) transform);
     output.tangent = mul(input.tangent, (float3x3) transform);
@@ -185,7 +186,7 @@ G_Buffer ModelDeferredPS(ModelPixelInput input)
     float3 diffuse = _diffuseTex.Sample(_basicSampler, input.uv).rgb;
 
     output.worldPos = input.worldPos;
-    output.normal = NormalMapSpace(_normalTex.Sample(_basicSampler, input.uv).xyz, input.normal, input.tangent);
+    output.normal = float4(NormalMapSpace(_normalTex.Sample(_basicSampler, input.uv).xyz, input.normal, input.tangent), 1);
     output.spec = float4(1, 1, 1, 2);
 
     output = PackGBuffer(output, input.normal, diffuse, 0.25f, 250.0f);

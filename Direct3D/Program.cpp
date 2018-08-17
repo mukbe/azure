@@ -9,6 +9,10 @@
 #include "./Renders/ShadowRenderer.h"
 #include "./Testing/DirectionalLight.h"
 
+#include "./Project/AnimationTool/FBX/Exporter.h"
+#include "./Model/Model.h"
+#include "Model/ModelAnimPlayer.h"
+
 Program::Program()
 {
 	States::Create();
@@ -18,6 +22,18 @@ Program::Program()
 
 	jsonRoot = new Json::Value();
 	JsonHelper::ReadData(L"LevelEditor.json", jsonRoot);
+
+	//Fbx::Exporter* exporter = new Fbx::Exporter(L"../_Assets/Test.fbx");
+	//exporter->ExportMesh(L"../_Assets/", L"Test");
+	//exporter->ExportMaterial(L"../_Assets/", L"Test");
+	//exporter->ExportAnimation(L"../_Assets/", L"Test");
+
+	Model* model = new Model;
+	model->ReadMaterial(L"../_Assets/Test.material");
+	model->ReadMesh(L"../_Assets/Test.mesh");
+
+	model->ReadAnimation(L"../_Assets/Test.anim");
+	this->animation = new ModelAnimPlayer(model);
 
 	freeCamera = new FreeCamera();
 	
@@ -55,7 +71,7 @@ void Program::PreUpdate()
 
 void Program::Update()
 {
-
+	animation->Update();
 }
 
 void Program::PostUpdate()
@@ -91,6 +107,7 @@ void Program::Render()
 	grid->Render();
 	box->Render();
 	sphere->Render();
+	animation->Render();
 	
 	//camera정보를 deferred에게 언팩킹시에 필요한 정보를 보낸다
 	deferred->SetUnPackInfo(freeCamera->GetViewMatrix(), freeCamera->GetProjection());

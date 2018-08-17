@@ -16,6 +16,7 @@ void ModelMeshPart::Clone(void ** clone)
 
 ModelMeshPart::ModelMeshPart()
 {
+	material = new Material;
 }
 
 

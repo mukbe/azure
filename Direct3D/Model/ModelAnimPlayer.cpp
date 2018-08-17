@@ -14,10 +14,11 @@ ModelAnimPlayer::ModelAnimPlayer(Model * model)
 	nextKeyframe(0), useQuaternionKeyframe(true)
 {
 	//TODO 모델 세이더 추가 시에 작업
-	shader = new Shader(L"");
-	shadowShader = new Shader(L"");
+	shader = Shaders->FindShader("modelShader");
+	//shadowShader = new Shader(L"");
 
 	currentClip = model->Clip(0);
+	this->Play();
 }
 
 ModelAnimPlayer::~ModelAnimPlayer()
@@ -39,7 +40,7 @@ void ModelAnimPlayer::Update()
 
 void ModelAnimPlayer::Render()
 {
-	model->Buffer()->SetVSBuffer(13);
+	model->Buffer()->SetVSBuffer(6);
 
 	for (ModelMesh* mesh : model->Meshes())
 		mesh->Render(this->shader);

@@ -78,4 +78,5 @@ void ShaderManager::Init()
 {
 	this->CreateShader("colorGBuffer",  L"001_GBuffer.hlsl", Shader::ShaderType::Default, "ColorDeferred");
 	this->CreateShader("colorShadow",  L"004_Shadow.hlsl", Shader::ShaderType::Default, "ColorShadow");
+	this->CreateShader("modelShader", L"001_GBuffer.hlsl", Shader::ShaderType::Default, "ModelDeferred");
 }
