@@ -12,7 +12,7 @@
 Program::Program()
 {
 	States::Create();
-
+	
 	D3DDesc desc;
 	DxRenderer::GetDesc(&desc);
 
@@ -25,6 +25,7 @@ Program::Program()
 	box->GetTransform()->SetWorldPosition(50.0f, 5.0f, 50.0f);
 	box->GetTransform()->RotateSelf(0.f, 45.0f * ONE_RAD, 0.f);
 	grid = new Figure(Figure::FigureType::Grid, 100.0f,D3DXCOLOR(0.3f,0.3f,0.3f,1.0f));
+
 	sphere = new Figure(Figure::FigureType::Sphere, 10.0f, D3DXCOLOR(1.f, 0.f, 0.f, 1.f));
 
 	deferred = new DeferredRenderer;
@@ -64,7 +65,7 @@ void Program::PostUpdate()
 
 void Program::ShadowRender()
 {
-	//
+	
 	freeCamera->Render();
 	States::SetRasterizer(States::SHADOW);
 	grid->ShadowRender();
@@ -91,6 +92,8 @@ void Program::Render()
 	box->Render();
 	sphere->Render();
 	
+	//camera정보를 deferred에게 언팩킹시에 필요한 정보를 보낸다
+	deferred->SetUnPackInfo(freeCamera->GetViewMatrix(), freeCamera->GetProjection());
 }
 
 void Program::PostRender()
@@ -99,8 +102,6 @@ void Program::PostRender()
 	ID3D11ShaderResourceView* view = shadow->GetDirectionalSRV();
 	DeviceContext->PSSetShaderResources(5, 1, &view);
 
-	//gbuffer unpack에 필요 vs0,ps0
-	freeCamera->Render();
 	
 	directionalLight->SetBuffer();
 

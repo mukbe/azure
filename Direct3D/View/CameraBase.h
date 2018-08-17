@@ -15,5 +15,7 @@ public:
 	virtual void Relase();
 	virtual void Update();
 	virtual void Render();
+
+	virtual D3DXMATRIX GetProjection();
 };
 

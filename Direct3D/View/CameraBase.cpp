@@ -45,3 +45,8 @@ void CameraBase::Render()
 {
 	perspective->Render();
 }
+
+D3DXMATRIX CameraBase::GetProjection()
+{
+	return perspective->GetMatrix();
+}

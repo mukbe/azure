@@ -19,6 +19,7 @@ private:
 	class Shader* shader;
 	class OrthoWindow* orthoWindow;
 	class DepthVis* depthVis;
+	class UnPacker* unPacker;
 private:
 	void ClearRenderTarget();
 	bool Create();
@@ -31,5 +32,6 @@ public:
 	void Render();					//2D화면상에 GBuffer기반으로 내용 작성
 	void UIRender();
 
+	void SetUnPackInfo(D3DXMATRIX view, D3DXMATRIX projection);
 };
 

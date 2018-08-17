@@ -46,7 +46,6 @@ public:
 	void SetProjection(D3DXMATRIX mat)
 	{
 		Data.Projection = mat;
-		SetPerspectiveValues();
 		D3DXMatrixInverse(&Data.InvProjection, NULL, &Data.Projection);
 		D3DXMatrixTranspose(&Data.InvProjection, &Data.InvProjection);
 		D3DXMatrixTranspose(&Data.Projection, &Data.Projection);
@@ -59,7 +58,6 @@ public:
 		D3DXMatrixTranspose(&Data.ViewProjection, &Data.ViewProjection);
 	}
 
-
 	struct Struct
 	{
 		D3DXMATRIX View;
@@ -69,19 +67,11 @@ public:
 		D3DXMATRIX InvProjection;
 		D3DXMATRIX InvViewProjection;
 
-		D3DXVECTOR4 PerspectiveValues;
 	};
 
 private:
 	Struct Data;
 
-	void SetPerspectiveValues()
-	{
-		Data.PerspectiveValues.x = 1.0f / Data.Projection.m[0][0];
-		Data.PerspectiveValues.y = 1.0f / Data.Projection.m[1][1];
-		Data.PerspectiveValues.z = Data.Projection.m[3][2];
-		Data.PerspectiveValues.w = -Data.Projection.m[2][2];
-	}
 
 	ShaderBuffer_Mecro(ViewProjectionBuffer)
 };
@@ -148,4 +138,37 @@ public:
 	}Data;
 
 	ShaderBuffer_Mecro(MaterialBuffer)
+};
+
+class UnPacker : public ShaderBuffer
+{
+public:
+	UnPacker()
+		: ShaderBuffer(&Data, sizeof(Data))
+	{
+		D3DXMatrixIdentity(&Data.InvView);
+		Data.PerspectiveValues = D3DXVECTOR4(0, 0, 0, 0);
+	}
+
+	void SetPerspectiveValues(D3DXMATRIX projection)
+	{
+		Data.PerspectiveValues.x = 1.0f / projection.m[0][0];
+		Data.PerspectiveValues.y = 1.0f / projection.m[1][1];
+		Data.PerspectiveValues.z = projection.m[3][2];
+		Data.PerspectiveValues.w = -projection.m[2][2];
+	}
+	
+	//view∏¶ ≥÷¿∏∏È invView∑Œ πŸ≤„¡‹
+	void SetInvView(D3DXMATRIX view)
+	{
+		Data.InvView = view;
+		D3DXMatrixInverse(&Data.InvView, nullptr, &Data.InvView);
+		D3DXMatrixTranspose(&Data.InvView, &Data.InvView);
+	}
+
+	struct Struct
+	{
+		D3DXMATRIX InvView;
+		D3DXVECTOR4 PerspectiveValues;
+	}Data;
 };

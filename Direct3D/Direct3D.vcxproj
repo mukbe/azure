@@ -32,15 +32,17 @@
     <ClInclude Include="Model\ModelMesh.h" />
     <ClInclude Include="Model\ModelBone.h" />
     <ClInclude Include="Model\ModelAnimClip.h" />
+    <ClInclude Include="Interfaces\IEvent.h" />
     <ClInclude Include="Renders\DepthVis.h" />
-    <ClInclude Include="FBX\Exporter.h" />
-    <ClInclude Include="FBX\FbxUtility.h" />
-    <ClInclude Include="FBX\BoneWeights.h" />
-    <ClInclude Include="FBX\Type.h" />
+    <ClInclude Include="Project\AnimationTool\FBX\Exporter.h" />
+    <ClInclude Include="Project\AnimationTool\FBX\FbxUtility.h" />
+    <ClInclude Include="Project\AnimationTool\FBX\BoneWeights.h" />
+    <ClInclude Include="Project\AnimationTool\FBX\Type.h" />
     <ClInclude Include="Manager\BufferManager.h" />
     <ClInclude Include="Manager\ShaderManager.h" />
     <ClInclude Include="Bounding\Ray.h" />
     <ClInclude Include="Renders\Material.h" />
+    <ClInclude Include="Systems\Event.h" />
     <ClInclude Include="Testing\DirectionalLight.h" />
     <ClInclude Include="Renders\ShadowRenderer.h" />
     <ClInclude Include="View\OrthoWindow.h" />
@@ -91,12 +93,13 @@
     <ClCompile Include="Model\ModelBone.cpp" />
     <ClCompile Include="Model\ModelAnimClip.cpp" />
     <ClCompile Include="Renders\DepthVis.cpp" />
-    <ClCompile Include="FBX\Exporter.cpp" />
-    <ClCompile Include="FBX\FbxUtility.cpp" />
+    <ClCompile Include="Project\AnimationTool\FBX\Exporter.cpp" />
+    <ClCompile Include="Project\AnimationTool\FBX\FbxUtility.cpp" />
     <ClCompile Include="Manager\BufferManager.cpp" />
     <ClCompile Include="Manager\ShaderManager.cpp" />
     <ClCompile Include="Bounding\Ray.cpp" />
     <ClCompile Include="Renders\Material.cpp" />
+    <ClCompile Include="Systems\Event.cpp" />
     <ClCompile Include="Testing\DirectionalLight.cpp" />
     <ClCompile Include="Renders\ShadowRenderer.cpp" />
     <ClCompile Include="View\OrthoWindow.cpp" />
@@ -127,6 +130,7 @@
     <ClCompile Include="View\Projection.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Project\Game\Header.hlsli" />
     <None Include="_Shaders\001_GBuffer.hlsl">
       <FileType>Document</FileType>
     </None>
@@ -158,6 +162,18 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
       <FileType>Document</FileType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Project\TerrainTool\ComputeShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+    </FxCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F89A7778-CBF0-4E22-B019-B7729ABB8281}</ProjectGuid>
