@@ -117,6 +117,7 @@ public:
 	MaterialBuffer()
 		: ShaderBuffer(&Data, sizeof(Data))
 	{
+		Data.Ambient = D3DXCOLOR(1, 1, 1, 1);
 		Data.Diffuse = D3DXCOLOR(1, 1, 1, 1);
 		Data.Specular = D3DXCOLOR(1, 1, 1, 1);
 		Data.Emissive = D3DXCOLOR(0, 0, 0, 1);
@@ -127,6 +128,7 @@ public:
 
 	struct Struct
 	{
+		D3DXCOLOR Ambient;
 		D3DXCOLOR Diffuse;
 		D3DXCOLOR Specular;
 		D3DXCOLOR Emissive;
