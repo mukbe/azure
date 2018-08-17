@@ -4,10 +4,10 @@
 #include "Type.h"
 #include "BoneWeights.h"
 #include "Fbxutility.h"
-#include "../Utilities/BinaryFile.h"
-#include "../Utilities/String.h"
-#include "../Utilities/Path.h"
-#include "../Utilities/Json.h"
+#include "./Utilities/BinaryFile.h"
+#include "./Utilities/String.h"
+#include "./Utilities/Path.h"
+#include "./Utilities/Json.h"
 
 
 Fbx::Exporter::Exporter(wstring file)
