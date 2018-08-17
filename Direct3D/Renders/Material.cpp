@@ -47,6 +47,16 @@ void Material::Clone(void ** clone)
 	*clone = material;
 }
 
+void Material::UpdateBuffer()
+{
+	this->buffer->Data.Ambient = this->ambientColor;
+	this->buffer->Data.Diffuse = this->diffuseColor;
+	this->buffer->Data.Specular = this->specColor;
+	this->buffer->Data.Emissive = this->emissiveColor;
+	this->buffer->Data.Shininess = this->shiness;
+	this->buffer->Data.DetailFactor = this->detailFactor;
+}
+
 void Material::BindBuffer()
 {
 	this->buffer->SetPSBuffer(3);
