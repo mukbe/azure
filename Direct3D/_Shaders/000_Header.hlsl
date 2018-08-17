@@ -52,6 +52,13 @@ cbuffer LightViewProjectionBuffer : register(b5)
     matrix _shadowMatrix;
 }
 
+cbuffer ModelBuffer : register(b6)
+{
+    matrix _modelBones[130];
+}
+
+
+
 Texture2D _deferredNormal : register(t0);
 Texture2D _deferredAlbedo : register(t1);
 Texture2D _deferredSpecular : register(t2);
@@ -60,11 +67,6 @@ Texture2D _deferredDepth : register(t4);
 
 Texture2D _sunLightsahdowMap : register(t5);
 
-Texture2D _diffuseTex : register(t5);
-Texture2D _specularTex : register(t6);
-Texture2D _emissiveTex : register(t7);
-Texture2D _normalTex : register(t8);
-Texture2D _detailTex : register(t9);
 
 SamplerState _basicSampler : register(s0);
 
@@ -100,7 +102,7 @@ struct VertexTextureNormal
     float3 normal : NORMAL0;
 };
 
-struct VertexTextureBlendNTB
+struct VertexTextureBlendNT
 {
     float4 position : POSITION0;
     float2 uv : TEXCOORD0;
@@ -108,7 +110,6 @@ struct VertexTextureBlendNTB
     float4 blendWeights : BLENDWEIGHTS0;
     float3 normal : NORMAL0;
     float3 tangent : TANGENT0;
-    float3 biNormal : NORMAL1;
 };
 
 struct G_Buffer
