@@ -11,6 +11,7 @@ private:
 	Synthesize(ID3D11ShaderResourceView*,emissiveMap,EmissiveMap)
 	Synthesize(ID3D11ShaderResourceView*,normalMap,NormalMap)
 	Synthesize(ID3D11ShaderResourceView*,detailMap,DetailMap)
+	Synthesize(D3DXCOLOR, ambientColor, AmbientColor)
 	Synthesize(D3DXCOLOR, diffuseColor,DiffuseColor)
 	Synthesize(D3DXCOLOR, specColor, SpecColor)
 	Synthesize(D3DXCOLOR , emissiveColor,EmissiveColor)
@@ -21,6 +22,8 @@ public:
 	~Material();
 
 	void Clone(void** clone)override;
+	
+	void UpdateBuffer();
 	void BindBuffer();
 	void UnBindBuffer();
 };

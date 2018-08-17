@@ -127,6 +127,7 @@ void Fbx::Exporter::WriteMaterial(wstring saveFolder, wstring saveName)
 		Json::Value val;
 		JsonHelper::SetValue(val, "Name", material->Name);
 
+		JsonHelper::SetValue(val, "Ambient", material->Ambient);
 		JsonHelper::SetValue(val, "Diffuse", material->Diffuse);
 		JsonHelper::SetValue(val, "Emissive", material->Emissive);
 		JsonHelper::SetValue(val, "Specular", material->Specular);

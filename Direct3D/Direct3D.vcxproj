@@ -26,6 +26,12 @@
     <ClInclude Include="Bounding\Bounding.h" />
     <ClInclude Include="ComputeShader\ComputeResource.h" />
     <ClInclude Include="ComputeShader\ComputeShader.h" />
+    <ClInclude Include="Model\ModelAnimPlayer.h" />
+    <ClInclude Include="Model\Model.h" />
+    <ClInclude Include="Model\ModelMeshPart.h" />
+    <ClInclude Include="Model\ModelMesh.h" />
+    <ClInclude Include="Model\ModelBone.h" />
+    <ClInclude Include="Model\ModelAnimClip.h" />
     <ClInclude Include="Renders\DepthVis.h" />
     <ClInclude Include="FBX\Exporter.h" />
     <ClInclude Include="FBX\FbxUtility.h" />
@@ -77,6 +83,13 @@
     <ClCompile Include="Bounding\BoundingSphere.cpp" />
     <ClCompile Include="ComputeShader\ComputeResource.cpp" />
     <ClCompile Include="ComputeShader\ComputeShader.cpp" />
+    <ClCompile Include="Model\Model + ReadData.cpp" />
+    <ClCompile Include="Model\ModelAnimPlayer.cpp" />
+    <ClCompile Include="Model\Model.cpp" />
+    <ClCompile Include="Model\ModelMeshPart.cpp" />
+    <ClCompile Include="Model\ModelMesh.cpp" />
+    <ClCompile Include="Model\ModelBone.cpp" />
+    <ClCompile Include="Model\ModelAnimClip.cpp" />
     <ClCompile Include="Renders\DepthVis.cpp" />
     <ClCompile Include="FBX\Exporter.cpp" />
     <ClCompile Include="FBX\FbxUtility.cpp" />
