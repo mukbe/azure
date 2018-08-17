@@ -33,8 +33,6 @@
     <ClCompile Include="Bounding\BoundingCapsule.cpp" />
     <ClCompile Include="Bounding\BoundingBox.cpp" />
     <ClCompile Include="Bounding\BoundingSphere.cpp" />
-    <ClCompile Include="FBX\Exporter.cpp" />
-    <ClCompile Include="FBX\FbxUtility.cpp" />
     <ClCompile Include="Manager\BufferManager.cpp" />
     <ClCompile Include="Bounding\Ray.cpp" />
     <ClCompile Include="Renders\Material.cpp" />
@@ -42,6 +40,9 @@
     <ClCompile Include="ComputeShader\ComputeResource.cpp" />
     <ClCompile Include="ComputeShader\ComputeShader.cpp" />
     <ClCompile Include="Renders\DepthVis.cpp" />
+    <ClCompile Include="Systems\Event.cpp" />
+    <ClCompile Include="Project\AnimationTool\FBX\Exporter.cpp" />
+    <ClCompile Include="Project\AnimationTool\FBX\FbxUtility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Testing\DirectionalLight.h" />
@@ -84,16 +85,18 @@
     <ClInclude Include="Bounding\BoundingBox.h" />
     <ClInclude Include="Bounding\BoundingSphere.h" />
     <ClInclude Include="Bounding\Bounding.h" />
-    <ClInclude Include="FBX\Exporter.h" />
-    <ClInclude Include="FBX\FbxUtility.h" />
-    <ClInclude Include="FBX\BoneWeights.h" />
-    <ClInclude Include="FBX\Type.h" />
     <ClInclude Include="Manager\BufferManager.h" />
     <ClInclude Include="Bounding\Ray.h" />
     <ClInclude Include="Renders\Material.h" />
     <ClInclude Include="ComputeShader\ComputeResource.h" />
     <ClInclude Include="ComputeShader\ComputeShader.h" />
     <ClInclude Include="Renders\DepthVis.h" />
+    <ClInclude Include="Systems\Event.h" />
+    <ClInclude Include="Interfaces\IEvent.h" />
+    <ClInclude Include="Project\AnimationTool\FBX\BoneWeights.h" />
+    <ClInclude Include="Project\AnimationTool\FBX\Exporter.h" />
+    <ClInclude Include="Project\AnimationTool\FBX\FbxUtility.h" />
+    <ClInclude Include="Project\AnimationTool\FBX\Type.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />
@@ -101,5 +104,9 @@
     <None Include="_Shaders\001_GBuffer.hlsl" />
     <None Include="_Shaders\002_Deferred.hlsl" />
     <None Include="_Shaders\DepthVis.hlsl" />
+    <None Include="Project\Game\Header.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Project\TerrainTool\ComputeShader.hlsl" />
   </ItemGroup>
 </Project>

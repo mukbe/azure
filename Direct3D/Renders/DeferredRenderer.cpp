@@ -17,6 +17,7 @@ DeferredRenderer::DeferredRenderer()
 
 	this->Create();
 	depthVis = new DepthVis;
+	unPacker = new UnPacker;
 }
 
 
@@ -36,6 +37,7 @@ DeferredRenderer::~DeferredRenderer()
 
 	SafeDelete(shader);
 	SafeDelete(orthoWindow);
+	SafeDelete(unPacker);
 }
 
 void DeferredRenderer::BegindDrawToGBuffer()
@@ -65,6 +67,7 @@ void DeferredRenderer::Render()
 	orthoWindow->Render();
 	DeviceContext->PSSetShaderResources(0, BUFFER_COUNT, &shaderResourceView[0]);
 	DeviceContext->PSSetShaderResources(4, 1, &depthSRV);
+	unPacker->SetPSBuffer(2);
 
 	shader->Render();
 	DeviceContext->DrawIndexed(6, 0, 0);
@@ -83,6 +86,12 @@ void DeferredRenderer::UIRender()
 		ImGui::ImageButton(depthVis->GetSRV(), ImVec2(200, 150));
 	}
 	ImGui::End();
+}
+
+void DeferredRenderer::SetUnPackInfo(D3DXMATRIX view, D3DXMATRIX projection)
+{
+	unPacker->SetInvView(view);
+	unPacker->SetPerspectiveValues(projection);
 }
 
 bool DeferredRenderer::Create()

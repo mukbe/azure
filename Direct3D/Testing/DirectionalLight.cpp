@@ -81,6 +81,5 @@ void DirectionalLight::SetBuffer()
 	sunBuffer->SetPSBuffer(4);
 	lightViewBuffer->SetVSBuffer(5);
 	lightViewBuffer->SetPSBuffer(5);
-	DeviceContext->PSSetSamplers(1, 1, &shadowSampler);
 }
 

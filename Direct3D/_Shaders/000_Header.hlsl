@@ -10,13 +10,17 @@ cbuffer ViewProjectionBuffer : register(b0)
     matrix _invView;
     matrix _invProjection;
     matrix _invViewProjection;
-
-    float4 _perspectiveValues;
 }
 
 cbuffer WorldBuffer : register(b1)
 {
     matrix _world;
+}
+
+cbuffer UnPacker : register(b2)
+{
+    matrix InvView;
+    float4 PerspectiveValues;
 }
 
 cbuffer MaterialBuffer : register(b3)
@@ -123,15 +127,6 @@ Func
 **************************************************************/
 
 
-//float3 normalPacking(in float3 normal)
-//{
-//    return normal * 0.5f + 0.5f;
-//}
-
-//float3 normalUnpacking(in float3 normal)
-//{
-//    return normal * 2.0f - 1.0f;
-//}
 
 //카메라 위치 계산
 float3 GetCameraPosition()
@@ -201,7 +196,7 @@ float4 GetFogColor(float4 diffuse, float4 color, float factor)
 
 float ConvertZToLinearDepth(float depth)
 {
-    float linearDepth = _perspectiveValues.z / (depth + _perspectiveValues.w);
+    float linearDepth = PerspectiveValues.z / (depth + PerspectiveValues.w);
     return linearDepth;
 }
 
@@ -244,9 +239,9 @@ float3 CalcWorldPos(float2 csPos, float depth)
 {
     float4 position;
 
-    position.xy = csPos.xy * _perspectiveValues.xy * depth;
+    position.xy = csPos.xy * PerspectiveValues.xy * depth;
     position.z = depth;
     position.w = 1.0;
 	
-    return mul(position, _invView).xyz;
+    return mul(position, InvView).xyz;
 }
