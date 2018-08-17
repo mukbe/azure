@@ -54,7 +54,7 @@ cbuffer LightViewProjectionBuffer : register(b5)
 
 cbuffer ModelBuffer : register(b6)
 {
-    matrix _modelBones[130];
+    matrix _modelBones[128];
 }
 
 
