@@ -100,6 +100,17 @@ struct VertexTextureNormal
     float3 normal : NORMAL0;
 };
 
+struct VertexTextureBlendNTB
+{
+    float4 position : POSITION0;
+    float2 uv : TEXCOORD0;
+    float4 blendIndices : BLENDINDICES0;
+    float4 blendWeights : BLENDWEIGHTS0;
+    float3 normal : NORMAL0;
+    float3 tangent : TANGENT0;
+    float3 biNormal : NORMAL1;
+};
+
 struct G_Buffer
 {
     float4 normal : SV_Target0;

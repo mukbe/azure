@@ -114,3 +114,28 @@ struct VertexTextureNormalTangent
 	D3DXVECTOR3	normal;
 	D3DXVECTOR3 tangent;
 };
+
+//========================================================================================
+
+struct VertexTextureBlendNTB
+{
+	VertexTextureBlendNTB()
+		: position(0, 0, 0)
+		, uv(0, 0)
+		, blendIndices(0, 0, 0, 0)
+		, blendWeights(0, 0, 0, 0) 
+		, normal(0, 0, 0)
+		, tangent(0, 0, 0)
+		, biNormal(0, 0, 0)
+
+	{}
+
+	D3DXVECTOR3 position;
+	D3DXVECTOR2 uv;
+	D3DXVECTOR4 blendIndices;
+	D3DXVECTOR4 blendWeights;
+	D3DXVECTOR3 normal;
+	D3DXVECTOR3 tangent;
+	D3DXVECTOR3 biNormal;
+
+};

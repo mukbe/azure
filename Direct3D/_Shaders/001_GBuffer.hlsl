@@ -133,3 +133,40 @@ G_Buffer GizmoDeferredPS(ColorPixelInput input)
 
     return output;
 }
+
+//===================================================
+//Deferred Model
+//===================================================
+
+struct ModelPixelInput
+{
+    float4 position : SV_POSITION;
+    float4 worldPos : POSITION0;
+    float4 uv : TEXCOORD0;
+    float3 normal : NORMAL0;
+};
+
+
+ModelPixelInput ModelDeferredVS(VertexTextureBlendNTB input)
+{
+    ModelPixelInput output;
+
+    output.position = output.worldPos = mul(input.position, _world);
+    output.position = mul(output.position, _viewProjection);
+
+    output.color = input.color;
+
+    return output;
+}
+
+G_Buffer ModelDeferredPS(ModelPixelInput input)
+{
+    G_Buffer output;
+
+    output.worldPos = input.worldPos;
+    output.diffuse = input.color;
+    output.spec = float4(1, 1, 1, 2);
+    output.normal = float4(0, 0, 0, 1);
+
+    return output;
+}
