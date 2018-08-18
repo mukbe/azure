@@ -10,7 +10,7 @@ public:
 	static const float FloatMin;
 	static const float FloatMax;
 
-
+	static float NegativeChecking(float value);
 	static float ToRadian(float degree);
 	static float ToDegree(float radian);
 

@@ -26,6 +26,10 @@
     <ClInclude Include="Bounding\Bounding.h" />
     <ClInclude Include="ComputeShader\ComputeResource.h" />
     <ClInclude Include="ComputeShader\ComputeShader.h" />
+    <ClInclude Include="Utilities\DebugTransform.h" />
+    <ClInclude Include="Manager\ObjectManager.h" />
+    <ClInclude Include="Object\GameObject\GameObject.h" />
+    <ClInclude Include="Object\GameObject\TagMessage.h" />
     <ClInclude Include="Model\ModelAnimPlayer.h" />
     <ClInclude Include="Model\Model.h" />
     <ClInclude Include="Model\ModelMeshPart.h" />
@@ -85,6 +89,9 @@
     <ClCompile Include="Bounding\BoundingSphere.cpp" />
     <ClCompile Include="ComputeShader\ComputeResource.cpp" />
     <ClCompile Include="ComputeShader\ComputeShader.cpp" />
+    <ClCompile Include="Utilities\DebugTransform.cpp" />
+    <ClCompile Include="Manager\ObjectManager.cpp" />
+    <ClCompile Include="Object\GameObject\GameObject.cpp" />
     <ClCompile Include="Model\Model + ReadData.cpp" />
     <ClCompile Include="Model\ModelAnimPlayer.cpp" />
     <ClCompile Include="Model\Model.cpp" />

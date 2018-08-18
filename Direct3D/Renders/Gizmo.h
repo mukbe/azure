@@ -25,13 +25,15 @@ private:
 	void CreateVertex();
 	void CreateIndex();
 public:
-
 	void Line(const D3DXVECTOR3 startPos, const D3DXVECTOR3 endPos, const D3DXCOLOR color);
 	void Circle(D3DXVECTOR3 center, float radius, D3DXVECTOR3 axis, D3DXCOLOR color);
+	void Quad(const D3DXVECTOR3 centerPos,const float width ,const float height, const D3DXVECTOR3 normal, D3DXCOLOR color);
 	void WireSphere(D3DXVECTOR3 center, float radius, D3DXCOLOR color);
 	void AABB(const D3DXVECTOR3 minPos, const D3DXVECTOR3 maxPos, const D3DXCOLOR color);
 	void OBB(vector<D3DXVECTOR3>& corners, const D3DXCOLOR color);
-	void LocalGizmo(D3DXVECTOR3 center, float radius, D3DXVECTOR3 right, D3DXVECTOR3 up, D3DXVECTOR3 forward);
+	void Cube(D3DXVECTOR3 center,D3DXVECTOR3 forward,D3DXVECTOR3 up,D3DXCOLOR color);
+	void LocalGizmo(D3DXVECTOR3 center, float radius, D3DXVECTOR3 right, D3DXVECTOR3 up, D3DXVECTOR3 forward,
+		D3DXCOLOR rightColor, D3DXCOLOR upColor, D3DXCOLOR forawrdColor);
 };
 
 

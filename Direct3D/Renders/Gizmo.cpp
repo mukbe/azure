@@ -5,6 +5,7 @@
 #include "./Utilities/Buffer.h"
 #include "./Renders/WorldBuffer.h"
 #include "./Renders/Shader.h"
+#include "./Bounding/BoundingBox.h"
 
 void Gizmo::CreateVertex()
 {
@@ -186,6 +187,16 @@ void Gizmo::Circle(D3DXVECTOR3 center, float radius, D3DXVECTOR3 axis, D3DXCOLOR
 	DeviceContext->DrawIndexed((CIRCLEGIZMO_SEGMENTS + 1), 0, 0);
 }
 
+void Gizmo::Quad(const D3DXVECTOR3 centerPos,const float width,const float height, const D3DXVECTOR3 normal, D3DXCOLOR color)
+{
+	/* 0 1
+	   3 2
+	*/ 
+	D3DXVECTOR3 corners[4];
+	
+
+}
+
 void Gizmo::WireSphere(D3DXVECTOR3 center, float radius, D3DXCOLOR color)
 {
 	this->Circle(center, radius, D3DXVECTOR3(1, 0, 0), color);
@@ -235,12 +246,43 @@ void Gizmo::OBB(vector<D3DXVECTOR3>& corners, const D3DXCOLOR color)
 	this->Line(corners[3], corners[7], color);
 	this->Line(corners[2], corners[6], color);
 
+	corners.clear();
 }
 
-void Gizmo::LocalGizmo(D3DXVECTOR3 center, float radius, D3DXVECTOR3 right, D3DXVECTOR3 up, D3DXVECTOR3 forward)
+void Gizmo::Cube(D3DXVECTOR3 center, D3DXVECTOR3 forward, D3DXVECTOR3 up,D3DXCOLOR color)
 {
-	//pRenderer->ChangeZBuffer(false);
+	//   0-------1
+	//  /|      /|
+	// 4-------5 |
+	// | 3-----|-2
+	// |/      |/
+	// 7-------6 
 
+	vector<D3DXVECTOR3> corners;
+	corners.assign(8, D3DXVECTOR3());
+
+	D3DXVECTOR3 right;
+	D3DXVec3Cross(&right, &forward, &up);
+	D3DXVec3Normalize(&right, &right);
+	D3DXVec3Normalize(&up, &up);
+	D3DXVec3Normalize(&forward, &forward);
+
+	corners[0] = center + (-right + up + forward);
+	corners[1] = center + (right + up + forward); //D3DXVECTOR3(0.5f, 0.5f, 0.5f);
+	corners[2] = center + (right - up + forward);//D3DXVECTOR3(0.5f, -0.5f, 0.5f);
+	corners[3] = center + (-right - up + forward);// D3DXVECTOR3(-0.5f, -0.5f, 0.5f);
+	corners[4] = center + (-right + up - forward); //D3DXVECTOR3(-0.5f, 0.5f, -0.5f);
+	corners[5] = center + (right + up - forward );//D3DXVECTOR3(0.5f, 0.5f, -0.5f);
+	corners[6] = center + (right - up - forward );//D3DXVECTOR3(0.5f, -0.5f, -0.5f);
+	corners[7] = center + (-right - up - forward);//D3DXVECTOR3(-0.5f, -0.5f, -0.5f);
+
+	this->OBB(corners, color);
+	//this->AABB(corners[7], corners[1], color);
+}
+
+void Gizmo::LocalGizmo(D3DXVECTOR3 center, float radius, D3DXVECTOR3 right, D3DXVECTOR3 up, D3DXVECTOR3 forward,
+	D3DXCOLOR rightColor, D3DXCOLOR upColor,D3DXCOLOR forwardColor)
+{
 	float axisLineLength = radius;
 	//xÃà ¶óÀÎ 
 	D3DXVECTOR3 xEnd = center + right * radius;
@@ -249,9 +291,12 @@ void Gizmo::LocalGizmo(D3DXVECTOR3 center, float radius, D3DXVECTOR3 right, D3DX
 
 	D3DXVECTOR3 zEnd = center + forward * radius;
 
-	Line(center, xEnd, D3DXCOLOR(0.7f, 0, 0, 1));
-	Line(center, yEnd, D3DXCOLOR(0, 0.7f, 0, 1));
-	Line(center, zEnd, D3DXCOLOR(0, 0, 0.7f, 1));
+	Line(center, xEnd, rightColor);
+	Line(center, yEnd, upColor);
+	Line(center, zEnd,forwardColor);
 
-	//pRenderer->ChangeZBuffer(true);
+	this->Cube(xEnd,right,up,rightColor);
+	this->Cube(yEnd, up,forward, upColor);
+	this->Cube(zEnd, forward,right,forwardColor);
+	
 }

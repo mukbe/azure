@@ -8,6 +8,14 @@ const int Math::IntMax = 2147483647;
 const float Math::FloatMin = -3.402823E+38f;
 const float Math::FloatMax = 3.402823E+38f;
 
+float Math::NegativeChecking(float value)
+{
+	if (value < 0.0f)
+		return -1.0f;
+	else
+		return 1.0f;
+}
+
 float Math::ToRadian(float degree)
 {
 	return degree * PI / 180.0f;

@@ -36,7 +36,7 @@ BoundingBox::BoundingBox(BoundingSphere sphere)
 	this->halfSize = sphere.center - minPos;
 }
 
-void BoundingBox::Render(D3DXMATRIX matWorld,bool drawAABB /*=true*/)
+void BoundingBox::Render(D3DXMATRIX matWorld,bool drawAABB /*=true*/,D3DXCOLOR color /*=Red*/)
 {
 	//   0-------1
 	//  /|      /|
@@ -47,7 +47,7 @@ void BoundingBox::Render(D3DXMATRIX matWorld,bool drawAABB /*=true*/)
 	vector<D3DXVECTOR3> corners;
 	this->GetCorners(corners, matWorld);
 
-	GizmoRenderer->OBB(corners, D3DXCOLOR(1.f, 0.f, 0.f, 1.f));
+	GizmoRenderer->OBB(corners, color);
 
 	if (drawAABB)
 	{

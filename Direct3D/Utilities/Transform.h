@@ -14,6 +14,7 @@
 
 class Transform
 {
+	friend class DebugTransform;
 private:
 	union
 	{
@@ -44,6 +45,9 @@ public:
 	~Transform();
 
 	D3DXMATRIX GetFinalMatrix()const { return this->matFinal; }
+	D3DXMATRIX GetRotateMatrix();
+	D3DXMATRIX GetScaleMatrix();
+	D3DXMATRIX GetTranslationMatrix();
 	void SetTransform(D3DXMATRIX mat);
 
 	void UpdateTransform();
@@ -70,6 +74,7 @@ public:
 	void Scaling(D3DXVECTOR3 deltaScale);
 
 	void RotateSelf(float x, float y, float z);
+	void RotateSelf(D3DXVECTOR3 angle);
 	void Rotating(float x, float y, float z);
 	void RotateWorld(float x, float y, float z);
 

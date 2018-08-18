@@ -16,6 +16,35 @@ Transform::~Transform()
 
 }
 
+
+D3DXMATRIX Transform::GetRotateMatrix()
+{
+	D3DXMATRIX mat = IdentityMatrix;
+	memcpy(&mat._11, &this->right, sizeof D3DXVECTOR3);
+	memcpy(&mat._21, &this->up, sizeof D3DXVECTOR3);
+	memcpy(&mat._31, &this->forward, sizeof D3DXVECTOR3);
+	
+	return mat;
+}
+
+D3DXMATRIX Transform::GetScaleMatrix()
+{
+	D3DXMATRIX mat = IdentityMatrix;
+	mat._11 = scale.x;
+	mat._22 = scale.y;
+	mat._33 = scale.z;
+	return mat;
+}
+
+D3DXMATRIX Transform::GetTranslationMatrix()
+{
+	D3DXMATRIX mat = IdentityMatrix;
+	mat._41 = this->position.x;
+	mat._42 = this->position.y;
+	mat._43 = this->position.z;
+	return mat;
+}
+
 void Transform::SetTransform(D3DXMATRIX mat)
 {
 	D3DXVECTOR3 x, y, z;
@@ -315,6 +344,11 @@ void Transform::RotateSelf(float x, float y, float z)
 		this->UpdateTransform();
 }
 
+void Transform::RotateSelf(D3DXVECTOR3 angle)
+{
+	this->RotateSelf(angle.x, angle.y, angle.z);
+}
+
 void Transform::Rotating(float x, float y, float z)
 {
 	this->angle += D3DXVECTOR3(x, y, z);
@@ -503,6 +537,15 @@ D3DXVECTOR3 Transform::GetScaleAxis(int axisIndex) const
 	{
 		D3DXMATRIXA16 matParentFinal = this->pParent->matFinal;
 		D3DXVec3TransformNormal(&result, &result, &matParentFinal);
+	}
+	else
+	{
+		if (axisIndex == AXIS_X)
+			result *= scale.x;
+		else if (axisIndex == AXIS_Y)
+			result *= scale.y;
+		else 
+result *= scale.z;
 	}
 
 	return result;

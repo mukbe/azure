@@ -10,7 +10,7 @@ public:
 	BoundingBox(D3DXVECTOR3 min, D3DXVECTOR3 max);
 	BoundingBox(class BoundingSphere sphere);
 
-	void Render(D3DXMATRIX matWorld,bool DrawAABB = true);
+	void Render(D3DXMATRIX matWorld,bool DrawAABB = true,D3DXCOLOR color = D3DXCOLOR(1.f,0.f,0.f,1.f));
 
 	void GetCorners(D3DXVECTOR3* pOut);
 	void GetCorners(vector<D3DXVECTOR3>& pOut);
