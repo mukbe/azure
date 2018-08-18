@@ -4,8 +4,9 @@
 
 class Gizmo 
 {
-	Singleton(Gizmo)
+	SingletonHeader(Gizmo)
 private:
+
 	UINT vertexCount;
 	UINT indexCount;
 
@@ -37,4 +38,4 @@ public:
 };
 
 
-#define GizmoRenderer Gizmo::GetInstance()
+#define GizmoRenderer Gizmo::Get()

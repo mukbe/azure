@@ -7,6 +7,8 @@
 #include "./Renders/Shader.h"
 #include "./Bounding/BoundingBox.h"
 
+SingletonCpp(Gizmo)
+
 void Gizmo::CreateVertex()
 {
 	VertexColor* vertex = new VertexColor[2];

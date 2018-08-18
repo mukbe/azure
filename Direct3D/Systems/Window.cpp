@@ -11,9 +11,11 @@ WPARAM Window::Run()
 	D3DDesc desc;
 	DxRenderer::GetDesc(&desc);
 
-
+//=========Init Manager=================================
+	DxRenderer::Create();
 	pRenderer->CreateDevice();
 	pRenderer->CreateSwapChain();
+
 
 	Keyboard::Create();
 	Mouse::Create();
@@ -21,10 +23,15 @@ WPARAM Window::Run()
 	Time::Create();
 	Time::Get()->Start();
 
+	ShaderManager::Create();
 	Shaders->Init();
+
+	BufferManager::Create();
+	Gizmo::Create();
 
 	ImGui::Create(desc.Handle, Device, DeviceContext);
 	ImGui::StyleColorsDark();
+//=====================================================
 
 	program = new Program();
 	while (true)
@@ -71,13 +78,17 @@ WPARAM Window::Run()
 	}
 	SafeDelete(program);
 
+
+//================Release Manager===============================
 	ImGui::Delete();
+	Gizmo::Delete();
+	Buffers->Delete();
+	Shaders->Delete();
 	Time::Delete();
 	Mouse::Delete();
 	Keyboard::Delete();
-	Buffers->Release();
-	pRenderer->Release();
-
+	pRenderer->Delete();
+//=============================================================
 
 
 	return msg.wParam;

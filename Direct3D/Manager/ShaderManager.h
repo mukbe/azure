@@ -2,17 +2,17 @@
 #include "DefineHeader.h"
 class ShaderManager
 {
-	Singleton(ShaderManager)
-
+	 SingletonHeader(ShaderManager)
 public:
 	Shader * CreateShader(string key, wstring fileName, Shader::ShaderType type = Shader::ShaderType::Default, string funcName = "");
 	Shader * FindShader(string key);
 	void BindShader(string key);
 	void ReleaseShader();
 public:
-	void Release();
 	void Init();
 
+
+	void ShaderRelease();
 private:
 	typedef map<string, Shader*> ShadersContain;
 	typedef map<string, Shader*>::iterator ShadersIter;
@@ -22,4 +22,4 @@ private:
 	Shader* currentShader;
 };
 
-#define Shaders ShaderManager::GetInstance()
+#define Shaders ShaderManager::Get()

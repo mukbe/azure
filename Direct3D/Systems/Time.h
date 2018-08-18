@@ -2,12 +2,8 @@
 
 class Time
 {
+	SingletonHeader(Time)
 public:
-	static Time* Get();
-
-	static void Create();
-	static void Delete();
-
 	static bool Stopped() { return isTimerStopped; }
 	static float Delta() { return isTimerStopped ? 0.0f : timeElapsed; }
 
@@ -28,13 +24,9 @@ public:
 	float GetDayTimeRatio() { return dayTimeRatio; }
 
 private:
-	Time(void);
-	~Time(void);
 	
 	void UpdateWorldTime();
 private:
-	static Time* instance;///< 싱글톤 객체
-
 	static bool isTimerStopped;///< 타이머 중지
 	static float timeElapsed;///< 이전 프레임으로부터 경과시간
 

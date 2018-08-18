@@ -16,16 +16,6 @@ protected:	VarType VarName;	\
 public:	inline VarType Get##FuncName(void) const { return VarName; }	\
 public:	inline void Set##FuncName(VarType value) { VarName = value; }
 
-#define Singleton(ClassName)	\
-private:						\
-ClassName(void);	\
-~ClassName(void);	\
-public:		\
-static ClassName* GetInstance()	\
-{			\
-	static ClassName Instance;	\
-	return &Instance;			\
-}
 
 #define FEPSLON		0.00001f
 
@@ -67,3 +57,32 @@ static ClassName* GetInstance()	\
 #define Assert(b)
 #endif   //   DEBUG || _DEBUG
 #endif
+
+#define SingletonHeader(ClassName)	\
+public:								\
+	static ClassName* Get();		\
+	static void Create();			\
+	static void Delete();			\
+private:							\
+	ClassName();					\
+	~ClassName();					\
+	static ClassName* instance;		
+
+#define SingletonCpp(ClassName)				\
+ClassName* ClassName::instance = nullptr;	\
+ClassName * ClassName::Get()				\
+{											\
+	assert(instance != nullptr);			\
+	return instance;						\
+}											\
+void ClassName::Create()					\
+{											\
+	assert(instance == nullptr);			\
+	instance = new ClassName();				\
+}											\
+void ClassName::Delete()					\
+{											\
+	SafeDelete(instance);					\
+}			
+
+

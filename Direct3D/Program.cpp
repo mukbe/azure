@@ -28,12 +28,12 @@ Program::Program()
 	//exporter->ExportMaterial(L"../_Assets/", L"Test");
 	//exporter->ExportAnimation(L"../_Assets/", L"Test");
 
-	Model* model = new Model;
-	model->ReadMaterial(L"../_Assets/Test.material");
-	model->ReadMesh(L"../_Assets/Test.mesh");
+	//Model* model = new Model;
+	//model->ReadMaterial(L"../_Assets/Test.material");
+	//model->ReadMesh(L"../_Assets/Test.mesh");
 
-	model->ReadAnimation(L"../_Assets/Test.anim");
-	this->animation = new ModelAnimPlayer(model);
+	//model->ReadAnimation(L"../_Assets/Test.anim");
+	//this->animation = new ModelAnimPlayer(model);
 
 	freeCamera = new FreeCamera();
 	
@@ -71,7 +71,7 @@ void Program::PreUpdate()
 
 void Program::Update()
 {
-	animation->Update();
+	//animation->Update();
 }
 
 void Program::PostUpdate()
@@ -107,7 +107,7 @@ void Program::Render()
 	grid->Render();
 	box->Render();
 	sphere->Render();
-	animation->Render();
+	//animation->Render();
 	
 	//camera정보를 deferred에게 언팩킹시에 필요한 정보를 보낸다
 	deferred->SetUnPackInfo(freeCamera->GetViewMatrix(), freeCamera->GetProjection());

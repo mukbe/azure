@@ -5,12 +5,8 @@
 
 class Keyboard
 {
+	SingletonHeader(Keyboard)
 public:
-	static Keyboard* Get();
-
-	static void Create();
-	static void Delete();
-
 	void Update();
 
 	bool Down(DWORD key) { return keyMap[key] == KEY_INPUT_STATUS_DOWN; }
@@ -18,11 +14,6 @@ public:
 	bool Press(DWORD key) { return keyMap[key] == KEY_INPUT_STATUS_PRESS; }
 
 private:
-	Keyboard();
-	~Keyboard();
-
-	static Keyboard* instance;
-
 	byte keyState[MAX_INPUT_KEY];
 	byte keyOldState[MAX_INPUT_KEY];
 	byte keyMap[MAX_INPUT_KEY];

@@ -2,6 +2,7 @@
 #include "ObjectManager.h"
 
 
+SingletonCpp(ObjectManager)
 
 ObjectManager::ObjectManager()
 {

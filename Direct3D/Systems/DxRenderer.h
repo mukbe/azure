@@ -13,7 +13,7 @@ struct D3DDesc
 
 class DxRenderer
 {
-	Singleton(DxRenderer)
+	SingletonHeader(DxRenderer)
 public:
 	static void GetDesc(D3DDesc* desc)
 	{
@@ -71,7 +71,7 @@ public:
 	//TODO ResizeScreen func
 };
 
-#define pRenderer DxRenderer::GetInstance()
-#define Device DxRenderer::GetInstance()->GetDevice()
-#define DeviceContext DxRenderer::GetInstance()->GetContext()
-#define SwapChain DxRenderer::GetInstance()->GetSwapChain()
+#define pRenderer DxRenderer::Get()
+#define Device DxRenderer::Get()->GetDevice()
+#define DeviceContext DxRenderer::Get()->GetContext()
+#define SwapChain DxRenderer::Get()->GetSwapChain()

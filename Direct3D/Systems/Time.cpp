@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Time.h"
 
-Time* Time::instance = NULL;
+SingletonCpp(Time)
 
 bool Time::isTimerStopped = true;
 float Time::timeElapsed = 0.0f;
@@ -32,25 +32,6 @@ void Time::UpdateWorldTime()
 
 	hour = (UINT)time24HClock;
 	minute = (UINT)((time24HClock - hour) * 60.0f);
-}
-
-Time* Time::Get()
-{
-	assert(instance != NULL);
-	
-	return instance;
-}
-
-void Time::Create()
-{
-	assert(instance == NULL);
-
-	instance = new Time();
-}
-
-void Time::Delete()
-{
-	SafeDelete(instance);
 }
 
 void Time::Update()

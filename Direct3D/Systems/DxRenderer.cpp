@@ -24,6 +24,8 @@
 
 	Viewport 를 생성한다
 */
+
+SingletonCpp(DxRenderer)
 D3DDesc DxRenderer::d3dDesc;
 
 DxRenderer::DxRenderer()

@@ -1,26 +1,7 @@
 #include "stdafx.h"
 #include "Keyboard.h"
 
-Keyboard* Keyboard::instance = NULL;
-
-Keyboard * Keyboard::Get()
-{
-	assert(instance != NULL);
-	
-	return instance;
-}
-
-void Keyboard::Create()
-{
-	assert(instance == NULL);
-
-	instance = new Keyboard();
-}
-
-void Keyboard::Delete()
-{
-	SafeDelete(instance);
-}
+SingletonCpp(Keyboard)
 
 void Keyboard::Update()
 {

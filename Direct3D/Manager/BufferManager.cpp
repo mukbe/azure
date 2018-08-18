@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "BufferManager.h"
 
-
+SingletonCpp(BufferManager)
 
 BufferManager::BufferManager()
 {
@@ -9,10 +9,6 @@ BufferManager::BufferManager()
 
 
 BufferManager::~BufferManager()
-{
-}
-
-void BufferManager::Release()
 {
 	ShaderBufferIter iter = bufferContainer.begin();
 

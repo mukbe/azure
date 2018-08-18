@@ -12,7 +12,7 @@ namespace ObjectType
 
 class ObjectManager
 {
-	Singleton(ObjectManager)
+	SingletonHeader(ObjectManager)
 private:
 	typedef vector<class GameObject*>								ArrObject;
 	typedef unordered_map<ObjectType::Enum, ArrObject>				ObjectContainer;
@@ -23,5 +23,5 @@ public:
 	void Update();
 };
 
-#define Objects ObjectManager::GetInstance()
+#define Objects ObjectManager::Get()
 

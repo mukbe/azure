@@ -2,6 +2,7 @@
 #include "ShaderManager.h"
 
 
+SingletonCpp(ShaderManager)
 
 ShaderManager::ShaderManager()
 {
@@ -62,14 +63,15 @@ void ShaderManager::ReleaseShader()
 	currentShader->ReleaseShader();
 }
 
-void ShaderManager::Release()
+void ShaderManager::ShaderRelease()
 {
 	ShadersIter Iter = shaders.begin();
 
 	for (Iter; Iter != shaders.end(); ++Iter)
 	{
 		Iter->second->ReleaseShader();
-		
+		//TODO 한번만 해도 되는것인지 확인해보고 나중에 변경할것
+		break;
 	}
 
 }

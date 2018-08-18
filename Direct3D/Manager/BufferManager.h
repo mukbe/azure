@@ -3,16 +3,13 @@
 #include <map>
 class BufferManager
 {
-	Singleton(BufferManager)
+	SingletonHeader(BufferManager)
 private:
 	typedef map<string, class ShaderBuffer*> ShaderBufferContainer;
 	typedef map<string, class ShaderBuffer*>::iterator ShaderBufferIter;
 private:
 	ShaderBufferContainer bufferContainer;
 public:
-
-	void Release();
-
 	template<class T> T* FindShaderBuffer();
 	template<class T> void AddShaderBuffer(class ShaderBuffer* shaderBuffer);
 };
@@ -34,4 +31,4 @@ template<class T> void BufferManager::AddShaderBuffer(class ShaderBuffer* shader
 	this->bufferContainer.insert(make_pair(T::GetCode(), shaderBuffer));
 }
 
-#define Buffers BufferManager::GetInstance()
+#define Buffers BufferManager::Get()

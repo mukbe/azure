@@ -14,9 +14,9 @@
 #include "./Utilities/String.h"
 #include "./Utilities/Path.h"
 
-#include "./Renders/Gizmo.h"
-#include "./Manager/ShaderManager.h"
 #include "./Manager/BufferManager.h"
+#include "./Manager/ShaderManager.h"
+#include "./Renders/Gizmo.h"
 
 #define KeyCode Keyboard::Get()
 #define GameMouse Mouse::Get()
