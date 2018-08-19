@@ -13,6 +13,8 @@
 #include "./Model/Model.h"
 #include "Model/ModelAnimPlayer.h"
 
+#include "./Utilities/DebugTransform.h"
+
 Program::Program()
 {
 	States::Create();
@@ -37,9 +39,10 @@ Program::Program()
 
 	freeCamera = new FreeCamera();
 	
-	box = new Figure(Figure::FigureType::Box, 10.0f);
+	box = new Figure(Figure::FigureType::Box, 1.f);
 	box->GetTransform()->SetWorldPosition(50.0f, 5.0f, 50.0f);
 	box->GetTransform()->RotateSelf(0.f, 45.0f * ONE_RAD, 0.f);
+	box->GetTransform()->SetScale(10.f, 10.f, 10.f);
 	grid = new Figure(Figure::FigureType::Grid, 100.0f,D3DXCOLOR(0.3f,0.3f,0.3f,1.0f));
 
 	sphere = new Figure(Figure::FigureType::Sphere, 10.0f, D3DXCOLOR(1.f, 0.f, 0.f, 1.f));
@@ -50,6 +53,9 @@ Program::Program()
 
 	shadow->SetRenderFunc(bind(&Program::ShadowRender,this));
 
+	debugTransform = new DebugTransform;
+	debugTransform->ConnectTransform(box->GetTransform());
+	debugTransform->SetCamera(freeCamera);
 }
 
 Program::~Program()
@@ -72,6 +78,7 @@ void Program::PreUpdate()
 void Program::Update()
 {
 	//animation->Update();
+	debugTransform->Update();
 }
 
 void Program::PostUpdate()
@@ -81,7 +88,6 @@ void Program::PostUpdate()
 
 void Program::ShadowRender()
 {
-	
 	freeCamera->Render();
 	States::SetRasterizer(States::SHADOW);
 	grid->ShadowRender();
@@ -97,7 +103,6 @@ void Program::PreRender()
 
 	//Program::ShodowRender
 	shadow->RenderDirectionalMap();
-
 }
 
 void Program::Render()
@@ -108,6 +113,7 @@ void Program::Render()
 	box->Render();
 	sphere->Render();
 	//animation->Render();
+	debugTransform->RenderGizmo();
 	
 	//camera정보를 deferred에게 언팩킹시에 필요한 정보를 보낸다
 	deferred->SetUnPackInfo(freeCamera->GetViewMatrix(), freeCamera->GetProjection());
@@ -118,8 +124,8 @@ void Program::PostRender()
 	//bind ShadowMap
 	ID3D11ShaderResourceView* view = shadow->GetDirectionalSRV();
 	DeviceContext->PSSetShaderResources(5, 1, &view);
+	shadow->BindResources();
 
-	
 	directionalLight->SetBuffer();
 
 	States::SetSampler(1, States::LINEAR);
@@ -129,6 +135,7 @@ void Program::PostRender()
 void Program::UIRender()
 {
 	deferred->UIRender();
+	debugTransform->RenderGUI();
 
 	ImGui::Begin("ShadowMap");
 	{

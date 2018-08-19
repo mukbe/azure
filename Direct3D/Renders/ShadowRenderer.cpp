@@ -17,10 +17,21 @@ ShadowRenderer::ShadowRenderer()
 
 	viewport.TopLeftX = 0.0f;
 	viewport.TopLeftY = 0.0f;
-	viewport.Width = static_cast<float>(WinSizeX);
+	viewport.Width = static_cast<float>(WinSizeX );
 	viewport.Height = static_cast<float>(WinSizeY);
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
+
+	D3D11_SAMPLER_DESC desc;
+	ZeroMemory(&desc, sizeof D3D11_SAMPLER_DESC);
+	desc.ComparisonFunc = D3D11_COMPARISON_LESS_EQUAL;
+	desc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+	desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	desc.MaxAnisotropy = 1;
+	HRESULT hr = Device->CreateSamplerState(&desc, &shadowSampler);
+	assert(SUCCEEDED(hr));
 }
 
 
@@ -34,6 +45,8 @@ ShadowRenderer::~ShadowRenderer()
 	SafeRelease(this->directionalSRV);
 	SafeRelease(this->directionalDSV);
 	SafeRelease(this->directionalTexture2D);
+
+	SafeRelease(shadowSampler);
 
 	viewProjectionDataContext.clear();
 }
@@ -62,6 +75,11 @@ void ShadowRenderer::SetViewProjection(UINT index, D3DXMATRIX view, D3DXMATRIX p
 	this->viewProjectionDataContext[index] = make_pair(view, projection);
 }
 
+void ShadowRenderer::BindResources()
+{
+	DeviceContext->PSSetSamplers(2, 1, &shadowSampler);
+}
+
 void ShadowRenderer::CreatePointRenderer()
 {
 
@@ -70,7 +88,7 @@ void ShadowRenderer::CreatePointRenderer()
 void ShadowRenderer::CreateDirectionalRenderer()
 {
 	Buffer::CreateDepthStencilSurface(&directionalTexture2D, &directionalSRV, &directionalDSV, DXGI_FORMAT_D16_UNORM, DXGI_FORMAT_R16_UNORM,
-		WinSizeX, WinSizeY, 1);
+		WinSizeX , WinSizeY , 1);
 }
 
 void ShadowRenderer::UpdateViewProjection(UINT index)

@@ -52,7 +52,7 @@ protected:
 		desc.MiscFlags = 0;
 		desc.StructureByteStride = 0;
 
-		HRESULT hr = Device->CreateBuffer(&desc, NULL, &buffer);
+		HRESULT hr = DxRenderer::Get()->GetDevice()->CreateBuffer(&desc, NULL, &buffer);
 		assert(SUCCEEDED(hr));
 	}
 

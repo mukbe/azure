@@ -134,7 +134,7 @@ G_Buffer GizmoDeferredPS(ColorPixelInput input)
 
     output.worldPos = input.worldPos;
     output.diffuse = input.color;
-    output.spec = float4(1, 1, 1, 2);
+    output.spec = float4(2, 2, 2, 2);
     output.normal = float4(0, 0, 0, 1);
 
     return output;

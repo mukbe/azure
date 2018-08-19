@@ -69,6 +69,7 @@ Texture2D _sunLightsahdowMap : register(t5);
 
 
 SamplerState _basicSampler : register(s0);
+SamplerComparisonState _shadowSampler : register(s2);
 
 /*************************************************************
 Struct
@@ -256,4 +257,27 @@ float3 CalcWorldPos(float2 csPos, float depth)
     position.w = 1.0;
 	
     return mul(position, InvView).xyz;
+}
+
+float CalcShadowFactor(float4 depthPosition, Texture2D shadowMap, SamplerComparisonState shadowSampler)
+{
+    float2 uv;
+    float3 shadowPos = depthPosition.xyz / depthPosition.w;
+    uv.x = shadowPos.x * 0.5f + 0.5f;
+    uv.y = shadowPos.y * -0.5f + 0.5f;
+
+    float shadow = shadowMap.SampleCmpLevelZero(shadowSampler, uv, shadowPos.z).r;
+
+    return shadow;
+    float offsetX = 1.0f / (1280.0f);
+    float offsetY = 1.0f / (720.0f);
+
+    for (int i = -1; i < 2; ++i)
+    {
+        for (int j = -1; j < 2; ++j)
+        {
+            shadow += shadowMap.SampleCmpLevelZero(shadowSampler, uv + float2(offsetX * j, offsetY * i), shadowPos.z).r;
+        }
+    }
+    return shadow / 9.0f;
 }

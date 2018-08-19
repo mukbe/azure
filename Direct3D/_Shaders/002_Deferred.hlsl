@@ -1,5 +1,6 @@
 #include "000_Header.hlsl"
 
+
 struct BasicPixelInput
 {
     float4 position : SV_POSITION;
@@ -27,18 +28,14 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
     float specPower = data.SpecPow;
 
     //GizmoRendering
-    //if (specPower.w > 1.5f)
-    //    return albedo;
-
-    //CalcMainShadow
-    float4 posLight = mul(worldPos, _shadowMatrix);
-    float2 samplingShadowData = _sunLightsahdowMap.Sample(_basicSampler, posLight.xy).xw;
-    float shadowMapDepth = samplingShadowData.x / samplingShadowData.y;
-
+    if (specPower> 1.5f)
+        return float4(albedo, 1.0f);
 
     float4 projectionToLight = mul(worldPos, _lightViewProjection);
-    float pixelDepth = projectionToLight.z / projectionToLight.w;
 
+    //return _sunLightsahdowMap.Sample(_basicSampler, input.uv);
+
+    float shadowFactor = CalcShadowFactor(projectionToLight,_sunLightsahdowMap,_shadowSampler);
 
     //CalcLighting
     float diffuseFactor = saturate(dot(worldNormal.xyz, -_sunDir));
@@ -46,14 +43,6 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
     float3 diffuseColor = albedo * diffuseFactor * _sunColor.rgb * 2.0f;
     //	finalColor += DirLightColor.rgb * pow(NDotH, material.specPow) * material.specIntensity;
 
-    //if in Shadow
-    if (shadowMapDepth + 0.02f > pixelDepth)
-    {
-        //TODO ºû°è»ê,PCF
-        return float4(diffuseColor * shadowMapDepth, 1.0f);
-    }
-    else
-    {
-        return float4(diffuseColor , 1.0f);;
-    }
+    return float4(diffuseColor * shadowFactor, 1.0f);
 }
+

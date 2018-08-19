@@ -25,5 +25,5 @@ private:
 	class ShadowRenderer* shadow;
 	class DirectionalLight* directionalLight;
 	class ModelAnimPlayer* animation;
-
+	class DebugTransform* debugTransform;
 };

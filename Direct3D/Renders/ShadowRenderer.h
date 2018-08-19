@@ -18,6 +18,8 @@ private:
 
 	class ViewProjectionBuffer*					viewProjectionBuffer;
 	D3D11_VIEWPORT								viewport;
+
+	ID3D11SamplerState*							shadowSampler;
 private:
 	void CreatePointRenderer();
 	void CreateDirectionalRenderer();
@@ -32,6 +34,8 @@ public:
 	void RenderPointMap();
 
 	void SetViewProjection(UINT index,D3DXMATRIX view, D3DXMATRIX projection);
+	void BindResources();
+
 
 	ID3D11ShaderResourceView* GetDirectionalSRV()const { return this->directionalSRV; }
 };

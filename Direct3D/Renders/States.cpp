@@ -304,7 +304,7 @@ void States::CreateRasterizerDesc()
 	ZeroMemory(&desc, sizeof D3D11_RASTERIZER_DESC);
 	desc.FillMode = D3D11_FILL_SOLID;
 	desc.CullMode = D3D11_CULL_BACK;
-	desc.DepthBias = 10000;
+	desc.DepthBias = 700;
 	desc.DepthBiasClamp = 0.0f;
 	desc.SlopeScaledDepthBias = 1.0f;
 	States::CreateRasterizer(&desc, &rasterizerStates[SHADOW]);

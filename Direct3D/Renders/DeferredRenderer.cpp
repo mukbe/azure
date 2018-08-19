@@ -18,6 +18,7 @@ DeferredRenderer::DeferredRenderer()
 	this->Create();
 	depthVis = new DepthVis;
 	unPacker = new UnPacker;
+
 }
 
 

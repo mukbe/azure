@@ -16,7 +16,6 @@ WPARAM Window::Run()
 	pRenderer->CreateDevice();
 	pRenderer->CreateSwapChain();
 
-
 	Keyboard::Create();
 	Mouse::Create();
 
@@ -27,6 +26,8 @@ WPARAM Window::Run()
 	Shaders->Init();
 
 	BufferManager::Create();
+	BufferManager::Get()->Init();
+
 	Gizmo::Create();
 
 	ImGui::Create(desc.Handle, Device, DeviceContext);
@@ -58,7 +59,6 @@ WPARAM Window::Run()
 			program->Update();
 			program->PostUpdate();
 			ImGui::Update();
-
 
 			program->PreRender();
 

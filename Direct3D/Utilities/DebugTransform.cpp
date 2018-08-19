@@ -178,9 +178,9 @@ DebugTransform::PickType DebugTransform::IsPick()
 
 		if (isPick == true)
 		{
-			if (i == 0)return PickType::Right;
-			else if (i == 1)return PickType::Up;
-			else if (i == 2)return PickType::Forward;
+			if (i == AXIS_X)return PickType::Right;
+			else if (i == AXIS_Y)return PickType::Up;
+			else if (i == AXIS_Z)return PickType::Forward;
 		}
 	}
 

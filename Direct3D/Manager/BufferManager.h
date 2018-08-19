@@ -12,6 +12,8 @@ private:
 public:
 	template<class T> T* FindShaderBuffer();
 	template<class T> void AddShaderBuffer(class ShaderBuffer* shaderBuffer);
+
+	void Init();
 };
 
 template<class T> T* BufferManager::FindShaderBuffer()
