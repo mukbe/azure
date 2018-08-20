@@ -375,15 +375,13 @@ void DxRenderer::Release()
 	SafeRelease(pD3dDevice);
 }
 
-void DxRenderer::SetScreenRTV()
+
+void DxRenderer::BeginDraw()
 {
 	pD3dContext->OMSetRenderTargets(1, &pRenderTargetView, pDepthStencilView);
 	pD3dContext->RSSetViewports(1, &ScreenViewPort);
 	pD3dContext->RSSetState(NULL);
-}
 
-void DxRenderer::BeginDraw()
-{
 	pD3dContext->ClearRenderTargetView(pRenderTargetView,
 		D3DXCOLOR(0.3f,0.3f,0.3f, 1.0f));
 

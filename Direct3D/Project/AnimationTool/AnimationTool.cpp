@@ -12,10 +12,47 @@
 #include "./Utilities/String.h"
 #include "./Utilities/Path.h"
 
+
+#include "./View/FreeCamera.h"
+#include "./Utilities/Transform.h"
+#include "./Figure/Figure.h"
+
+#include "./Testing/DirectionalLight.h"
+
+#include "./Renders/DeferredRenderer.h"
+
+
 AnimationTool::AnimationTool()
 	:animation(nullptr), model(nullptr), isRenderUI(false), isPlay(false), exporter(nullptr), shdowDemo(nullptr)
 {
+
+	RenderRequest->AddRender("UIRender", bind(&AnimationTool::UIRender, this), RenderType::UIRender);
+
+	RenderRequest->AddRender("shadow", bind(&AnimationTool::ShadowRender, this), RenderType::Shadow);
+
+	RenderRequest->AddRender("render", bind(&AnimationTool::Render, this), RenderType::Render);
+
 	animation = new ModelAnimPlayer(nullptr);
+
+	Model* model = new Model;
+	model->ReadMaterial(L"../_Assets/Test.material");
+	model->ReadMesh(L"../_Assets/Test.mesh");
+	model->ReadAnimation(L"../_Assets/Test.anim");
+	model->ReadAnimation(L"../_Assets/Running.anim");
+	this->AttachModel(model);
+
+	freeCamera = new FreeCamera();
+
+	box = new Figure(Figure::FigureType::Box, 1.f);
+	box->GetTransform()->SetWorldPosition(50.0f, 5.0f, 50.0f);
+	box->GetTransform()->RotateSelf(0.f, 45.0f * ONE_RAD, 0.f);
+	box->GetTransform()->SetScale(10.f, 10.f, 10.f);
+	grid = new Figure(Figure::FigureType::Grid, 100.0f, D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f));
+
+	sphere = new Figure(Figure::FigureType::Sphere, 10.0f, D3DXCOLOR(1.f, 0.f, 0.f, 1.f));
+
+	directionalLight = new DirectionalLight;
+
 }
 
 
@@ -24,14 +61,22 @@ AnimationTool::~AnimationTool()
 	SafeDelete(exporter);
 	SafeDelete(animation);
 	SafeDelete(model);
+
+	SafeDelete(sphere);
+	SafeDelete(grid);
+	SafeDelete(box);
+
 }
 
 void AnimationTool::Init()
 {
-	
 }
 
 void AnimationTool::Release()
+{
+}
+
+void AnimationTool::PreUpdate()
 {
 }
 
@@ -40,13 +85,76 @@ void AnimationTool::Update()
 	animation->Update();
 }
 
+void AnimationTool::PostUpdate()
+{
+	freeCamera->Update();
+}
+
+void AnimationTool::ShadowRender()
+{
+	directionalLight->UpdateView();
+	directionalLight->SetBuffer();
+
+	freeCamera->Render();
+	States::SetRasterizer(States::SHADOW);
+	grid->ShadowRender();
+	box->ShadowRender();
+	sphere->ShadowRender();
+	States::SetRasterizer(States::SOLID_CULL_ON);
+
+}
+
 void AnimationTool::Render()
 {
+	freeCamera->Render();
+	grid->Render();
+	box->Render();
+	sphere->Render();
 	animation->Render();
+
+	//camera정보를 deferred에게 언팩킹시에 필요한 정보를 보낸다
+	DeferredRenderer*deferred = (DeferredRenderer*)RenderRequest->GetDeferred();
+	deferred->SetUnPackInfo(freeCamera->GetViewMatrix(), freeCamera->GetProjection());
+	directionalLight->SetBuffer();
+
+	States::SetSampler(1, States::LINEAR);
+
 }
 
 void AnimationTool::UIRender()
 {
+
+	ImGui::Begin("System Info");
+	ImGui::Text("Frame Per Second : %4.0f", ImGui::GetIO().Framerate);
+	ImGui::Text("TimeDelta : %f", DeltaTime);
+
+	UINT hour = Time::Get()->GetHour();
+	string hourStr = hour < 10 ? "0" + to_string(hour) : to_string(hour);
+
+	UINT minute = Time::Get()->GetMinute();
+	string minuteStr = minute < 10 ? "0" + to_string(minute) : to_string(minute);
+
+	ImGui::Text("%s", (hourStr + ":" + minuteStr).c_str());
+
+	ImGui::Separator();
+
+	D3DXVECTOR3 pos = freeCamera->GetTransform()->GetWorldPosition();
+	ImGui::Text
+	(
+		"Camera Position : %3.0f, %3.0f, %3.0f"
+		, pos.x, pos.y, pos.z
+	);
+
+	D3DXVECTOR3 angle = freeCamera->GetTransform()->GetAngle();
+	ImGui::Text
+	(
+		"Camera Rotation : %3.0f, %3.0f", angle.x * 180.f / D3DX_PI, angle.y *180.f / D3DX_PI
+	);
+
+	ImGui::Separator();
+
+	ImGui::End();
+
 	//MainBar
 	if (ImGui::BeginMainMenuBar())
 	{

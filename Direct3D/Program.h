@@ -10,20 +10,11 @@ public:
 	void Update();
 	void PostUpdate();
 
-	void ShadowRender();
-	void PreRender();
 	void Render();
-	void PostRender();
-	void UIRender();
 
 	void ResizeScreen();
 private:
-	class FreeCamera* freeCamera;
 	class Json::Value* jsonRoot;
-	class Figure* box, *grid, *sphere;
 	class DeferredRenderer* deferred;
 	class ShadowRenderer* shadow;
-	class DirectionalLight* directionalLight;
-	class ModelAnimPlayer* animation;
-	class DebugTransform* debugTransform;
 };
