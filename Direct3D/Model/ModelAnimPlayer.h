@@ -12,6 +12,10 @@ public:
 	{
 		Play = 0, Pause, Stop
 	};
+	enum class PlayState
+	{
+		Normal,Blending,End
+	};
 
 	ModelAnimPlayer(Model* model);
 	~ModelAnimPlayer();
@@ -25,6 +29,10 @@ public:
 
 	void ChangeAnimation(wstring animName, function<void()> func = NULL);
 	void ChangeAnimation(UINT index);
+
+	void ChangeAnimation(wstring animName, float blendTime);
+	void ChangeAnimation(UINT index, float blendTime);
+
 	ModelAnimClip* GetCurrentClip() const { return this->currentClip; }
 	Model* GetModel()const { return this->model; }
 
@@ -32,16 +40,26 @@ public:
 	D3DXMATRIX GetBoneAnimation(UINT index) { return this->boneAnimation[index]; }
 	void SetKeyframe(int key);
 private:
+
+	void UpdateAnimation();
+	void UpdateAnimationByBlending();
+
 	void UpdateTime();
 	void UpdateBone();
 
+	void UpdateTimeByBlending();
+	void UpdateBoneByBlending();
 private:
 	Shader * shader;
 	Shader* shadowShader;
 
-	Model * model;
-	ModelAnimClip* currentClip;
-	Mode mode;
+	Model *			model;
+	ModelAnimClip*	currentClip;
+	Mode			mode;
+	PlayState		playState;
+
+	vector<D3DXMATRIX> skinTransform;
+	vector<D3DXMATRIX> boneAnimation;
 
 	int currentKeyframe;
 	float frameTime; //현재 프레임에서 경과된 시간
@@ -50,6 +68,13 @@ private:
 	int nextKeyframe;
 	bool useQuaternionKeyframe; //쿼터니언 보간 사용여부
 
-	vector<D3DXMATRIX> skinTransform;
-	vector<D3DXMATRIX> boneAnimation;
+	float blendFrameTime;
+	float totalBlendingTime;
+	float blendTimeFactor;
+	int blendStartKeyframe;
+	int endClipInex;
+	wstring endClipName;
+	ModelAnimClip* startBlendClip;
+	ModelAnimClip* endBlendClip;
+
 };

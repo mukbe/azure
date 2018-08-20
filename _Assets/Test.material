@@ -1,0 +1,14 @@
+{
+   "Akai_MAT" : {
+      "Ambient" : [ 1.0, 1.0,1.0, 1.0 ],
+      "Diffuse" : [ 1.0, 1.0, 1.0, 1.0 ],
+      "DiffuseFile" : [ "../_Assets/akai_diffuse.png" ],
+      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "EmissiveFile" : [ "" ],
+      "Name" : [ "Akai_MAT" ],
+    "NormalFile": [ "../_Assets/akai_normal.png" ],
+      "Shininess" : 5.0,
+      "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
+      "SpecularFile" : [ "" ]
+   }
+}

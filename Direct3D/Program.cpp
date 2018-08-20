@@ -25,17 +25,17 @@ Program::Program()
 	jsonRoot = new Json::Value();
 	JsonHelper::ReadData(L"LevelEditor.json", jsonRoot);
 
-	//Fbx::Exporter* exporter = new Fbx::Exporter(L"../_Assets/Test.fbx");
+	//Fbx::Exporter* exporter = new Fbx::Exporter(L"../_Assets/Running.fbx");
 	//exporter->ExportMesh(L"../_Assets/", L"Test");
 	//exporter->ExportMaterial(L"../_Assets/", L"Test");
-	//exporter->ExportAnimation(L"../_Assets/", L"Test");
+	//exporter->ExportAnimation(L"../_Assets/", L"Running");
 
-	//Model* model = new Model;
-	//model->ReadMaterial(L"../_Assets/Test.material");
-	//model->ReadMesh(L"../_Assets/Test.mesh");
-
-	//model->ReadAnimation(L"../_Assets/Test.anim");
-	//this->animation = new ModelAnimPlayer(model);
+	Model* model = new Model;
+	model->ReadMaterial(L"../_Assets/Test.material");
+	model->ReadMesh(L"../_Assets/Test.mesh");
+	model->ReadAnimation(L"../_Assets/Test.anim");
+	model->ReadAnimation(L"../_Assets/Running.anim");
+	this->animation = new ModelAnimPlayer(model);
 
 	freeCamera = new FreeCamera();
 	
@@ -77,7 +77,16 @@ void Program::PreUpdate()
 
 void Program::Update()
 {
-	//animation->Update();
+	if (KeyCode->Down(VK_F1))
+	{
+		animation->ChangeAnimation(1, 0.2f);
+	}
+	if (KeyCode->Down(VK_F2))
+	{
+		animation->ChangeAnimation(3, 0.2f);
+	}
+
+	animation->Update();
 	debugTransform->Update();
 }
 
@@ -112,7 +121,7 @@ void Program::Render()
 	grid->Render();
 	box->Render();
 	sphere->Render();
-	//animation->Render();
+	animation->Render();
 	debugTransform->RenderGizmo();
 	
 	//camera정보를 deferred에게 언팩킹시에 필요한 정보를 보낸다
@@ -145,6 +154,7 @@ void Program::UIRender()
 
 	ImGui::Begin("System Info");
 	ImGui::Text("Frame Per Second : %4.0f", ImGui::GetIO().Framerate);
+	ImGui::Text("TimeDelta : %f", DeltaTime);
 
 	UINT hour = Time::Get()->GetHour();
 	string hourStr = hour < 10 ? "0" + to_string(hour) : to_string(hour);

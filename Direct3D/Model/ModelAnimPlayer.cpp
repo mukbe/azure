@@ -11,7 +11,8 @@
 ModelAnimPlayer::ModelAnimPlayer(Model * model)
 	: model(model), currentClip(nullptr), mode(Mode::Play),
 	currentKeyframe(0), frameTime(0.0f), keyframeFactor(0.0f),
-	nextKeyframe(0), useQuaternionKeyframe(true)
+	nextKeyframe(0), useQuaternionKeyframe(true), playState(PlayState::Normal),
+	blendFrameTime(0.f),totalBlendingTime(0.f),blendTimeFactor(0.f),blendStartKeyframe(0)
 {
 	//TODO 모델 세이더 추가 시에 작업
 	shader = Shaders->FindShader("modelShader");
@@ -19,6 +20,7 @@ ModelAnimPlayer::ModelAnimPlayer(Model * model)
 
 	currentClip = model->Clip(0);
 	this->Play();
+
 }
 
 ModelAnimPlayer::~ModelAnimPlayer()
@@ -31,8 +33,11 @@ void ModelAnimPlayer::Update()
 	if (currentClip == NULL || mode != Mode::Play)
 		return;
 
-	UpdateTime();
-	UpdateBone();
+	if (this->playState == PlayState::Normal)
+		UpdateAnimation();
+	else if (this->playState == PlayState::Blending)
+		UpdateAnimationByBlending();
+
 	model->Buffer()->SetBoneTransforms(skinTransform.data(), skinTransform.size());
 }
 
@@ -150,6 +155,13 @@ void ModelAnimPlayer::UpdateBone()
 
 
 
+void ModelAnimPlayer::UpdateAnimation()
+{
+	UpdateTime();
+	UpdateBone();
+}
+
+
 void ModelAnimPlayer::Play()
 {
 	mode = Mode::Play;
@@ -172,6 +184,7 @@ void ModelAnimPlayer::Stop()
 
 void ModelAnimPlayer::ChangeAnimation(wstring animName, function<void()> func)
 {
+	this->playState = PlayState::Normal;
 	currentClip = model->Clip(animName);
 	this->Stop();
 	this->Play();
@@ -179,7 +192,9 @@ void ModelAnimPlayer::ChangeAnimation(wstring animName, function<void()> func)
 
 void ModelAnimPlayer::ChangeAnimation(UINT index)
 {
+	this->playState = PlayState::Normal;
 	currentClip = model->Clip(index);
 	this->Stop();
 	this->Play();
 }
+

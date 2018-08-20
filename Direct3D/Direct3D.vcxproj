@@ -93,6 +93,7 @@
     <ClCompile Include="ComputeShader\ComputeShader.cpp" />
     <ClCompile Include="Manager\SceneManager.cpp" />
     <ClCompile Include="Manager\SceneNode.cpp" />
+    <ClCompile Include="Model\ModelAnimPlayer + Blending.cpp" />
     <ClCompile Include="Utilities\DebugTransform.cpp" />
     <ClCompile Include="Manager\ObjectManager.cpp" />
     <ClCompile Include="Object\GameObject\GameObject.cpp" />

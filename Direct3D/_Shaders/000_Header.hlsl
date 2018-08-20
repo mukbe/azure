@@ -266,9 +266,9 @@ float CalcShadowFactor(float4 depthPosition, Texture2D shadowMap, SamplerCompari
     uv.x = shadowPos.x * 0.5f + 0.5f;
     uv.y = shadowPos.y * -0.5f + 0.5f;
 
-    float shadow = shadowMap.SampleCmpLevelZero(shadowSampler, uv, shadowPos.z).r;
+    float shadow; // = shadowMap.SampleCmpLevelZero(shadowSampler, uv, shadowPos.z).r;
 
-    return shadow;
+    //return shadow;
     float offsetX = 1.0f / (1280.0f);
     float offsetY = 1.0f / (720.0f);
 
@@ -279,5 +279,6 @@ float CalcShadowFactor(float4 depthPosition, Texture2D shadowMap, SamplerCompari
             shadow += shadowMap.SampleCmpLevelZero(shadowSampler, uv + float2(offsetX * j, offsetY * i), shadowPos.z).r;
         }
     }
-    return shadow / 9.0f;
+
+    return clamp(shadow / 9.0f, 0.5f, 1.0f);
 }

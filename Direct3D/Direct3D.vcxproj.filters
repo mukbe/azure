@@ -55,6 +55,7 @@
     <ClCompile Include="Model\ModelAnimClip.cpp" />
     <ClCompile Include="Manager\SceneManager.cpp" />
     <ClCompile Include="Manager\SceneNode.cpp" />
+    <ClCompile Include="Model\ModelAnimPlayer + Blending.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Testing\DirectionalLight.h" />
