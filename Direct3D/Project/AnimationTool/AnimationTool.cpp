@@ -28,6 +28,7 @@ AnimationTool::~AnimationTool()
 
 void AnimationTool::Init()
 {
+	
 }
 
 void AnimationTool::Release()

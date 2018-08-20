@@ -18,7 +18,6 @@ public:
 	void Update();
 	void Render();
 	void UIRender();
-
 private:
 	void AttachModel(class Model* model);
 	void LoadModel();
