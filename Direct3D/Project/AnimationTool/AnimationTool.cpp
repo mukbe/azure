@@ -66,6 +66,8 @@ void AnimationTool::UIRender()
 		if (this->model == nullptr || this->animation == nullptr)return;
 		ImGui::Begin("AnimationTool");
 		{
+			ImGui::Button("AddAnimation", ImVec2(100, 50));
+			ImGui::Separator();
 			ImGui::Text("FrameTime : %f", animation->GetFrameTime());
 			ImGui::Separator();
 
