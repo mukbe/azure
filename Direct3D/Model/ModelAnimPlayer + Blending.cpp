@@ -38,6 +38,7 @@ void ModelAnimPlayer::ChangeAnimation(UINT index, float blendTime)
 void ModelAnimPlayer::UpdateAnimationByBlending()
 {
 	this->UpdateTimeByBlending();
+	
 	if (this->playState == PlayState::Normal)
 	{
 		this->UpdateBone();

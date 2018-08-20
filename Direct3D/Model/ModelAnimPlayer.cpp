@@ -18,6 +18,7 @@ ModelAnimPlayer::ModelAnimPlayer(Model * model)
 	shader = Shaders->FindShader("modelShader");
 	//shadowShader = new Shader(L"");
 
+	if (model == nullptr)return;
 	currentClip = model->Clip(0);
 	this->Play();
 
@@ -28,9 +29,23 @@ ModelAnimPlayer::~ModelAnimPlayer()
 	model = nullptr;
 }
 
+void ModelAnimPlayer::Init()
+{
+	SafeDelete(model);
+	this->currentClip = nullptr;
+	this->mode = Mode::Stop;
+	this->currentKeyframe = 0.f;
+	this->frameTime = 0.f;
+	this->keyframeFactor = 0.f;
+	this->nextKeyframe = this->currentKeyframe = 0;
+	this->useQuaternionKeyframe = true;
+	this->playState = PlayState::Normal;
+}
+
 void ModelAnimPlayer::Update()
 {
-	if (currentClip == NULL || mode != Mode::Play)
+	if (model == nullptr)return;
+	if (currentClip == nullptr || mode != Mode::Play)
 		return;
 
 	if (this->playState == PlayState::Normal)
@@ -45,6 +60,7 @@ void ModelAnimPlayer::Update()
 
 void ModelAnimPlayer::Render()
 {
+	if (model == nullptr)return;
 	model->Buffer()->SetVSBuffer(6);
 
 	for (ModelMesh* mesh : model->Meshes())
