@@ -10,6 +10,9 @@ GameObject::GameObject(string name)
 
 GameObject::~GameObject()
 {
+	callbackList.clear();
+	reserveMessageList.clear();
+	SafeDelete(transform)
 }
 
 void GameObject::Init()
@@ -19,9 +22,11 @@ void GameObject::Init()
 
 void GameObject::Release()
 {
-	callbackList.clear();
-	reserveMessageList.clear();
-	SafeDelete(transform)
+	
+}
+
+void GameObject::PrevUpdate()
+{
 }
 
 void GameObject::Update()
@@ -41,6 +46,10 @@ void GameObject::Update()
 			Sleep(1);
 		}
 	}
+}
+
+void GameObject::PostUpdate()
+{
 }
 
 void GameObject::PrevRender()
