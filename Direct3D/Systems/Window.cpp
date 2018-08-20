@@ -29,6 +29,8 @@ WPARAM Window::Run()
 	BufferManager::Get()->Init();
 
 	Gizmo::Create();
+	RenderManager::Create();
+	SceneManager::Create();
 
 	ImGui::Create(desc.Handle, Device, DeviceContext);
 	ImGui::StyleColorsDark();
@@ -81,6 +83,8 @@ WPARAM Window::Run()
 
 //================Release Manager===============================
 	ImGui::Delete();
+	Scenes->Delete();
+	Renderer->Create();
 	Gizmo::Delete();
 	Buffers->Delete();
 	Shaders->Delete();
