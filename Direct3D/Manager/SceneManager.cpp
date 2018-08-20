@@ -17,9 +17,8 @@ SceneManager::~SceneManager()
 	for (;Iter != scenes.end(); ++Iter)
 	{
 		SafeDelete(Iter->second);
-		scenes.erase(Iter);
-		Iter--;
 	}
+	scenes.clear();
 }
 
 BOOL SceneManager::AddScene(string name, SceneNode * node)
@@ -53,6 +52,24 @@ BOOL SceneManager::ChangeScene(string key)
 		return false;
 
 	return true;
+}
+
+void SceneManager::PreUpdate()
+{
+	if (current != nullptr)
+		current->PreUpdate();
+}
+
+void SceneManager::Update()
+{
+	if (current != nullptr)
+		current->Update();
+}
+
+void SceneManager::PostUpdate()
+{
+	if (current != nullptr)
+		current->PostUpdate();
 }
 
 SceneNode * SceneManager::FindScene(string key)

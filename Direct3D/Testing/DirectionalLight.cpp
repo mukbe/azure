@@ -3,6 +3,7 @@
 
 #include "../Utilities/Transform.h"
 #include "./Renders/WorldBuffer.h"
+
 DirectionalLight::DirectionalLight()
 {
 	this->sunBuffer = Buffers->FindShaderBuffer<SunBuffer>();

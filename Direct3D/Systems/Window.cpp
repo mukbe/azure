@@ -62,20 +62,7 @@ WPARAM Window::Run()
 			program->PostUpdate();
 			ImGui::Update();
 
-			program->PreRender();
-
-			pRenderer->BeginDraw();
-			{
-				program->Render();
-			}
-			pRenderer->SetScreenRTV();
-			pRenderer->BeginDraw();
-			{
-				program->PostRender();
-				program->UIRender();
-				ImGui::Render();
-			}
-			pRenderer->EndDraw();
+			program->Render();			
 		}
 	}
 	SafeDelete(program);
@@ -84,7 +71,7 @@ WPARAM Window::Run()
 //================Release Manager===============================
 	ImGui::Delete();
 	Scenes->Delete();
-	Renderer->Delete();
+	RenderRequest->Delete();
 	Gizmo::Delete();
 	Buffers->Delete();
 	Shaders->Delete();

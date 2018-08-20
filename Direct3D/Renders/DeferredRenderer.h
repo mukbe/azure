@@ -1,6 +1,6 @@
 #pragma once
 #define BUFFER_COUNT 4
-class DeferredRenderer
+class DeferredRenderer : public Renderer
 {
 	//0 == normal
 	//1 == diffuse
@@ -20,18 +20,19 @@ private:
 	class OrthoWindow* orthoWindow;
 	class DepthVis* depthVis;
 	class UnPacker* unPacker;
-private:
-	void ClearRenderTarget();
-	bool Create();
+
 public:
 	DeferredRenderer();
-	~DeferredRenderer();
+	virtual~DeferredRenderer();
 
-	void BegindDrawToGBuffer();		//RenderTarget을 잡아주고 이전 내용을 검은색으로 밀어준다.
+	virtual void SetRTV();		//RenderTarget을 잡아주고 이전 내용을 검은색으로 밀어준다.
 
-	void Render();					//2D화면상에 GBuffer기반으로 내용 작성
+	virtual void Render();					//2D화면상에 GBuffer기반으로 내용 작성
+
 	void UIRender();
-
 	void SetUnPackInfo(D3DXMATRIX view, D3DXMATRIX projection);
+private:
+	bool Create();
+
 };
 

@@ -11,6 +11,10 @@ public:
 	BOOL AddScene(string name, SceneNode* node);
 	BOOL ChangeScene(string key);
 
+	void PreUpdate();
+	void Update();
+	void PostUpdate();
+
 private:
 	Nodes scenes;
 	SceneNode* current;

@@ -1,6 +1,7 @@
 #pragma once
 #include "./Project/AnimationTool/FBX/Exporter.h"
-class AnimationTool
+
+class AnimationTool :public SceneNode
 {
 private:
 	class ModelAnimPlayer* animation;
@@ -15,7 +16,10 @@ public:
 	
 	void Init();
 	void Release();
+	void PreUpdate();
 	void Update();
+	void PostUpdate();
+	void ShadowRender();
 	void Render();
 	void UIRender();
 
@@ -29,5 +33,11 @@ private:
 	void ExportMaterial(wstring fileName = L"");
 	void ExportMesh(wstring fileName = L"");
 	void ExportAnimation(wstring fileName = L"");
+
+	class FreeCamera* freeCamera;
+	class Figure* box, *grid, *sphere;
+
+	class DirectionalLight* directionalLight;
+
 };
 

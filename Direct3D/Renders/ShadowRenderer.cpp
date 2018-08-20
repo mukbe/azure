@@ -5,15 +5,11 @@
 #include "WorldBuffer.h"
 
 ShadowRenderer::ShadowRenderer()
-	:pointTexture2D(NULL),pointDSV(NULL),pointSRV(NULL),directionalTexture2D(NULL),directionalDSV(NULL),directionalSRV(NULL)
-	,renderFunc(NULL), viewProjectionBuffer(NULL)
+	:directionalTexture2D(NULL), directionalDSV(NULL), directionalSRV(NULL), renderFunc(NULL)
 {
-	pair<D3DXMATRIX, D3DXMATRIX> p(IdentityMatrix, IdentityMatrix);
-	this->viewProjectionDataContext.assign(6, p);
 
 	this->CreateDirectionalRenderer();
 
-	this->viewProjectionBuffer = Buffers->FindShaderBuffer<ViewProjectionBuffer>();
 
 	viewport.TopLeftX = 0.0f;
 	viewport.TopLeftY = 0.0f;
@@ -32,76 +28,49 @@ ShadowRenderer::ShadowRenderer()
 	desc.MaxAnisotropy = 1;
 	HRESULT hr = Device->CreateSamplerState(&desc, &shadowSampler);
 	assert(SUCCEEDED(hr));
+	RenderRequest->AddRender("deui", bind(&ShadowRenderer::UIRender, this), RenderType::UIRender);
+
 }
 
 
 ShadowRenderer::~ShadowRenderer()
 {
-
-	SafeRelease(this->pointSRV);
-	SafeRelease(this->pointDSV);
-	SafeRelease(this->pointTexture2D);
-
 	SafeRelease(this->directionalSRV);
 	SafeRelease(this->directionalDSV);
 	SafeRelease(this->directionalTexture2D);
 
 	SafeRelease(shadowSampler);
-
-	viewProjectionDataContext.clear();
 }
 
-void ShadowRenderer::RenderDirectionalMap()
+void ShadowRenderer::SetRTV()
 {
 	DeviceContext->RSSetViewports(1, &viewport);
-
 	DeviceContext->ClearDepthStencilView(directionalDSV, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
 	ID3D11RenderTargetView* nullRenderTarget = NULL;
 	DeviceContext->OMSetRenderTargets(1, &nullRenderTarget,directionalDSV);
-	//this->UpdateViewProjection(0);
 
 	if (this->renderFunc != NULL)
 		this->renderFunc();
 }
 
-void ShadowRenderer::RenderPointMap()
+void ShadowRenderer::Render()
 {
-	
-}
-
-void ShadowRenderer::SetViewProjection(UINT index, D3DXMATRIX view, D3DXMATRIX projection)
-{
-	if (index >= viewProjectionDataContext.size())return;
-	this->viewProjectionDataContext[index] = make_pair(view, projection);
-}
-
-void ShadowRenderer::BindResources()
-{
+	DeviceContext->PSSetShaderResources(5, 1, &directionalSRV);
 	DeviceContext->PSSetSamplers(2, 1, &shadowSampler);
 }
 
-void ShadowRenderer::CreatePointRenderer()
+void ShadowRenderer::UIRender()
 {
-
+	ImGui::Begin("ShadowMap");
+	{
+		ImGui::ImageButton(directionalSRV, ImVec2(200, 200));
+	}
+	ImGui::End();
 }
 
 void ShadowRenderer::CreateDirectionalRenderer()
 {
 	Buffer::CreateDepthStencilSurface(&directionalTexture2D, &directionalSRV, &directionalDSV, DXGI_FORMAT_D16_UNORM, DXGI_FORMAT_R16_UNORM,
 		WinSizeX , WinSizeY , 1);
-}
-
-void ShadowRenderer::UpdateViewProjection(UINT index)
-{
-	if (index >= viewProjectionDataContext.size())return;
-	D3DXMATRIX view = this->viewProjectionDataContext[index].first;
-	D3DXMATRIX proj = this->viewProjectionDataContext[index].second;
-	D3DXMATRIX viewProj;
-	D3DXMatrixMultiply(&viewProj, &view, &proj);
-
-	this->viewProjectionBuffer->SetView(view);
-	this->viewProjectionBuffer->SetProjection(proj);
-	this->viewProjectionBuffer->SetVP(viewProj);
-
-	this->viewProjectionBuffer->SetVSBuffer(0);
 }

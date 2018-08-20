@@ -19,6 +19,8 @@ DeferredRenderer::DeferredRenderer()
 	depthVis = new DepthVis;
 	unPacker = new UnPacker;
 
+	RenderRequest->AddRender("deui", bind(&DeferredRenderer::UIRender, this), RenderType::UIRender);
+
 }
 
 
@@ -41,24 +43,18 @@ DeferredRenderer::~DeferredRenderer()
 	SafeDelete(unPacker);
 }
 
-void DeferredRenderer::BegindDrawToGBuffer()
+void DeferredRenderer::SetRTV()
 {
 	//·»´õÅ¸°ÙÀ» Àâ¾ÆÁØ´Ù. 
 	DeviceContext->OMSetRenderTargets(BUFFER_COUNT, renderTargetView, depthStencilView);
 	DeviceContext->RSSetViewports(1, &viewport);
 	//DeviceContext->OMSetDepthStencilState(depthStencilState, 2);
-	this->ClearRenderTarget();
-}
-
-void DeferredRenderer::ClearRenderTarget()
-{
 	for (int i = 0; i < BUFFER_COUNT; i++)
 	{
-		DeviceContext->ClearRenderTargetView(renderTargetView[i], D3DXCOLOR(0.f, 0.f, 0.f,1.f));
+		DeviceContext->ClearRenderTargetView(renderTargetView[i], D3DXCOLOR(0.f, 0.f, 0.f, 1.f));
 	}
 
 	DeviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-
 }
 
 

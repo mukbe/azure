@@ -5,21 +5,32 @@
 SingletonCpp(RenderManager)
 
 RenderManager::RenderManager()
+	:deferred(nullptr),shadow(nullptr)
 {
 }
 
 
 RenderManager::~RenderManager()
 {
+	SafeDelete(deferred);
+	SafeDelete(shadow);
 }
 
 void RenderManager::Draw()
 {
-	ShadowRender();
+	//컴퓨팅
 	PreRender();
+
+	ShadowRender();
+
 	Render();
-	PostRender();
-	UIRender();
+
+	pRenderer->BeginDraw();
+	{
+		PostRender();
+		UIRender();
+	}
+	pRenderer->EndDraw();
 }
 
 void RenderManager::AddRender(string name, function<void(void)> renderFunc, RenderType type, UINT count)
@@ -39,8 +50,18 @@ void RenderManager::AddRender(string name, function<void(void)> renderFunc, Rend
 	}
 }
 
+void RenderManager::AddRenderer(string key, Renderer * renderer)
+{
+	if (strstr(key.c_str(), "shadow"))
+		shadow = renderer;
+	if (strstr(key.c_str(), "deferred"))
+		deferred = renderer;
+}
+
 void RenderManager::ShadowRender()
 {
+	shadow->SetRTV();
+
 	Rendering::iterator renderingIter = rendering.begin();
 	for (;renderingIter != rendering.end(); ++renderingIter)
 	{
@@ -58,6 +79,7 @@ void RenderManager::ShadowRender()
 
 void RenderManager::PreRender()
 {
+	//컴퓨팅
 	Rendering::iterator renderingIter = rendering.begin();
 	for (;renderingIter != rendering.end(); ++renderingIter)
 	{
@@ -75,6 +97,9 @@ void RenderManager::PreRender()
 
 void RenderManager::Render()
 {
+	//gbuffer작성
+	deferred->SetRTV();
+
 	Rendering::iterator renderingIter = rendering.begin();
 	for (;renderingIter != rendering.end(); ++renderingIter)
 	{
@@ -91,22 +116,15 @@ void RenderManager::Render()
 }
 void RenderManager::PostRender()
 {
-	Rendering::iterator renderingIter = rendering.begin();
-	for (;renderingIter != rendering.end(); ++renderingIter)
-	{
-		Renders renders = renderingIter->second;
-		RenderFunc funcs = renders[RenderType::PostRender];
-		for (size_t i = 0; i < funcs.size(); i++)
-		{
-			for (size_t j = 0; j < funcs[i].first; j++)
-			{
-				funcs[i].second();
-			}
-		}
-	}
+	//쉐도우맵 바인딩
+	shadow->Render();
+
+	//gbuffer 바인딩, 스크린에 출력
+	deferred->Render();
 }
 void RenderManager::UIRender()
 {
+	//imgui
 	Rendering::iterator renderingIter = rendering.begin();
 	for (;renderingIter != rendering.end(); ++renderingIter)
 	{
@@ -120,4 +138,6 @@ void RenderManager::UIRender()
 			}
 		}
 	}
+
+	ImGui::Render();
 }

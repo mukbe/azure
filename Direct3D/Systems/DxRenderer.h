@@ -56,7 +56,6 @@ public:
 	void Release(void);
 
 public:
-	void SetScreenRTV();
 	void BeginDraw();
 	void EndDraw();
 	void ChangeZBuffer(bool isBuffer);
