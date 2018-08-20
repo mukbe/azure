@@ -12,11 +12,7 @@ private:
 	typedef map<RenderType, RenderFunc> Renders;
 	typedef map<string, Renders> Rendering;
 public:
-	RenderManager();
-	~RenderManager();
-
 	void Draw();
-
 	void AddRender(string name, function<void(void)> renderFunc, RenderType type, UINT count = 1);
 
 private:

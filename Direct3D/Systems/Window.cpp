@@ -84,7 +84,7 @@ WPARAM Window::Run()
 //================Release Manager===============================
 	ImGui::Delete();
 	Scenes->Delete();
-	Renderer->Create();
+	Renderer->Delete();
 	Gizmo::Delete();
 	Buffers->Delete();
 	Shaders->Delete();

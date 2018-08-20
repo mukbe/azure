@@ -24,7 +24,7 @@ void RenderManager::Draw()
 
 void RenderManager::AddRender(string name, function<void(void)> renderFunc, RenderType type, UINT count)
 {
-	if (rendering.find("name") == rendering.end())
+	if (rendering.find(name) == rendering.end())
 	{//add
 		RenderFunc func;
 		func.clear();
