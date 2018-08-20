@@ -20,6 +20,8 @@ public:
 	ModelAnimPlayer(Model* model);
 	~ModelAnimPlayer();
 
+	void Init();
+
 	void Update();
 	void Render();
 
@@ -27,20 +29,18 @@ public:
 	void Pause();
 	void Stop();
 
+	//NoBlending
 	void ChangeAnimation(wstring animName, function<void()> func = NULL);
 	void ChangeAnimation(UINT index);
-
+	//UseBlending
 	void ChangeAnimation(wstring animName, float blendTime);
 	void ChangeAnimation(UINT index, float blendTime);
-
-	ModelAnimClip* GetCurrentClip() const { return this->currentClip; }
 	Model* GetModel()const { return this->model; }
 
 	vector<D3DXMATRIX> GetBoneAnimations()const { return this->boneAnimation; }
 	D3DXMATRIX GetBoneAnimation(UINT index) { return this->boneAnimation[index]; }
 	void SetKeyframe(int key);
 private:
-
 	void UpdateAnimation();
 	void UpdateAnimationByBlending();
 
@@ -50,20 +50,20 @@ private:
 	void UpdateTimeByBlending();
 	void UpdateBoneByBlending();
 private:
-	Shader * shader;
-	Shader* shadowShader;
+	Synthesize(Shader *, shader,MainShader)
+	Synthesize(Shader*, shadowShader,ShadowShader)
 
-	Model *			model;
-	ModelAnimClip*	currentClip;
-	Mode			mode;
-	PlayState		playState;
+	Synthesize(Model *,model,AnimationModel)
+	Synthesize(ModelAnimClip*,currentClip,CurrentClip)
+	Synthesize(Mode	,mode,PlayMode)
+	Synthesize(PlayState,playState,PlayState)
 
 	vector<D3DXMATRIX> skinTransform;
 	vector<D3DXMATRIX> boneAnimation;
 
-	int currentKeyframe;
-	float frameTime; //현재 프레임에서 경과된 시간
-	float keyframeFactor; //현재 프레임과 다음 프레임 사이의 보간 값
+	Synthesize(int,currentKeyframe,CurrentKeyFrame)
+	Synthesize(float, frameTime,FrameTime) //현재 프레임에서 경과된 시간
+	Synthesize(float,keyframeFactor,KeyFrameFactor) //현재 프레임과 다음 프레임 사이의 보간 값
 
 	int nextKeyframe;
 	bool useQuaternionKeyframe; //쿼터니언 보간 사용여부
@@ -76,5 +76,4 @@ private:
 	wstring endClipName;
 	ModelAnimClip* startBlendClip;
 	ModelAnimClip* endBlendClip;
-
 };
