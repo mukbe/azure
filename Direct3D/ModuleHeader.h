@@ -16,9 +16,10 @@
 
 #include "./Manager/BufferManager.h"
 #include "./Manager/ShaderManager.h"
-#include "./Renders/Gizmo.h"
-#include "./Manager/RenderManager.h"
 #include "./Manager/SceneManager.h"
+#include "./Manager/RenderManager.h"
+
+#include "./Renders/Gizmo.h"
 
 #define KeyCode Keyboard::Get()
 #define GameMouse Mouse::Get()

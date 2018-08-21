@@ -50,6 +50,20 @@ void RenderManager::AddRender(string name, function<void(void)> renderFunc, Rend
 	}
 }
 
+BOOL RenderManager::EraseRender(string name)
+{
+	Rendering::iterator Iter = rendering.find(name);
+	if (Iter != rendering.end())
+	{//Ã£À½
+		rendering.erase(Iter);
+	}
+	else
+	{//fail
+		return false;
+	}
+	return true;
+}
+
 void RenderManager::AddRenderer(string key, Renderer * renderer)
 {
 	if (strstr(key.c_str(), "shadow"))

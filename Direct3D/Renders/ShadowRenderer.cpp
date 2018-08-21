@@ -28,7 +28,8 @@ ShadowRenderer::ShadowRenderer()
 	desc.MaxAnisotropy = 1;
 	HRESULT hr = Device->CreateSamplerState(&desc, &shadowSampler);
 	assert(SUCCEEDED(hr));
-	RenderRequest->AddRender("deui", bind(&ShadowRenderer::UIRender, this), RenderType::UIRender);
+
+	RenderRequest->AddRender("shadowRenderer", bind(&ShadowRenderer::UIRender, this), RenderType::UIRender);
 
 }
 
