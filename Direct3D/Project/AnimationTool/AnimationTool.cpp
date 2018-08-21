@@ -27,9 +27,7 @@ AnimationTool::AnimationTool()
 {
 
 	RenderRequest->AddRender("UIRender", bind(&AnimationTool::UIRender, this), RenderType::UIRender);
-
 	RenderRequest->AddRender("shadow", bind(&AnimationTool::ShadowRender, this), RenderType::Shadow);
-
 	RenderRequest->AddRender("render", bind(&AnimationTool::Render, this), RenderType::Render);
 
 	animation = new ModelAnimPlayer(nullptr);
@@ -42,6 +40,13 @@ AnimationTool::AnimationTool()
 	//this->AttachModel(model);
 
 	freeCamera = new FreeCamera();
+
+
+	//Cameras->AddCamera("freeCamera", new FreeCamera);
+	box = new Figure(Figure::FigureType::Box, 1.f);
+	box->GetTransform()->SetWorldPosition(50.0f, 5.0f, 50.0f);
+	box->GetTransform()->RotateSelf(0.f, 45.0f * ONE_RAD, 0.f);
+	box->GetTransform()->SetScale(10.f, 10.f, 10.f);
 
 	grid = new Figure(Figure::FigureType::Grid, 100.0f, D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f));
 

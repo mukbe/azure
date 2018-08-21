@@ -28,7 +28,9 @@ private:
 	typedef map<string, Renders> Rendering;
 public:
 	void Draw();
+
 	void AddRender(string name, function<void(void)> renderFunc, RenderType type, UINT count = 1);
+	BOOL EraseRender(string name);
 
 	void AddRenderer(string key, Renderer* renderer);
 
