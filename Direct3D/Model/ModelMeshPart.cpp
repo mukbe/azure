@@ -15,6 +15,7 @@ void ModelMeshPart::Clone(void ** clone)
 }
 
 ModelMeshPart::ModelMeshPart()
+	:vertexBuffer(nullptr),indexBuffer(nullptr)
 {
 	material = new Material;
 }

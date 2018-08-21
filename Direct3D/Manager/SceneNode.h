@@ -4,7 +4,7 @@ class SceneNode
 {
 public:
 	SceneNode() {}
-	~SceneNode() {}
+	virtual ~SceneNode() {}
 
 	virtual void Init() = 0;
 	virtual void Release() = 0;

@@ -49,7 +49,6 @@ AnimationTool::AnimationTool()
 	grid = new Figure(Figure::FigureType::Grid, 100.0f, D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f));
 
 	directionalLight = new DirectionalLight;
-
 }
 
 
@@ -80,8 +79,6 @@ void AnimationTool::PreUpdate()
 
 void AnimationTool::Update()
 {
-	
-
 	if (KeyCode->Down(VK_F1))
 		animation->ChangeAnimation(0);
 	if (KeyCode->Down(VK_F2))

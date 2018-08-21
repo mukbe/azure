@@ -14,10 +14,10 @@ Material::Material()
 Material::~Material()
 {
 	//TODO 추 후 리소스 메니져 생기면 그쪽에서 할당 해제
-	SafeRelease(this->diffuseMap);
-	SafeRelease(this->specularMap);
-	SafeRelease(this->normalMap);
-	SafeRelease(this->emissiveMap);
+	//SafeRelease(this->diffuseMap);
+	//SafeRelease(this->specularMap);
+	//SafeRelease(this->normalMap);
+	//SafeRelease(this->emissiveMap);
 }
 
 void Material::Clone(void ** clone)

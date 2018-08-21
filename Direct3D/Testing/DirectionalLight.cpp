@@ -25,8 +25,8 @@ DirectionalLight::DirectionalLight()
 
 DirectionalLight::~DirectionalLight()
 {
-	SafeDelete(sunBuffer);
-	SafeDelete(lightViewBuffer);
+	//SafeDelete(sunBuffer);
+	//SafeDelete(lightViewBuffer);
 }
 
 

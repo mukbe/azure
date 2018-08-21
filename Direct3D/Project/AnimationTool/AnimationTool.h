@@ -17,7 +17,7 @@ private:
 	bool isLoadModel;
 public:
 	AnimationTool();
-	~AnimationTool();
+	virtual ~AnimationTool();
 	
 	void Init();
 	void Release();

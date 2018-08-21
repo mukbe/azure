@@ -91,10 +91,16 @@ void Models::Delete()
 		for (ModelBone* bone : data.Bones)
 			SafeDelete(bone);
 
+		data.Bones.clear();
+
 		for (ModelMesh* mesh : data.Meshes)
 			SafeDelete(mesh);
+
+		data.Meshes.clear();
 	}
 
+	materialMap.clear();
+	meshDataMap.clear();
 }
 
 

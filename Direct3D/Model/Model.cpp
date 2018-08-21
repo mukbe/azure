@@ -23,8 +23,8 @@ Model::~Model()
 {
 	SafeDelete(buffer);
 
-	for (Material* material : materials)
-		SafeDelete(material);
+	//for (Material* material : materials)
+	//	SafeDelete(material);
 
 	for (ModelMesh* mesh : meshes)
 		SafeDelete(mesh);

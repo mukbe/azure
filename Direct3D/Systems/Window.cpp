@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Window.h"
 #include "../Program.h"
-
+#include "./Model/Model.h"
 Program* Window::program = NULL;
 
 WPARAM Window::Run()
@@ -75,6 +75,7 @@ WPARAM Window::Run()
 	Gizmo::Delete();
 	Buffers->Delete();
 	Shaders->Delete();
+	Models::Delete();
 	Time::Delete();
 	Mouse::Delete();
 	Keyboard::Delete();
