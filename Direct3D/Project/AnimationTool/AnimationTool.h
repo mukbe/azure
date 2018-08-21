@@ -22,7 +22,6 @@ public:
 	void ShadowRender();
 	void Render();
 	void UIRender();
-
 private:
 	void AttachModel(class Model* model);
 	void LoadModel();

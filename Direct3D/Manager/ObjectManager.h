@@ -6,7 +6,7 @@ namespace ObjectType
 {
 	enum Enum
 	{
-		NORMAL, ENEMY, UI, END
+		Object, Enemy, Ui, END
 	};
 }
 
@@ -17,10 +17,18 @@ private:
 	typedef vector<class GameObject*>								ArrObject;
 	typedef unordered_map<ObjectType::Enum, ArrObject>				ObjectContainer;
 	typedef unordered_map<ObjectType::Enum, ArrObject>::iterator	ObjectContainerIter;
-public:
 
+	ObjectContainer objectList;
+public:
 	void Release();
 	void Update();
+
+	void AddObject(ObjectType::Enum type, class GameObject* object);
+	void DeleteObject(ObjectType::Enum type, string name);
+
+	class GameObject*  FindObject(ObjectType::Enum type, string name);
+	vector<class GameObject*>  FindObjects(ObjectType::Enum type, string name);
+	vector<class GameObject*> GetObjectList(ObjectType::Enum type);
 };
 
 #define Objects ObjectManager::Get()
