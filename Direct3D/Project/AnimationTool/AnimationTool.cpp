@@ -25,7 +25,6 @@
 AnimationTool::AnimationTool()
 	:animation(nullptr), model(nullptr), isRenderUI(false), isPlay(false), exporter(nullptr), shdowDemo(nullptr), selectClipIndex(0), selectedIndex(0)
 {
-
 	RenderRequest->AddRender("UIRender", bind(&AnimationTool::UIRender, this), RenderType::UIRender);
 	RenderRequest->AddRender("shadow", bind(&AnimationTool::ShadowRender, this), RenderType::Shadow);
 	RenderRequest->AddRender("render", bind(&AnimationTool::Render, this), RenderType::Render);
@@ -39,14 +38,13 @@ AnimationTool::AnimationTool()
 	//model->ReadAnimation(L"../_Assets/Running.anim");
 	//this->AttachModel(model);
 
+	//Fbx::Exporter* exporter = new Fbx::Exporter(L"../_Assets/wow.fbx");
+	//exporter->ExportMaterial(Assets, L"wow");
+	//exporter->ExportMesh(Assets, L"wow");
+	//exporter->ExportAnimation(Assets, L"wow");
+	//SafeDelete(exporter);
+
 	freeCamera = new FreeCamera();
-
-
-	//Cameras->AddCamera("freeCamera", new FreeCamera);
-	box = new Figure(Figure::FigureType::Box, 1.f);
-	box->GetTransform()->SetWorldPosition(50.0f, 5.0f, 50.0f);
-	box->GetTransform()->RotateSelf(0.f, 45.0f * ONE_RAD, 0.f);
-	box->GetTransform()->SetScale(10.f, 10.f, 10.f);
 
 	grid = new Figure(Figure::FigureType::Grid, 100.0f, D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f));
 
@@ -61,9 +59,10 @@ AnimationTool::~AnimationTool()
 	SafeDelete(animation);
 	SafeDelete(model);
 
-	//SafeDelete(sphere);
 	SafeDelete(grid);
-	//SafeDelete(box);
+
+	SafeDelete(directionalLight);
+	SafeDelete(freeCamera);
 
 }
 
@@ -81,6 +80,11 @@ void AnimationTool::PreUpdate()
 
 void AnimationTool::Update()
 {
+	if (KeyCode->Down(VK_F1))
+		animation->ChangeAnimation(0);
+	if (KeyCode->Down(VK_F2))
+		animation->ChangeAnimation(1);
+
 	animation->Update();
 }
 
@@ -97,8 +101,6 @@ void AnimationTool::ShadowRender()
 	freeCamera->Render();
 	States::SetRasterizer(States::SHADOW);
 	grid->ShadowRender();
-	//box->ShadowRender();
-	//sphere->ShadowRender();
 	States::SetRasterizer(States::SOLID_CULL_ON);
 
 }
@@ -107,8 +109,6 @@ void AnimationTool::Render()
 {
 	freeCamera->Render();
 	grid->Render();
-	//box->Render();
-	//sphere->Render();
 	animation->Render();
 
 	//camera정보를 deferred에게 언팩킹시에 필요한 정보를 보낸다
@@ -326,7 +326,7 @@ void AnimationTool::ExportMaterial(wstring fileName)
 	if (fileName.length() > 0)
 	{
 		if (exporter)
-			exporter->ExportMaterial(Assets,fileName);
+			exporter->ExportMaterial(L"",fileName);
 	}
 	else
 	{
@@ -340,7 +340,7 @@ void AnimationTool::ExportMesh(wstring fileName)
 	if (fileName.length() > 0)
 	{	
 		if(exporter)
-			exporter->ExportMesh(Assets, fileName);
+			exporter->ExportMesh(L"", fileName);
 	}
 	else
 	{
@@ -354,7 +354,7 @@ void AnimationTool::ExportAnimation(wstring fileName)
 	if (fileName.length() > 0)
 	{
 		if (exporter)
-			exporter->ExportAnimation(Assets, fileName);
+			exporter->ExportAnimation(L"", fileName);
 	}
 	else
 	{
