@@ -7,6 +7,10 @@ private:
 	class ModelAnimPlayer* animation;
 	class Model* model;
 	class Fbx::Exporter *exporter;
+	int selectClipIndex;
+	string comboStr;
+	string selectedAnimation;
+	int selectedIndex;
 	Synthesize(bool, isRenderUI, IsRenderUI)
 	bool shdowDemo;
 	bool isPlay;
@@ -33,10 +37,14 @@ private:
 	void ExportMesh(wstring fileName = L"");
 	void ExportAnimation(wstring fileName = L"");
 
+	void AddAnimation(wstring fileName = L"");
+	void ReNameAnimation(class ModelAnimClip* clip);
+	void DeleteAnimation(wstring name);
+
+	void SaveAnimation(wstring fileName = L"");
+private:
 	class FreeCamera* freeCamera;
 	class Figure* box, *grid, *sphere;
-
 	class DirectionalLight* directionalLight;
-
 };
 

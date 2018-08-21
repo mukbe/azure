@@ -23,7 +23,7 @@
 
 
 AnimationTool::AnimationTool()
-	:animation(nullptr), model(nullptr), isRenderUI(false), isPlay(false), exporter(nullptr), shdowDemo(nullptr)
+	:animation(nullptr), model(nullptr), isRenderUI(false), isPlay(false), exporter(nullptr), shdowDemo(nullptr), selectClipIndex(0), selectedIndex(0)
 {
 
 	RenderRequest->AddRender("UIRender", bind(&AnimationTool::UIRender, this), RenderType::UIRender);
@@ -34,22 +34,16 @@ AnimationTool::AnimationTool()
 
 	animation = new ModelAnimPlayer(nullptr);
 
-	Model* model = new Model;
-	model->ReadMaterial(L"../_Assets/Test.material");
-	model->ReadMesh(L"../_Assets/Test.mesh");
-	model->ReadAnimation(L"../_Assets/Test.anim");
-	model->ReadAnimation(L"../_Assets/Running.anim");
-	this->AttachModel(model);
+	//Model* model = new Model;
+	//model->ReadMaterial(L"../_Assets/Test.material");
+	//model->ReadMesh(L"../_Assets/Test.mesh");
+	//model->ReadAnimation(L"../_Assets/Test.anim");
+	//model->ReadAnimation(L"../_Assets/Running.anim");
+	//this->AttachModel(model);
 
 	freeCamera = new FreeCamera();
 
-	box = new Figure(Figure::FigureType::Box, 1.f);
-	box->GetTransform()->SetWorldPosition(50.0f, 5.0f, 50.0f);
-	box->GetTransform()->RotateSelf(0.f, 45.0f * ONE_RAD, 0.f);
-	box->GetTransform()->SetScale(10.f, 10.f, 10.f);
 	grid = new Figure(Figure::FigureType::Grid, 100.0f, D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f));
-
-	sphere = new Figure(Figure::FigureType::Sphere, 10.0f, D3DXCOLOR(1.f, 0.f, 0.f, 1.f));
 
 	directionalLight = new DirectionalLight;
 
@@ -62,9 +56,9 @@ AnimationTool::~AnimationTool()
 	SafeDelete(animation);
 	SafeDelete(model);
 
-	SafeDelete(sphere);
+	//SafeDelete(sphere);
 	SafeDelete(grid);
-	SafeDelete(box);
+	//SafeDelete(box);
 
 }
 
@@ -98,8 +92,8 @@ void AnimationTool::ShadowRender()
 	freeCamera->Render();
 	States::SetRasterizer(States::SHADOW);
 	grid->ShadowRender();
-	box->ShadowRender();
-	sphere->ShadowRender();
+	//box->ShadowRender();
+	//sphere->ShadowRender();
 	States::SetRasterizer(States::SOLID_CULL_ON);
 
 }
@@ -108,8 +102,8 @@ void AnimationTool::Render()
 {
 	freeCamera->Render();
 	grid->Render();
-	box->Render();
-	sphere->Render();
+	//box->Render();
+	//sphere->Render();
 	animation->Render();
 
 	//camera정보를 deferred에게 언팩킹시에 필요한 정보를 보낸다
@@ -175,7 +169,18 @@ void AnimationTool::UIRender()
 		if (this->model == nullptr || this->animation == nullptr)return;
 		ImGui::Begin("AnimationTool");
 		{
-			ImGui::Button("AddAnimation", ImVec2(100, 50));
+			if (ImGui::Button("Add", ImVec2(80, 50)))
+				this->AddAnimation();
+			ImGui::SameLine();
+			if (ImGui::Button("Delete", ImVec2(80, 50)))
+				this->DeleteAnimation(String::StringToWString(selectedAnimation));
+			ImGui::SameLine();
+			if (ImGui::Button("ReName", ImVec2(80, 50)))
+				ImGui::OpenPopup("ReNameAnimation");
+			ImGui::SameLine();
+			if (ImGui::Button("Save",ImVec2(80,50)))
+				this->SaveAnimation();
+
 			ImGui::Separator();
 			ImGui::Text("FrameTime : %f", animation->GetFrameTime());
 			ImGui::Separator();
@@ -185,12 +190,46 @@ void AnimationTool::UIRender()
 				if (isPlay)this->animation->Play();
 				else this->animation->Pause();
 			}
+
+			//AnimationList
+			vector<ModelAnimClip*> clips = this->animation->GetModel()->GetClips();
+			if(ImGui::BeginCombo("AnimationList", comboStr.c_str()))
+			{
+				for (UINT i = 0; i < clips.size(); ++i)
+				{
+					string clipName = String::WStringToString(clips[i]->Name());
+					bool isSelected = false;
+					if (ImGui::Selectable(clipName.c_str(), isSelected))
+					{
+						comboStr = clipName;
+						selectedIndex = (int)i;
+					}
+					if (isSelected);
+						ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
+		
+			if (ImGui::BeginPopupModal("ReNameAnimation", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+			{
+				this->ReNameAnimation(model->GetClips()[selectedIndex]);
+				ImGui::EndPopup();
+			}
+
 		}
 		ImGui::End();
 	}
 
 	if (shdowDemo)
 		ImGui::ShowDemoWindow();
+
+	if (selectedAnimation != comboStr)
+	{
+		animation->ChangeAnimation(String::StringToWString(comboStr));
+		selectedAnimation = comboStr;
+	}
+
+	
 }
 
 void AnimationTool::AttachModel(Model * model)
@@ -217,6 +256,8 @@ void AnimationTool::LoadModel()
 	this->animation->SetAnimationModel(model);
 	this->animation->ChangeAnimation(0);
 	this->isPlay = true;
+	this->comboStr = String::WStringToString(animation->GetModel()->Clip(0)->Name()).c_str();
+	this->selectedIndex = 0;
 }
 
 void AnimationTool::LoadMaterial(wstring fileName)
@@ -316,3 +357,58 @@ void AnimationTool::ExportAnimation(wstring fileName)
 		Path::SaveFileDialog(fileName, Path::AnimationFilter, Assets, func);
 	}
 }
+
+void AnimationTool::AddAnimation(wstring fileName)
+{
+	if (this->model == nullptr)return;
+	
+	if (fileName.length() > 0)
+	{
+		model->ReadAnimation(fileName);
+	}
+	else
+	{
+		function<void(wstring)> func = std::bind(&AnimationTool::AddAnimation, this, placeholders::_1);
+		Path::OpenFileDialog(L"", Path::AnimationFilter, Assets, func);
+	}
+
+}
+
+void AnimationTool::ReNameAnimation(ModelAnimClip * clip)
+{
+	static char str[48] = {};
+	ImGui::InputText("Name", str, sizeof(char) * 48);
+	if (ImGui::Button("Accept"))
+	{
+		wstring newName = String::StringToWString(str);
+		clip->SetName(newName);
+		this->selectedAnimation = this->comboStr = str;
+
+		ImGui::CloseCurrentPopup();
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Cancle"))
+		ImGui::CloseCurrentPopup();
+}
+
+void AnimationTool::DeleteAnimation(wstring name)
+{
+	model->DeleteClip(name);
+	animation->ChangeAnimation(0);
+	this->selectedIndex = 0;
+	this->comboStr = this->selectedAnimation = String::WStringToString(animation->GetCurrentClip()->Name());
+}
+
+void AnimationTool::SaveAnimation(wstring fileName)
+{
+	if (fileName.length() > 0)
+	{
+		model->SaveAnimationData(fileName);
+	}
+	else
+	{
+		function<void(wstring)> func = std::bind(&AnimationTool::SaveAnimation, this, placeholders::_1);
+		Path::SaveFileDialog(fileName, Path::AnimationFilter, Assets, func);
+	}
+}
+

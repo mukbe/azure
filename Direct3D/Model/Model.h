@@ -60,6 +60,7 @@ public:
 	void DeleteClip(UINT index);
 	void DeleteClip(wstring name);
 	UINT ClipCount() { return clips.size(); }
+	vector<ModelAnimClip*> GetClips() const { return this->clips; }
 
 	void CopyAbsoluteBoneTo(vector<D3DXMATRIX>& transforms);
 	void SaveAnimationData(wstring fileName);
