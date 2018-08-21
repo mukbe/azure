@@ -27,11 +27,14 @@ ModelAnimPlayer::ModelAnimPlayer(Model * model)
 ModelAnimPlayer::~ModelAnimPlayer()
 {
 	model = nullptr;
+
+	this->skinTransform.clear();
+	this->boneAnimation.clear();
 }
 
 void ModelAnimPlayer::Init()
 {
-	SafeDelete(model);
+	this->model = nullptr;
 	this->currentClip = nullptr;
 	this->mode = Mode::Stop;
 	this->currentKeyframe = 0.f;

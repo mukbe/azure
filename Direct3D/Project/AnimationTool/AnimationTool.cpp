@@ -24,6 +24,7 @@
 
 AnimationTool::AnimationTool()
 	:animation(nullptr), model(nullptr), isRenderUI(false), isPlay(false), exporter(nullptr), shdowDemo(nullptr), selectClipIndex(0), selectedIndex(0)
+	, isLoadModel(false)
 {
 	RenderRequest->AddRender("UIRender", bind(&AnimationTool::UIRender, this), RenderType::UIRender);
 	RenderRequest->AddRender("shadow", bind(&AnimationTool::ShadowRender, this), RenderType::Shadow);
@@ -31,11 +32,10 @@ AnimationTool::AnimationTool()
 
 	animation = new ModelAnimPlayer(nullptr);
 
-	//Model* model = new Model;
-	//model->ReadMaterial(L"../_Assets/Test.material");
-	//model->ReadMesh(L"../_Assets/Test.mesh");
-	//model->ReadAnimation(L"../_Assets/Test.anim");
-	//model->ReadAnimation(L"../_Assets/Running.anim");
+	//model = new Model;
+	//model->ReadMaterial(L"../_Assets/wow.material");
+	//model->ReadMesh(L"../_Assets/wow.mesh");
+	//model->ReadAnimation(L"../_Assets/wow.anim");
 	//this->AttachModel(model);
 
 	//Fbx::Exporter* exporter = new Fbx::Exporter(L"../_Assets/wow.fbx");
@@ -80,6 +80,8 @@ void AnimationTool::PreUpdate()
 
 void AnimationTool::Update()
 {
+	
+
 	if (KeyCode->Down(VK_F1))
 		animation->ChangeAnimation(0);
 	if (KeyCode->Down(VK_F2))
@@ -250,9 +252,9 @@ void AnimationTool::AttachModel(Model * model)
 
 void AnimationTool::LoadModel()
 {
+	this->animation->Init();
 	SafeDelete(model);
 	model = new Model;
-	this->animation->Init();
 	
 	this->LoadMaterial();
 	this->LoadMesh();
@@ -261,7 +263,7 @@ void AnimationTool::LoadModel()
 	this->animation->SetAnimationModel(model);
 	this->animation->ChangeAnimation(0);
 	this->isPlay = true;
-	this->comboStr = String::WStringToString(animation->GetModel()->Clip(0)->Name()).c_str();
+	this->comboStr = String::WStringToString(model->Clip(0)->Name()).c_str();
 	this->selectedIndex = 0;
 }
 

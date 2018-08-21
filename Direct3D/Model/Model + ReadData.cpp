@@ -169,8 +169,8 @@ void Models::LoadMaterial(wstring file, vector<class Material*> * materials)
 		}//if(materialMap)
 
 		materialMap[file] = srcMaterials;
+		srcMaterials.clear();
 	}
-
 
 	materials->clear();
 	for (Material* material : materialMap[file])

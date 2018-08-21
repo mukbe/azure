@@ -16,6 +16,7 @@ ModelMesh::~ModelMesh()
 {
 	for (ModelMeshPart* part : meshParts)
 		SafeDelete(part);
+	meshParts.clear();
 }
 
 

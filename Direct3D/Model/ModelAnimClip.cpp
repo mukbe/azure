@@ -34,4 +34,5 @@ ModelAnimClip::~ModelAnimClip()
 	{
 		SafeDelete(temp.second);
 	}
+	keyframeMap.clear();
 }

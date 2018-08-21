@@ -11,6 +11,7 @@ ModelBone::ModelBone()
 
 ModelBone::~ModelBone()
 {
+	childs.clear();
 }
 
 void ModelBone::Clone(void ** clone)

@@ -24,6 +24,11 @@ ModelMeshPart::~ModelMeshPart()
 {
 	SafeRelease(vertexBuffer);
 	SafeRelease(indexBuffer);
+
+	vertices.clear();
+	indices.clear();
+
+	SafeDelete(material);
 }
 
 void ModelMeshPart::Binding()

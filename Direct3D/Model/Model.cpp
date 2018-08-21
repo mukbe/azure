@@ -32,6 +32,14 @@ Model::~Model()
 	for (ModelAnimClip* clip : clips)
 		SafeDelete(clip);
 
+	for (ModelBone* bone : bones)
+		SafeDelete(bone);
+
+	materials.clear();
+	meshes.clear();
+	clips.clear();
+	bones.clear();
+
 }
 
 ModelMesh * Model::Mesh(wstring name)

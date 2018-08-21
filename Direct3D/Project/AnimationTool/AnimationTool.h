@@ -14,6 +14,7 @@ private:
 	Synthesize(bool, isRenderUI, IsRenderUI)
 	bool shdowDemo;
 	bool isPlay;
+	bool isLoadModel;
 public:
 	AnimationTool();
 	~AnimationTool();
