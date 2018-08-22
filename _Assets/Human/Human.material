@@ -1,47 +1,95 @@
 {
-   "character/human/male/humanmale_12" : {
+   "character/human/male/humanmale_1" : {
       "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
       "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
       "DiffuseFile" : [ "../_Assets/Human/Body.png" ],
       "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
       "EmissiveFile" : [ "" ],
-      "Name" : [ "character/human/male/humanmale_12" ],
+      "Name" : [ "character/human/male/humanmale_1" ],
       "NormalFile" : [ "" ],
       "Shininess" : 20.0,
       "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
       "SpecularFile" : [ "" ]
    },
-   "character/human/male/humanmale_17" : {
+   "character/human/male/humanmale_10" : {
       "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
       "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
     "DiffuseFile": [ "../_Assets/Human/Body.png" ],
       "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
       "EmissiveFile" : [ "" ],
-      "Name" : [ "character/human/male/humanmale_17" ],
+      "Name" : [ "character/human/male/humanmale_10" ],
       "NormalFile" : [ "" ],
       "Shininess" : 20.0,
       "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
       "SpecularFile" : [ "" ]
    },
-   "character/human/male/humanmale_25" : {
+   "character/human/male/humanmale_11" : {
       "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
       "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
     "DiffuseFile": [ "../_Assets/Human/Body.png" ],
       "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
       "EmissiveFile" : [ "" ],
-      "Name" : [ "character/human/male/humanmale_25" ],
+      "Name" : [ "character/human/male/humanmale_11" ],
       "NormalFile" : [ "" ],
       "Shininess" : 20.0,
       "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
       "SpecularFile" : [ "" ]
    },
-   "character/human/male/humanmale_27" : {
+   "character/human/male/humanmale_13" : {
       "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
       "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
     "DiffuseFile": [ "../_Assets/Human/Body.png" ],
       "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
       "EmissiveFile" : [ "" ],
-      "Name" : [ "character/human/male/humanmale_27" ],
+      "Name" : [ "character/human/male/humanmale_13" ],
+      "NormalFile" : [ "" ],
+      "Shininess" : 20.0,
+      "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
+      "SpecularFile" : [ "" ]
+   },
+   "character/human/male/humanmale_16" : {
+      "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
+      "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
+    "DiffuseFile": [ "../_Assets/Human/Body.png" ],
+      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "EmissiveFile" : [ "" ],
+      "Name" : [ "character/human/male/humanmale_16" ],
+      "NormalFile" : [ "" ],
+      "Shininess" : 20.0,
+      "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
+      "SpecularFile" : [ "" ]
+   },
+   "character/human/male/humanmale_2" : {
+      "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
+      "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
+    "DiffuseFile": [ "../_Assets/Human/Body.png" ],
+      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "EmissiveFile" : [ "" ],
+      "Name" : [ "character/human/male/humanmale_2" ],
+      "NormalFile" : [ "" ],
+      "Shininess" : 20.0,
+      "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
+      "SpecularFile" : [ "" ]
+   },
+   "character/human/male/humanmale_20" : {
+      "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
+      "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
+    "DiffuseFile": [ "../_Assets/Human/Body.png" ],
+      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "EmissiveFile" : [ "" ],
+      "Name" : [ "character/human/male/humanmale_20" ],
+      "NormalFile" : [ "" ],
+      "Shininess" : 20.0,
+      "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
+      "SpecularFile" : [ "" ]
+   },
+   "character/human/male/humanmale_21" : {
+      "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
+      "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
+    "DiffuseFile": [ "../_Assets/Human/Body.png" ],
+      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "EmissiveFile" : [ "" ],
+      "Name" : [ "character/human/male/humanmale_21" ],
       "NormalFile" : [ "" ],
       "Shininess" : 20.0,
       "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
@@ -59,49 +107,25 @@
       "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
       "SpecularFile" : [ "" ]
    },
-   "character/human/male/humanmale_31" : {
+   "character/human/male/humanmale_37" : {
       "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
       "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
     "DiffuseFile": [ "../_Assets/Human/Body.png" ],
       "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
       "EmissiveFile" : [ "" ],
-      "Name" : [ "character/human/male/humanmale_31" ],
+      "Name" : [ "character/human/male/humanmale_37" ],
       "NormalFile" : [ "" ],
       "Shininess" : 20.0,
       "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
       "SpecularFile" : [ "" ]
    },
-   "character/human/male/humanmale_32" : {
+   "character/human/male/humanmale_42" : {
       "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
       "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
     "DiffuseFile": [ "../_Assets/Human/Body.png" ],
       "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
       "EmissiveFile" : [ "" ],
-      "Name" : [ "character/human/male/humanmale_32" ],
-      "NormalFile" : [ "" ],
-      "Shininess" : 20.0,
-      "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
-      "SpecularFile" : [ "" ]
-   },
-   "character/human/male/humanmale_4" : {
-      "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
-      "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
-    "DiffuseFile": [ "../_Assets/Human/Body.png" ],
-      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
-      "EmissiveFile" : [ "" ],
-      "Name" : [ "character/human/male/humanmale_4" ],
-      "NormalFile" : [ "" ],
-      "Shininess" : 20.0,
-      "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
-      "SpecularFile" : [ "" ]
-   },
-   "character/human/male/humanmale_40" : {
-      "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
-      "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
-    "DiffuseFile": [ "../_Assets/Human/hair02_06.png" ],
-      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
-      "EmissiveFile" : [ "" ],
-      "Name" : [ "character/human/male/humanmale_40" ],
+      "Name" : [ "character/human/male/humanmale_42" ],
       "NormalFile" : [ "" ],
       "Shininess" : 20.0,
       "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
@@ -119,37 +143,13 @@
       "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
       "SpecularFile" : [ "" ]
    },
-   "character/human/male/humanmale_5" : {
+   "character/human/male/humanmale_49" : {
       "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
       "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
-    "DiffuseFile": [ "../_Assets/Human/Body.png" ],
+    "DiffuseFile": [ "../_Assets/Human/hair02_06.png" ],
       "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
       "EmissiveFile" : [ "" ],
-      "Name" : [ "character/human/male/humanmale_5" ],
-      "NormalFile" : [ "" ],
-      "Shininess" : 20.0,
-      "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
-      "SpecularFile" : [ "" ]
-   },
-   "character/human/male/humanmale_64" : {
-      "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
-      "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
-    "DiffuseFile": [ "../_Assets/Human/Body.png" ],
-      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
-      "EmissiveFile" : [ "" ],
-      "Name" : [ "character/human/male/humanmale_64" ],
-      "NormalFile" : [ "" ],
-      "Shininess" : 20.0,
-      "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
-      "SpecularFile" : [ "" ]
-   },
-   "character/human/male/humanmale_8" : {
-      "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
-      "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
-    "DiffuseFile": [ "../_Assets/Human/Body.png" ],
-      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
-      "EmissiveFile" : [ "" ],
-      "Name" : [ "character/human/male/humanmale_8" ],
+      "Name" : [ "character/human/male/humanmale_49" ],
       "NormalFile" : [ "" ],
       "Shininess" : 20.0,
       "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],

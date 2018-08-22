@@ -1,0 +1,14 @@
+{
+   "item/objectcomponents/weapon/axe_2h_horde_c_02_0" : {
+      "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
+      "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
+      "DiffuseFile" : [ "../_Assets/Items/Axe/axe_2h_horde_c_02brown.png" ],
+      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "EmissiveFile" : [ "" ],
+      "Name" : [ "item/objectcomponents/weapon/axe_2h_horde_c_02_0" ],
+      "NormalFile" : [ "" ],
+      "Shininess" : 20.0,
+      "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
+      "SpecularFile" : [ "" ]
+   }
+}

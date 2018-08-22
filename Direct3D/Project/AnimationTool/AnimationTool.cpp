@@ -19,10 +19,11 @@
 #include "./Testing/DirectionalLight.h"
 
 #include "./Renders/DeferredRenderer.h"
+#include "./Renders/Texture.h"
 
 AnimationTool::AnimationTool()
 	:animation(nullptr), model(nullptr), isRenderUI(false), isPlay(false), exporter(nullptr), shdowDemo(nullptr), selectClipIndex(0), selectedIndex(0)
-	, isShowBone(false), boneIndex(0)
+	, isShowBone(false), boneIndex(0),load(nullptr),loadMesh(nullptr),loadAni(nullptr),bLoadedMat(true),bLoadedMesh(true),bLoadedAni(true)
 {
 	RenderRequest->AddRender("UIRender", bind(&AnimationTool::UIRender, this), RenderType::UIRender);
 	RenderRequest->AddRender("shadow", bind(&AnimationTool::ShadowRender, this), RenderType::Shadow);
@@ -36,18 +37,15 @@ AnimationTool::AnimationTool()
 	model->ReadAnimation(L"../_Assets/Human/Human.anim");
 	this->AttachModel(model);
 
-	//Fbx::Exporter* exporter = new Fbx::Exporter(L"../_Assets/Human/Attack01.fbx");
-	//exporter->ExportMaterial(Assets, L"Human");
-	//exporter->ExportMesh(Assets, L"Human");
+	//Fbx::Exporter* exporter = new Fbx::Exporter(L"../_Assets/Items/Axe/Axe.fbx");
+	//exporter->ExportMaterial(Assets + L"Items/Axe/", L"Human");
+	//exporter->ExportMesh(Assets + L"Items/Axe/", L"Human");
 	//exporter->ExportAnimation(Assets, L"Attack01");
 	//SafeDelete(exporter);
 
 	freeCamera = new FreeCamera();
 	grid = new Figure(Figure::FigureType::Grid, 100.0f, D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f));
 	directionalLight = new DirectionalLight;
-	load = nullptr;
-	loadMesh = nullptr;
-	loadAni = nullptr;
 }
 
 
@@ -138,6 +136,11 @@ void AnimationTool::Render()
 	freeCamera->Render();
 	grid->Render();
 
+	if (bLoadedMat == true && bLoadedMesh == true && bLoadedAni == true)
+	{
+		animation->Render();
+	}
+
 	if (model != nullptr && isShowBone == true)
 	{
 		pRenderer->ChangeZBuffer(false);
@@ -149,11 +152,6 @@ void AnimationTool::Render()
 		pRenderer->ChangeZBuffer(true);
 	}
 	
-
-	if (bLoadedMat == true && bLoadedMesh == true && bLoadedAni == true)
-	{
-		animation->Render();
-	}
 	//camera정보를 deferred에게 언팩킹시에 필요한 정보를 보낸다
 	DeferredRenderer*deferred = (DeferredRenderer*)RenderRequest->GetDeferred();
 	deferred->SetUnPackInfo(freeCamera->GetViewMatrix(), freeCamera->GetProjection());

@@ -26,6 +26,7 @@
     <ClInclude Include="Bounding\Bounding.h" />
     <ClInclude Include="ComputeShader\ComputeResource.h" />
     <ClInclude Include="ComputeShader\ComputeShader.h" />
+    <ClInclude Include="Object\Item\GameItem.h" />
     <ClInclude Include="Manager\RenderManager.h" />
     <ClInclude Include="Manager\SceneManager.h" />
     <ClInclude Include="Manager\SceneNode.h" />
@@ -34,6 +35,7 @@
     <ClInclude Include="Physics\Physics.h" />
     <ClInclude Include="Physics\RigidShapes.h" />
     <ClInclude Include="Project\AnimationTool\AnimationTool.h" />
+    <ClInclude Include="Renders\Texture.h" />
     <ClInclude Include="Project\TerrainTool\TerrainTool.h" />
     <ClInclude Include="Project\TerrainTool\TestBT.h" />
     <ClInclude Include="Utilities\DebugTransform.h" />
@@ -99,12 +101,17 @@
     <ClCompile Include="Bounding\BoundingSphere.cpp" />
     <ClCompile Include="ComputeShader\ComputeResource.cpp" />
     <ClCompile Include="ComputeShader\ComputeShader.cpp" />
+    <ClCompile Include="Object\Item\GameItem.cpp" />
     <ClCompile Include="Manager\RenderManager.cpp" />
     <ClCompile Include="Manager\SceneManager.cpp" />
     <ClCompile Include="Model\ModelAnimPlayer + Blending.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="Physics\DebugDraw.cpp" />
     <ClCompile Include="Physics\Physics.cpp" />
     <ClCompile Include="Project\AnimationTool\AnimationTool.cpp" />
+=======
+    <ClCompile Include="Project\AnimationTool\AnimationTool.cpp" />    <ClCompile Include="Renders\Texture.cpp" />
+>>>>>>> 869fa6bc687b8c012ef0343af0d734e7fba603e6
     <ClCompile Include="Project\TerrainTool\TerrainTool.cpp" />
     <ClCompile Include="Project\TerrainTool\TestBT.cpp" />
     <ClCompile Include="Utilities\DebugTransform.cpp" />
