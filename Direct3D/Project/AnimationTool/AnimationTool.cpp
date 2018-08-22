@@ -46,8 +46,6 @@ AnimationTool::AnimationTool()
 	freeCamera = new FreeCamera();
 	grid = new Figure(Figure::FigureType::Grid, 100.0f, D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f));
 	directionalLight = new DirectionalLight;
-
-	Texture* tex = new Texture();
 }
 
 
