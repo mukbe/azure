@@ -57,6 +57,7 @@
     <ClCompile Include="Model\ModelAnimPlayer + Blending.cpp" />
     <ClCompile Include="Manager\RenderManager.cpp" />
     <ClCompile Include="Project\AnimationTool\AnimationTool.cpp" />
+    <ClCompile Include="Project\TerrainTool\TerrainTool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Testing\DirectionalLight.h" />
@@ -125,6 +126,7 @@
     <ClInclude Include="Manager\SceneNode.h" />
     <ClInclude Include="Manager\RenderManager.h" />
     <ClInclude Include="Project\AnimationTool\AnimationTool.h" />
+    <ClInclude Include="Project\TerrainTool\TerrainTool.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />
@@ -133,8 +135,5 @@
     <None Include="_Shaders\002_Deferred.hlsl" />
     <None Include="_Shaders\DepthVis.hlsl" />
     <None Include="Project\Game\Header.hlsli" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Project\TerrainTool\ComputeShader.hlsl" />
   </ItemGroup>
 </Project>

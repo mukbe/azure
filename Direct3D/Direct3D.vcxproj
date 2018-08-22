@@ -30,6 +30,7 @@
     <ClInclude Include="Manager\SceneManager.h" />
     <ClInclude Include="Manager\SceneNode.h" />
     <ClInclude Include="Project\AnimationTool\AnimationTool.h" />
+    <ClInclude Include="Project\TerrainTool\TerrainTool.h" />
     <ClInclude Include="Utilities\DebugTransform.h" />
     <ClInclude Include="Manager\ObjectManager.h" />
     <ClInclude Include="Object\GameObject\GameObject.h" />
@@ -97,6 +98,7 @@
     <ClCompile Include="Manager\SceneManager.cpp" />
     <ClCompile Include="Model\ModelAnimPlayer + Blending.cpp" />
     <ClCompile Include="Project\AnimationTool\AnimationTool.cpp" />
+    <ClCompile Include="Project\TerrainTool\TerrainTool.cpp" />
     <ClCompile Include="Utilities\DebugTransform.cpp" />
     <ClCompile Include="Manager\ObjectManager.cpp" />
     <ClCompile Include="Object\GameObject\GameObject.cpp" />
@@ -177,18 +179,6 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
       <FileType>Document</FileType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Project\TerrainTool\ComputeShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
-    </FxCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F89A7778-CBF0-4E22-B019-B7729ABB8281}</ProjectGuid>
