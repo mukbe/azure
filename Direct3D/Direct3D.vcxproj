@@ -105,13 +105,9 @@
     <ClCompile Include="Manager\RenderManager.cpp" />
     <ClCompile Include="Manager\SceneManager.cpp" />
     <ClCompile Include="Model\ModelAnimPlayer + Blending.cpp" />
-<<<<<<< HEAD
     <ClCompile Include="Physics\DebugDraw.cpp" />
     <ClCompile Include="Physics\Physics.cpp" />
     <ClCompile Include="Project\AnimationTool\AnimationTool.cpp" />
-=======
-    <ClCompile Include="Project\AnimationTool\AnimationTool.cpp" />    <ClCompile Include="Renders\Texture.cpp" />
->>>>>>> 869fa6bc687b8c012ef0343af0d734e7fba603e6
     <ClCompile Include="Project\TerrainTool\TerrainTool.cpp" />
     <ClCompile Include="Project\TerrainTool\TestBT.cpp" />
     <ClCompile Include="Utilities\DebugTransform.cpp" />
