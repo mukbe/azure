@@ -29,8 +29,13 @@
     <ClInclude Include="Manager\RenderManager.h" />
     <ClInclude Include="Manager\SceneManager.h" />
     <ClInclude Include="Manager\SceneNode.h" />
+    <ClInclude Include="Physics\DebugDraw.h" />
+    <ClInclude Include="Physics\IShapes.h" />
+    <ClInclude Include="Physics\Physics.h" />
+    <ClInclude Include="Physics\RigidShapes.h" />
     <ClInclude Include="Project\AnimationTool\AnimationTool.h" />
     <ClInclude Include="Project\TerrainTool\TerrainTool.h" />
+    <ClInclude Include="Project\TerrainTool\TestBT.h" />
     <ClInclude Include="Utilities\DebugTransform.h" />
     <ClInclude Include="Manager\ObjectManager.h" />
     <ClInclude Include="Object\GameObject\GameObject.h" />
@@ -97,8 +102,11 @@
     <ClCompile Include="Manager\RenderManager.cpp" />
     <ClCompile Include="Manager\SceneManager.cpp" />
     <ClCompile Include="Model\ModelAnimPlayer + Blending.cpp" />
+    <ClCompile Include="Physics\DebugDraw.cpp" />
+    <ClCompile Include="Physics\Physics.cpp" />
     <ClCompile Include="Project\AnimationTool\AnimationTool.cpp" />
     <ClCompile Include="Project\TerrainTool\TerrainTool.cpp" />
+    <ClCompile Include="Project\TerrainTool\TestBT.cpp" />
     <ClCompile Include="Utilities\DebugTransform.cpp" />
     <ClCompile Include="Manager\ObjectManager.cpp" />
     <ClCompile Include="Object\GameObject\GameObject.cpp" />
@@ -252,7 +260,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>./;../_Libraries/;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../_Libraries/;../_Libraries/src;</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>

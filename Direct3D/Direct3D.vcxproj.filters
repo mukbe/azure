@@ -58,6 +58,9 @@
     <ClCompile Include="Manager\RenderManager.cpp" />
     <ClCompile Include="Project\AnimationTool\AnimationTool.cpp" />
     <ClCompile Include="Project\TerrainTool\TerrainTool.cpp" />
+    <ClCompile Include="Physics\DebugDraw.cpp" />
+    <ClCompile Include="Physics\Physics.cpp" />
+    <ClCompile Include="Project\TerrainTool\TestBT.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Testing\DirectionalLight.h" />
@@ -127,6 +130,11 @@
     <ClInclude Include="Manager\RenderManager.h" />
     <ClInclude Include="Project\AnimationTool\AnimationTool.h" />
     <ClInclude Include="Project\TerrainTool\TerrainTool.h" />
+    <ClInclude Include="Physics\DebugDraw.h" />
+    <ClInclude Include="Physics\IShapes.h" />
+    <ClInclude Include="Physics\Physics.h" />
+    <ClInclude Include="Physics\RigidShapes.h" />
+    <ClInclude Include="Project\TerrainTool\TestBT.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />
