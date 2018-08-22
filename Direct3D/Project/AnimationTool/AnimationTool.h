@@ -1,5 +1,6 @@
 #pragma once
 #include "./Project/AnimationTool/FBX/Exporter.h"
+#include <thread>
 
 class AnimationTool :public SceneNode
 {
@@ -50,5 +51,14 @@ private:
 	class FreeCamera* freeCamera;
 	class Figure* box, *grid, *sphere;
 	class DirectionalLight* directionalLight;
+
+	thread* load;
+	thread* loadMesh;
+	thread* loadAni;
+
+	bool bLoadedMat;
+	bool bLoadedMesh;
+	bool bLoadedAni;
+
 };
 

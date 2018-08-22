@@ -20,7 +20,6 @@
 
 #include "./Renders/DeferredRenderer.h"
 
-
 AnimationTool::AnimationTool()
 	:animation(nullptr), model(nullptr), isRenderUI(false), isPlay(false), exporter(nullptr), shdowDemo(nullptr), selectClipIndex(0), selectedIndex(0)
 	, isShowBone(false), boneIndex(0)
@@ -46,6 +45,9 @@ AnimationTool::AnimationTool()
 	freeCamera = new FreeCamera();
 	grid = new Figure(Figure::FigureType::Grid, 100.0f, D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f));
 	directionalLight = new DirectionalLight;
+	load = nullptr;
+	loadMesh = nullptr;
+	loadAni = nullptr;
 }
 
 
@@ -82,7 +84,36 @@ void AnimationTool::Update()
 	if (KeyCode->Down(VK_F2))
 		animation->ChangeAnimation(1);
 
-	animation->Update();
+	if (bLoadedMat == true && bLoadedMesh == true && bLoadedAni == true)
+	{
+		if (load != nullptr)
+		{
+			load->join();
+			SafeDelete(load);
+
+		}
+		if (loadMesh != nullptr)
+		{
+			loadMesh->join();
+			SafeDelete(loadMesh);
+		}
+
+		if (loadAni != nullptr)
+		{
+			loadAni->join();
+			SafeDelete(loadAni);
+			this->animation->SetAnimationModel(model);
+			this->animation->ChangeAnimation(0);
+			this->isPlay = true;
+			this->comboStr = String::WStringToString(model->Clip(0)->Name()).c_str();
+			this->selectedIndex = 0;
+		}
+
+		animation->Update();
+
+	}
+
+
 }
 
 void AnimationTool::PostUpdate()
@@ -106,7 +137,6 @@ void AnimationTool::Render()
 {
 	freeCamera->Render();
 	grid->Render();
-	animation->Render();
 
 	if (model != nullptr && isShowBone == true)
 	{
@@ -120,6 +150,10 @@ void AnimationTool::Render()
 	}
 	
 
+	if (bLoadedMat == true && bLoadedMesh == true && bLoadedAni == true)
+	{
+		animation->Render();
+	}
 	//camera정보를 deferred에게 언팩킹시에 필요한 정보를 보낸다
 	DeferredRenderer*deferred = (DeferredRenderer*)RenderRequest->GetDeferred();
 	deferred->SetUnPackInfo(freeCamera->GetViewMatrix(), freeCamera->GetProjection());
@@ -279,18 +313,18 @@ void AnimationTool::LoadModel()
 	this->LoadMesh();
 	this->LoadAnimation();
 
-	this->animation->SetAnimationModel(model);
-	this->animation->ChangeAnimation(0);
-	this->isPlay = true;
-	this->comboStr = String::WStringToString(model->Clip(0)->Name()).c_str();
-	this->selectedIndex = 0;
 }
 
 void AnimationTool::LoadMaterial(wstring fileName)
 {
 	if (fileName.length() > 0)
-	{
-		model->ReadMaterial(fileName);
+	{		
+		//model->ReadMaterial(fileName);
+		load = new thread([=]() {
+			bLoadedMat = false;
+			model->ReadMaterial(fileName);
+			bLoadedMat = true;
+		});
 	}
 	else
 	{
@@ -303,7 +337,13 @@ void AnimationTool::LoadMesh(wstring fileName)
 {
 	if (fileName.length() > 0)
 	{
-		model->ReadMesh(fileName);
+		//model->ReadMesh(fileName);
+		loadMesh = new thread([=]() {
+			bLoadedMesh = false;
+			model->ReadMesh(fileName);
+			bLoadedMesh = true;
+		});
+
 	}
 	else
 	{
@@ -316,7 +356,13 @@ void AnimationTool::LoadAnimation(wstring fileName)
 {
 	if (fileName.length() > 0)
 	{
-		model->ReadAnimation(fileName);
+		//model->ReadAnimation(fileName);
+		loadAni = new thread([=]() {
+			bLoadedAni = false;
+			model->ReadAnimation(fileName);
+			bLoadedAni = true;
+		});
+
 	}
 	else
 	{
