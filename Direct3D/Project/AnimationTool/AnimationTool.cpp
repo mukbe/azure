@@ -12,7 +12,6 @@
 #include "./Utilities/String.h"
 #include "./Utilities/Path.h"
 
-
 #include "./View/FreeCamera.h"
 #include "./Utilities/Transform.h"
 #include "./Figure/Figure.h"
@@ -23,7 +22,7 @@
 
 AnimationTool::AnimationTool()
 	:animation(nullptr), model(nullptr), isRenderUI(false), isPlay(false), exporter(nullptr), shdowDemo(nullptr), selectClipIndex(0), selectedIndex(0)
-	, isLoadModel(false)
+	, isShowBone(false), boneIndex(0)
 {
 	RenderRequest->AddRender("UIRender", bind(&AnimationTool::UIRender, this), RenderType::UIRender);
 	RenderRequest->AddRender("shadow", bind(&AnimationTool::ShadowRender, this), RenderType::Shadow);
@@ -31,22 +30,20 @@ AnimationTool::AnimationTool()
 
 	animation = new ModelAnimPlayer(nullptr);
 
-	//model = new Model;
-	//model->ReadMaterial(L"../_Assets/wow.material");
-	//model->ReadMesh(L"../_Assets/wow.mesh");
-	//model->ReadAnimation(L"../_Assets/wow.anim");
-	//this->AttachModel(model);
+	model = new Model;
+	model->ReadMaterial(L"../_Assets/Human/Human.material");
+	model->ReadMesh(L"../_Assets/Human/Human.mesh");
+	model->ReadAnimation(L"../_Assets/Human/Human.anim");
+	this->AttachModel(model);
 
-	//Fbx::Exporter* exporter = new Fbx::Exporter(L"../_Assets/wow.fbx");
-	//exporter->ExportMaterial(Assets, L"wow");
-	//exporter->ExportMesh(Assets, L"wow");
-	//exporter->ExportAnimation(Assets, L"wow");
+	//Fbx::Exporter* exporter = new Fbx::Exporter(L"../_Assets/Human/Attack01.fbx");
+	//exporter->ExportMaterial(Assets, L"Human");
+	//exporter->ExportMesh(Assets, L"Human");
+	//exporter->ExportAnimation(Assets, L"Attack01");
 	//SafeDelete(exporter);
 
 	freeCamera = new FreeCamera();
-
 	grid = new Figure(Figure::FigureType::Grid, 100.0f, D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f));
-
 	directionalLight = new DirectionalLight;
 	load = nullptr;
 	loadMesh = nullptr;
@@ -81,6 +78,7 @@ void AnimationTool::PreUpdate()
 
 void AnimationTool::Update()
 {
+
 	if (KeyCode->Down(VK_F1))
 		animation->ChangeAnimation(0);
 	if (KeyCode->Down(VK_F2))
@@ -140,6 +138,18 @@ void AnimationTool::Render()
 	freeCamera->Render();
 	grid->Render();
 
+	if (model != nullptr && isShowBone == true)
+	{
+		pRenderer->ChangeZBuffer(false);
+		{
+			D3DXMATRIX mat = model->Bones()[boneIndex]->AbsoluteTransform();
+			D3DXVECTOR3 center(mat._41, mat._42, mat._43);
+			GizmoRenderer->WireSphere(center, 5.0f, D3DXCOLOR(1.f, 0.f, 0.f, 1.f));
+		}
+		pRenderer->ChangeZBuffer(true);
+	}
+	
+
 	if (bLoadedMat == true && bLoadedMesh == true && bLoadedAni == true)
 	{
 		animation->Render();
@@ -155,6 +165,21 @@ void AnimationTool::Render()
 
 void AnimationTool::UIRender()
 {
+	//MainBar
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("AnimationFile"))
+		{
+			if (ImGui::MenuItem("Tool"))isRenderUI = !isRenderUI;
+			if (ImGui::MenuItem("ExportModel"))this->ExportModel();
+			if (ImGui::MenuItem("Demo"))shdowDemo = !shdowDemo;
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMainMenuBar();
+	}
+
+
 
 	ImGui::Begin("System Info");
 	ImGui::Text("Frame Per Second : %4.0f", ImGui::GetIO().Framerate);
@@ -187,21 +212,6 @@ void AnimationTool::UIRender()
 
 	ImGui::End();
 
-	//MainBar
-	if (ImGui::BeginMainMenuBar())
-	{
-		if (ImGui::BeginMenu("AnimationFile"))
-		{
-			if (ImGui::MenuItem("Tool"))isRenderUI = !isRenderUI;
-			if (ImGui::MenuItem("LoadModel"))this->LoadModel();
-			if (ImGui::MenuItem("ExportModel"))this->ExportModel();
-			if (ImGui::MenuItem("Demo"))shdowDemo = !shdowDemo;
-			ImGui::EndMenu();
-		}
-
-		ImGui::EndMainMenuBar();
-	}
-
 	if (isRenderUI)
 	{
 		if (this->model == nullptr || this->animation == nullptr)return;
@@ -218,17 +228,21 @@ void AnimationTool::UIRender()
 			ImGui::SameLine();
 			if (ImGui::Button("Save",ImVec2(80,50)))
 				this->SaveAnimation();
-
+			ImGui::SameLine();
+			if (ImGui::Button("ShowBone", ImVec2(80, 50)))
+				ImGui::OpenPopup("BoneData");
+	
 			ImGui::Separator();
-			ImGui::Text("FrameTime : %f", animation->GetFrameTime());
+			ImGui::Text("FrameFactor : %f", animation->GetKeyFrameFactor());
 			ImGui::Separator();
-
+	
 			if (ImGui::Checkbox("Play", &isPlay))
 			{
 				if (isPlay)this->animation->Play();
 				else this->animation->Pause();
 			}
-
+			ImGui::SameLine();
+			ImGui::Checkbox("ShowBoneGizmo", &isShowBone);
 			//AnimationList
 			vector<ModelAnimClip*> clips = this->animation->GetModel()->GetClips();
 			if(ImGui::BeginCombo("AnimationList", comboStr.c_str()))
@@ -247,6 +261,9 @@ void AnimationTool::UIRender()
 				}
 				ImGui::EndCombo();
 			}
+
+			ImGui::SliderInt("SelectBoneIndex", &boneIndex, 0, model->BoneCount() - 1);
+
 		
 			if (ImGui::BeginPopupModal("ReNameAnimation", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 			{
@@ -254,13 +271,18 @@ void AnimationTool::UIRender()
 				ImGui::EndPopup();
 			}
 
+			if (ImGui::BeginPopupModal("BoneData", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+			{
+				this->ShowBoneData();
+				ImGui::EndPopup();
+			}
 		}
 		ImGui::End();
 	}
-
+	
 	if (shdowDemo)
 		ImGui::ShowDemoWindow();
-
+	
 	if (selectedAnimation != comboStr)
 	{
 		animation->ChangeAnimation(String::StringToWString(comboStr));
@@ -460,5 +482,19 @@ void AnimationTool::SaveAnimation(wstring fileName)
 		function<void(wstring)> func = std::bind(&AnimationTool::SaveAnimation, this, placeholders::_1);
 		Path::SaveFileDialog(fileName, Path::AnimationFilter, Assets, func);
 	}
+}
+
+void AnimationTool::ShowBoneData()
+{
+	vector<ModelBone*> bones = model->Bones();
+	for (UINT i = 0; i < bones.size(); ++i)
+	{
+		ImGui::Text("[%d] : %s",i,String::WStringToString(bones[i]->Name()).c_str());
+	}
+
+	ImGui::Separator();
+
+	if (ImGui::Button("OK",ImVec2(50,20)))
+		ImGui::CloseCurrentPopup();
 }
 

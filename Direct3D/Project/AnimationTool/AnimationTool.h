@@ -15,7 +15,8 @@ private:
 	Synthesize(bool, isRenderUI, IsRenderUI)
 	bool shdowDemo;
 	bool isPlay;
-	bool isLoadModel;
+	bool isShowBone;
+	int boneIndex;
 public:
 	AnimationTool();
 	virtual ~AnimationTool();
@@ -44,6 +45,8 @@ private:
 	void DeleteAnimation(wstring name);
 
 	void SaveAnimation(wstring fileName = L"");
+
+	void ShowBoneData();
 private:
 	class FreeCamera* freeCamera;
 	class Figure* box, *grid, *sphere;

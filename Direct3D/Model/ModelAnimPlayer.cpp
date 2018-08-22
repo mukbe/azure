@@ -217,3 +217,13 @@ void ModelAnimPlayer::ChangeAnimation(UINT index)
 	this->Play();
 }
 
+void ModelAnimPlayer::TPose()
+{
+	this->currentClip = nullptr;
+	this->mode = Mode::Stop;
+	this->playState = PlayState::Normal;
+	this->currentKeyframe = 0.f;
+	this->frameTime = 0.f;
+	this->keyframeFactor = 0.f;
+	this->nextKeyframe = this->currentKeyframe = 0;
+}

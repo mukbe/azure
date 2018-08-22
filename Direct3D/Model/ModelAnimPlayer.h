@@ -35,6 +35,9 @@ public:
 	//UseBlending
 	void ChangeAnimation(wstring animName, float blendTime);
 	void ChangeAnimation(UINT index, float blendTime);
+	
+	void TPose();
+
 	Model* GetModel()const { return this->model; }
 
 	vector<D3DXMATRIX> GetBoneAnimations()const { return this->boneAnimation; }
@@ -58,8 +61,8 @@ private:
 	Synthesize(Mode	,mode,PlayMode)
 	Synthesize(PlayState,playState,PlayState)
 
-	vector<D3DXMATRIX> skinTransform;
-	vector<D3DXMATRIX> boneAnimation;
+	Synthesize(vector<D3DXMATRIX> ,skinTransform,SkinTransform);
+	Synthesize(vector<D3DXMATRIX>, boneAnimation,BoneAnimation);
 
 	Synthesize(int,currentKeyframe,CurrentKeyFrame)
 	Synthesize(float, frameTime,FrameTime)			//현재 프레임에서 경과된 시간

@@ -20,7 +20,6 @@ Fbx::Exporter::Exporter(wstring file)
 	ios->SetBoolProp(IMP_FBX_TEXTURE, true);
 	manager->SetIOSettings(ios);
 
-
 	importer = FbxImporter::Create(manager, "");
 
 	string sFile = String::WStringToString(file);
@@ -281,11 +280,10 @@ void Fbx::Exporter::ReadSkinData()
 			for (int clusterIndex = 0; clusterIndex < skin->GetClusterCount(); clusterIndex++)
 			{
 				FbxCluster* cluster = skin->GetCluster(clusterIndex);
-				assert(cluster->GetLinkMode() == FbxCluster::eNormalize);
+				assert((cluster->GetLinkMode() == FbxCluster::eTotalOne || cluster->GetLinkMode() == FbxCluster::eNormalize));
 
 				string linkName = cluster->GetLink()->GetName();
 				UINT boneIndex = GetBoneIndexByName(linkName);
-
 
 				FbxAMatrix transform;
 				FbxAMatrix linkTransform;
@@ -296,7 +294,6 @@ void Fbx::Exporter::ReadSkinData()
 				boneDatas[boneIndex]->Transform = Utility::ToMatrix(transform);
 				boneDatas[boneIndex]->AbsoluteTransform = Utility::ToMatrix(linkTransform);
 
-
 				for (int indexCount = 0; indexCount < cluster->GetControlPointIndicesCount(); indexCount++)
 				{
 					int temp = cluster->GetControlPointIndices()[indexCount];
@@ -304,6 +301,7 @@ void Fbx::Exporter::ReadSkinData()
 
 					boneWeights[temp].AddBoneWeight(boneIndex, (float)weights[indexCount]);
 				}
+				
 			}//for(clusterIndex)
 		}//for(joints)
 
@@ -445,10 +443,8 @@ void Fbx::Exporter::ReadAnimation()
 		double start = (double)span.GetStart().GetFrameCount();
 		double end = (double)span.GetStop().GetFrameCount();
 
-
 		if (start < end)
 		{
-
 			// KeyFrames의 수 = Animation 실행 시간(초) * 초당 Frmae 수 + 1(프레임 0)
 			// frameRate가 30이라는 것은, 초당 30회 애니메이션이라는 뜻이다.
 			// 그러므로 실행시간이 1초라면 딱 30프레임에 맞춰지고,
@@ -465,6 +461,7 @@ void Fbx::Exporter::ReadAnimation()
 
 		animDatas.push_back(animation);
 	}//for(i)
+
 }
 
 void Fbx::Exporter::ReadAnimation(FbxAnimation* animation, FbxNode * node, int start, int end)
