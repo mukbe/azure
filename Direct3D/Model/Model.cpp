@@ -21,10 +21,10 @@ Model::Model()
 
 Model::~Model()
 {
-	SafeDelete(buffer);
-
 	//for (Material* material : materials)
 	//	SafeDelete(material);
+
+	SafeDelete(buffer);
 
 	for (ModelMesh* mesh : meshes)
 		SafeDelete(mesh);
@@ -34,6 +34,7 @@ Model::~Model()
 
 	for (ModelBone* bone : bones)
 		SafeDelete(bone);
+
 
 	materials.clear();
 	meshes.clear();

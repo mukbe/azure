@@ -4,12 +4,18 @@ class ModelMesh;
 class ModelBone;
 class Material;
 
-#define MaxBoneCount 128
+#define MaxBoneCount 230
 
 class ModelBuffer : public ShaderBuffer
 {
 public:
 	ModelBuffer() : ShaderBuffer(&data, sizeof(data))
+	{
+		for (int i = 0; i < MaxBoneCount; ++i)
+			D3DXMatrixIdentity(&data.BoneArray[i]);
+	}
+
+	void TPose()
 	{
 		for (int i = 0; i < MaxBoneCount; ++i)
 			D3DXMatrixIdentity(&data.BoneArray[i]);

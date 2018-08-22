@@ -35,6 +35,7 @@ void ModelAnimPlayer::ChangeAnimation(UINT index, float blendTime)
 	this->endClipName = L"";
 }
 
+
 void ModelAnimPlayer::UpdateAnimationByBlending()
 {
 	this->UpdateTimeByBlending();
