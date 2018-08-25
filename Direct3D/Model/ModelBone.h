@@ -7,7 +7,7 @@ public:
 	friend class Model;
 	friend class Models;
 	friend class ObjectData;
-	friend class IntanceDraw;
+	friend class InstanceRenderer;
 private:
 	ModelBone();
 	~ModelBone();

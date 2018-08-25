@@ -29,5 +29,8 @@ public:
 
 	void SendMSG(struct TagMessage msg);
 	void AddCallback(string name, CallbackFunc func);
+	D3DXMATRIX GetFinalMatrix();
+
+	bool IsSame(GameObject* object);
 };
 

@@ -89,3 +89,15 @@ void GameObject::AddCallback(string name, CallbackFunc func)
 	pair<string, CallbackFunc> p = make_pair(name, func);
 	this->callbackList.insert(p);
 }
+
+D3DXMATRIX GameObject::GetFinalMatrix()
+{
+	return transform->GetFinalMatrix();
+}
+
+bool GameObject::IsSame(GameObject * object)
+{
+	if (this->name != object->name)return false;
+
+	return true;
+}

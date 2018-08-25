@@ -26,6 +26,8 @@
     <ClInclude Include="Bounding\Bounding.h" />
     <ClInclude Include="ComputeShader\ComputeResource.h" />
     <ClInclude Include="ComputeShader\ComputeShader.h" />
+    <ClInclude Include="Renders\Instancing\InstanceShader.h" />
+    <ClInclude Include="Renders\Instancing\InstanceRenderer.h" />
     <ClInclude Include="Object\Item\GameItem.h" />
     <ClInclude Include="Manager\RenderManager.h" />
     <ClInclude Include="Manager\SceneManager.h" />
@@ -101,6 +103,8 @@
     <ClCompile Include="Bounding\BoundingSphere.cpp" />
     <ClCompile Include="ComputeShader\ComputeResource.cpp" />
     <ClCompile Include="ComputeShader\ComputeShader.cpp" />
+    <ClCompile Include="Renders\Instancing\InstanceShader.cpp" />
+    <ClCompile Include="Renders\Instancing\InstanceRenderer.cpp" />
     <ClCompile Include="Object\Item\GameItem.cpp" />
     <ClCompile Include="Manager\RenderManager.cpp" />
     <ClCompile Include="Manager\SceneManager.cpp" />
@@ -110,6 +114,7 @@
     <ClCompile Include="Project\AnimationTool\AnimationTool.cpp" />
     <ClCompile Include="Project\TerrainTool\TerrainTool.cpp" />
     <ClCompile Include="Project\TerrainTool\TestBT.cpp" />
+    <ClCompile Include="Renders\Texture.cpp" />
     <ClCompile Include="Utilities\DebugTransform.cpp" />
     <ClCompile Include="Manager\ObjectManager.cpp" />
     <ClCompile Include="Object\GameObject\GameObject.cpp" />

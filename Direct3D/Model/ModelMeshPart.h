@@ -9,7 +9,7 @@ public:
 	friend class ModelMesh;
 	friend class Models;
 	friend class ObjectData;
-	friend class ObjectInstance;
+	friend class InstanceRenderer;
 public:
 	virtual void Clone(void** clone);
 private:

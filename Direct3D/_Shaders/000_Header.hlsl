@@ -282,3 +282,12 @@ float CalcShadowFactor(float4 depthPosition, Texture2D shadowMap, SamplerCompari
 
     return clamp(shadow / 9.0f, 0.5f, 1.0f);
 }
+
+
+matrix DecodeMatrix(float3x4 encodedMatrix)
+{
+    return matrix(float4(encodedMatrix[0].xyz, 0),
+                  float4(encodedMatrix[1].xyz, 0),
+                  float4(encodedMatrix[2].xyz, 0),
+                  float4(encodedMatrix[0].w, encodedMatrix[1].w, encodedMatrix[2].w, 1));
+}
