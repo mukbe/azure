@@ -2,6 +2,10 @@
 #include "./Project/AnimationTool/FBX/Exporter.h"
 #include <thread>
 
+namespace Environment
+{
+	class Sun;
+}
 class AnimationTool :public SceneNode
 {
 private:
@@ -60,7 +64,8 @@ private:
 private:
 	class FreeCamera* freeCamera;
 	class Figure* box, *grid, *sphere;
-	class DirectionalLight* directionalLight;
+	Environment::Sun* sun;
+
 
 	thread* load;
 	thread* loadMesh;

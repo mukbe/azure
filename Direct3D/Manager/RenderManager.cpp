@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "RenderManager.h"
-
+#include "./Renders/DeferredRenderer.h"
 
 SingletonCpp(RenderManager)
 
@@ -70,6 +70,11 @@ void RenderManager::AddRenderer(string key, Renderer * renderer)
 		shadow = renderer;
 	if (strstr(key.c_str(), "deferred"))
 		deferred = renderer;
+}
+
+void RenderManager::SetUnPackGBufferProp(D3DXMATRIX view, D3DXMATRIX proj)
+{
+	((DeferredRenderer*)deferred)->SetUnPackInfo(view, proj);
 }
 
 void RenderManager::ShadowRender()

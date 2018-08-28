@@ -4,53 +4,52 @@
 
 cbuffer ViewProjectionBuffer : register(b0)
 {
-    matrix _view;
-    matrix _projection;
-    matrix _viewProjection;
-    matrix _invView;
-    matrix _invProjection;
-    matrix _invViewProjection;
+    matrix View;
+    matrix Projection;
+    matrix ViewProjection;
+    matrix InvView;
+    matrix InvProjection;
+    matrix InvViewProjection;
 }
 
 cbuffer WorldBuffer : register(b1)
 {
-    matrix _world;
+    matrix World;
 }
 
 cbuffer UnPacker : register(b2)
 {
-    matrix InvView;
-    float4 PerspectiveValues;
+    matrix UnPackInvView;
+    float4 UnPackPerspectiveValues;
 }
 
 cbuffer MaterialBuffer : register(b3)
 {
-    float4 _diffuseColor;
-    float4 _specColor;
-    float4 _emissiveColor;
+    float4 DiffuseColor;
+    float4 SpecColor;
+    float4 EmissiveColor;
 
-    float _shiness;
-    float _detailFactor;
-    float2 _materialPadding;
+    float Shiness;
+    float DetailFactor;
+    float2 MaterialPadding;
 }
-
-
 cbuffer SunBuffer : register(b4)
 {
-    float3 _sunPosition;
-    float _sunIntensity;
-    float3 _sunDir;
-    float _sunPadding;
-    float4 _sunColor;
+    matrix SunView;
+
+    float3 SunPosition;
+    float SunPadding;
+
+    float SunIntensity;
+    float3 SunDir;
+
+    float4 SunColor;
+
+    matrix SunProjection;
+    matrix SunViewProjection;
+    matrix ShadowMatrix;
 }
 
-cbuffer LightViewProjectionBuffer : register(b5)
-{
-    matrix _lightView;
-    matrix _lightProjection;
-    matrix _lightViewProjection;
-    matrix _shadowMatrix;
-}
 
 cbuffer ModelBuffer : register(b6)
 {
@@ -131,7 +130,7 @@ struct GBuffer_Data
 };
 
 
-#define EyePosition (_invView[3].xyz)
+#define EyePosition (InvView[3].xyz)
 
 static const float2 g_SpecPowerRange = { 10.0, 250.0 };
 
@@ -145,7 +144,7 @@ Func
 //카메라 위치 계산
 float3 GetCameraPosition()
 {
-    return _invView[3].xyz;
+    return InvView[3].xyz;
 }
 
 //노멀벡터 변환
@@ -210,7 +209,7 @@ float4 GetFogColor(float4 diffuse, float4 color, float factor)
 
 float ConvertZToLinearDepth(float depth)
 {
-    float linearDepth = PerspectiveValues.z / (depth + PerspectiveValues.w);
+    float linearDepth = UnPackPerspectiveValues.z / (depth + UnPackPerspectiveValues.w);
     return linearDepth;
 }
 
@@ -253,7 +252,7 @@ float3 CalcWorldPos(float2 csPos, float depth)
 {
     float4 position;
 
-    position.xy = csPos.xy * PerspectiveValues.xy * depth;
+    position.xy = csPos.xy * UnPackPerspectiveValues.xy * depth;
     position.z = depth;
     position.w = 1.0;
 	

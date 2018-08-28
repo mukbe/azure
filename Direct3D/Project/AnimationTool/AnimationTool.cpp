@@ -16,7 +16,7 @@
 #include "./Utilities/Transform.h"
 #include "./Figure/Figure.h"
 
-#include "./Testing/DirectionalLight.h"
+#include "./Environment/Sun.h"
 
 #include "./Renders/DeferredRenderer.h"
 #include "./Renders/Texture.h"
@@ -52,7 +52,7 @@ AnimationTool::AnimationTool()
 
 	freeCamera = new FreeCamera();
 	grid = new Figure(Figure::FigureType::Grid, 100.0f, D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f));
-	directionalLight = new DirectionalLight;
+	sun = new Environment::Sun;
 	debugTransform = new DebugTransform();
 	debugTransform->SetCamera(freeCamera);
 	debugTransform->ConnectTransform(new Transform);
@@ -67,7 +67,7 @@ AnimationTool::~AnimationTool()
 
 	SafeDelete(grid);
 
-	SafeDelete(directionalLight);
+	SafeDelete(sun);
 	SafeDelete(freeCamera);
 	
 	for (UINT i = 0; i < colliderList.size(); ++i)
@@ -110,8 +110,8 @@ void AnimationTool::PostUpdate()
 
 void AnimationTool::ShadowRender()
 {
-	directionalLight->UpdateView();
-	directionalLight->SetBuffer();
+	sun->UpdateView();
+	sun->Render();
 
 	freeCamera->Render();
 	States::SetRasterizer(States::SHADOW);
@@ -149,9 +149,8 @@ void AnimationTool::Render()
 	}
 	
 	//camera정보를 deferred에게 언팩킹시에 필요한 정보를 보낸다
-	DeferredRenderer*deferred = (DeferredRenderer*)RenderRequest->GetDeferred();
-	deferred->SetUnPackInfo(freeCamera->GetViewMatrix(), freeCamera->GetProjection());
-	directionalLight->SetBuffer();
+	RenderRequest->SetUnPackGBufferProp(freeCamera->GetViewMatrix(), freeCamera->GetProjection());
+	sun->Render();
 
 	States::SetSampler(1, States::LINEAR);
 

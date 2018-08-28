@@ -57,6 +57,7 @@ const wstring BinModels = L"../_Contents/BinModels/";
 const wstring FbxModels = L"../_Contents/FbxModels/";
 const wstring ShaderPath = L"_Shaders/";
 
+#include "./Environment/Sun.h"
 
 namespace Landscape
 {

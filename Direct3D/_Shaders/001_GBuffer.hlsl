@@ -38,10 +38,10 @@ BasicPixelInput BasicDeferredVS(VertexTextureNormal input)
 {
     BasicPixelInput output;
 
-    output.position = output.worldPos = mul(input.position, _world);
-    output.position = mul(output.position, _viewProjection);
+    output.position = output.worldPos = mul(input.position, World);
+    output.position = mul(output.position, ViewProjection);
 
-    output.normal = normalize(mul(input.normal, (float3x3) _world));
+    output.normal = normalize(mul(input.normal, (float3x3) World));
 
     output.uv = input.uv;
 
@@ -83,10 +83,10 @@ ColorNormalPixelInput ColorDeferredVS(VertexColorNormal input)
 {
     ColorNormalPixelInput output;
 
-    output.position = output.worldPos = mul(input.position, _world);
-    output.position = mul(output.position, _viewProjection);
+    output.position = output.worldPos = mul(input.position, World);
+    output.position = mul(output.position, ViewProjection);
 
-    output.normal = mul(input.normal, (float3x3) _world);
+    output.normal = mul(input.normal, (float3x3) World);
 
     output.color = input.color;
 
@@ -120,8 +120,8 @@ ColorPixelInput GizmoDeferredVS(VertexColorNormal input)
 {
     ColorPixelInput output;
 
-    output.position = output.worldPos = mul(input.position, _world);
-    output.position = mul(output.position, _viewProjection);
+    output.position = output.worldPos = mul(input.position, World);
+    output.position = mul(output.position, ViewProjection);
 
     output.color = input.color;
 
@@ -170,7 +170,7 @@ ModelPixelInput ModelDeferredVS(VertexTextureBlendNT input)
     output.normal = mul(input.normal, (float3x3) transform);
     output.tangent = mul(input.tangent, (float3x3) transform);
 
-    output.position = mul(output.position, _viewProjection);
+    output.position = mul(output.position, ViewProjection);
 
     output.uv = input.uv;
 
@@ -214,12 +214,12 @@ ModelPixelInput InstanceVS(InstanceInputVS input)
 {
     ModelPixelInput output;
     matrix worldMatrix = DecodeMatrix(float3x4(input.world0, input.world1, input.world2));
-    matrix finalMatrix = _world * worldMatrix;
+    matrix finalMatrix = World * worldMatrix;
     output.position = output.worldPos = mul(input.position, finalMatrix);
     output.normal = mul(input.normal, (float3x3) finalMatrix);
     output.tangent = mul(input.tangent, (float3x3) finalMatrix);
 
-    output.position = mul(output.position, _viewProjection);
+    output.position = mul(output.position, ViewProjection);
 
     output.uv = input.uv;
 
