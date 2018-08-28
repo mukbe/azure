@@ -151,7 +151,6 @@ struct ModelPixelInput
     float2 uv : TEXCOORD0;
     float3 normal : NORMAL0;
     float3 tangent : TANGENT0;
-    
 };
 
 
@@ -180,6 +179,55 @@ ModelPixelInput ModelDeferredVS(VertexTextureBlendNT input)
 
 
 G_Buffer ModelDeferredPS(ModelPixelInput input)
+{
+    G_Buffer output;
+
+    float3 diffuse = _diffuseTex.Sample(_basicSampler, input.uv).rgb;
+
+    output.worldPos = input.worldPos;
+    output.normal = float4(NormalMapSpace(_normalTex.Sample(_basicSampler, input.uv).xyz, input.normal, input.tangent), 1);
+    output.spec = float4(1, 1, 1, 2);
+
+    output = PackGBuffer(output, input.normal, diffuse, 0.25f, 250.0f);
+    return output;
+}
+
+//===================================================
+//Deferred Object
+//===================================================
+
+struct InstanceInputVS
+{
+    float4 position : POSITION0;
+    float2 uv : TEXCOORD0;
+    float4 blendIndices : BLENDINDICES0;
+    float4 blendWeights : BLENDWEIGHTS0;
+    float3 normal : NORMAL0;
+    float3 tangent : TANGENT0;
+
+    float4 world0 : WORLD0;
+    float4 world1 : WORLD1;
+    float4 world2 : WORLD2;
+};
+
+ModelPixelInput InstanceVS(InstanceInputVS input)
+{
+    ModelPixelInput output;
+    matrix worldMatrix = DecodeMatrix(float3x4(input.world0, input.world1, input.world2));
+    matrix finalMatrix = _world * worldMatrix;
+    output.position = output.worldPos = mul(input.position, finalMatrix);
+    output.normal = mul(input.normal, (float3x3) finalMatrix);
+    output.tangent = mul(input.tangent, (float3x3) finalMatrix);
+
+    output.position = mul(output.position, _viewProjection);
+
+    output.uv = input.uv;
+
+    return output;
+}
+
+
+G_Buffer InstancePS(ModelPixelInput input)
 {
     G_Buffer output;
 

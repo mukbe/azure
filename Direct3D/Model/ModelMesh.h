@@ -7,7 +7,7 @@ public:
 	friend class Model;
 	friend class Models;
 	friend class ObjectData;
-	friend class ObjectInstance;
+	friend class InstanceRenderer;
 public:
 	virtual void Clone(void** clone);
 
