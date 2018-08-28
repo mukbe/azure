@@ -111,8 +111,6 @@
     <ClCompile Include="Renders\Texture.cpp" />
     <ClCompile Include="Project\TerrainTool\TerrainHeight.cpp" />
     <ClCompile Include="Project\TerrainTool\Terrain.cpp" />
-    <ClCompile Include="Project\TerrainTool\TestBT.cpp" />
-    <ClCompile Include="Renders\Texture.cpp" />
     <ClCompile Include="Utilities\DebugTransform.cpp" />
     <ClCompile Include="Manager\ObjectManager.cpp" />
     <ClCompile Include="Object\GameObject\GameObject.cpp" />
