@@ -12,6 +12,13 @@ public:
 	virtual void Update();
 	virtual void PostUpdate();
 
+	void PreRender();
 	void Render();
+	void UIRender();
+	
+private:
+
+	class Terrain* terrain;
+	class FreeCamera *freeCamera;
 };
 

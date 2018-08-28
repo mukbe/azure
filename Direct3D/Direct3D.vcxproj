@@ -30,14 +30,11 @@
     <ClInclude Include="Manager\RenderManager.h" />
     <ClInclude Include="Manager\SceneManager.h" />
     <ClInclude Include="Manager\SceneNode.h" />
-    <ClInclude Include="Physics\DebugDraw.h" />
-    <ClInclude Include="Physics\IShapes.h" />
-    <ClInclude Include="Physics\Physics.h" />
-    <ClInclude Include="Physics\RigidShapes.h" />
     <ClInclude Include="Project\AnimationTool\AnimationTool.h" />
     <ClInclude Include="Renders\Texture.h" />
     <ClInclude Include="Project\TerrainTool\TerrainTool.h" />
-    <ClInclude Include="Project\TerrainTool\TestBT.h" />
+    <ClInclude Include="Project\TerrainTool\TerrainHeight.h" />
+    <ClInclude Include="Project\TerrainTool\Terrain.h" />
     <ClInclude Include="Utilities\DebugTransform.h" />
     <ClInclude Include="Manager\ObjectManager.h" />
     <ClInclude Include="Object\GameObject\GameObject.h" />
@@ -105,11 +102,11 @@
     <ClCompile Include="Manager\RenderManager.cpp" />
     <ClCompile Include="Manager\SceneManager.cpp" />
     <ClCompile Include="Model\ModelAnimPlayer + Blending.cpp" />
-    <ClCompile Include="Physics\DebugDraw.cpp" />
-    <ClCompile Include="Physics\Physics.cpp" />
     <ClCompile Include="Project\AnimationTool\AnimationTool.cpp" />
     <ClCompile Include="Project\TerrainTool\TerrainTool.cpp" />
-    <ClCompile Include="Project\TerrainTool\TestBT.cpp" />
+    <ClCompile Include="Renders\Texture.cpp" />
+    <ClCompile Include="Project\TerrainTool\TerrainHeight.cpp" />
+    <ClCompile Include="Project\TerrainTool\Terrain.cpp" />
     <ClCompile Include="Utilities\DebugTransform.cpp" />
     <ClCompile Include="Manager\ObjectManager.cpp" />
     <ClCompile Include="Object\GameObject\GameObject.cpp" />
@@ -162,6 +159,7 @@
     <None Include="_Shaders\001_GBuffer.hlsl">
       <FileType>Document</FileType>
     </None>
+    <None Include="_Shaders\TerrainTool.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\002_Deferred.hlsl">
@@ -190,6 +188,31 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
       <FileType>Document</FileType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\Copy.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="_Shaders\TerrainToolCS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+    </FxCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F89A7778-CBF0-4E22-B019-B7729ABB8281}</ProjectGuid>

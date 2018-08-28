@@ -56,6 +56,33 @@ BOOL SceneManager::ChangeScene(string key)
 
 void SceneManager::PreUpdate()
 {
+	//현재 편의를 위해서 아용
+	if (Keyboard::Get()->Down(VK_F1))
+	{
+		Nodes::iterator Iter = scenes.begin();
+
+		current = Iter->second;
+		current->Init();
+	}
+	else if (Keyboard::Get()->Down(VK_F2))
+	{
+		Nodes::iterator Iter = scenes.begin();
+		Iter++;
+
+		current = Iter->second;
+		current->Init();
+	}
+	else if (Keyboard::Get()->Down(VK_F3))
+	{
+		Nodes::iterator Iter = scenes.begin();
+		Iter++;
+		Iter++;
+
+		current = Iter->second;
+		current->Init();
+
+	}
+
 	if (current != nullptr)
 		current->PreUpdate();
 }

@@ -58,9 +58,10 @@
     <ClCompile Include="Manager\RenderManager.cpp" />
     <ClCompile Include="Project\AnimationTool\AnimationTool.cpp" />
     <ClCompile Include="Project\TerrainTool\TerrainTool.cpp" />
-    <ClCompile Include="Physics\DebugDraw.cpp" />
-    <ClCompile Include="Physics\Physics.cpp" />
-    <ClCompile Include="Project\TerrainTool\TestBT.cpp" />
+    <ClCompile Include="Object\Item\GameItem.cpp" />
+    <ClCompile Include="Renders\Texture.cpp" />
+    <ClCompile Include="Project\TerrainTool\TerrainHeight.cpp" />
+    <ClCompile Include="Project\TerrainTool\Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Testing\DirectionalLight.h" />
@@ -130,11 +131,10 @@
     <ClInclude Include="Manager\RenderManager.h" />
     <ClInclude Include="Project\AnimationTool\AnimationTool.h" />
     <ClInclude Include="Project\TerrainTool\TerrainTool.h" />
-    <ClInclude Include="Physics\DebugDraw.h" />
-    <ClInclude Include="Physics\IShapes.h" />
-    <ClInclude Include="Physics\Physics.h" />
-    <ClInclude Include="Physics\RigidShapes.h" />
-    <ClInclude Include="Project\TerrainTool\TestBT.h" />
+    <ClInclude Include="Object\Item\GameItem.h" />
+    <ClInclude Include="Renders\Texture.h" />
+    <ClInclude Include="Project\TerrainTool\TerrainHeight.h" />
+    <ClInclude Include="Project\TerrainTool\Terrain.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />
@@ -143,5 +143,10 @@
     <None Include="_Shaders\002_Deferred.hlsl" />
     <None Include="_Shaders\DepthVis.hlsl" />
     <None Include="Project\Game\Header.hlsli" />
+    <None Include="_Shaders\Copy.hlsl" />
+    <None Include="_Shaders\TerrainTool.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="_Shaders\TerrainToolCS.hlsl" />
   </ItemGroup>
 </Project>
