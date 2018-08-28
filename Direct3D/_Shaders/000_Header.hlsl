@@ -130,6 +130,21 @@ struct GBuffer_Data
     float SpecIntensity;
 };
 
+struct InstanceInputVS
+{
+    float4 position : POSITION0;
+    float2 uv : TEXCOORD0;
+    float4 blendIndices : BLENDINDICES0;
+    float4 blendWeights : BLENDWEIGHTS0;
+    float3 normal : NORMAL0;
+    float3 tangent : TANGENT0;
+
+    float4 world0 : WORLD0;
+    float4 world1 : WORLD1;
+    float4 world2 : WORLD2;
+};
+
+
 
 #define EyePosition (_invView[3].xyz)
 
