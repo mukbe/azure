@@ -135,6 +135,7 @@ struct GBuffer_Data
 
 static const float2 g_SpecPowerRange = { 10.0, 250.0 };
 
+static const float _heightRatio = 15.0f;
 /*************************************************************
 Func
 **************************************************************/

@@ -10,6 +10,7 @@ void Texture::Initialize()
 	width = 0; height = 0;
 	texture = nullptr; srv = nullptr;
 	lastSlot = -1; lastBindFlag = 0;
+	isSlot = ShaderSlot::None;
 }
 
 Texture::Texture(DXGI_FORMAT format)
@@ -169,6 +170,17 @@ void Texture::SavePNG(wstring saveFile)
 void Texture::SetShaderResource(UINT slot)
 {
 	DeviceContext->PSSetShaderResources(slot, 1, &srv);
+	isSlot = isSlot | ShaderSlot::PS;
+}
+
+void Texture::SetCSResource(UINT slot)
+{
+	DeviceContext->CSSetShaderResources(slot, 1, &srv);
+	isSlot = isSlot | ShaderSlot::CS;
+}
+
+void Texture::ReleaseResource()
+{
 }
 
 

@@ -4,11 +4,11 @@
 #include "./Renders/DeferredRenderer.h"
 #include "./Renders/ShadowRenderer.h"
 #include "./Project/AnimationTool/AnimationTool.h"
-#include "./Project/TerrainTool/TestBT.h"
+
+#include "./Project/TerrainTool/TerrainTool.h"
 Program::Program()
 {
 	States::Create();
-	Physics::Create();
 
 	jsonRoot = new Json::Value();
 	JsonHelper::ReadData(L"LevelEditor.json", jsonRoot);
@@ -16,7 +16,7 @@ Program::Program()
 	RenderRequest->AddRenderer("deferred", new DeferredRenderer);
 	RenderRequest->AddRenderer("shadow", new ShadowRenderer);
 	//Scenes->AddScene("anim", new AnimationTool);
-	Scenes->AddScene("TestBT", new TestBT);
+	Scenes->AddScene("terrain", new TerrainTool);
 
 }
 
@@ -25,7 +25,6 @@ Program::~Program()
 	JsonHelper::WriteData(L"LevelEditor.json", jsonRoot);
 	SafeDelete(jsonRoot);
 
-	Physics::Delete();
 	States::Delete();
 }
 
@@ -36,7 +35,6 @@ void Program::PreUpdate()
 
 void Program::Update()
 {
-	Physics::Get()->Update();
 	Scenes->Update();
 }
 

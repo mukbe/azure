@@ -45,14 +45,6 @@ using namespace fbxsdk;
 #pragma comment(lib, "jsoncpp.lib")
 //#pragma warning(disable:4996)
 
-//Bullet Physics
-#include <btBulletCollisionCommon.h>
-#include <btBulletDynamicsCommon.h>
-//#include <BulletSoftBody/btSoftBody.h>
-#pragma comment(lib, "BulletCollision.lib")
-#pragma comment(lib, "BulletDynamics.lib")
-#pragma comment(lib, "LinearMath.lib")
-//#pragma comment(lib, "BulletSoftBody.lib")
 
 #include "DefineHeader.h"
 #include "./Systems/DxRenderer.h"

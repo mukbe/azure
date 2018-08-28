@@ -32,9 +32,9 @@ AnimationTool::AnimationTool()
 	:animation(nullptr), model(nullptr), isRenderUI(false), isPlay(false), exporter(nullptr), shdowDemo(nullptr), selectClipIndex(0), selectedIndex(0)
 	, isShowBone(false), boneIndex(0),load(nullptr),loadMesh(nullptr),loadAni(nullptr),bLoadedMat(true),bLoadedMesh(true),bLoadedAni(true), targetCollider(nullptr)
 {
-	RenderRequest->AddRender("UIRender", bind(&AnimationTool::UIRender, this), RenderType::UIRender);
-	RenderRequest->AddRender("shadow", bind(&AnimationTool::ShadowRender, this), RenderType::Shadow);
-	RenderRequest->AddRender("render", bind(&AnimationTool::Render, this), RenderType::Render);
+	RenderRequest->AddRender("AnimationToolUIRender", bind(&AnimationTool::UIRender, this), RenderType::UIRender);
+	RenderRequest->AddRender("AnimationToolshadow", bind(&AnimationTool::ShadowRender, this), RenderType::Shadow);
+	RenderRequest->AddRender("AnimationToolrender", bind(&AnimationTool::Render, this), RenderType::Render);
 
 	animation = new ModelAnimPlayer(nullptr);
 
