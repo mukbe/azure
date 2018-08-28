@@ -14,8 +14,8 @@
 #include "./Renders/WorldBuffer.h"
 #include "./Utilities/Buffer.h"
 
-InstanceRenderer::InstanceRenderer(UINT maxInstance)
-	:maxInstanceCount(maxInstance),drawInstanceCout(0)
+InstanceRenderer::InstanceRenderer(string name,UINT maxInstance)
+	:name(name),maxInstanceCount(maxInstance),drawInstanceCout(0)
 {
 	shader = new InstanceShader(L"./_Shaders/001_GBuffer.hlsl");
 }
@@ -34,6 +34,11 @@ InstanceRenderer::~InstanceRenderer()
 	materials.clear();
 	meshes.clear();
 	bones.clear();
+
+	localTransforms.clear();
+	instanceList.clear();
+
+	SafeRelease(instanceBuffer);
 }
 
 void InstanceRenderer::CopyAbsoluteBoneTo()
@@ -109,7 +114,7 @@ void InstanceRenderer::CreateBuffer()
 {
 	D3D11_BUFFER_DESC desc;
 	desc.Usage = D3D11_USAGE_DYNAMIC;
-	desc.ByteWidth = (sizeof D3DXVECTOR4 * 3) * maxInstanceCount;
+	desc.ByteWidth = (sizeof InstanceData) * maxInstanceCount;
 	desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	desc.MiscFlags = 0;
@@ -126,11 +131,14 @@ void InstanceRenderer::UpdateBuffer()
 	D3D11_MAPPED_SUBRESOURCE mapData;
 	DeviceContext->Map(instanceBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapData);
 	{
-		D3DXMATRIX* dataView = reinterpret_cast<D3DXMATRIX*>(mapData.pData);
+		InstanceData* dataView = reinterpret_cast<InstanceData*>(mapData.pData);
 
 		for (UINT i = 0; i < instanceList.size(); ++i)
 		{
-			dataView[drawInstanceCout] = instanceList[i]->GetFinalMatrix();
+			D3DXMATRIX mat = instanceList[i]->GetFinalMatrix();
+			dataView[drawInstanceCout].data[0] = D3DXVECTOR4(mat._11, mat._12, mat._13, mat._41);
+			dataView[drawInstanceCout].data[1] = D3DXVECTOR4(mat._21, mat._22, mat._23, mat._42);
+			dataView[drawInstanceCout].data[2] = D3DXVECTOR4(mat._31, mat._32, mat._33, mat._43);
 			drawInstanceCout++;
 		}
 	}
@@ -148,7 +156,7 @@ void InstanceRenderer::Render()
 		mesh->GetWorldBuffer()->SetVSBuffer(1);
 		for (ModelMeshPart* part : mesh->meshParts)
 		{
-			UINT stride[2] = { sizeof VertexTextureBlendNT,sizeof D3DXVECTOR4 * 3 };
+			UINT stride[2] = { sizeof VertexTextureBlendNT,sizeof InstanceData};
 			UINT offset[2] = { 0,0 };
 			ID3D11Buffer* buffers[2] = { part->vertexBuffer,instanceBuffer };
 

@@ -44,6 +44,8 @@ public:
 	Transform();
 	~Transform();
 
+	void RenderGizmo();
+
 	D3DXMATRIX GetFinalMatrix()const { return this->matFinal; }
 	D3DXMATRIX GetRotateMatrix();
 	D3DXMATRIX GetScaleMatrix();

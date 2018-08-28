@@ -34,7 +34,7 @@ public:
 	void OBB(vector<D3DXVECTOR3>& corners, const D3DXCOLOR color);
 	void Cube(D3DXVECTOR3 center,D3DXVECTOR3 forward,D3DXVECTOR3 up,D3DXCOLOR color);
 	void LocalGizmo(D3DXVECTOR3 center, float radius, D3DXVECTOR3 right, D3DXVECTOR3 up, D3DXVECTOR3 forward,
-		D3DXCOLOR rightColor, D3DXCOLOR upColor, D3DXCOLOR forawrdColor);
+		D3DXCOLOR rightColor = D3DXCOLOR(1.f,0.f,0.f,1.f), D3DXCOLOR upColor = D3DXCOLOR(0.f,1.f,0.f,1.f), D3DXCOLOR forawrdColor = D3DXCOLOR(0.f,0.f,1.f,1.f));
 };
 
 

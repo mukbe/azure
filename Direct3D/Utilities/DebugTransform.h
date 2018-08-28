@@ -16,6 +16,7 @@ private:
 
 	D3DXVECTOR3				saveMousePos;
 	D3DXVECTOR3				angle;
+	D3DXVECTOR3				saveAngle;
 public:
 	DebugTransform();
 	~DebugTransform();
@@ -26,6 +27,8 @@ public:
 	void Update();
 	void RenderGizmo();
 	void RenderGUI();
+
+	class Transform* GetTransform()const { return this->transform; }
 private:
 	PickType IsPick();
 	void ControlGizmo();

@@ -119,6 +119,7 @@ const WCHAR* Path::ShaderFilter = L"HLSL file\0*.hlsl";
 const WCHAR* Path::MaterialFilter = L"Material file\0*.material";
 const WCHAR* Path::MeshFilter = L"Mesh file\0*.mesh";
 const WCHAR* Path::AnimationFilter = L"Animation file\0*.anim";
+const WCHAR* Path::ColliderFilter = L"Collider file\0*.collider";
 
 void Path::OpenFileDialog(wstring file, const WCHAR* filter, wstring folder, function<void(wstring)> func, HWND hwnd)
 {

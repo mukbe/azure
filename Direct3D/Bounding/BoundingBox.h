@@ -20,8 +20,9 @@ public:
 	bool Intersects(class BoundingFrustum frustum);
 	enum PlaneIntersectionType Intersects(D3DXPLANE plane);
 	bool Intersects(class Ray ray, float* result);
-	bool Intersects(BoundingSphere sphere);
+	bool Intersects(class BoundingSphere sphere);
 
 	static bool IntersectsOBB(class Transform * pTransA, class BoundingBox * pBoundA, class Transform * pTransB, class BoundingBox * pBoundB);
+	static bool IntersectsOBB(D3DXMATRIX matA, class BoundingBox* pBoundA, D3DXMATRIX matB, class BoundingBox* pBoundB);
 };
 

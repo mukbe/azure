@@ -34,7 +34,7 @@ public:
 	const static WCHAR* MaterialFilter;
 	const static WCHAR* MeshFilter;
 	const static WCHAR* AnimationFilter;
-
+	const static WCHAR* ColliderFilter;
 
 	static void OpenFileDialog(wstring file, const WCHAR* filter, wstring folder, function<void(wstring)> func, HWND hwnd = NULL);
 	static void SaveFileDialog(wstring file, const WCHAR* filter, wstring folder, function<void(wstring)> func, HWND hwnd = NULL);

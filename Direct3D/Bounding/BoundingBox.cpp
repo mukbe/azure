@@ -523,5 +523,279 @@ bool BoundingBox::IntersectsOBB(Transform * pTransA, BoundingBox * pBoundA, Tran
 	return true;
 }
 
+/*********************************************************************************************************
+OBBOBB 2
+**********************************************************************************************************/
+
+bool BoundingBox::IntersectsOBB(D3DXMATRIX matA, BoundingBox * pBoundA, D3DXMATRIX matB, BoundingBox * pBoundB)
+{
+	//배열순서
+	//X = 0, Y = 1, Z = 2;
+	//OBB 충돌에 필요한 충돌 구조체
+	struct OBB {
+		D3DXVECTOR3 center;		//중심점
+		D3DXVECTOR3 axis[3];	//축방향	
+		float halfLength[3];	//각축에 대한 절반 크기
+	};
+
+	Transform transA,transB;
+	transA.SetTransform(matA);
+	transB.SetTransform(matB);
+
+	D3DXVECTOR3 centerA, centerB;
+	D3DXVec3TransformCoord(&centerA, &(pBoundA->minPos + pBoundA->halfSize), &matA);
+	D3DXVec3TransformCoord(&centerB, &(pBoundB->minPos + pBoundB->halfSize), &matB);
+
+	//
+	// A 바운딩에 대한 충돌 구조체
+	//
+	OBB obbA;
+
+	//각 축 방향
+	obbA.axis[0] = transA.GetRight();
+	obbA.axis[1] = transA.GetUp();
+	obbA.axis[2] = transA.GetForward();
+
+	//센터
+	obbA.center = centerA;
+
+	//하프사이즈
+	D3DXVECTOR3 scaleA = transA.GetScale();
+	obbA.halfLength[0] = pBoundA->halfSize.x * scaleA.x;
+	obbA.halfLength[1] = pBoundA->halfSize.y * scaleA.y;
+	obbA.halfLength[2] = pBoundA->halfSize.z * scaleA.z;
+
+	//
+	// B 바운딩에 대한 충돌 구조체
+	//
+	OBB obbB;
+
+	//각 축 방향
+	obbB.axis[0] = transB.GetRight();
+	obbB.axis[1] = transB.GetUp();
+	obbB.axis[2] = transB.GetForward();
+
+	//센터
+	obbB.center = centerB;
+
+	//하프사이즈
+	D3DXVECTOR3 scaleB = transB.GetScale();
+	obbB.halfLength[0] = pBoundB->halfSize.x * scaleB.x;
+	obbB.halfLength[1] = pBoundB->halfSize.y * scaleB.y;
+	obbB.halfLength[2] = pBoundB->halfSize.z * scaleB.z;
+
+
+	//
+	// OBB 충돌
+	//
+	float cos[3][3];				//각축 차에대한 대한 코사인 값  [A축][B축]  ( [0][1] => 이인덱스는 A의 X 축과 B의 Y 축의 각차에 대한 cos 값이다 )
+	float absCos[3][3];				//각축 차에대한 대한 코사인 절대값  [A축][B축]  ( [0][1] => 이인덱스는 A의 X 축과 B의 Y 축의 각차에 대한 cos 절대 값이다 )
+	float dist[3];					//A 바운드 각축으로 A 중심점에서 B 의 중심점벡터를 투영한 투영길이			
+
+
+	const float cutOff = 0.99999f;		//수직 판단을 하기위한 컷오프 값 ( 어느 한 축의 cos 결과 값이 이보다 크다면 두 충돌체는 한축이 평행하다는 예기 )
+	bool existParallelPair = false;		//한 축이라도 평행하나?
+
+										//A 에서 B 의 방향벡터
+	D3DXVECTOR3 D = obbB.center - obbA.center;
+
+	float r, r0, r1;			//r0 과 r1 의 합이 r 보다 작으면 충돌 실패 
+
+	for (int a = 0; a < 3; a++)
+	{
+		for (int b = 0; b < 3; b++)
+		{
+			cos[a][b] = D3DXVec3Dot(&obbA.axis[a], &obbB.axis[b]);
+			absCos[a][b] = abs(cos[a][b]);
+
+			//한축이 서로 교차 되는 지확인
+			if (absCos[a][b] > cutOff) existParallelPair = true;
+		}
+
+		//센터끼리의 방향벡터를 A 바운드 Axis 의 투영한 거리
+		dist[a] = D3DXVec3Dot(&obbA.axis[a], &D);
+	}
+
+
+	//
+	// A 바운드 박스에 X 축을 기준으로 한 연산
+	//
+
+	//r 은 dist[0] 의 절대 값이 된다.
+	r = abs(dist[0]);
+
+	//r0 
+	r0 = obbA.halfLength[0];
+
+	r1 = absCos[0][0] * obbB.halfLength[0] +
+		absCos[0][1] * obbB.halfLength[1] +
+		absCos[0][2] * obbB.halfLength[2];
+
+	if (r > r0 + r1) return false;
+
+
+	//
+	// A 바운드 박스에 Y 축을 기준으로 한 연산
+	//
+
+	//r 은 dist[1] 의 절대 값이 된다.
+	r = abs(dist[1]);
+
+	//r0 
+	r0 = obbA.halfLength[1];
+
+	//r1 
+	r1 = absCos[1][0] * obbB.halfLength[0] +
+		absCos[1][1] * obbB.halfLength[1] +
+		absCos[1][2] * obbB.halfLength[2];
+
+	if (r > r0 + r1) return false;
+
+	//
+	// A 바운드 박스에 Z 축을 기준으로 한 연산
+	//
+
+	//r 은 dist[2] 의 절대 값이 된다.
+	r = abs(dist[2]);
+
+	//r0 
+	r0 = obbA.halfLength[2];
+
+	//r1 
+	r1 = absCos[2][0] * obbB.halfLength[0] +
+		absCos[2][1] * obbB.halfLength[1] +
+		absCos[2][2] * obbB.halfLength[2];
+
+	if (r > r0 + r1) return false;
+
+
+
+
+	//
+	// B 바운드 박스에 X 축을 기준으로 한 연산
+	//
+	r = abs(D3DXVec3Dot(&obbB.axis[0], &D));
+
+	//r0 
+	r0 = absCos[0][0] * obbA.halfLength[0] +
+		absCos[1][0] * obbA.halfLength[1] +
+		absCos[2][0] * obbA.halfLength[2];
+
+	//r1 
+	r1 = obbB.halfLength[0];
+
+	if (r > r0 + r1) return false;
+
+	//
+	// B 바운드 박스에 Y 축을 기준으로 한 연산
+	//
+	r = abs(D3DXVec3Dot(&obbB.axis[1], &D));
+
+	//r0 
+	r0 = absCos[0][1] * obbA.halfLength[0] +
+		absCos[1][1] * obbA.halfLength[1] +
+		absCos[2][1] * obbA.halfLength[2];
+
+	//r1 
+	r1 = obbB.halfLength[1];
+	if (r > r0 + r1) return false;
+
+	//
+	// B 바운드 박스에 Z 축을 기준으로 한 연산
+	//
+	r = abs(D3DXVec3Dot(&obbB.axis[2], &D));
+
+	//r0 
+	r0 = absCos[0][2] * obbA.halfLength[0] +
+		absCos[1][2] * obbA.halfLength[1] +
+		absCos[2][2] * obbA.halfLength[2];
+
+	//r1 
+	r1 = obbB.halfLength[2];
+	if (r > r0 + r1) return false;
+
+
+	//여기까왔는데 실패되지 않았다.. 그러면 existParallelPair true 이면
+	//한축이 평행하다는 예기인데 이러면 분리축 6 번만 검색하면된다....
+	if (existParallelPair) return true;
+
+
+	//////////////////////////////////////////////////////////////////////////////////////
+
+	//////////////////////////////////////////////////////////////////////////////////////
+
+	//A의 X 축 B 의 X 축에 대한 외적의 충돌 체크
+	r = abs(dist[2] * cos[1][0] - dist[1] * cos[2][0]);
+	r0 = obbA.halfLength[1] * absCos[2][0] + obbA.halfLength[2] * absCos[1][0];
+	r1 = obbB.halfLength[1] * absCos[0][2] + obbB.halfLength[2] * absCos[0][1];
+	if (r > r0 + r1)
+		return false;
+
+
+	//A의 X 축 B 의 Y 축에 대한 외적의 충돌 체크
+	r = abs(dist[2] * cos[1][1] - dist[1] * cos[2][1]);
+	r0 = obbA.halfLength[1] * absCos[2][1] + obbA.halfLength[2] * absCos[1][1];
+	r1 = obbB.halfLength[0] * absCos[0][2] + obbB.halfLength[2] * absCos[0][0];
+	if (r > r0 + r1)
+		return false;
+
+
+	//A의 X 축 B 의 Z 축에 대한 외적의 충돌 체크
+	r = abs(dist[2] * cos[1][2] - dist[1] * cos[2][2]);
+	r0 = obbA.halfLength[1] * absCos[2][2] + obbA.halfLength[2] * absCos[1][2];
+	r1 = obbB.halfLength[0] * absCos[0][1] + obbB.halfLength[1] * absCos[0][0];
+	if (r > r0 + r1)
+		return false;
+
+	/////////////////////////////////////////////////////////////////
+
+	//A의 Y 축 B 의 X 축에 대한 외적의 충돌 체크
+	r = abs(dist[0] * cos[2][0] - dist[2] * cos[0][0]);
+	r0 = obbA.halfLength[0] * absCos[2][0] + obbA.halfLength[2] * absCos[0][0];
+	r1 = obbB.halfLength[1] * absCos[1][2] + obbB.halfLength[2] * absCos[1][1];
+	if (r > r0 + r1)
+		return false;
+
+	//A의 Y 축 B 의 Y 축에 대한 외적의 충돌 체크
+	r = abs(dist[0] * cos[2][1] - dist[2] * cos[0][1]);
+	r0 = obbA.halfLength[0] * absCos[2][1] + obbA.halfLength[2] * absCos[0][1];
+	r1 = obbB.halfLength[0] * absCos[1][2] + obbB.halfLength[2] * absCos[1][0];
+	if (r > r0 + r1)
+		return false;
+
+	//A의 Y 축 B 의 Z 축에 대한 외적의 충돌 체크
+	r = abs(dist[0] * cos[2][2] - dist[2] * cos[0][2]);
+	r0 = obbA.halfLength[0] * absCos[2][2] + obbA.halfLength[2] * absCos[0][2];
+	r1 = obbB.halfLength[0] * absCos[1][1] + obbB.halfLength[1] * absCos[1][0];
+	if (r > r0 + r1)
+		return false;
+
+
+	/////////////////////////////////////////////////////////////////	 
+
+	//A의 Z 축 B 의 X 축에 대한 외적의 충돌 체크
+	r = abs(dist[1] * cos[0][0] - dist[0] * cos[1][0]);
+	r0 = obbA.halfLength[0] * absCos[1][0] + obbA.halfLength[1] * absCos[0][0];
+	r1 = obbB.halfLength[1] * absCos[2][2] + obbB.halfLength[2] * absCos[2][1];
+	if (r > r0 + r1)
+		return false;
+
+	//A의 Z 축 B 의 Y 축에 대한 외적의 충돌 체크
+	r = abs(dist[1] * cos[0][1] - dist[0] * cos[1][1]);
+	r0 = obbA.halfLength[0] * absCos[1][1] + obbA.halfLength[1] * absCos[0][1];
+	r1 = obbB.halfLength[0] * absCos[2][2] + obbB.halfLength[2] * absCos[2][0];
+	if (r > r0 + r1)
+		return false;
+
+	//A의 Z 축 B 의 Z 축에 대한 외적의 충돌 체크
+	r = abs(dist[1] * cos[0][2] - dist[0] * cos[1][2]);
+	r0 = obbA.halfLength[0] * absCos[1][2] + obbA.halfLength[1] * absCos[0][2];
+	r1 = obbB.halfLength[0] * absCos[2][1] + obbB.halfLength[1] * absCos[2][0];
+	if (r > r0 + r1)
+		return false;
+
+	return true;
+}
+
 
 

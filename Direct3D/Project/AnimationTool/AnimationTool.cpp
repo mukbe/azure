@@ -21,9 +21,16 @@
 #include "./Renders/DeferredRenderer.h"
 #include "./Renders/Texture.h"
 
+#include "./Renders/Instancing/InstanceRenderer.h"
+#include "./Object/GameObject/GameObject.h"
+
+#include "./Bounding/AnimationCollider.h"
+#include "./Utilities/DebugTransform.h"
+#include "./Utilities/BinaryFile.h"
+
 AnimationTool::AnimationTool()
 	:animation(nullptr), model(nullptr), isRenderUI(false), isPlay(false), exporter(nullptr), shdowDemo(nullptr), selectClipIndex(0), selectedIndex(0)
-	, isShowBone(false), boneIndex(0),load(nullptr),loadMesh(nullptr),loadAni(nullptr),bLoadedMat(true),bLoadedMesh(true),bLoadedAni(true)
+	, isShowBone(false), boneIndex(0),load(nullptr),loadMesh(nullptr),loadAni(nullptr),bLoadedMat(true),bLoadedMesh(true),bLoadedAni(true), targetCollider(nullptr)
 {
 	RenderRequest->AddRender("UIRender", bind(&AnimationTool::UIRender, this), RenderType::UIRender);
 	RenderRequest->AddRender("shadow", bind(&AnimationTool::ShadowRender, this), RenderType::Shadow);
@@ -37,15 +44,18 @@ AnimationTool::AnimationTool()
 	model->ReadAnimation(L"../_Assets/Human/Human.anim");
 	this->AttachModel(model);
 
-	//Fbx::Exporter* exporter = new Fbx::Exporter(L"../_Assets/Items/Axe/Axe.fbx");
-	//exporter->ExportMaterial(Assets + L"Items/Axe/", L"Human");
-	//exporter->ExportMesh(Assets + L"Items/Axe/", L"Human");
+	//Fbx::Exporter* exporter = new Fbx::Exporter(L"../_Assets/Temple.fbx");
+	//exporter->ExportMaterial(Assets , L"Temple");
+	//exporter->ExportMesh(Assets, L"Temple");
 	//exporter->ExportAnimation(Assets, L"Attack01");
 	//SafeDelete(exporter);
 
 	freeCamera = new FreeCamera();
 	grid = new Figure(Figure::FigureType::Grid, 100.0f, D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f));
 	directionalLight = new DirectionalLight;
+	debugTransform = new DebugTransform();
+	debugTransform->SetCamera(freeCamera);
+	debugTransform->ConnectTransform(new Transform);
 }
 
 
@@ -59,7 +69,11 @@ AnimationTool::~AnimationTool()
 
 	SafeDelete(directionalLight);
 	SafeDelete(freeCamera);
+	
+	for (UINT i = 0; i < colliderList.size(); ++i)
+		SafeDelete(colliderList[i]);
 
+	colliderList.clear();
 }
 
 void AnimationTool::Init()
@@ -76,42 +90,17 @@ void AnimationTool::PreUpdate()
 
 void AnimationTool::Update()
 {
+	if (targetCollider)
+		targetCollider->SetlocalMatrix(debugTransform->GetTransform()->GetFinalMatrix());
+	if (targetCollider)
+		debugTransform->GetTransform()->SetTransform(targetCollider->GetlocalMatrix());
 
-	if (KeyCode->Down(VK_F1))
-		animation->ChangeAnimation(0);
-	if (KeyCode->Down(VK_F2))
-		animation->ChangeAnimation(1);
-
-	if (bLoadedMat == true && bLoadedMesh == true && bLoadedAni == true)
-	{
-		if (load != nullptr)
-		{
-			load->join();
-			SafeDelete(load);
-
-		}
-		if (loadMesh != nullptr)
-		{
-			loadMesh->join();
-			SafeDelete(loadMesh);
-		}
-
-		if (loadAni != nullptr)
-		{
-			loadAni->join();
-			SafeDelete(loadAni);
-			this->animation->SetAnimationModel(model);
-			this->animation->ChangeAnimation(0);
-			this->isPlay = true;
-			this->comboStr = String::WStringToString(model->Clip(0)->Name()).c_str();
-			this->selectedIndex = 0;
-		}
-
-		animation->Update();
-
-	}
+	debugTransform->Update();
+	animation->Update();
 
 
+	for (UINT i = 0; i < colliderList.size(); ++i)
+		colliderList[i]->Update();
 }
 
 void AnimationTool::PostUpdate()
@@ -136,10 +125,17 @@ void AnimationTool::Render()
 	freeCamera->Render();
 	grid->Render();
 
-	if (bLoadedMat == true && bLoadedMesh == true && bLoadedAni == true)
+	animation->Render();
+
+	if (targetCollider)
 	{
-		animation->Render();
+		Transform transform;
+		transform.SetTransform(targetCollider->GetFinalMatrix());
+		transform.RenderGizmo();
 	}
+
+	for (UINT i = 0; i < colliderList.size(); ++i)
+		colliderList[i]->Render();
 
 	if (model != nullptr && isShowBone == true)
 	{
@@ -176,39 +172,6 @@ void AnimationTool::UIRender()
 
 		ImGui::EndMainMenuBar();
 	}
-
-
-
-	ImGui::Begin("System Info");
-	ImGui::Text("Frame Per Second : %4.0f", ImGui::GetIO().Framerate);
-	ImGui::Text("TimeDelta : %f", DeltaTime);
-
-	UINT hour = Time::Get()->GetHour();
-	string hourStr = hour < 10 ? "0" + to_string(hour) : to_string(hour);
-
-	UINT minute = Time::Get()->GetMinute();
-	string minuteStr = minute < 10 ? "0" + to_string(minute) : to_string(minute);
-
-	ImGui::Text("%s", (hourStr + ":" + minuteStr).c_str());
-
-	ImGui::Separator();
-
-	D3DXVECTOR3 pos = freeCamera->GetTransform()->GetWorldPosition();
-	ImGui::Text
-	(
-		"Camera Position : %3.0f, %3.0f, %3.0f"
-		, pos.x, pos.y, pos.z
-	);
-
-	D3DXVECTOR3 angle = freeCamera->GetTransform()->GetAngle();
-	ImGui::Text
-	(
-		"Camera Rotation : %3.0f, %3.0f", angle.x * 180.f / D3DX_PI, angle.y *180.f / D3DX_PI
-	);
-
-	ImGui::Separator();
-
-	ImGui::End();
 
 	if (isRenderUI)
 	{
@@ -276,6 +239,27 @@ void AnimationTool::UIRender()
 			}
 		}
 		ImGui::End();
+
+		if (ImGui::Begin("BoundingTool"))
+		{
+			if (ImGui::Button("Add", ImVec2(80, 50)))
+				ImGui::OpenPopup("AddCollider");
+			ImGui::SameLine();
+			if (ImGui::Button("Save", ImVec2(80, 50)))
+				this->SaveCollider();
+			ImGui::SameLine();
+			if (ImGui::Button("Load", ImVec2(80, 50)))
+				this->LoadCollider();
+
+
+			if (ImGui::BeginPopup("AddCollider"))
+			{
+				this->AddCollider();
+				ImGui::EndPopup();
+			}
+			
+			ImGui::End();
+		}
 	}
 	
 	if (shdowDemo)
@@ -287,7 +271,7 @@ void AnimationTool::UIRender()
 		selectedAnimation = comboStr;
 	}
 
-	
+	debugTransform->RenderGUI();
 }
 
 void AnimationTool::AttachModel(Model * model)
@@ -482,6 +466,54 @@ void AnimationTool::SaveAnimation(wstring fileName)
 	}
 }
 
+void AnimationTool::SaveCollider(wstring fileName)
+{
+	if (fileName.length() > 0)
+	{
+		BinaryWriter* w = new BinaryWriter();
+		w->Open(fileName);
+		{
+			w->UInt(colliderList.size());
+			for (UINT i = 0; i < colliderList.size(); ++i)
+				GameCollider::SaveCollider(w, colliderList[i]);
+		}
+		w->Close();
+	}
+	else
+	{
+		function<void(wstring)> func = std::bind(&AnimationTool::SaveCollider, this, placeholders::_1);
+		Path::SaveFileDialog(fileName, Path::ColliderFilter, Assets, func);
+	}
+}
+
+void AnimationTool::LoadCollider(wstring fileName)
+{
+	if (fileName.length() > 0)
+	{
+		this->ReleaseCollider();
+
+		BinaryReader* r = new BinaryReader;
+		r->Open(fileName);
+		{
+			UINT size = r->UInt();
+			for (UINT i = 0; i < size; ++i)
+			{
+				AnimationCollider* newCollider = new AnimationCollider(nullptr,this->animation);
+				GameCollider::LoadCollider(r, newCollider);
+				colliderList.push_back(newCollider);
+			}
+			targetCollider = colliderList[0];
+			this->debugTransform->GetTransform()->SetTransform(targetCollider->GetlocalMatrix());
+		}
+		r->Close();
+	}
+	else
+	{
+		function<void(wstring)> func = std::bind(&AnimationTool::LoadCollider, this, placeholders::_1);
+		Path::OpenFileDialog(L"", Path::ColliderFilter, Assets, func);
+	}
+}
+
 void AnimationTool::ShowBoneData()
 {
 	vector<ModelBone*> bones = model->Bones();
@@ -496,3 +528,91 @@ void AnimationTool::ShowBoneData()
 		ImGui::CloseCurrentPopup();
 }
 
+void AnimationTool::AddCollider()
+{
+	static int selectIndex = 0;
+	static int selectType = 0;
+	static char str[48] = {};
+	bool isSelected = false;
+	ImGui::InputText("BoundingName", str, sizeof (char) * 48);
+	ImGui::InputInt("ParentBoneIndex", &selectIndex);
+
+	if(ImGui::BeginCombo("BoundingType", GameCollider::GetTypeName(selectType).c_str()))
+	{
+		if (ImGui::Selectable("RigidBody", &isSelected))selectType = 0;
+		if (ImGui::Selectable("Attack", &isSelected))selectType = 1;
+		if (ImGui::Selectable("HeatBox", &isSelected))selectType = 2;
+
+		if (isSelected);
+		ImGui::SetItemDefaultFocus();
+
+		ImGui::EndCombo();
+	}
+
+	ImGui::Separator();
+
+	if (ImGui::Button("Add"))
+	{
+		AnimationCollider* newBounding = new AnimationCollider(nullptr,animation);
+		newBounding->SetName(str);
+		newBounding->SetParentBoneIndex(selectIndex);
+		newBounding->SetType((GameCollider::ColliderType)selectType);
+
+		this->colliderList.push_back(newBounding);
+		this->targetCollider = newBounding;
+		this->debugTransform->GetTransform()->SetTransform(IdentityMatrix);
+		
+		ImGui::CloseCurrentPopup();
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Cancle"))
+		ImGui::CloseCurrentPopup();
+}
+
+void AnimationTool::ReleaseCollider()
+{
+	for (UINT i = 0; i < colliderList.size(); ++i)
+		SafeDelete(colliderList[i]);
+	colliderList.clear();
+
+	targetCollider = nullptr;
+}
+
+
+
+/*
+void AnimationTool::CameraInfoRender()
+{
+	ImGui::Begin("System Info");
+	ImGui::Text("Frame Per Second : %4.0f", ImGui::GetIO().Framerate);
+	ImGui::Text("TimeDelta : %f", DeltaTime);
+	
+	UINT hour = Time::Get()->GetHour();
+	string hourStr = hour < 10 ? "0" + to_string(hour) : to_string(hour);
+	
+	UINT minute = Time::Get()->GetMinute();
+	string minuteStr = minute < 10 ? "0" + to_string(minute) : to_string(minute);
+	
+	ImGui::Text("%s", (hourStr + ":" + minuteStr).c_str());
+	
+	ImGui::Separator();
+	
+	D3DXVECTOR3 pos = freeCamera->GetTransform()->GetWorldPosition();
+	ImGui::Text
+	(
+	"Camera Position : %3.0f, %3.0f, %3.0f"
+	, pos.x, pos.y, pos.z
+	);
+	
+	D3DXVECTOR3 angle = freeCamera->GetTransform()->GetAngle();
+	ImGui::Text
+	(
+	"Camera Rotation : %3.0f, %3.0f", angle.x * 180.f / D3DX_PI, angle.y *180.f / D3DX_PI
+	);
+	
+	ImGui::Separator();
+	
+	ImGui::End();
+}
+
+*/

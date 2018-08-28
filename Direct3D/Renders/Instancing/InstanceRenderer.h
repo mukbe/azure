@@ -1,4 +1,10 @@
 #pragma once
+
+struct InstanceData
+{
+	D3DXVECTOR4 data[3];
+};
+
 class InstanceRenderer
 {
 private:
@@ -15,11 +21,11 @@ private:
 private:
 	vector<class GameObject*>			instanceList;
 	vector<D3DXMATRIX>					localTransforms;
-private:
+public:
 	void CopyAbsoluteBoneTo();
 	Material * GetMaterialByName(wstring name);
 public:
-	InstanceRenderer(UINT maxInstance);
+	InstanceRenderer(string name,UINT maxInstance);
 	~InstanceRenderer();
 
 	void ReadMaterial(wstring file);
@@ -30,6 +36,5 @@ public:
 	void Render();
 
 	void AddInstanceData(class GameObject* mat);
-
 };
 

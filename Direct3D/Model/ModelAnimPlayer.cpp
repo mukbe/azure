@@ -19,6 +19,13 @@ ModelAnimPlayer::ModelAnimPlayer(Model * model)
 	//shadowShader = new Shader(L"");
 
 	if (model == nullptr)return;
+	if (skinTransform.size() < 1)
+		skinTransform.assign(model->BoneCount(), D3DXMATRIX());
+
+	if (boneAnimation.size() < 1)
+		boneAnimation.assign(model->BoneCount(), D3DXMATRIX());
+
+
 	currentClip = model->Clip(0);
 	this->Play();
 
@@ -105,6 +112,7 @@ void ModelAnimPlayer::UpdateBone()
 
 	if (boneAnimation.size() < 1)
 		boneAnimation.assign(model->BoneCount(), D3DXMATRIX());
+
 
 	int index = 0;
 	for (UINT i = 0; i < model->BoneCount(); i++)

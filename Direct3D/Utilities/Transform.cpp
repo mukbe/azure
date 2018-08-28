@@ -16,6 +16,13 @@ Transform::~Transform()
 
 }
 
+void Transform::RenderGizmo()
+{
+	pRenderer->ChangeZBuffer(false);
+	GizmoRenderer->LocalGizmo(this->position, 1.0f, this->right * scale.x, this->up * scale.y, this->forward * scale.z);
+	pRenderer->ChangeZBuffer(true);
+}
+
 
 D3DXMATRIX Transform::GetRotateMatrix()
 {
@@ -322,9 +329,9 @@ void Transform::Scaling(D3DXVECTOR3 deltaScale)
 
 void Transform::RotateSelf(float x, float y, float z)
 {
-	this->angle.x += x;
-	this->angle.y += y;
-	this->angle.z += z;
+	this->angle.x = x;
+	this->angle.y = y;
+	this->angle.z = z;
 
 	D3DXMATRIX matRotateX;
 	D3DXMatrixRotationAxis(&matRotateX, &this->right, x);

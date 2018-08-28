@@ -12,11 +12,15 @@ private:
 	string comboStr;
 	string selectedAnimation;
 	int selectedIndex;
-	Synthesize(bool, isRenderUI, IsRenderUI)
+	bool isRenderUI;
 	bool shdowDemo;
 	bool isPlay;
 	bool isShowBone;
 	int boneIndex;
+
+	vector<class AnimationCollider*> colliderList;
+	class AnimationCollider* targetCollider;
+	class DebugTransform* debugTransform;
 public:
 	AnimationTool();
 	virtual ~AnimationTool();
@@ -45,8 +49,14 @@ private:
 	void DeleteAnimation(wstring name);
 
 	void SaveAnimation(wstring fileName = L"");
+	void SaveCollider(wstring fileName = L"");
+	void LoadCollider(wstring fileName = L"");
 
 	void ShowBoneData();
+
+	void AddCollider();
+	void ReleaseCollider();
+	//void CameraInfoRender();
 private:
 	class FreeCamera* freeCamera;
 	class Figure* box, *grid, *sphere;

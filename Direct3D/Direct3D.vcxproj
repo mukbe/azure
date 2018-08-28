@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bounding\AnimationCollider.h" />
     <ClInclude Include="Bounding\BoundingFrustum.h" />
     <ClInclude Include="Bounding\BoundingCapsule.h" />
     <ClInclude Include="Bounding\BoundingBox.h" />
@@ -26,6 +27,9 @@
     <ClInclude Include="Bounding\Bounding.h" />
     <ClInclude Include="ComputeShader\ComputeResource.h" />
     <ClInclude Include="ComputeShader\ComputeShader.h" />
+    <ClInclude Include="Bounding\GameCollider.h" />
+    <ClInclude Include="Object\Unit\GameUnit.h" />
+    <ClInclude Include="View\FirstPersonCamera.h" />
     <ClInclude Include="Renders\Instancing\InstanceShader.h" />
     <ClInclude Include="Renders\Instancing\InstanceRenderer.h" />
     <ClInclude Include="Object\Item\GameItem.h" />
@@ -97,12 +101,16 @@
     <ClInclude Include="View\Projection.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bounding\AnimationCollider.cpp" />
     <ClCompile Include="Bounding\BoundingFrustum.cpp" />
     <ClCompile Include="Bounding\BoundingCapsule.cpp" />
     <ClCompile Include="Bounding\BoundingBox.cpp" />
     <ClCompile Include="Bounding\BoundingSphere.cpp" />
     <ClCompile Include="ComputeShader\ComputeResource.cpp" />
     <ClCompile Include="ComputeShader\ComputeShader.cpp" />
+    <ClCompile Include="Bounding\GameCollider.cpp" />
+    <ClCompile Include="Object\Unit\GameUnit.cpp" />
+    <ClCompile Include="View\FirstPersonCamera.cpp" />
     <ClCompile Include="Renders\Instancing\InstanceShader.cpp" />
     <ClCompile Include="Renders\Instancing\InstanceRenderer.cpp" />
     <ClCompile Include="Object\Item\GameItem.cpp" />
