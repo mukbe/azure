@@ -31,6 +31,7 @@
     <ClInclude Include="ComputeShader\ComputeShader.h" />
     <ClInclude Include="Bounding\GameCollider.h" />
     <ClInclude Include="Object\Unit\GameUnit.h" />
+    <ClInclude Include="Environment\Sun.h" />
     <ClInclude Include="View\FirstPersonCamera.h" />
     <ClInclude Include="Renders\Instancing\InstanceShader.h" />
     <ClInclude Include="Renders\Instancing\InstanceRenderer.h" />
@@ -63,7 +64,6 @@
     <ClInclude Include="Bounding\Ray.h" />
     <ClInclude Include="Renders\Material.h" />
     <ClInclude Include="Systems\Event.h" />
-    <ClInclude Include="Testing\DirectionalLight.h" />
     <ClInclude Include="Renders\ShadowRenderer.h" />
     <ClInclude Include="View\OrthoWindow.h" />
     <ClInclude Include="Renders\DeferredRenderer.h" />
@@ -111,6 +111,7 @@
     <ClCompile Include="ComputeShader\ComputeShader.cpp" />
     <ClCompile Include="Bounding\GameCollider.cpp" />
     <ClCompile Include="Object\Unit\GameUnit.cpp" />
+    <ClCompile Include="Environment\Sun.cpp" />
     <ClCompile Include="View\FirstPersonCamera.cpp" />
     <ClCompile Include="Renders\Instancing\InstanceShader.cpp" />
     <ClCompile Include="Renders\Instancing\InstanceRenderer.cpp" />
@@ -140,7 +141,6 @@
     <ClCompile Include="Bounding\Ray.cpp" />
     <ClCompile Include="Renders\Material.cpp" />
     <ClCompile Include="Systems\Event.cpp" />
-    <ClCompile Include="Testing\DirectionalLight.cpp" />
     <ClCompile Include="Renders\ShadowRenderer.cpp" />
     <ClCompile Include="View\OrthoWindow.cpp" />
     <ClCompile Include="Renders\DeferredRenderer.cpp" />

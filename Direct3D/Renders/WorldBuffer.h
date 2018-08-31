@@ -81,30 +81,63 @@ class SunBuffer : public ShaderBuffer
 public:
 	SunBuffer() : ShaderBuffer(&Data, sizeof(Struct))
 	{
-		Data.pos = D3DXVECTOR3(-10.0f, 30.0f, 50.f);
-		Data.intensity = 1.0f;
-		Data.dir = D3DXVECTOR3(1, -1, 0);
-		Data.color = D3DXCOLOR(1, 1, 1, 1);
+		Data.SunPosition = D3DXVECTOR3(-10.0f, 30.0f, 50.f);
+		Data.SunIntensity = 1.0f;
+		Data.SunDir = D3DXVECTOR3(1, -1, 0);
+		Data.SunColor = D3DXCOLOR(1, 1, 1, 1);
 
-		D3DXVec3Normalize(&Data.dir, &Data.dir);
+		D3DXVec3Normalize(&Data.SunDir, &Data.SunDir);
 	}
 	struct Struct
 	{
-		D3DXVECTOR3 pos;
-		float intensity;
-		D3DXVECTOR3 dir;
-		float padding;
-		D3DXCOLOR color;
+		D3DXMATRIX SunView;
+
+		D3DXVECTOR3 SunPosition;
+		float SunPadding;
+
+		float SunIntensity;
+		D3DXVECTOR3 SunDir;
+
+		D3DXCOLOR SunColor;
+
+		D3DXMATRIX SunProjection;
+		D3DXMATRIX SunViewProjection;
+		D3DXMATRIX ShadowMatrix;
 
 	};
 
-	void SetDirection(D3DXVECTOR3 pos) { this->Data.dir= pos; }
-	void SetColor(D3DXCOLOR col) { this->Data.color = col; }
-	void SetIntensity(float i) { this->Data.intensity = i; }
-	void SetPos(D3DXVECTOR3 pos) { this->Data.pos = pos; }
+	void SetDirection(D3DXVECTOR3 pos) { this->Data.SunDir = pos; }
+	void SetColor(D3DXCOLOR col) { this->Data.SunColor = col; }
+	void SetIntensity(float i) { this->Data.SunIntensity = i; }
+	void SetPos(D3DXVECTOR3 pos) { this->Data.SunPosition = pos; }
 
-	D3DXVECTOR3 GetPos() { return this->Data.pos; }
-	D3DXVECTOR3 GetDir() { return this->Data.dir; }
+	D3DXVECTOR3 GetPos() { return this->Data.SunPosition; }
+	D3DXVECTOR3 GetDir() { return this->Data.SunDir; }
+
+	void SetView(D3DXMATRIX mat)
+	{
+		this->Data.SunView = mat;
+		D3DXMatrixTranspose(&Data.SunView, &Data.SunView);
+	}
+
+	void SetProj(D3DXMATRIX mat)
+	{
+		this->Data.SunProjection = mat;
+		D3DXMatrixTranspose(&Data.SunProjection, &Data.SunProjection);
+	}
+
+	void SetViewProj(D3DXMATRIX mat)
+	{
+		this->Data.SunViewProjection = mat;
+		D3DXMatrixTranspose(&Data.SunViewProjection, &Data.SunViewProjection);
+	}
+
+	void SetShadowMatrix(D3DXMATRIX mat)
+	{
+		this->Data.ShadowMatrix = mat;
+		D3DXMatrixTranspose(&Data.ShadowMatrix, &Data.ShadowMatrix);
+	}
+
 private:
 	Struct Data;
 

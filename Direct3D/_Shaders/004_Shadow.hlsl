@@ -10,8 +10,8 @@ PixelInput ColorShadowVS(VertexColorNormal input)
 {
     PixelInput output;
 
-    output.position = mul(input.position, _world);
-    output.position = mul(output.position, _lightViewProjection);
+    output.position = mul(input.position, World);
+    output.position = mul(output.position, SunViewProjection);
 
     return output;
 }
@@ -20,8 +20,8 @@ PixelInput TextureShadowVS(VertexTextureNormal input)
 {
     PixelInput output;
 
-    output.position = mul(input.position, _world);
-    output.position = mul(output.position, _lightViewProjection);
+    output.position = mul(input.position, World);
+    output.position = mul(output.position, SunViewProjection);
 
     return output;
 }

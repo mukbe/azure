@@ -3,7 +3,7 @@
 #include "Terrain.h"
 
 #include "./View/FreeCamera.h"
-#include "./Renders/DeferredRenderer.h"
+#include "./Environment/Sun.h"
 
 TerrainTool::TerrainTool()
 {
@@ -12,6 +12,7 @@ TerrainTool::TerrainTool()
 
 	terrain = new Terrain;
 	freeCamera = new FreeCamera;
+	sun = new Environment::Sun;
 }
 
 
@@ -42,26 +43,25 @@ void TerrainTool::PostUpdate()
 {
 	terrain->PostUpdate();
 	freeCamera->Update();
+	sun->UpdateView();
 }
 
 void TerrainTool::PreRender()
 {
 	terrain->PreRender();
+	//camera정보를 deferred에게 언팩킹시에 필요한 정보를 보낸다
+	RenderRequest->SetUnPackGBufferProp(freeCamera->GetViewMatrix(), freeCamera->GetProjection());
+
 }
 
 void TerrainTool::Render()
 {
+	//Bind Prop
 	freeCamera->Render();
+	sun->Render();
 
+	//Render
 	terrain->Render();
-
-	//camera정보를 deferred에게 언팩킹시에 필요한 정보를 보낸다
-	DeferredRenderer*deferred = (DeferredRenderer*)RenderRequest->GetDeferred();
-	deferred->SetUnPackInfo(freeCamera->GetViewMatrix(), freeCamera->GetProjection());
-
-	States::SetSampler(1, States::LINEAR);
-
-
 }
 
 void TerrainTool::UIRender()

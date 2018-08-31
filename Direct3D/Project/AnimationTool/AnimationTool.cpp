@@ -1,10 +1,30 @@
 #include "stdafx.h"
 #include "AnimationTool.h"
 
+
 #include "View/FreeCamera.h"
 #include "Figure/Figure.h"
 #include "Testing/DirectionalLight.h"
 #include "CharacterTool.h"
+=======
+#include "./Model/ModelAnimPlayer.h"
+#include "./Model/Model.h"
+#include "./Model/ModelBone.h"
+#include "./Model/ModelMesh.h"
+#include "./Model/ModelAnimClip.h"
+
+#include "./Project/AnimationTool/FBX/Exporter.h"
+
+#include "./Utilities/String.h"
+#include "./Utilities/Path.h"
+
+#include "./View/FreeCamera.h"
+#include "./Utilities/Transform.h"
+#include "./Figure/Figure.h"
+
+#include "./Environment/Sun.h"
+
+
 #include "./Renders/DeferredRenderer.h"
 
 AnimationTool::AnimationTool()
@@ -15,10 +35,15 @@ AnimationTool::AnimationTool()
 
 
 	freeCamera = new FreeCamera();
-	grid = new Figure(Figure::FigureType::Grid, 100.0f, D3DXCOLOR(0.1f, 0.1f, 0.1f, 1.0f));
-	directionalLight = new DirectionalLight;
+
 	characterTool = new CharacterTool;
 	characterTool->SetCamera(freeCamera);
+
+	grid = new Figure(Figure::FigureType::Grid, 100.0f, D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f));
+	sun = new Environment::Sun;
+	debugTransform = new DebugTransform();
+	debugTransform->SetCamera(freeCamera);
+	debugTransform->ConnectTransform(new Transform);
 }
 
 
@@ -28,7 +53,7 @@ AnimationTool::~AnimationTool()
 
 	SafeDelete(grid);
 
-	SafeDelete(directionalLight);
+	SafeDelete(sun);
 	SafeDelete(freeCamera);
 	
 
@@ -58,8 +83,8 @@ void AnimationTool::PostUpdate()
 
 void AnimationTool::ShadowRender()
 {
-	directionalLight->UpdateView();
-	directionalLight->SetBuffer();
+	sun->UpdateView();
+	sun->Render();
 
 	freeCamera->Render();
 	States::SetRasterizer(States::SHADOW);
@@ -77,9 +102,8 @@ void AnimationTool::Render()
 	characterTool->Render();
 
 	//camera정보를 deferred에게 언팩킹시에 필요한 정보를 보낸다
-	DeferredRenderer*deferred = (DeferredRenderer*)RenderRequest->GetDeferred();
-	deferred->SetUnPackInfo(freeCamera->GetViewMatrix(), freeCamera->GetProjection());
-	directionalLight->SetBuffer();
+	RenderRequest->SetUnPackGBufferProp(freeCamera->GetViewMatrix(), freeCamera->GetProjection());
+	sun->Render();
 
 	States::SetSampler(1, States::LINEAR);
 

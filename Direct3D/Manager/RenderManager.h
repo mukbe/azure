@@ -34,7 +34,7 @@ public:
 
 	void AddRenderer(string key, Renderer* renderer);
 
-	Renderer* GetDeferred() { return deferred; }
+	void SetUnPackGBufferProp(D3DXMATRIX view, D3DXMATRIX proj);
 private:
 	void ShadowRender();
 	void PreRender();

@@ -20,5 +20,6 @@ private:
 
 	class Terrain* terrain;
 	class FreeCamera *freeCamera;
+	class Environment::Sun* sun;
 };
 

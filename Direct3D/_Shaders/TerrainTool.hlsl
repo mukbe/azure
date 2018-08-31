@@ -153,12 +153,12 @@ PixelInput TerrainToolDS(ConstantType input, float2 uv : SV_DomainLocation, cons
     output.uv *= 32.f;
     
 
-    output.position = mul(float4(position.xyz, 1.0f), _world);
+    output.position = mul(float4(position.xyz, 1.0f), World);
     output.oPosition = output.position;
 
-    output.position = mul(output.position, _viewProjection);
+    output.position = mul(output.position, ViewProjection);
 
-    output.normal = mul(output.normal, (float3x3) _world);
+    output.normal = mul(output.normal, (float3x3) World);
 
     return output;
 }

@@ -27,20 +27,21 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
     float3 albedo = data.Color;
     float specPower = data.SpecPow;
 
+
     //GizmoRendering
     if (specPower> 1.5f)
         return float4(albedo, 1.0f);
 
-    float4 projectionToLight = mul(worldPos, _lightViewProjection);
+    float4 projectionToLight = mul(worldPos, SunViewProjection);
 
     //return _sunLightsahdowMap.Sample(_basicSampler, input.uv);
 
     float shadowFactor = CalcShadowFactor(projectionToLight,_sunLightsahdowMap,_shadowSampler);
 
     //CalcLighting
-    float diffuseFactor = saturate(dot(worldNormal.xyz, -_sunDir));
+    float diffuseFactor = saturate(dot(worldNormal.xyz, -SunDir));
 
-    float3 diffuseColor = albedo * diffuseFactor * _sunColor.rgb * 2.0f;
+    float3 diffuseColor = albedo * diffuseFactor * SunColor.rgb * 2.0f;
     //	finalColor += DirLightColor.rgb * pow(NDotH, material.specPow) * material.specIntensity;
 
     return float4(diffuseColor * shadowFactor, 1.0f);
