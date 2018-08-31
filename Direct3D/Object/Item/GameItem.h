@@ -1,17 +1,22 @@
 #pragma once
+class Model;
+class ModelAnimPlayer;
 class GameItem
 {
 private:
-	class Model* model;
-	class WorldBuffer* worldBuffer;
+	Synthesize(string, name, Name)
+	Synthesize(Model*, model, ModelClass)
+	Synthesize(ModelAnimPlayer*, animation, Animation)
+	Synthesize(int, jointIndex, JointIndex)
+	Synthesize(D3DXMATRIX,finalMatrix,FinalMatrix)
 	class Shader* shader;
-	D3DXMATRIX* pParentMat;
-	vector<D3DXMATRIX> absolutes;
 public:
-	GameItem(class Model* model,D3DXMATRIX* pParentMat);
-	~GameItem();
+	GameItem();
+	virtual ~GameItem();
 
-	void Update();
-	void Render();
+	void AttachToCharater(class GameUnit* unit);
+
+	virtual void Update();
+	virtual void Render();
 };
 

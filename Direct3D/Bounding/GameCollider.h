@@ -18,7 +18,7 @@ public:
 	virtual ~GameCollider();
 
 	virtual void Update();
-	virtual void Render();
+	virtual void Render(D3DXCOLOR color = D3DXCOLOR(1.f,0.f,0.f,1.f));
 
 	bool IsIntersect(GameCollider* collider);
 

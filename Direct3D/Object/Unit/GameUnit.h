@@ -6,6 +6,7 @@ protected:
 	class Model* model;
 	class ModelAnimPlayer* animation;
 	vector<class GameCollider*> colliderList;
+	vector<class GameItem*> itemList;
 public:
 	GameUnit(string name,class Model* model);
 	~GameUnit();

@@ -61,8 +61,8 @@ private:
 	Synthesize(Mode	,mode,PlayMode)
 	Synthesize(PlayState,playState,PlayState)
 
-	Synthesize(vector<D3DXMATRIX> ,skinTransform,SkinTransform);
-	Synthesize(vector<D3DXMATRIX>, boneAnimation,BoneAnimation);
+	Synthesize(vector<D3DXMATRIX> ,skinTransform,SkinTransform)
+	Synthesize(vector<D3DXMATRIX>, boneAnimation,BoneAnimation)
 
 	Synthesize(int,currentKeyframe,CurrentKeyFrame)
 	Synthesize(float, frameTime,FrameTime)			//현재 프레임에서 경과된 시간

@@ -19,6 +19,7 @@ ModelAnimPlayer::ModelAnimPlayer(Model * model)
 	//shadowShader = new Shader(L"");
 
 	if (model == nullptr)return;
+
 	if (skinTransform.size() < 1)
 		skinTransform.assign(model->BoneCount(), D3DXMATRIX());
 

@@ -3,25 +3,31 @@
 
 #include "./Model/Model.h"
 #include "./Renders/WorldBuffer.h"
+#include "./Model/ModelAnimPlayer.h"
+#include "./Model/ModelMesh.h"
+#include "./Model/ModelMeshPart.h"
+#include "./Renders/Material.h"
+#include "./Utilities/String.h"
 
-GameItem::GameItem(Model* model, D3DXMATRIX* pParentMat)
-	:model(model),pParentMat(pParentMat)
+GameItem::GameItem()
 {
-	this->worldBuffer = Buffers->FindShaderBuffer<WorldBuffer>();
-	this->model->CopyAbsoluteBoneTo(absolutes);
-
 }
 
 
 GameItem::~GameItem()
 {
-	absolutes.clear();
 }
+
 
 void GameItem::Update()
 {
 }
 
 void GameItem::Render()
+{
+}
+
+
+void GameItem::AttachToCharater(GameUnit * unit)
 {
 }

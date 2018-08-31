@@ -19,7 +19,7 @@ Transform::~Transform()
 void Transform::RenderGizmo()
 {
 	pRenderer->ChangeZBuffer(false);
-	GizmoRenderer->LocalGizmo(this->position, 1.0f, this->right * scale.x, this->up * scale.y, this->forward * scale.z);
+	GizmoRenderer->LocalGizmo(this->position, 1.0f, this->right * scale.x * 0.5f, this->up * scale.y * 0.5f , this->forward * scale.z * 0.5f);
 	pRenderer->ChangeZBuffer(true);
 }
 
