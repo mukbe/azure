@@ -16,8 +16,6 @@
 #include "./Utilities/Transform.h"
 #include "./Figure/Figure.h"
 
-#include "./Testing/DirectionalLight.h"
-
 #include "./Renders/DeferredRenderer.h"
 #include "./Renders/Texture.h"
 

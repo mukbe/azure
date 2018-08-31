@@ -32,7 +32,7 @@ PixelInput ObjectShadowVS(InstanceInputVS input)
 
     matrix world = DecodeMatrix(float3x4(input.world0, input.world1, input.world2));
     output.position = mul(input.position, world);
-    output.position = mul(output.position, _lightViewProjection);
+    output.position = mul(output.position, SunViewProjection);
     
     return output;
 

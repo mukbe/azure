@@ -4,9 +4,8 @@
 
 #include "View/FreeCamera.h"
 #include "Figure/Figure.h"
-#include "Testing/DirectionalLight.h"
 #include "CharacterTool.h"
-=======
+
 #include "./Model/ModelAnimPlayer.h"
 #include "./Model/Model.h"
 #include "./Model/ModelBone.h"
@@ -39,11 +38,7 @@ AnimationTool::AnimationTool()
 	characterTool = new CharacterTool;
 	characterTool->SetCamera(freeCamera);
 
-	grid = new Figure(Figure::FigureType::Grid, 100.0f, D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f));
 	sun = new Environment::Sun;
-	debugTransform = new DebugTransform();
-	debugTransform->SetCamera(freeCamera);
-	debugTransform->ConnectTransform(new Transform);
 }
 
 
@@ -51,7 +46,6 @@ AnimationTool::~AnimationTool()
 {
 	SafeDelete(characterTool);
 
-	SafeDelete(grid);
 
 	SafeDelete(sun);
 	SafeDelete(freeCamera);
@@ -88,7 +82,7 @@ void AnimationTool::ShadowRender()
 
 	freeCamera->Render();
 	States::SetRasterizer(States::SHADOW);
-	grid->ShadowRender();
+
 	States::SetRasterizer(States::SOLID_CULL_ON);
 
 }
@@ -96,9 +90,6 @@ void AnimationTool::ShadowRender()
 void AnimationTool::Render()
 {
 	freeCamera->Render();
-	grid->Render();
-
-
 	characterTool->Render();
 
 	//camera정보를 deferred에게 언팩킹시에 필요한 정보를 보낸다
