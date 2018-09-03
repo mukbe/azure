@@ -2,6 +2,7 @@
 #include <functional>
 #include <map>
 
+class Transform;
 class GameObject
 {
 private:
@@ -11,7 +12,8 @@ private:
 protected:
 	Synthesize(string, name, Name)
 	Synthesize(bool,isLive,IsLive)
-	Synthesize(class Transform*,transform,Transform)
+	Synthesize(bool,isRender,IsRender)
+	Synthesize(Transform*,transform,Transform)
 	CallbackList callbackList;
 	vector<struct TagMessage> reserveMessageList;
 public:

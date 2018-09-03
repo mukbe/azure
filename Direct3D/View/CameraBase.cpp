@@ -5,6 +5,7 @@
 #include "../Renders/WorldBuffer.h"
 #include "Perspective.h"
 #include "Bounding/Ray.h"
+#include "Bounding/BoundingFrustum.h"
 
 CameraBase::CameraBase()
 	:GameObject("Camera")
@@ -20,12 +21,14 @@ CameraBase::CameraBase()
 
 	perspective->SetView(matView);
 
+	frustum = new BoundingFrustum;
+
 }
 
 CameraBase::~CameraBase()
 {
+	SafeDelete(frustum);
 	SafeDelete(perspective);
-	SafeDelete(transform);
 }
 
 
@@ -40,6 +43,8 @@ void CameraBase::Release()
 void CameraBase::Update()
 {
 	GameObject::Update();
+
+	this->frustum->UpdateFrustum(perspective->GetViewProj());
 }
 
 void CameraBase::Render()

@@ -27,15 +27,17 @@
 #include "./Utilities/BinaryFile.h"
 
 #include "./Object/Item/GameItem.h"
+#include "./Bounding/QuadTree/QuadTreeNode.h"
+#include "./Bounding/QuadTree/QuadTreeSystem.h"
 
 CharacterTool::CharacterTool()
 	:animation(nullptr), model(nullptr),debugTransform(nullptr),targetCollider(nullptr), showDemo(false), showTool(false)
 	, showBone(false), selectBoneIndex(0), debugControl(false),  tempItemModel(nullptr)
 {
-	//Fbx::Exporter* exporter = new Fbx::Exporter(L"../_Assets/Pandaren/Attack01.fbx");
-	//exporter->ExportMaterial(Assets + L"Pandaren/", L"Pandaren");
-	//exporter->ExportMesh(Assets + L"Pandaren/", L"Pandaren");
-	//exporter->ExportAnimation(Assets + L"Pandaren/", L"Attack01");
+	//Fbx::Exporter* exporter = new Fbx::Exporter(L"../_Assets/Test.fbx");
+	//exporter->ExportMaterial(Assets, L"Test");
+	//exporter->ExportMesh(Assets, L"Test");
+	//exporter->ExportAnimation(Assets, L"Attack01");
 	//SafeDelete(exporter);
 
 	model = new Model;
@@ -46,7 +48,7 @@ CharacterTool::CharacterTool()
 
 	debugTransform = new DebugTransform();
 	debugTransform->ConnectTransform(new Transform);
-	
+
 }
 
 
@@ -88,13 +90,12 @@ void CharacterTool::Update()
 			continue;
 		colliderList[i]->Update();
 	}
+
 }
 
 void CharacterTool::Render()
 {
 	animation->Render();
-
-
 
 	for (UINT i = 0; i < colliderList.size(); ++i)
 	{

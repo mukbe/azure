@@ -35,22 +35,28 @@ AnimationTool::AnimationTool()
 
 	freeCamera = new FreeCamera();
 
+	sun = new Environment::Sun;
+
+	grid = new Figure(Figure::FigureType::Grid, 50.0f, ColorGray(0.4f));
+	ObjectManager::Create();
+	Objects->SetMainCamera(freeCamera);
+
+
 	characterTool = new CharacterTool;
 	characterTool->SetCamera(freeCamera);
-
-	sun = new Environment::Sun;
 }
 
 
 AnimationTool::~AnimationTool()
 {
-	SafeDelete(characterTool);
+	ObjectManager::Delete();
 
+	SafeDelete(grid);
+
+	SafeDelete(characterTool);
 
 	SafeDelete(sun);
 	SafeDelete(freeCamera);
-	
-
 }
 
 void AnimationTool::Init()
@@ -90,14 +96,15 @@ void AnimationTool::ShadowRender()
 void AnimationTool::Render()
 {
 	freeCamera->Render();
+
 	characterTool->Render();
+	grid->Render();
 
 	//camera정보를 deferred에게 언팩킹시에 필요한 정보를 보낸다
 	RenderRequest->SetUnPackGBufferProp(freeCamera->GetViewMatrix(), freeCamera->GetProjection());
 	sun->Render();
 
 	States::SetSampler(1, States::LINEAR);
-
 }
 
 void AnimationTool::UIRender()

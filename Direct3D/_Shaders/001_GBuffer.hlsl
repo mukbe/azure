@@ -219,7 +219,12 @@ G_Buffer InstancePS(ModelPixelInput input)
 {
     G_Buffer output;
 
-    float3 diffuse = _diffuseTex.Sample(_basicSampler, input.uv).rgb;
+    float4 diffuse4 = _diffuseTex.Sample(_basicSampler, input.uv);
+
+    if (diffuse4.a < 0.1f)
+        discard;
+
+    float3 diffuse = diffuse4.rgb;
 
     output.worldPos = input.worldPos;
     output.normal = float4(NormalMapSpace(_normalTex.Sample(_basicSampler, input.uv).xyz, input.normal, input.tangent), 1);
@@ -236,12 +241,12 @@ ModelPixelInput ObjectVS(VertexTextureBlendNT input)
 {
     ModelPixelInput output;
 
-    output.position = output.worldPos = mul(input.position, _world);
+    output.position = output.worldPos = mul(input.position, World);
 
-    output.normal = mul(input.normal, (float3x3) _world);
-    output.tangent = mul(input.tangent, (float3x3) _world);
+    output.normal = mul(input.normal, (float3x3) World);
+    output.tangent = mul(input.tangent, (float3x3) World);
 
-    output.position = mul(output.position, _viewProjection);
+    output.position = mul(output.position, ViewProjection);
 
     output.uv = input.uv;
 
@@ -253,6 +258,7 @@ G_Buffer ObjectPS(ModelPixelInput input)
     G_Buffer output;
 
     float3 diffuse = _diffuseTex.Sample(_basicSampler, input.uv).rgb;
+
 
     output.worldPos = input.worldPos;
     output.normal = float4(NormalMapSpace(_normalTex.Sample(_basicSampler, input.uv).xyz, input.normal, input.tangent), 1);

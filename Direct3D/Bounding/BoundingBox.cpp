@@ -12,7 +12,7 @@
 
 
 BoundingBox::BoundingBox()
-	:minPos(0.f,0.f,0.f),maxPos(0.f,0.f,0.f),halfSize(0.f,0.f,0.f)
+	:minPos(-0.5f,-0.5f,-0.5f),maxPos(0.5f,0.5f,0.5f),halfSize(0.5f,0.5f,0.5f)
 {
 }
 
@@ -55,6 +55,12 @@ void BoundingBox::Render(D3DXMATRIX matWorld,bool drawAABB /*=true*/,D3DXCOLOR c
 		D3DXComputeBoundingBox(&corners[0], corners.size(), sizeof D3DXVECTOR3, &min, &max);
 		GizmoRenderer->AABB(min, max, D3DXCOLOR(0.f, 1.f, 0.f, 1.f));
 	}
+	
+}
+
+void BoundingBox::RenderAABB(D3DXCOLOR color)
+{
+	GizmoRenderer->AABB(minPos, maxPos, color);
 	
 }
 
@@ -132,6 +138,13 @@ void BoundingBox::GetCorners(vector<D3DXVECTOR3>& pOut, D3DXMATRIX mat)
 	pOut.push_back(currentVertex);
 }
 
+void BoundingBox::GetCenterAndRadius(D3DXVECTOR3 * pOutCenter, float * pOutRadius)
+{
+	BoundingSphere sphere(*this);
+	*pOutCenter = sphere.center;
+	*pOutRadius = sphere.radius;
+}
+
 bool BoundingBox::IntersectsAABB(BoundingBox box)
 {
 	if ((double)maxPos.x < (double)box.minPos.x || (double)minPos.x >(double)box.maxPos.x || ((double)maxPos.y < (double)box.minPos.y
@@ -149,7 +162,6 @@ bool BoundingBox::Intersects(BoundingFrustum frustum)
 PlaneIntersectionType BoundingBox::Intersects(D3DXPLANE plane)
 {
 	return PlaneIntersectionType_Front;
-
 }
 
 bool BoundingBox::Intersects(Ray ray, float * result)

@@ -34,6 +34,8 @@ void FreeCamera::Update()
 {
 	this->ControlCamera();
 	this->UpdateView();
+
+	CameraBase::Update();
 }
 
 void FreeCamera::Render()

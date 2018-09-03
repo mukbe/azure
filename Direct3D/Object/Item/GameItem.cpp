@@ -13,11 +13,9 @@ GameItem::GameItem()
 {
 }
 
-
 GameItem::~GameItem()
 {
 }
-
 
 void GameItem::Update()
 {
@@ -26,7 +24,6 @@ void GameItem::Update()
 void GameItem::Render()
 {
 }
-
 
 void GameItem::AttachToCharater(GameUnit * unit)
 {

@@ -10,6 +10,9 @@ class AnimationTool :public SceneNode
 {
 private:
 	class CharacterTool* characterTool;
+	class FreeCamera* freeCamera;
+	class Figure* grid;
+	Environment::Sun* sun;
 public:
 	AnimationTool();
 	virtual ~AnimationTool();
@@ -22,11 +25,6 @@ public:
 	void ShadowRender();
 	void Render();
 	void UIRender();
-private:
-
-private:
-	class FreeCamera* freeCamera;
-	Environment::Sun* sun;
 
 
 };

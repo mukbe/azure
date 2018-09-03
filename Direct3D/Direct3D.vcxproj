@@ -32,6 +32,9 @@
     <ClInclude Include="Bounding\GameCollider.h" />
     <ClInclude Include="Object\Unit\GameUnit.h" />
     <ClInclude Include="Environment\Sun.h" />
+    <ClInclude Include="Bounding\QuadTree\QuadTreeSystem.h" />
+    <ClInclude Include="Bounding\QuadTree\QuadTreeNode.h" />
+    <ClInclude Include="Object\StaticObject\StaticObject.h" />
     <ClInclude Include="View\FirstPersonCamera.h" />
     <ClInclude Include="Renders\Instancing\InstanceShader.h" />
     <ClInclude Include="Renders\Instancing\InstanceRenderer.h" />
@@ -112,6 +115,9 @@
     <ClCompile Include="Bounding\GameCollider.cpp" />
     <ClCompile Include="Object\Unit\GameUnit.cpp" />
     <ClCompile Include="Environment\Sun.cpp" />
+    <ClCompile Include="Bounding\QuadTree\QuadTreeSystem.cpp" />
+    <ClCompile Include="Bounding\QuadTree\QuadTreeNode.cpp" />
+    <ClCompile Include="Object\StaticObject\StaticObject.cpp" />
     <ClCompile Include="View\FirstPersonCamera.cpp" />
     <ClCompile Include="Renders\Instancing\InstanceShader.cpp" />
     <ClCompile Include="Renders\Instancing\InstanceRenderer.cpp" />

@@ -2,7 +2,7 @@
 class Model;
 class ModelAnimPlayer;
 class GameItem
-{
+{//TODO 추후 본격적으로 컨텐츠 제작시 수정
 private:
 	Synthesize(string, name, Name)
 	Synthesize(Model*, model, ModelClass)

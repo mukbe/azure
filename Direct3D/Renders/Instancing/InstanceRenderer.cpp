@@ -20,6 +20,12 @@ InstanceRenderer::InstanceRenderer(string name,UINT maxInstance)
 	shader = new InstanceShader(L"./_Shaders/001_GBuffer.hlsl");
 }
 
+InstanceRenderer::InstanceRenderer(string name)
+	:name(name), drawInstanceCout(0),maxInstanceCount(0)
+{
+	shader = new InstanceShader(L"./_Shaders/001_GBuffer.hlsl");
+}
+
 
 InstanceRenderer::~InstanceRenderer()
 {
@@ -124,6 +130,14 @@ void InstanceRenderer::CreateBuffer()
 	assert(SUCCEEDED(hr));
 }
 
+void InstanceRenderer::InitData(wstring materialFile, wstring meshFile)
+{
+	this->ReadMaterial(materialFile);
+	this->ReadMesh(meshFile);
+	this->CreateBuffer();
+	this->CopyAbsoluteBoneTo();
+}
+
 void InstanceRenderer::UpdateBuffer()
 {
 	this->drawInstanceCout = 0;
@@ -135,11 +149,14 @@ void InstanceRenderer::UpdateBuffer()
 
 		for (UINT i = 0; i < instanceList.size(); ++i)
 		{
-			D3DXMATRIX mat = instanceList[i]->GetFinalMatrix();
-			dataView[drawInstanceCout].data[0] = D3DXVECTOR4(mat._11, mat._12, mat._13, mat._41);
-			dataView[drawInstanceCout].data[1] = D3DXVECTOR4(mat._21, mat._22, mat._23, mat._42);
-			dataView[drawInstanceCout].data[2] = D3DXVECTOR4(mat._31, mat._32, mat._33, mat._43);
-			drawInstanceCout++;
+			if (instanceList[i]->GetIsRender())
+			{
+				D3DXMATRIX mat = instanceList[i]->GetFinalMatrix();
+				dataView[drawInstanceCout].data[0] = D3DXVECTOR4(mat._11, mat._12, mat._13, mat._41);
+				dataView[drawInstanceCout].data[1] = D3DXVECTOR4(mat._21, mat._22, mat._23, mat._42);
+				dataView[drawInstanceCout].data[2] = D3DXVECTOR4(mat._31, mat._32, mat._33, mat._43);
+				drawInstanceCout++;
+			}
 		}
 	}
 	DeviceContext->Unmap(instanceBuffer, 0);

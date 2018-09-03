@@ -41,9 +41,6 @@ void GameUnit::Update()
 
 	for (UINT i = 0; i < colliderList.size(); ++i)
 		colliderList[i]->Update();
-
-	for (UINT i = 0; i < itemList.size(); ++i)
-		itemList[i]->Update();
 }
 
 void GameUnit::PostUpdate()
@@ -58,8 +55,6 @@ void GameUnit::Render()
 {
 	this->animation->Render();
 
-	for (UINT i = 0; i < itemList.size(); ++i)
-		itemList[i]->Render();
 }
 
 void GameUnit::PostRender()

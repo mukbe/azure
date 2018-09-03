@@ -27,9 +27,11 @@
 #include "./Utilities/BinaryFile.h"
 #include "./Object/Item/GameItem.h"
 
+#include "./Bounding/QuadTree/QuadTreeSystem.h"
 
 void CharacterTool::UIRender()
 {
+
 	//MainBar
 	if (ImGui::BeginMainMenuBar())
 	{

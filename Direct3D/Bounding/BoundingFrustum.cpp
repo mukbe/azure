@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "BoundingFrustum.h"
 #include "Bounding.h"
+#include "BoundingBox.h"
+#include "BoundingSphere.h"
 
 
 BoundingFrustum::BoundingFrustum()
@@ -115,6 +117,12 @@ bool BoundingFrustum::IsPointInFrustum(D3DXVECTOR3 * p)
 	return true;
 }
 
+bool BoundingFrustum::IsAABBInFrustum(BoundingBox * boundingBox)
+{
+	
+	return false;
+}
+
 bool BoundingFrustum::IsSphereInFrustum(D3DXVECTOR3 * p, float radius)
 {
 	for (int i = 1; i < 6; i++)
@@ -124,4 +132,12 @@ bool BoundingFrustum::IsSphereInFrustum(D3DXVECTOR3 * p, float radius)
 	}
 
 	return true;
+}
+
+bool BoundingFrustum::IsSphereInFrustum(BoundingBox* boundingBox)
+{
+	D3DXVECTOR3 center;
+	float radius;
+	boundingBox->GetCenterAndRadius(&center, &radius);
+	return IsSphereInFrustum(&center, radius);
 }
