@@ -53,6 +53,7 @@ WPARAM Window::Run()
 
 			if (ImGui::IsMouseHoveringAnyWindow() == false)
 			{
+				
 				Keyboard::Get()->Update();
 				Mouse::Get()->Update();
 			}

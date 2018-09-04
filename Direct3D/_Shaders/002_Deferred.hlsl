@@ -28,6 +28,7 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
     float specPower = data.SpecPow;
 
 
+    return float4(albedo, 1);
     //GizmoRendering
     if (specPower> 1.5f)
         return float4(albedo, 1.0f);

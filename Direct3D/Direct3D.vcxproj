@@ -25,20 +25,23 @@
     <ClInclude Include="Bounding\BoundingBox.h" />
     <ClInclude Include="Bounding\BoundingSphere.h" />
     <ClInclude Include="Bounding\Bounding.h" />
+<<<<<<< HEAD
     <ClInclude Include="Bounding\Gjk.h" />
     <ClInclude Include="Object\Item\GameItem.h" />
     <ClInclude Include="Project\AnimationTool\CharacterTool.h" />
+=======
+>>>>>>> 9ebd09abfd6d431060b7c1c194f82df6c952889f
     <ClInclude Include="ComputeShader\ComputeResource.h" />
     <ClInclude Include="ComputeShader\ComputeShader.h" />
     <ClInclude Include="Bounding\GameCollider.h" />
+    <ClInclude Include="Manager\ResourceManager.h" />
     <ClInclude Include="Object\Unit\GameUnit.h" />
     <ClInclude Include="Environment\Sun.h" />
-    <ClInclude Include="Bounding\QuadTree\QuadTreeSystem.h" />
-    <ClInclude Include="Bounding\QuadTree\QuadTreeNode.h" />
-    <ClInclude Include="Object\StaticObject\StaticObject.h" />
+    <ClInclude Include="Project\TerrainTool\TerrainSplat.h" />
     <ClInclude Include="View\FirstPersonCamera.h" />
     <ClInclude Include="Renders\Instancing\InstanceShader.h" />
     <ClInclude Include="Renders\Instancing\InstanceRenderer.h" />
+    <ClInclude Include="Object\Item\GameItem.h" />
     <ClInclude Include="Manager\RenderManager.h" />
     <ClInclude Include="Manager\SceneManager.h" />
     <ClInclude Include="Manager\SceneNode.h" />
@@ -108,21 +111,24 @@
     <ClCompile Include="Bounding\BoundingCapsule.cpp" />
     <ClCompile Include="Bounding\BoundingBox.cpp" />
     <ClCompile Include="Bounding\BoundingSphere.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="Bounding\Gjk.cpp" />
     <ClCompile Include="Object\Item\GameItem.cpp" />
     <ClCompile Include="Project\AnimationTool\CharacterTool + ImGui.cpp" />
     <ClCompile Include="Project\AnimationTool\CharacterTool.cpp" />
+=======
+>>>>>>> 9ebd09abfd6d431060b7c1c194f82df6c952889f
     <ClCompile Include="ComputeShader\ComputeResource.cpp" />
     <ClCompile Include="ComputeShader\ComputeShader.cpp" />
     <ClCompile Include="Bounding\GameCollider.cpp" />
+    <ClCompile Include="Manager\ResourceManager.cpp" />
     <ClCompile Include="Object\Unit\GameUnit.cpp" />
     <ClCompile Include="Environment\Sun.cpp" />
-    <ClCompile Include="Bounding\QuadTree\QuadTreeSystem.cpp" />
-    <ClCompile Include="Bounding\QuadTree\QuadTreeNode.cpp" />
-    <ClCompile Include="Object\StaticObject\StaticObject.cpp" />
+    <ClCompile Include="Project\TerrainTool\TerrainSplat.cpp" />
     <ClCompile Include="View\FirstPersonCamera.cpp" />
     <ClCompile Include="Renders\Instancing\InstanceShader.cpp" />
     <ClCompile Include="Renders\Instancing\InstanceRenderer.cpp" />
+    <ClCompile Include="Object\Item\GameItem.cpp" />
     <ClCompile Include="Manager\RenderManager.cpp" />
     <ClCompile Include="Manager\SceneManager.cpp" />
     <ClCompile Include="Model\ModelAnimPlayer + Blending.cpp" />
@@ -179,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Project\Game\Header.hlsli" />
+    <None Include="_Shaders\000_HeaderProp.hlsl" />
     <None Include="_Shaders\001_GBuffer.hlsl">
       <FileType>Document</FileType>
     </None>
@@ -226,7 +233,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="_Shaders\TerrainToolCS.hlsl">
+    <None Include="_Shaders\TerrainToolCS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
@@ -235,7 +242,8 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
-    </FxCompile>
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F89A7778-CBF0-4E22-B019-B7729ABB8281}</ProjectGuid>

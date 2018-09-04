@@ -68,6 +68,8 @@
     <ClCompile Include="Renders\Instancing\InstanceShader.cpp" />
     <ClCompile Include="Renders\Instancing\InstanceRenderer.cpp" />
     <ClCompile Include="Environment\Sun.cpp" />
+    <ClCompile Include="Project\TerrainTool\TerrainSplat.cpp" />
+    <ClCompile Include="Manager\ResourceManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renders\ShadowRenderer.h" />
@@ -147,6 +149,8 @@
     <ClInclude Include="Renders\Instancing\InstanceShader.h" />
     <ClInclude Include="Renders\Instancing\InstanceRenderer.h" />
     <ClInclude Include="Environment\Sun.h" />
+    <ClInclude Include="Project\TerrainTool\TerrainSplat.h" />
+    <ClInclude Include="Manager\ResourceManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />
@@ -157,8 +161,7 @@
     <None Include="Project\Game\Header.hlsli" />
     <None Include="_Shaders\Copy.hlsl" />
     <None Include="_Shaders\TerrainTool.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="_Shaders\TerrainToolCS.hlsl" />
+    <None Include="_Shaders\TerrainToolCS.hlsl" />
+    <None Include="_Shaders\000_HeaderProp.hlsl" />
   </ItemGroup>
 </Project>

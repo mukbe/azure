@@ -59,6 +59,9 @@ const wstring ShaderPath = L"_Shaders/";
 
 #include "./Environment/Sun.h"
 
+#include "./Renders/Texture.h"
+#include "./Renders/WorldBuffer.h"
+
 namespace Landscape
 {
 	typedef VertexTextureNormal TerrainVertexType;

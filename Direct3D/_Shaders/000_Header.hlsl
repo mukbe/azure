@@ -144,12 +144,8 @@ struct InstanceInputVS
 };
 
 
-
 #define EyePosition (InvView[3].xyz)
-
-static const float2 g_SpecPowerRange = { 10.0, 250.0 };
-
-static const float _heightRatio = 15.0f;
+#include "000_HeaderProp.hlsl"
 /*************************************************************
 Func
 **************************************************************/
@@ -305,4 +301,118 @@ matrix DecodeMatrix(float3x4 encodedMatrix)
                   float4(encodedMatrix[1].xyz, 0),
                   float4(encodedMatrix[2].xyz, 0),
                   float4(encodedMatrix[0].w, encodedMatrix[1].w, encodedMatrix[2].w, 1));
+}
+
+bool IntersectTri(float3 origin, float3 dir, float3 v0, float3 v1, float3 v2, out float u, out float v, out float distance)
+{
+    float3 edge1 = v1 - v0;
+    float3 edge2 = v2 - v0;
+    
+    float3 pvec = cross(dir, edge2);
+
+    float det = dot(edge1, pvec);
+
+    //float3 temp = cross(edge1, edge2);
+    //float def = dot(dir, temp);
+    //if (def < 0.f)
+    //    return false;
+    ////==================================
+    //float f = 1 / det;
+    //float3 s = origin - v0;
+    //u = f * dot(s, pvec);
+    //if (u < 0 || u > 1)
+    //    return false;
+
+    //float3 q = cross(s, edge1);
+
+    //v = f * dot(dir, q);
+    //if (v < 0 || u + v > 1)
+    //    return false;
+
+    //distance = f * dot(edge2, q);
+    //return true;
+
+
+    //=====================================
+
+    float3 tvec;
+    if (det > 0.0f) 
+        tvec = origin - v0;
+    else
+    {
+        tvec = v0 - origin;
+        det = -det;
+    }
+
+    if (det < 0.00001f)
+        return false;
+
+    u = dot(tvec, pvec);
+    if (u < 0.0f || u > det)
+        return false;
+
+    float3 qvec = cross(tvec, edge1);
+    
+    v = dot(dir, qvec);
+    if (v < 0.0f || u + v > det)
+        return false;
+
+    distance = dot(edge2, qvec);
+    float invDet = 1 / det;
+    distance *= invDet;
+    u *= invDet;
+    v *= invDet;
+
+    return true;
+
+    //===============================DXÇÔ¼ö
+
+    //// Find vectors for two edges sharing vert0
+    //    float3 edge1 = v1 - v0;
+    //    float3 edge2 = v2 - v0;
+
+    //// Begin calculating determinant - also used to calculate U parameter
+    //    float3 pvec;
+    //pvec = cross(dir, edge2);
+
+    //// If determinant is near zero, ray lies in plane of triangle
+    //float det = cross(edge1, pvec);
+    //float tvec;
+
+    //    if (det > 0)
+    //    {
+    //    tvec = origin - v0;
+    //}
+    //    else
+    //    {
+    //    tvec = v0 - origin;
+    //        det = -det;
+    //    }
+
+    //    if (det < 0.0001f)
+    //        return false;
+
+    //// Calculate U parameter and test bounds
+    //u = dot(tvec, pvec);
+
+    //    if (  u < 0.0f ||   u > det)
+    //        return false;
+
+    //// Prepare to test V parameter
+    //    float qvec;
+    //qvec = cross(tvec, edge1);
+
+    //// Calculate V parameter and test bounds
+    //v = dot(dir, qvec);
+    //    if (  v < 0.0f ||   u +   v > det)
+    //        return false;
+
+    //// Calculate t, scale parameters, ray intersects triangle
+    //distance = dot(edge2, qvec);
+    //float fInvDet = 1.0f / det;
+    //distance *= fInvDet;
+    //u *= fInvDet;
+    //v *= fInvDet;
+
+    //    return true;
 }
