@@ -25,8 +25,8 @@ public:
 
 	void Render();
 private:
-	bool SubDevide();	//아직 level이 0보다 크다면 분리한다.
-	bool IsInFrustum(class BoundingFrustum* pFrustum);	//프러스텀에 포함되는가
+	bool SubDevide();															//아직 level이 0보다 크다면 분리한다.
+	bool IsInFrustum(class BoundingFrustum* pFrustum);							//프러스텀에 포함되는가.
 };
 
 #define CanDeepInTo(level) level > 0
