@@ -30,34 +30,43 @@ struct PixelInput
     float4 oPosition : POSITION0;
 
 };
+cbuffer TerrainTool : register(b5)
+{
+    float2 MouseScreenPos;
+    int BrushStyle;
+    float BrushSize;
 
-//float4 GetBrushColor(float3 pos)
-//{
-//    if (BrushStyle == 0)
-//    {
-//        if (pos.x >= (MousePos.x - BrushSize) &&
-//          pos.x <= (MousePos.x + BrushSize) &&
-//          pos.z >= (MousePos.z - BrushSize) &&
-//          pos.z <= (MousePos.z + BrushSize))
-//        {
-//            return float4(0, 0, 1, 1);
-//        }
-//    }
-//    if (BrushStyle == 1)
-//    {
-//        float dx = pos.x - MousePos.x;
-//        float dy = pos.z - MousePos.z;
+    float3 PickPos;
+    float HeightAmount;
+}
 
-//        float distance = sqrt(dx * dx + dy * dy);
+float4 GetBrushColor(float3 pos)
+{
+    if (BrushStyle == 0)
+    {
+        if (pos.x >= (PickPos.x - BrushSize) &&
+          pos.x <= (PickPos.x + BrushSize) &&
+          pos.z >= (PickPos.z - BrushSize) &&
+          pos.z <= (PickPos.z + BrushSize))
+        {
+            return float4(0, 0, 1, 1);
+        }
+    }
+    if (BrushStyle == 1)
+    {
+        float dx = pos.x - PickPos.x;
+        float dy = pos.z - PickPos.z;
 
-//        if (distance <= BrushSize)
-//        {
-//            return float4(0, 0, 1, 1);
-//        }
+        float distance = sqrt(dx * dx + dy * dy);
 
-//    }
-//    return float4(0, 0, 0, 0);
-//}
+        if (distance <= BrushSize)
+        {
+            return float4(0, 0, 1, 1);
+        }
+
+    }
+    return float4(0, 0, 0, 0);
+}
 
 HullInput TerrainToolVS(VertexTextureNormal input)
 {
@@ -66,7 +75,7 @@ HullInput TerrainToolVS(VertexTextureNormal input)
     output.position = input.position;
     output.uv = input.uv;
     output.normal = input.normal;
-    output.BrushColor = float4(0,0,0,0);   // GetBrushColor(input.position.xyz);
+    output.BrushColor = GetBrushColor(input.position.xyz); // GetBrushColor(input.position.xyz);
 
 
     return output;
@@ -142,15 +151,15 @@ PixelInput TerrainToolDS(ConstantType input, float2 uv : SV_DomainLocation, cons
     float3 normal2 = lerp(patch[2].normal, patch[3].normal, uv.x);
     output.normal = saturate(lerp(normal1, normal2, uv.y));
 
-    //float4 brush1 = lerp(patch[0].BrushColor, patch[1].BrushColor, uv.x);
-    //float4 brush2 = lerp(patch[2].BrushColor, patch[3].BrushColor, uv.x);
-    //float4 brush = lerp(brush1, brush2, uv.y);
-    //output.BrushColor = brush;
+    float4 brush1 = lerp(patch[0].BrushColor, patch[1].BrushColor, uv.x);
+    float4 brush2 = lerp(patch[2].BrushColor, patch[3].BrushColor, uv.x);
+    float4 brush = lerp(brush1, brush2, uv.y);
+    output.BrushColor = brush;
 
     float2 heightUV = output.uv;
     position.y = map.SampleLevel(samp, heightUV, 0).r * _heightRatio;
 
-    output.uv *= 32.f;
+    output.uv *= UvAmount;
     
 
     output.position = mul(float4(position.xyz, 1.0f), World);
@@ -190,12 +199,39 @@ G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float SpecI
 
 }
 
+Texture2D<float4> SplitMap : register(t5);
+Texture2D srcTex[4] : register(t6);
+
+float4 CalCuSplat(float4 diffuse, float2 uv)
+{
+    //TODO 수누꺼로 바꾸기로~
+
+    float4 color = diffuse;
+
+    float4 splatMap = SplitMap.Sample(wrapSamp, uv / UvAmount);
+    float splat[4] = { splatMap.r, splatMap.g, splatMap.b, splatMap.a };
+    
+    for (int i = 0; i < 4; i ++)
+    {
+        float4 src = srcTex[i].Sample(wrapSamp, uv);
+        color += splat[i] * src;
+    }
+
+    color /= color.a + 1.0f;
+
+    return color;
+}
+
 G_Buffer TerrainToolPS(PixelInput input)
 {
     G_Buffer output;
 
-    output.worldPos = input.oPosition;
+    output.worldPos = float4(SplitMap.Sample(wrapSamp, input.uv / UvAmount).rgb, 1); //input.oPosition; //  SplitMap.Sample(wrapSamp, input.uv / UvAmount);
     output.diffuse = _diffuseTex.Sample(wrapSamp, input.uv);
+    //==========================TEST
+    output.diffuse = CalCuSplat(output.diffuse, input.uv);
+    //==============================
+    output.diffuse += input.BrushColor;
     output = PackGBuffer(output, input.normal, output.diffuse.rgb, 0.25f, 250.0f);
 
     output.spec = _specularTex.Sample(_basicSampler, input.uv);
