@@ -25,6 +25,7 @@
     <ClInclude Include="Bounding\BoundingBox.h" />
     <ClInclude Include="Bounding\BoundingSphere.h" />
     <ClInclude Include="Bounding\Bounding.h" />
+    <ClInclude Include="Bounding\Gjk.h" />
     <ClInclude Include="Object\Item\GameItem.h" />
     <ClInclude Include="Project\AnimationTool\CharacterTool.h" />
     <ClInclude Include="ComputeShader\ComputeResource.h" />
@@ -107,6 +108,7 @@
     <ClCompile Include="Bounding\BoundingCapsule.cpp" />
     <ClCompile Include="Bounding\BoundingBox.cpp" />
     <ClCompile Include="Bounding\BoundingSphere.cpp" />
+    <ClCompile Include="Bounding\Gjk.cpp" />
     <ClCompile Include="Object\Item\GameItem.cpp" />
     <ClCompile Include="Project\AnimationTool\CharacterTool + ImGui.cpp" />
     <ClCompile Include="Project\AnimationTool\CharacterTool.cpp" />
