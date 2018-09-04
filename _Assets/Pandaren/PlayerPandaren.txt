@@ -1,0 +1,8 @@
+PlayerPandaren
+
+skin 8
+face 8
+hairStyle 11
+hair 6
+
+chest °ËÀº ¹ëºª ·Îºê

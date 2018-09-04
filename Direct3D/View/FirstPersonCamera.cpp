@@ -32,6 +32,8 @@ void FirstPersonCamera::Update()
 {
 	this->ControlCamera();
 	this->UpdateView();
+
+	CameraBase::Update();
 }
 
 void FirstPersonCamera::Render()

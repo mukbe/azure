@@ -11,10 +11,12 @@ public:
 	BoundingBox(class BoundingSphere sphere);
 
 	void Render(D3DXMATRIX matWorld,bool DrawAABB = true,D3DXCOLOR color = D3DXCOLOR(1.f,0.f,0.f,1.f));
+	void RenderAABB(D3DXCOLOR color = D3DXCOLOR(1.f, 0.f, 0.f, 1.f));
 
 	void GetCorners(D3DXVECTOR3* pOut);
 	void GetCorners(vector<D3DXVECTOR3>& pOut);
 	void GetCorners(vector<D3DXVECTOR3>& pOut, D3DXMATRIX mat);
+	void GetCenterAndRadius(D3DXVECTOR3* pOutCenter,float* pOutRadius);
 	
 	bool IntersectsAABB(class BoundingBox box);
 	bool Intersects(class BoundingFrustum frustum);

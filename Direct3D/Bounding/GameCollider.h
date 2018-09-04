@@ -6,7 +6,7 @@ class GameObject;
 class GameCollider
 {
 public:
-	enum ColliderType {RigidBody,Attack,HeatBox,UnKnown};
+	enum ColliderType {RigidBody = 0,Attack,HeatBox,Static,UnKnown};
 protected:
 	Synthesize(string,name,Name)
 	Synthesize(BoundingBox*, boundingBox,Bounding)
@@ -18,12 +18,12 @@ public:
 	virtual ~GameCollider();
 
 	virtual void Update();
-	virtual void Render();
+	virtual void Render(D3DXCOLOR color = D3DXCOLOR(1.f,0.f,0.f,1.f));
 
 	bool IsIntersect(GameCollider* collider);
 
 	static string GetTypeName(int index);
 	static void SaveCollider(class BinaryWriter* w,class AnimationCollider* collider);
-	static void LoadCollider(class BinaryReader* r, class AnimationCollider* cillider);
+	static void LoadCollider(class BinaryReader* r,class AnimationCollider* cillider);
 };
 

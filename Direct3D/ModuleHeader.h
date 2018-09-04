@@ -18,6 +18,7 @@
 #include "./Manager/ShaderManager.h"
 #include "./Manager/SceneManager.h"
 #include "./Manager/RenderManager.h"
+#include "./Manager/ObjectManager.h"
 
 #include "./Renders/Gizmo.h"
 

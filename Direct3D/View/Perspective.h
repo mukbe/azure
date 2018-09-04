@@ -11,6 +11,7 @@ public:
 	void Render();
 
 	void SetView(D3DXMATRIX v);
+	D3DXMATRIX GetViewProj()const { return this->matViewProj; }
 private:
 	float width, height;
 	float fov;

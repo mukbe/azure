@@ -7,13 +7,6 @@
 #include "./Bounding/Ray.h"
 #include "./View/CameraBase.h"
 #include "./Utilities/Math.h"
-
-#define ColorRed D3DXCOLOR(1.f,0.f,0.f,1.f)
-#define ColorGreen D3DXCOLOR(0.f,1.f,0.f,1.f)
-#define ColorBlue D3DXCOLOR(0.f,0.f,1.f,1.f)
-#define ColorWhite D3DXCOLOR(1.f,1.f,1.f,1.f)
-#define ColorGray(f) {D3DXCOLOR(f,f,f,1.f)}
-
 DebugTransform::DebugTransform()
 	:transform(NULL), debugType(DebugType::Translation),spaceType(SpaceType::Local),
 	pickType(PickType::None),camera(NULL), saveMousePos(0.f, 0.f, 0.f),angle(0,0,0),saveAngle(0,0,0)

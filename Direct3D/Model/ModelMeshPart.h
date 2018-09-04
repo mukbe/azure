@@ -12,7 +12,7 @@ public:
 	friend class InstanceRenderer;
 public:
 	virtual void Clone(void** clone);
-private:
+public:
 	ModelMeshPart();
 	~ModelMeshPart();
 
@@ -20,7 +20,7 @@ private:
 	void Render(class Shader* shader);
 
 	ID3D11Buffer* GetVertexBuffer()const { return vertexBuffer; }
-	ID3D11Buffer* GetIndexBUffer()const { return indexBuffer; }
+	ID3D11Buffer* GetIndexBuffer()const { return indexBuffer; }
 	UINT GetIndexCount()const { return indices.size(); }
 	UINT GetVertexCount()const { return vertices.size(); }
 	class Material* GetMaterial()const { return material; }

@@ -22,12 +22,12 @@ void GameCollider::Update()
 	
 }
 
-void GameCollider::Render()
+void GameCollider::Render(D3DXCOLOR color)
 {
 	pRenderer->ChangeZBuffer(false);
 	vector<D3DXVECTOR3> corners;
 	this->boundingBox->GetCorners(corners, this->finalMatrix);
-	GizmoRenderer->OBB(corners, D3DXCOLOR(1.f, 0.f, 0.f, 1.f));
+	GizmoRenderer->OBB(corners, color);
 	pRenderer->ChangeZBuffer(true);
 }
 

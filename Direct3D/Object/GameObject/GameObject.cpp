@@ -4,7 +4,7 @@
 #include "TagMessage.h"
 
 GameObject::GameObject(string name)
-	:name(name),isLive(true),transform(new Transform)
+	:name(name),isLive(true),transform(new Transform),isRender(true)
 {
 }
 

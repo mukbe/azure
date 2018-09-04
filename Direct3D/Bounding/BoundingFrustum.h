@@ -17,7 +17,9 @@ private:
 	float PlaneDot(const LPD3DXPLANE plane, const D3DXVECTOR3* point);
 public:
 	bool IsPointInFrustum(D3DXVECTOR3* p);
+	bool IsAABBInFrustum(class BoundingBox* boundingBox);
 	bool IsSphereInFrustum(D3DXVECTOR3* p, float radius);
+	bool IsSphereInFrustum(class BoundingBox* boundingBox);
 
 	void UpdateFrustum(D3DXMATRIX viewProj);
 	void Render();

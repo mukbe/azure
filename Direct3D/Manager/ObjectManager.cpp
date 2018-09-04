@@ -34,6 +34,10 @@ void ObjectManager::Release()
 	objectList.clear();
 }
 
+void ObjectManager::PreUpdate()
+{
+}
+
 void ObjectManager::Update()
 {
 	ObjectContainerIter iter = this->objectList.begin();
@@ -45,6 +49,10 @@ void ObjectManager::Update()
 			list[i]->Update();
 		}
 	}
+}
+
+void ObjectManager::PostUpdate()
+{
 }
 
 void ObjectManager::AddObject(ObjectType::Enum type, GameObject * object)

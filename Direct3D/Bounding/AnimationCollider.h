@@ -12,6 +12,8 @@ public:
 	virtual ~AnimationCollider();
 
 	virtual void Update()override;
-	virtual void Render()override;
+	void DebugUpdate(D3DXMATRIX matLocal,D3DXMATRIX matFinal);
+	virtual void Render(D3DXCOLOR color = D3DXCOLOR(1.f,0.f,0.f,1.f))override;
+
 };
 
