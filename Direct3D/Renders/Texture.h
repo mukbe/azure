@@ -1,7 +1,4 @@
 #pragma once
-//DirectXTex
-#include <DirectXTex.h>
-#pragma comment(lib, "directxtex.lib")
 
 class Texture
 {

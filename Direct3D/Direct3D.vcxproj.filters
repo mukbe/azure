@@ -70,6 +70,8 @@
     <ClCompile Include="Environment\Sun.cpp" />
     <ClCompile Include="Project\TerrainTool\TerrainSplat.cpp" />
     <ClCompile Include="Manager\ResourceManager.cpp" />
+    <ClCompile Include="Project\AnimationTool\CharacterTool + ImGui.cpp" />
+    <ClCompile Include="Project\AnimationTool\CharacterTool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renders\ShadowRenderer.h" />
@@ -151,6 +153,7 @@
     <ClInclude Include="Environment\Sun.h" />
     <ClInclude Include="Project\TerrainTool\TerrainSplat.h" />
     <ClInclude Include="Manager\ResourceManager.h" />
+    <ClInclude Include="Project\AnimationTool\CharacterTool.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />

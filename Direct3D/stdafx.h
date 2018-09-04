@@ -45,6 +45,10 @@ using namespace fbxsdk;
 #pragma comment(lib, "jsoncpp.lib")
 //#pragma warning(disable:4996)
 
+//DirectXTex
+#include <DirectXTex.h>
+#pragma comment(lib, "directxtex.lib")
+
 
 #include "DefineHeader.h"
 #include "./Systems/DxRenderer.h"
