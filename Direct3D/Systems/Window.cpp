@@ -2,6 +2,7 @@
 #include "Window.h"
 #include "../Program.h"
 #include "./Model/Model.h"
+
 Program* Window::program = NULL;
 
 WPARAM Window::Run()
@@ -16,11 +17,16 @@ WPARAM Window::Run()
 	pRenderer->CreateDevice();
 	pRenderer->CreateSwapChain();
 
+	_jsonRoot = new Json::Value();
+	JsonHelper::ReadData(L"LevelEditor.json", _jsonRoot);
+
 	Keyboard::Create();
 	Mouse::Create();
 
 	Time::Create();
 	Time::Get()->Start();
+
+	ResourceManager::Create();
 
 	ShaderManager::Create();
 	Shaders->Init();
@@ -77,9 +83,14 @@ WPARAM Window::Run()
 	Buffers->Delete();
 	Shaders->Delete();
 	Models::Delete();
+	ResourceManager::Delete();
 	Time::Delete();
 	Mouse::Delete();
 	Keyboard::Delete();
+
+	JsonHelper::WriteData(L"LevelEditor.json", _jsonRoot);
+	SafeDelete(_jsonRoot);
+	
 	pRenderer->Delete();
 //=============================================================
 

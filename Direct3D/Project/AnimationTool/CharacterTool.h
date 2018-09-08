@@ -20,8 +20,6 @@ public:
 	CharacterTool();
 	~CharacterTool();
 
-	void Init();
-	void Release();
 	void Update();
 	void Render();
 	void UIRender();
@@ -54,5 +52,6 @@ private:
 	void RenderAnimationTool();
 	void RenderBoneTool();
 	void RenderColliderTool();
+	void RenderPart();
 };
 

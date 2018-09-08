@@ -20,7 +20,7 @@ InstanceRenderer::InstanceRenderer(string name,UINT maxInstance)
 	shader = new InstanceShader(L"./_Shaders/001_GBuffer.hlsl");
 }
 
-InstanceRenderer::InstanceRenderer(string name)
+InstanceRenderer::InstanceRenderer(string name,wstring fileName)
 	:name(name), drawInstanceCout(0),maxInstanceCount(0)
 {
 	shader = new InstanceShader(L"./_Shaders/001_GBuffer.hlsl");

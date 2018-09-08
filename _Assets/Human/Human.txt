@@ -1,7 +1,0 @@
-Human
-
-Skin 4
-Face 12
-HairStyle 9 
-HairColor 6
-Facial Hair 5 

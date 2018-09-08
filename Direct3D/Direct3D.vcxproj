@@ -25,9 +25,16 @@
     <ClInclude Include="Bounding\BoundingBox.h" />
     <ClInclude Include="Bounding\BoundingSphere.h" />
     <ClInclude Include="Bounding\Bounding.h" />
+    <ClInclude Include="Bounding\Gjk.h" />
+    <ClInclude Include="Bounding\QuadTree\QuadTreeNode.h" />
+    <ClInclude Include="Bounding\QuadTree\QuadTreeSystem.h" />
     <ClInclude Include="ComputeShader\ComputeResource.h" />
     <ClInclude Include="ComputeShader\ComputeShader.h" />
     <ClInclude Include="Bounding\GameCollider.h" />
+    <ClInclude Include="Object\StaticObject\StaticObject.h" />
+    <ClInclude Include="Renders\Grass\GrassRenderer.h" />
+    <ClInclude Include="Project\AnimationTool\ObjectTool.h" />
+    <ClInclude Include="Utilities\ImGuiHelper.h" />
     <ClInclude Include="Manager\ResourceManager.h" />
     <ClInclude Include="Object\Unit\GameUnit.h" />
     <ClInclude Include="Environment\Sun.h" />
@@ -106,9 +113,16 @@
     <ClCompile Include="Bounding\BoundingCapsule.cpp" />
     <ClCompile Include="Bounding\BoundingBox.cpp" />
     <ClCompile Include="Bounding\BoundingSphere.cpp" />
+    <ClCompile Include="Bounding\Gjk.cpp" />
+    <ClCompile Include="Bounding\QuadTree\QuadTreeNode.cpp" />
+    <ClCompile Include="Bounding\QuadTree\QuadTreeSystem.cpp" />
     <ClCompile Include="ComputeShader\ComputeResource.cpp" />
     <ClCompile Include="ComputeShader\ComputeShader.cpp" />
     <ClCompile Include="Bounding\GameCollider.cpp" />
+    <ClCompile Include="Object\StaticObject\StaticObject.cpp" />
+    <ClCompile Include="Renders\Grass\GrassRenderer.cpp" />
+    <ClCompile Include="Project\AnimationTool\ObjectTool.cpp" />
+    <ClCompile Include="Utilities\ImGuiHelper.cpp" />
     <ClCompile Include="Manager\ResourceManager.cpp" />
     <ClCompile Include="Object\Unit\GameUnit.cpp" />
     <ClCompile Include="Environment\Sun.cpp" />
@@ -232,6 +246,11 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\005_Grass.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

@@ -11,7 +11,6 @@
 #include <functional>
 using namespace std;
 
-
 //Direct3D
 #include <dxgi1_2.h>
 #include <d3dcommon.h>
@@ -65,6 +64,10 @@ const wstring ShaderPath = L"_Shaders/";
 
 #include "./Renders/Texture.h"
 #include "./Renders/WorldBuffer.h"
+#include "./Utilities/ImGuiHelper.h"
+
+extern Json::Value* _jsonRoot;
+
 
 namespace Landscape
 {
