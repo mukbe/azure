@@ -237,6 +237,7 @@
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
+<<<<<<< HEAD
   <ItemGroup>
     <None Include="_Shaders\AtmosphericScattering.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
@@ -273,6 +274,8 @@
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
+=======
+>>>>>>> parent of 384283e... AssetManager로 ModelData 이동
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F89A7778-CBF0-4E22-B019-B7729ABB8281}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
