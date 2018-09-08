@@ -1,4 +1,5 @@
 #pragma once
+#include "./Utilities/Transform.h"
 
 class SunBuffer;
 namespace Environment
@@ -9,15 +10,28 @@ namespace Environment
 		Sun();
 		~Sun();
 
+		void Update();
 		void UpdateView();
 		void Render();
 
+		D3DXVECTOR3 GetForward() { return dir; }
+		float* GetPosPtr();
 	private:
+
 		SunBuffer* sunBuffer;
 
 		D3DXMATRIX view;
 		D3DXMATRIX ortho;
 		D3DXMATRIX shadowMatrix;
+
+		D3DXVECTOR3 dir;
+
+		float height;
+		bool bUpdate;
+
+		D3DXVECTOR3 preMousePos;
+		D3DXVECTOR3 angle;
+		D3DXVECTOR3 right;
 	};
 
 }

@@ -101,6 +101,10 @@ void Terrain::Render()
 	DeviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST);
 
+	D3DXMATRIX mat;
+	D3DXMatrixIdentity(&mat);
+	worldBuffer->SetMatrix(mat);
+
 	worldBuffer->SetVSBuffer(1);
 	worldBuffer->SetDSBuffer(1);
 	buffer->SetVSBuffer(5);

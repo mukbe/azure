@@ -4,8 +4,10 @@
 
 class BoundingFrustum
 {
-private:
+public:
+	//absolute
 	D3DXVECTOR3			vertex[8];
+	//to world
 	D3DXVECTOR3			transformVertex[8];
 	D3DXPLANE			plane[6];
 public:

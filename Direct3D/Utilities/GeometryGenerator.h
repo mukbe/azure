@@ -17,9 +17,9 @@ public:
 			:Position(px, py, pz), Normal(nx, ny, nz), TangentU(tx, ty, tz), TexC(u, v) {};
 
 		D3DXVECTOR3 Position;		//	ÁÂÇ¥
-		D3DXVECTOR3 Normal;			//	³ë¸Ö
-		D3DXVECTOR3 TangentU;		//	ÅºÁ¨ (ÅØ½ºÃ³ÁÂÇ¥)
 		D3DXVECTOR2 TexC;			//	ÅØ¼¿ ÁÂÇ¥
+		D3DXVECTOR3 Normal;			//	³ë¸Ö
+		D3DXVECTOR3 TangentU;		//	ÅºÁ¨ (ÅØ½ºÃ³ÁÂÇ¥
 	};
 
 	struct MeshData {

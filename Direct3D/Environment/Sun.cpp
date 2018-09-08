@@ -4,8 +4,14 @@
 
 
 Environment::Sun::Sun()
+	:bUpdate(true),height(5)
 {
 	this->sunBuffer = Buffers->FindShaderBuffer<SunBuffer>();
+
+	dir = D3DXVECTOR3(0, 0, 1);
+	angle = D3DXVECTOR3(0, 0, 0);
+	right = D3DXVECTOR3(1, 0, 0);
+	preMousePos = D3DXVECTOR3();
 
 	this->UpdateView();
 }
@@ -15,14 +21,52 @@ Environment::Sun::~Sun()
 {
 }
 
+void Environment::Sun::Update()
+{
+	if (bUpdate == false) return;
+
+
+	if (Mouse::Get()->Down(0) && Keyboard::Get()->Press(VK_SHIFT))
+		preMousePos = Mouse::Get()->GetPosition();
+
+	D3DXVECTOR3 current = Mouse::Get()->GetPosition();
+	D3DXVECTOR3 delta = current - preMousePos;
+	preMousePos = current;
+
+	if (Mouse::Get()->Press(0) && Keyboard::Get()->Press(VK_SHIFT))
+	{
+		angle.y += delta.x * 0.005f;
+		angle.x -= delta.y * 0.005f;
+
+
+		D3DXMATRIX mat;
+		D3DXQUATERNION q;
+
+		D3DXMatrixRotationAxis(&mat, &right, angle.x);
+		D3DXVec3TransformNormal(&dir, &dir, &mat);
+
+
+		D3DXQuaternionRotationYawPitchRoll(&q, angle.y, 0, 0);
+		D3DXMatrixRotationQuaternion(&mat, &q);
+		D3DXVec3TransformNormal(&dir, &dir, &mat);
+
+		D3DXVec3TransformNormal(&right, &right, &mat);
+
+
+
+		angle = D3DXVECTOR3(0,0,0);
+		//transform->RotateWorld(0, delta.x * 0.001f, 0);
+		//transform->RotateSelf(-delta.y * 0.001f, 0, 0);
+	}
+}
+
 void Environment::Sun::UpdateView()
 {
-	D3DXVECTOR3 origin, dir;
-	D3DXVECTOR3 center(50, 0, 50);
-	origin = sunBuffer->GetPos();
-	dir = center - origin;
+	//TODO 보는 방향 조정해야됨
+	D3DXVECTOR3 center(0, 0, 0), origin;
 	D3DXVec3Normalize(&dir, &dir);
 	sunBuffer->SetDirection(dir);
+	origin = -dir * 50.f;
 
 	D3DXVECTOR3 up;
 	D3DXVec3Cross(&up, &D3DXVECTOR3(1.f, 0.f, 0.f), &dir);
@@ -63,4 +107,9 @@ void Environment::Sun::UpdateView()
 void Environment::Sun::Render()
 {
 	sunBuffer->SetPSBuffer(4);
+}
+
+float * Environment::Sun::GetPosPtr()
+{
+	return sunBuffer->GetPosPtr();
 }

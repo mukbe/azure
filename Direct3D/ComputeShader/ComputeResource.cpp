@@ -481,3 +481,82 @@ void CAppendResource1D::CreateUAV()
 	assert(SUCCEEDED(hr));
 
 }
+
+CResource3D::CResource3D(UINT width, UINT height, UINT depth, DXGI_FORMAT format, void * pInitData)
+	:IComputeResource(), rwBuffer(nullptr), readBuffer(nullptr), format(format)
+{
+	this->depth = depth;
+	CreateBufferForGPU(width, height, depth, pInitData, rwBuffer);
+	CreateBufferForGPU(width, height, depth, nullptr, readBuffer);
+	CreateSRV();
+	CreateUAV();
+
+}
+
+CResource3D::~CResource3D()
+{
+}
+
+void CResource3D::CreateBufferForGPU(UINT width, UINT height, UINT depth, void * pInitData, ID3D11Texture3D * buffer)
+{
+	D3D11_TEXTURE3D_DESC desc;
+	ZeroMemory(&desc, sizeof(D3D11_TEXTURE3D_DESC));
+	desc.Format = format;
+	desc.Width = width;
+	desc.Height = height;
+	desc.Depth = depth;
+
+	HRESULT hr;
+	if (rwBuffer == nullptr)
+	{
+		desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
+
+		hr = Device->CreateTexture3D(&desc, nullptr, &rwBuffer);
+	}
+	else
+	{
+		desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+		desc.Usage = D3D11_USAGE_STAGING;
+
+		hr = Device->CreateTexture3D(&desc, nullptr, &readBuffer);
+	}
+	assert(SUCCEEDED(hr));
+
+}
+
+void CResource3D::CreateSRV()
+{
+	D3D11_TEXTURE3D_DESC bufDesc;
+	ZeroMemory(&bufDesc, sizeof(D3D11_TEXTURE3D_DESC));
+	rwBuffer->GetDesc(&bufDesc);
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC desc;
+	ZeroMemory(&desc, sizeof(desc));
+	desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE3D;
+	desc.Format = format;
+	desc.Texture3D.MipLevels = -1;
+	desc.Texture3D.MostDetailedMip = 0;
+
+	HRESULT hr = Device->CreateShaderResourceView(rwBuffer, &desc, &srv);
+	assert(SUCCEEDED(hr));
+
+}
+
+void CResource3D::CreateUAV()
+{
+	D3D11_TEXTURE3D_DESC bufDesc;
+	ZeroMemory(&bufDesc, sizeof(D3D11_TEXTURE3D_DESC));
+	rwBuffer->GetDesc(&bufDesc);
+
+	D3D11_UNORDERED_ACCESS_VIEW_DESC viewDesc;
+	ZeroMemory(&viewDesc, sizeof(viewDesc));
+	viewDesc.Format = bufDesc.Format;
+	viewDesc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE3D;
+	viewDesc.Texture3D.MipSlice = 0;
+	viewDesc.Texture3D.FirstWSlice = 0;
+	viewDesc.Texture3D.WSize = depth;
+
+	HRESULT hr = Device->CreateUnorderedAccessView(rwBuffer, &viewDesc, &uav);
+
+	assert(SUCCEEDED(hr));
+}

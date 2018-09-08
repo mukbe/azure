@@ -114,6 +114,8 @@ public:
 	D3DXVECTOR3 GetPos() { return this->Data.SunPosition; }
 	D3DXVECTOR3 GetDir() { return this->Data.SunDir; }
 
+	float* GetPosPtr() { return &Data.SunPosition.x; }
+
 	void SetView(D3DXMATRIX mat)
 	{
 		this->Data.SunView = mat;

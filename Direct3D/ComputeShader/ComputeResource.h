@@ -87,3 +87,25 @@ private:
 	UINT byteWidth;
 
 };
+
+class CResource3D : public IComputeResource
+{
+public:
+	CResource3D(UINT width, UINT height, UINT depth, DXGI_FORMAT format = DXGI_FORMAT_R32G32B32A32_FLOAT, void * pInitData = nullptr);
+	virtual~CResource3D();
+
+	//virtual void GetDatas(vector<vector<D3DXCOLOR>>& colors);
+
+
+private:
+	void CreateBufferForGPU(UINT width, UINT height, UINT depth, void * pInitData, ID3D11Texture3D* buffer);
+	void CreateSRV();
+	void CreateUAV();
+
+	ID3D11Texture3D * rwBuffer;
+	ID3D11Texture3D* readBuffer;
+	DXGI_FORMAT format;
+	UINT byteWidth;
+	UINT depth;
+};
+
