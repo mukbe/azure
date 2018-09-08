@@ -72,7 +72,6 @@ void ModelMeshPart::Render(Shader* shader)
 	UINT stride = sizeof(VertexType);
 	UINT offset = 0;
 
-	material->UpdateBuffer();
 	material->BindBuffer();
 
 	DeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);

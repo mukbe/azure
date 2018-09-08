@@ -2,7 +2,7 @@
    "character/pandaren/male/pandarenmale_0" : {
       "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
       "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
-    "DiffuseFile": [ "../_Assets/Pandaren/PandarenBody.png" ],
+    "DiffuseFile": [ "../_Assets/Pandaren/Body.png" ],
       "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
       "EmissiveFile" : [ "" ],
       "Name" : [ "character/pandaren/male/pandarenmale_0" ],
@@ -14,7 +14,7 @@
    "character/pandaren/male/pandarenmale_18" : {
       "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
       "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
-    "DiffuseFile": [ "../_Assets/Pandaren/PandarenBody.png" ],
+    "DiffuseFile": [ "../_Assets/Pandaren/Body.png" ],
       "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
       "EmissiveFile" : [ "" ],
       "Name" : [ "character/pandaren/male/pandarenmale_18" ],
@@ -26,7 +26,7 @@
    "character/pandaren/male/pandarenmale_19" : {
       "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
       "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
-    "DiffuseFile": [ "../_Assets/Pandaren/PandarenBody.png" ],
+    "DiffuseFile": [ "../_Assets/Pandaren/Body.png" ],
       "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
       "EmissiveFile" : [ "" ],
       "Name" : [ "character/pandaren/male/pandarenmale_19" ],
@@ -38,7 +38,7 @@
    "character/pandaren/male/pandarenmale_29" : {
       "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
       "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
-    "DiffuseFile": [ "../_Assets/Pandaren/PandarenBody.png" ],
+    "DiffuseFile": [ "../_Assets/Pandaren/Body.png" ],
       "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
       "EmissiveFile" : [ "" ],
       "Name" : [ "character/pandaren/male/pandarenmale_29" ],
@@ -50,7 +50,7 @@
    "character/pandaren/male/pandarenmale_3" : {
       "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
       "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
-    "DiffuseFile": [ "../_Assets/Pandaren/PandarenBody.png" ],
+    "DiffuseFile": [ "../_Assets/Pandaren/Body.png" ],
       "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
       "EmissiveFile" : [ "" ],
       "Name" : [ "character/pandaren/male/pandarenmale_3" ],
@@ -62,7 +62,7 @@
    "character/pandaren/male/pandarenmale_38" : {
       "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
       "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
-    "DiffuseFile": [ "../_Assets/Pandaren/PandarenBody.png" ],
+    "DiffuseFile": [ "../_Assets/Pandaren/Body.png" ],
       "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
       "EmissiveFile" : [ "" ],
       "Name" : [ "character/pandaren/male/pandarenmale_38" ],
@@ -74,7 +74,7 @@
    "character/pandaren/male/pandarenmale_4" : {
       "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
       "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
-    "DiffuseFile": [ "../_Assets/Pandaren/PandarenBody.png" ],
+    "DiffuseFile": [ "../_Assets/Pandaren/Body.png" ],
       "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
       "EmissiveFile" : [ "" ],
       "Name" : [ "character/pandaren/male/pandarenmale_4" ],
@@ -83,22 +83,22 @@
       "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
       "SpecularFile" : [ "" ]
    },
-  "character/pandaren/male/pandarenmale_40": {
-    "Ambient": [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
-    "Diffuse": [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
-    "DiffuseFile": [ "../_Assets/Pandaren/PandarenHair.png" ],
-    "Emissive": [ 0.0, 0.0, 0.0, 1.0 ],
-    "EmissiveFile": [ "" ],
-    "Name": [ "character/pandaren/male/pandarenmale_40" ],
-    "NormalFile": [ "" ],
-    "Shininess": 20.0,
-    "Specular": [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
-    "SpecularFile": [ "" ]
-  },
+   "character/pandaren/male/pandarenmale_40" : {
+      "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
+      "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
+    "DiffuseFile": [ "../_Assets/Pandaren/pandamaleskinextra00_02.png" ],
+      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "EmissiveFile" : [ "" ],
+      "Name" : [ "character/pandaren/male/pandarenmale_40" ],
+      "NormalFile" : [ "" ],
+      "Shininess" : 20.0,
+      "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
+      "SpecularFile" : [ "" ]
+   },
    "character/pandaren/male/pandarenmale_5" : {
       "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
       "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
-    "DiffuseFile": [ "../_Assets/Pandaren/PandarenBody.png" ],
+    "DiffuseFile": [ "../_Assets/Pandaren/Body.png" ],
       "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
       "EmissiveFile" : [ "" ],
       "Name" : [ "character/pandaren/male/pandarenmale_5" ],
@@ -107,34 +107,34 @@
       "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
       "SpecularFile" : [ "" ]
    },
-  "character/pandaren/male/pandarenmale_62": {
-    "Ambient": [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
-    "Diffuse": [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
-    "DiffuseFile": [ "../_Assets/Pandaren/PandarenHair.png" ],
-    "Emissive": [ 0.0, 0.0, 0.0, 1.0 ],
-    "EmissiveFile": [ "" ],
-    "Name": [ "character/pandaren/male/pandarenmale_62" ],
-    "NormalFile": [ "" ],
-    "Shininess": 20.0,
-    "Specular": [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
-    "SpecularFile": [ "" ]
-  },
-  "character/pandaren/male/pandarenmale_69": {
-    "Ambient": [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
-    "Diffuse": [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
-    "DiffuseFile": [ "../_Assets/Pandaren/PandarenHair.png" ],
-    "Emissive": [ 0.0, 0.0, 0.0, 1.0 ],
-    "EmissiveFile": [ "" ],
-    "Name": [ "character/pandaren/male/pandarenmale_69" ],
-    "NormalFile": [ "" ],
-    "Shininess": 20.0,
-    "Specular": [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
-    "SpecularFile": [ "" ]
-  },
+   "character/pandaren/male/pandarenmale_62" : {
+      "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
+      "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
+    "DiffuseFile": [ "../_Assets/Pandaren/pandamaleskinextra00_02.png" ],
+      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "EmissiveFile" : [ "" ],
+      "Name" : [ "character/pandaren/male/pandarenmale_62" ],
+      "NormalFile" : [ "" ],
+      "Shininess" : 20.0,
+      "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
+      "SpecularFile" : [ "" ]
+   },
+   "character/pandaren/male/pandarenmale_69" : {
+      "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
+      "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
+    "DiffuseFile": [ "../_Assets/Pandaren/pandamaleskinextra00_02.png" ],
+      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "EmissiveFile" : [ "" ],
+      "Name" : [ "character/pandaren/male/pandarenmale_69" ],
+      "NormalFile" : [ "" ],
+      "Shininess" : 20.0,
+      "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
+      "SpecularFile" : [ "" ]
+   },
    "character/pandaren/male/pandarenmale_7" : {
       "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
       "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
-    "DiffuseFile": [ "../_Assets/Pandaren/PandarenBody.png" ],
+    "DiffuseFile": [ "../_Assets/Pandaren/Body.png" ],
       "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
       "EmissiveFile" : [ "" ],
       "Name" : [ "character/pandaren/male/pandarenmale_7" ],
@@ -143,22 +143,22 @@
       "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
       "SpecularFile" : [ "" ]
    },
-  "character/pandaren/male/pandarenmale_87": {
-    "Ambient": [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
-    "Diffuse": [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
-    "DiffuseFile": [ "../_Assets/Pandaren/PandarenHair.png" ],
-    "Emissive": [ 0.0, 0.0, 0.0, 1.0 ],
-    "EmissiveFile": [ "" ],
-    "Name": [ "character/pandaren/male/pandarenmale_87" ],
-    "NormalFile": [ "" ],
-    "Shininess": 20.0,
-    "Specular": [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
-    "SpecularFile": [ "" ]
-  },
+   "character/pandaren/male/pandarenmale_87" : {
+      "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
+      "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
+    "DiffuseFile": [ "../_Assets/Pandaren/pandamaleskinextra00_02.png" ],
+      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "EmissiveFile" : [ "" ],
+      "Name" : [ "character/pandaren/male/pandarenmale_87" ],
+      "NormalFile" : [ "" ],
+      "Shininess" : 20.0,
+      "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
+      "SpecularFile" : [ "" ]
+   },
    "character/pandaren/male/pandarenmale_9" : {
       "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
       "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
-    "DiffuseFile": [ "../_Assets/Pandaren/PandarenBody.png" ],
+    "DiffuseFile": [ "../_Assets/Pandaren/Body.png" ],
       "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
       "EmissiveFile" : [ "" ],
       "Name" : [ "character/pandaren/male/pandarenmale_9" ],

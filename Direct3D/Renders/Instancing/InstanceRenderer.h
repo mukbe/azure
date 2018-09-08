@@ -8,7 +8,7 @@ struct InstanceData
 class InstanceRenderer
 {
 private:
-	Synthesize(string,name,Name)
+	string name;
 	UINT maxInstanceCount;
 	UINT drawInstanceCout;
 	class InstanceShader* shader;
@@ -29,13 +29,13 @@ private:
 	void CreateBuffer();
 public:
 	InstanceRenderer(string name,UINT maxInstance);		//툴작업용 생성자
-	InstanceRenderer(string name,wstring fileName);		//플레이씬용 생정자 
+	InstanceRenderer(string name);						//플레이씬용 생정자 
 	~InstanceRenderer();
 
 	void InitData(wstring materiakFile, wstring meshFile);
 	void UpdateBuffer();
 	void Render();
 
-	void AddInstanceData(class GameObject* pOject);
+	void AddInstanceData(class GameObject* mat);
 };
 

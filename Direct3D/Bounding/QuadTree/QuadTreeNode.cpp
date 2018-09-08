@@ -8,14 +8,13 @@
 UINT QuadTreeNode::_renderingNodeCount = 0;
 
 QuadTreeNode::QuadTreeNode(int level , D3DXVECTOR3 minPos, D3DXVECTOR3 maxPos)
-	:level(level), isInFrustum(false)
+	:level(level)
 {
 	this->boundingBox = new BoundingBox(minPos, maxPos);
 	this->SubDevide();
 }
 
 QuadTreeNode::QuadTreeNode(QuadTreeNode * parent, CornerType cornerType)
-	:isInFrustum(false)
 {
 	D3DXVECTOR3 parentMin, parentMax,newMinPos,newMaxPos;
 	float width, height;
@@ -62,33 +61,7 @@ QuadTreeNode::~QuadTreeNode()
 	for (UINT i = 0; i < childs.size(); ++i)
 		SafeDelete(childs[i]);
 	childs.clear();
-}
-
-void QuadTreeNode::UpdateNode(BoundingFrustum * pFrustum)
-{
-	if (CanDeepInTo(level) == true)
-	{
-		isInFrustum = this->IsInFrustum(pFrustum);
-	}
-	else
-	{
-		isInFrustum = this->IsInFrustum(pFrustum);
-		if (isInFrustum)
-		{
-			childs[0]->UpdateNode(pFrustum);
-			childs[1]->UpdateNode(pFrustum);
-			childs[2]->UpdateNode(pFrustum);
-			childs[3]->UpdateNode(pFrustum);
-		}
-		else
-		{
-			childs[0]->SetIsInfrustum(false);
-			childs[1]->SetIsInfrustum(false);
-			childs[2]->SetIsInfrustum(false);
-			childs[3]->SetIsInfrustum(false);
-			
-		}
-	}
+	staticObjectList.clear();
 }
 
 void QuadTreeNode::Render()
@@ -97,10 +70,8 @@ void QuadTreeNode::Render()
 	{
 		if (this->IsInFrustum(MainCamera->GetFrustum()))
 		{
-			childs[0]->Render();
-			childs[1]->Render();
-			childs[2]->Render();
-			childs[3]->Render();
+			for (UINT i = 0; i < CornerType::End; ++i)
+				childs[i]->Render();
 		}
 	}
 	else
@@ -128,20 +99,5 @@ bool QuadTreeNode::SubDevide()
 //TODO AABB 프러스텀 충돌 구현 후 추가 작업
 bool QuadTreeNode::IsInFrustum(BoundingFrustum* pFrustum)
 {
-	return isInFrustum = pFrustum->IsSphereInFrustum(boundingBox);
-}
-
-void QuadTreeNode::SetIsInfrustum(bool b)
-{
-	if (CanDeepInTo(level) == true)
-	{
-		isInFrustum = b;
-	}
-	else
-	{
-		childs[0]->SetIsInfrustum(false);
-		childs[1]->SetIsInfrustum(false);
-		childs[2]->SetIsInfrustum(false);
-		childs[3]->SetIsInfrustum(false);
-	}
+	return pFrustum->IsSphereInFrustum(boundingBox);
 }

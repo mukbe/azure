@@ -22,8 +22,6 @@
 
 #include "./Renders/Gizmo.h"
 
-#include "./Manager/ResourceManager.h"
-
 #define KeyCode Keyboard::Get()
 #define GameMouse Mouse::Get()
 #define DeltaTime Time::Delta()

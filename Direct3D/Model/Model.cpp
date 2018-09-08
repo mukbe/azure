@@ -43,8 +43,6 @@ Model::~Model()
 
 }
 
-
-
 ModelMesh * Model::Mesh(wstring name)
 {
 	for (ModelMesh* mesh : meshes)

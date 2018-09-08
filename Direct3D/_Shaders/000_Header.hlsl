@@ -25,7 +25,6 @@ cbuffer UnPacker : register(b2)
 
 cbuffer MaterialBuffer : register(b3)
 {
-    float4 AmbientColor;
     float4 DiffuseColor;
     float4 SpecColor;
     float4 EmissiveColor;
@@ -34,8 +33,6 @@ cbuffer MaterialBuffer : register(b3)
     float DetailFactor;
     float2 MaterialPadding;
 }
-
-
 cbuffer SunBuffer : register(b4)
 {
     matrix SunView;
@@ -58,6 +55,7 @@ cbuffer ModelBuffer : register(b6)
 {
     matrix _modelBones[230];
 }
+
 
 
 Texture2D _deferredNormal : register(t0);

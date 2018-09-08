@@ -9,7 +9,6 @@
 #include "../Utilities/Math.h"
 
 #include "../Utilities/Transform.h"
-#include "./Utilities/BinaryFile.h"
 
 
 BoundingBox::BoundingBox()
@@ -808,20 +807,6 @@ bool BoundingBox::IntersectsOBB(D3DXMATRIX matA, BoundingBox * pBoundA, D3DXMATR
 		return false;
 
 	return true;
-}
-
-void BoundingBox::SaveData(BinaryWriter * w)
-{
-	w->Vector3(minPos);
-	w->Vector3(maxPos);
-	w->Vector3(halfSize);
-}
-
-void BoundingBox::LoadData(BinaryReader * r)
-{
-	minPos = r->Vector3();
-	maxPos = r->Vector3();
-	halfSize = r->Vector3();
 }
 
 

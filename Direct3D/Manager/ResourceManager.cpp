@@ -1,267 +1,64 @@
 #include "stdafx.h"
 #include "ResourceManager.h"
 
-#include "./Model/Model.h"
-#include "./Model/ModelAnimClip.h"
-#include "./Model/ModelBone.h"
-#include "./Model/ModelMesh.h"
-
-#include "./Renders/Material.h"
-
 SingletonCpp(ResourceManager)
 
 ResourceManager::ResourceManager()
-	:isShow(true)
+	:isShow(false)
 {
 
 }
 ResourceManager::~ResourceManager()
 {
-	TextureIter iter = textures.begin();
-	for (; iter != textures.end(); ++iter)
-		SafeDelete(iter->second);
-	textures.clear();
 
-	ModelContainerIter modelIter = models.begin();
-	for (; modelIter != models.end(); ++modelIter)
-	{
-		modelIter->second.Release();
-	}
-	models.clear();
 }
-
-
-void ResourceManager::LoadAsset()
-{
-	this->AddModelData(Assets + L"Pandaren/Pandaren", true);
-	this->AddModelData(Assets + L"Objects/FishingBox/FishingBox");
-	this->AddModelData(Assets + L"Objects/Trees/Tree1");
-	this->AddModelData(Assets + L"Objects/Trees/Tree2");
-	this->AddModelData(Assets + L"Objects/Trees/Tree3");
-	this->AddModelData(Assets + L"Objects/Trees/Tree4");
-	this->AddModelData(Assets + L"Objects/Trees/Tree5");
-}
-
-Texture * ResourceManager::AddTexture(wstring file, string keyName)
-{
-	TextureIter iter = textures.find(keyName);
-	if (iter != textures.end())
-		return iter->second;
-
-	Texture* newTexture = new Texture(file);
-	this->textures.insert(make_pair(keyName, newTexture));
-
-	return newTexture;
-}
-
-Texture * ResourceManager::FindTexture(string keyName)
-{
-	TextureIter iter = textures.find(keyName);
-	if (iter == textures.end())return nullptr;
-	
-	return iter->second;
-}
-
-ID3D11ShaderResourceView * ResourceManager::GetRsourceView(string keyName)
-{
-	TextureIter iter = textures.find(keyName);
-	if (iter == textures.end())return nullptr;
-	return iter->second->GetSRV();
-}
-
-ModelData ResourceManager::AddModelData(wstring file, string keyName,bool isAnimation)
-{
-	ModelContainerIter iter = models.find(keyName);
-	if (iter != models.end())
-		return iter->second;
-
-	ModelData data;
-
-	Models::LoadMaterial(file + L".material", &data.materials);
-	Models::LoadMesh(file + L".mesh", &data.meshDatas.Bones, &data.meshDatas.Meshes);
-
-	if(isAnimation)
-		Models::LoadAnimation(file + L".anim", &data.animations);
-
-	this->models.insert(make_pair(keyName, data));
-
-	return data;
-}
-
-ModelData ResourceManager::AddModelData(wstring file, bool isAnimation)
-{
-	wstring keyName = Path::GetFileNameWithoutExtension(file);
-	return AddModelData(file, String::WStringToString(keyName), isAnimation);
-}
-
-ModelData ResourceManager::GetModelData(string keyName)
-{
-	ModelContainerIter iter = models.find(keyName);
-	if (iter != models.end())
-	{
-		return iter->second;
-	}
-
-	return ModelData();
-}
-
-Model * ResourceManager::GetModel(wstring file, string keyName, bool isAnimation)
-{
-	ModelContainerIter iter = models.find(keyName);
-	if (iter != models.end())
-	{
-		ModelData data = iter->second;
-		class Model* model = new Model;
-		data.Clone(model);
-		model->BindMeshData();
-		return model;
-	}
-
-	ModelData data = this->AddModelData(file, keyName, isAnimation);
-	Model* model = new Model;
-	data.Clone(model);
-	model->BindMeshData();
-
-	return model;
-}
-
-Model * ResourceManager::GetModel(wstring file, bool isAnimation)
-{
-	wstring keyName = Path::GetFileNameWithoutExtension(file);
-
-	return this->GetModel(file, String::WStringToString(keyName), isAnimation);
-}
-
-
 
 void ResourceManager::UIRender()
 {
 	if (isShow == false) return;
 
-	ImGuiDragDropFlags src_flags = 0;
-	src_flags |= ImGuiDragDropFlags_SourceNoDisableHover;
-	src_flags |= ImGuiDragDropFlags_SourceNoHoldToOpenOthers;
-
 	ImGui::Begin("Assets");
+	static const char* names[6] = { "1. Adbul", "2. Alfonso", "3. Aline", "4. Amelie", "5. Anna", "6. Arthur" };
+	int move_from = -1, move_to = -1;
+	for (int n = 0; n < IM_ARRAYSIZE(names); n++)
 	{
-		//Textures ----------------------------------------------------------------------------
-		if (ImGui::TreeNode("Textures"))
+		ImGui::Selectable(names[n]);
+
+		ImGuiDragDropFlags src_flags = 0;
+		src_flags |= ImGuiDragDropFlags_SourceNoDisableHover;     // Keep the source displayed as hovered
+		src_flags |= ImGuiDragDropFlags_SourceNoHoldToOpenOthers; // Because our dragging is local, we disable the feature of opening foreign treenodes/tabs while dragging
+																  //src_flags |= ImGuiDragDropFlags_SourceNoPreviewTooltip; // Hide the tooltip
+		if (ImGui::BeginDragDropSource(src_flags))
 		{
-			TextureIter iter = textures.begin();
-			for (; iter != textures.end(); ++iter)
-			{
-				ImGui::Selectable(iter->first.c_str());
-
-				if (ImGui::BeginDragDropSource(src_flags))
-				{
-					if (!(src_flags & ImGuiDragDropFlags_SourceNoPreviewTooltip))
-					{
-						ImGui::Text("%s", iter->first.c_str());
-						ImGui::Image(iter->second->GetSRV(), ImVec2(50, 50));
-					}
-					ImGui::SetDragDropPayload("TextureMove", iter->second, sizeof(Texture));
-					ImGui::EndDragDropSource();
-				}
-			}
-
-			ImGui::TreePop();
-		}
-		//--------------------------------------------------------------------------------------
-		//Textures ----------------------------------------------------------------------------
-		if (ImGui::TreeNode("Models"))
-		{
-			ModelContainerIter iter = models.begin();
-			for (; iter != models.end(); ++iter)
-			{
-				ImGui::Selectable(iter->first.c_str());
-
-				if (ImGui::BeginDragDropSource(src_flags))
-				{
-					if (!(src_flags & ImGuiDragDropFlags_SourceNoPreviewTooltip))
-					{
-						ImGui::Text("%s", iter->first.c_str());
-					}
-					ImGui::SetDragDropPayload("ModelMove", &iter->second, sizeof(ModelData));
-					ImGui::EndDragDropSource();
-				}
-			}
-			ImGui::TreePop();
+			if (!(src_flags & ImGuiDragDropFlags_SourceNoPreviewTooltip))
+				ImGui::Text("Moving \"%s\"", names[n]);
+			ImGui::SetDragDropPayload("Assets_Move", &n, sizeof(int));
+			ImGui::EndDragDropSource();
 		}
 
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Assets_Move"))
+			{
+				move_from = *(const int*)payload->Data;
+				move_to = n;
+			}
+			ImGui::EndDragDropTarget();
+		}
 	}
+
+	if (move_from != -1 && move_to != -1)
+	{
+		// Reorder items
+		int copy_dst = (move_from < move_to) ? move_from : move_to + 1;
+		int copy_src = (move_from < move_to) ? move_from + 1 : move_to;
+		int copy_count = (move_from < move_to) ? move_to - move_from : move_from - move_to;
+		const char* tmp = names[move_from];
+		//printf("[%05d] move %d->%d (copy %d..%d to %d..%d)\n", ImGui::GetFrameCount(), move_from, move_to, copy_src, copy_src + copy_count - 1, copy_dst, copy_dst + copy_count - 1);
+		memmove(&names[copy_dst], &names[copy_src], (size_t)copy_count * sizeof(const char*));
+		names[move_to] = tmp;
+		ImGui::SetDragDropPayload("Assets_Move", &move_to, sizeof(int)); // Update payload immediately so on the next frame if we move the mouse to an earlier item our index payload will be correct. This is odd and showcase how the DnD api isn't best presented in this example.
+	}
+
 	ImGui::End();
-}
-
-
-
-
-void ModelData::Clone(vector<class Material*>* pMaterials, vector<class ModelBone*>* pBones, 
-	vector<class ModelMesh*>* pMeshes, vector<class ModelAnimClip*>* pAnim)
-{
-	pMaterials->clear();
-	for (Material* material : materials)
-	{
-		Material* temp = nullptr;
-		material->Clone((void **)&temp);
-
-		pMaterials->push_back(temp);
-	}
-
-	pBones->clear();
-	for (ModelBone* bone : meshDatas.Bones)
-	{
-		ModelBone* temp = nullptr;
-		bone->Clone((void**)&temp);
-
-		pBones->push_back(temp);
-	}
-
-	pMeshes->clear();
-	for (ModelMesh* mesh : meshDatas.Meshes)
-	{
-		ModelMesh* temp = nullptr;
-		mesh->Clone((void**)&temp);
-
-		pMeshes->push_back(temp);
-	}
-
-	pAnim->clear();
-	for (ModelAnimClip* clip : animations)
-	{
-		ModelAnimClip* temp = nullptr;
-		clip->Clone((void**)&temp);
-
-		pAnim->push_back(temp);
-	}
-}
-
-void ModelData::Clone(Model * model)
-{
-	this->Clone(&model->materials, &model->bones, &model->meshes, &model->clips);
-}
-
-void ModelData::Release()
-{
-	for (Material* material : materials)
-	{
-		SafeDelete(material)
-	}
-	materials.clear();
-
-	for (ModelBone* bone : meshDatas.Bones)
-	{
-		SafeDelete(bone);
-	}
-	meshDatas.Bones.clear();
-
-	for (ModelMesh* mesh : meshDatas.Meshes)
-	{
-		SafeDelete(mesh);
-	}
-
-	for (ModelAnimClip* clip : animations)
-	{
-		SafeDelete(clip);
-	}
-	animations.clear();
 }

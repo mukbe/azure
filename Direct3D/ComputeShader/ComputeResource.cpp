@@ -180,6 +180,7 @@ void CResource1D::CreateUAV()
 }
 void CResource1D::GetDatas(void * datas)
 {
+
 	DeviceContext->CopyResource(readBuffer, rwBuffer);
 
 	D3D11_MAPPED_SUBRESOURCE dat = { 0 };

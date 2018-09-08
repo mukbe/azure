@@ -8,7 +8,7 @@ public:
 	friend class Models;
 	friend class ObjectData;
 	friend class InstanceRenderer;
-public:
+private:
 	ModelBone();
 	~ModelBone();
 

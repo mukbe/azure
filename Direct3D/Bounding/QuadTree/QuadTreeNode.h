@@ -14,21 +14,19 @@ private:
 	};
 private:
 	int level;
-	bool isInFrustum;
 	class BoundingBox* boundingBox;
 	vector<QuadTreeNode*> childs;
+	vector<class StaticObject*> staticObjectList;
 public:
 	//TODO 추후 지형 높이가 들어갈경우 수정
 	QuadTreeNode(int level , D3DXVECTOR3 minPos, D3DXVECTOR3 maxPos);			//최초 노드 생성자
 	QuadTreeNode(QuadTreeNode* parent,CornerType cornerType);					//자식 노드 생성자
 	~QuadTreeNode();
 
-	void UpdateNode(class BoundingFrustum* pFrustum);
 	void Render();
 private:
 	bool SubDevide();															//아직 level이 0보다 크다면 분리한다.
 	bool IsInFrustum(class BoundingFrustum* pFrustum);							//프러스텀에 포함되는가.
-	void SetIsInfrustum(bool b);
 };
 
 #define CanDeepInTo(level) level > 0

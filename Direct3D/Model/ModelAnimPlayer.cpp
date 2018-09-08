@@ -72,7 +72,6 @@ void ModelAnimPlayer::Update()
 void ModelAnimPlayer::Render()
 {
 	if (model == nullptr)return;
-
 	model->Buffer()->SetVSBuffer(6);
 
 	for (ModelMesh* mesh : model->Meshes())

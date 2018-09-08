@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Material.h"
 #include "WorldBuffer.h"
-#include "./Utilities/ImGuiHelper.h"
+
 
 Material::Material()
 	:name(L""),number(0),diffuseColor(0.f,0.f,0.f,1.f),specColor(0.f,0.f,0.f,1.f),emissiveColor(0.f,0.f,0.f,1.f),shiness(0.f),
@@ -13,7 +13,11 @@ Material::Material()
 
 Material::~Material()
 {
-	
+	//TODO 추 후 리소스 메니져 생기면 그쪽에서 할당 해제
+	//SafeRelease(this->diffuseMap);
+	//SafeRelease(this->specularMap);
+	//SafeRelease(this->normalMap);
+	//SafeRelease(this->emissiveMap);
 }
 
 void Material::Clone(void ** clone)
@@ -87,45 +91,4 @@ void Material::UnBindBuffer()
 		DeviceContext->PSSetShaderResources(3, 1, nullView);
 	if (this->detailMap)
 		DeviceContext->PSSetShaderResources(4, 1, nullView);
-}
-
-void Material::UIRender()
-{
-	ImGuiHelper::RenderImageButton(diffuseMap);
-	ImGui::SameLine();
-	ImGui::Text("DiffuseMap");
-
-	ImGuiHelper::RenderImageButton(specularMap);
-	ImGui::SameLine();
-	ImGui::Text("SpecularMap");
-
-	ImGuiHelper::RenderImageButton(emissiveMap);
-	ImGui::SameLine();
-	ImGui::Text("EmissiveMap");
-
-	ImGuiHelper::RenderImageButton(normalMap);
-	ImGui::SameLine();
-	ImGui::Text("NormalMap");
-
-	ImGuiHelper::RenderImageButton(detailMap);
-	ImGui::SameLine();
-	ImGui::Text("DetailMap");
-
-	ImGui::Separator();
-
-	ImGui::ColorEdit4("AmbientColor", (float*)&ambientColor.r,
-		ImGuiColorEditFlags_Float | ImGuiColorEditFlags_AlphaPreviewHalf);
-
-	ImGui::ColorEdit4("DiffuseColor", (float*)&diffuseColor.r,
-		ImGuiColorEditFlags_Float | ImGuiColorEditFlags_AlphaPreviewHalf);
-
-	ImGui::ColorEdit4("SpecColor", (float*)&specColor.r,
-		ImGuiColorEditFlags_Float | ImGuiColorEditFlags_AlphaPreviewHalf);
-
-	ImGui::ColorEdit4("EmissiveColor", (float*)&emissiveColor.r,
-		ImGuiColorEditFlags_Float | ImGuiColorEditFlags_AlphaPreviewHalf);
-
-	ImGui::Separator();
-
-	UpdateBuffer();
 }

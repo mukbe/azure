@@ -8,25 +8,24 @@
 StaticObject::StaticObject(string name)
 	:GameObject(name)
 {
-
+	this->collider = new GameCollider(this, new BoundingBox);
+	this->collider->SetFinalMatrix(this->transform->GetFinalMatrix());
+	this->collider->SetType(GameCollider::ColliderType::Static);
 }
 
 
 StaticObject::~StaticObject()
 {
-
+	SafeDelete(collider);
 }
 
 void StaticObject::Init()
 {
-	
 }
 
 void StaticObject::Release()
 {
-	for (UINT i = 0; i < colliderList.size(); ++i)
-		SafeDelete(colliderList[i]);
-	colliderList.clear();
+
 }
 
 void StaticObject::PrevUpdate()
@@ -39,10 +38,4 @@ void StaticObject::Update()
 
 void StaticObject::PostUpdate()
 {
-}
-
-void StaticObject::AddCollider(GameCollider * collider)
-{
-	collider->SetFinalMatrix(collider->GetFinalMatrix() * transform->GetFinalMatrix());
-	this->colliderList.push_back(collider);
 }

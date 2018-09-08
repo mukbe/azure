@@ -5,10 +5,12 @@
 #include "./Model/Model.h"
 #include "./Model/ModelBone.h"
 #include "./Model/ModelMesh.h"
-#include "./Model/ModelMeshPart.h"
 #include "./Model/ModelAnimClip.h"
 
 #include "./Project/AnimationTool/FBX/Exporter.h"
+
+#include "./Utilities/String.h"
+#include "./Utilities/Path.h"
 
 #include "./View/FreeCamera.h"
 #include "./Utilities/Transform.h"
@@ -16,23 +18,35 @@
 
 #include "./Renders/DeferredRenderer.h"
 #include "./Renders/Texture.h"
-#include "./Renders/Material.h"
+
 #include "./Renders/Instancing/InstanceRenderer.h"
-
-#include "./Utilities/String.h"
-#include "./Utilities/Path.h"
-#include "./Utilities/DebugTransform.h"
-#include "./Utilities/BinaryFile.h"
-
-#include "./Object/Item/GameItem.h"
 #include "./Object/GameObject/GameObject.h"
 
 #include "./Bounding/AnimationCollider.h"
+#include "./Utilities/DebugTransform.h"
+#include "./Utilities/BinaryFile.h"
+#include "./Object/Item/GameItem.h"
+
 #include "./Bounding/QuadTree/QuadTreeSystem.h"
 
 void CharacterTool::UIRender()
 {
-	AssetManager->UIRender();
+
+	//MainBar
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("AnimationFile"))
+		{
+			if (ImGui::MenuItem("Tool"))
+				showTool = !showTool;
+			if (ImGui::MenuItem("Demo"))
+				showDemo = !showDemo;
+
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMainMenuBar();
+	}
 
 	//ToolPage
 	if (showTool)
@@ -52,8 +66,6 @@ void CharacterTool::UIRender()
 					if (ImGui::CollapsingHeader("Collider"))
 						this->RenderColliderTool();
 					ImGui::Separator();
-					if (ImGui::CollapsingHeader("Part"))
-						this->RenderPart();
 				}
 			}
 
@@ -67,6 +79,9 @@ void CharacterTool::UIRender()
 			ImGui::End();
 		}
 	}
+	//Demo
+	if (showDemo)
+		ImGui::ShowDemoWindow();
 	//DebugTransform
 	if (targetCollider)
 	{
@@ -205,33 +220,6 @@ void CharacterTool::RenderColliderTool()
 		ImGui::SameLine();
 		if (ImGui::Button("Load", ImVec2(70, 20)))
 			this->LoadCollider();
-	}
-	ImGui::EndGroup();
-}
-
-void CharacterTool::RenderPart()
-{
-	ImGui::BeginGroup();
-	{
-		vector<ModelMesh*> meshes = model->Meshes();
-		for (UINT i = 0; i < meshes.size(); ++i)
-		{
-			if (ImGui::TreeNode(String::WStringToString(meshes[i]->Name()).c_str()))
-			{
-				vector<ModelMeshPart*> parts = meshes[i]->GetMeshParts();
-				for (UINT i = 0; i < parts.size(); ++i)
-				{
-					Material* material = parts[i]->GetMaterial();
-					if (ImGui::TreeNode(String::WStringToString(material->GetName()).c_str()))
-					{
-						material->UIRender();
-						ImGui::TreePop();
-					}
-				}
-				ImGui::TreePop();
-			}
-		}
-		
 	}
 	ImGui::EndGroup();
 }

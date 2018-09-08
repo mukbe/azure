@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "./Systems/Window.h"
 
-Json::Value* _jsonRoot;
-
 int WINAPI WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR param, int command)
 {
 	D3DDesc desc;

@@ -38,7 +38,6 @@ private:
 
 class Model
 {
-	friend class ModelData;
 public:
 	Model();
 	~Model();
@@ -72,9 +71,9 @@ public:
 	void CopyAbsoluteBoneTo(vector<D3DXMATRIX>& transforms);
 	void SaveAnimationData(wstring fileName);
 	void AddAnimationData(wstring fileName);
-	void BindMeshData();
 private:
 	Material * GetMaterialByName(wstring name);
+	void BindMeshData();
 private:
 	class ModelBone* root;
 
@@ -98,19 +97,19 @@ public:
 	static void LoadMaterial(wstring file, vector<Material *>* materials);
 
 	static void LoadMesh(wstring file, vector<ModelBone *>* bones, vector<ModelMesh *>* meshes);
-	static void ReadMeshData(wstring file,vector<ModelBone*>* bones, vector<ModelMesh*>* meshes);
+	static void ReadMeshData(wstring file);
 
 	static void LoadAnimation(wstring file, vector<ModelAnimClip *>* clips);
-	static void ReadAnimation(wstring file,vector<ModelAnimClip*>* clips);
+	static void ReadAnimation(wstring file);
 
 private:
+	static map<wstring, vector<class Material *>> materialMap;
 	struct MeshData
 	{
 		vector<ModelBone *> Bones;
 		vector<ModelMesh *> Meshes;
 	};
-	
-	static map<wstring, vector<class Material *>>	materialMap;
-	static map<wstring, MeshData>					meshDataMap;
-	static map<wstring, vector<ModelAnimClip *>>	animClipMap;
+
+	static map<wstring, MeshData> meshDataMap;
+	static map<wstring, vector<ModelAnimClip *>> animClipMap;
 };

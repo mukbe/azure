@@ -3,7 +3,7 @@
 class StaticObject : public GameObject
 {
 private:
-	vector<class GameCollider*> colliderList;
+	class GameCollider* collider;
 public:
 	StaticObject(string name);
 	virtual ~StaticObject();
@@ -13,7 +13,5 @@ public:
 	virtual void PrevUpdate()override;
 	virtual void Update()override;
 	virtual void PostUpdate()override;
-
-	void AddCollider(class GameCollider* collider);
 };
 

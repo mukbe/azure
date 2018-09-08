@@ -1,12 +1,11 @@
 #pragma once
 #include "../Interfaces/ICloneable.h"
-class MaterialBuffer;
 class Material : public ICloneable
 {
 private:
 	Synthesize(UINT,number,Number)
 	Synthesize(wstring,name,Name)
-	Synthesize(MaterialBuffer*, buffer,Buffer)
+	Synthesize(class MaterialBuffer*, buffer,Buffer)
 	Synthesize(ID3D11ShaderResourceView*,diffuseMap,DiffuseMap)
 	Synthesize(ID3D11ShaderResourceView*,specularMap,SpecularMap)
 	Synthesize(ID3D11ShaderResourceView*,emissiveMap,EmissiveMap)
@@ -27,6 +26,5 @@ public:
 	void UpdateBuffer();
 	void BindBuffer();
 	void UnBindBuffer();
-	void UIRender();
 };
 

@@ -24,8 +24,6 @@ public:
 	UINT GetIndexCount()const { return indices.size(); }
 	UINT GetVertexCount()const { return vertices.size(); }
 	class Material* GetMaterial()const { return material; }
-	vector<VertexType> GetVertexData()const { return vertices; }
-	wstring GetMaterialName()const { return this->materialName; }
 private:
 	class Material * material;
 	wstring materialName;
