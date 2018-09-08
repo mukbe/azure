@@ -51,6 +51,7 @@ private:
 			float _SunIntensity;
 			D3DXVECTOR3 _inscatteringLUTSize;
 			
+			D3DXCOLOR testAmbient;
 		}Data;
 	};
 public:
@@ -120,7 +121,7 @@ private:
 	float MaxRayLength = 400;
 
 	//0~10
-	D3DXCOLOR IncomingLight = D3DXCOLOR(4, 4, 4, 4);
+	D3DXCOLOR IncomingLight = D3DXCOLOR(4,4,4,4);
 
 
 	//0~10

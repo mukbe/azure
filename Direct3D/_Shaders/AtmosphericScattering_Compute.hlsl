@@ -52,6 +52,8 @@ cbuffer Buffers : register(b2)
     float _SunIntensity;
     float3 _inscatteringLUTSize;
 
+    float4 _testAmbient;
+
 }
 
 

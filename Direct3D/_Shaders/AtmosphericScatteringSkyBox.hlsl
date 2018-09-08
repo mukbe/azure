@@ -42,14 +42,15 @@ G_Buffer PS(v2f i)
     if (intersection.x > 0)
         rayLength = min(rayLength, intersection.x);
 
+    float4 extinction;
+    float4 inscattering = IntegrateInscattering(rayStart, rayDir, rayLength, planetCenter, 1, lightDir, 16, extinction);
+    
+    //TODO 보정값을 바꿔야겠음 아래부분이 검은색으로 나오게 하는게 좋을지도 
+    float4 color = _testAmbient;
 
-    float4 extinction, testColor;
-    float4 inscattering = IntegrateInscattering(testColor ,rayStart, rayDir, rayLength, planetCenter, 1, lightDir, 16, extinction);
-
-    output.diffuse = float4(inscattering.xyz, 1);
-
+    output.diffuse = float4(inscattering.xyz + color.xyz, 1);
     return output;
-    //===============일단 아래에 있는건 무시
+    //===============SkyoxLUT을 사용하는 코드인데 일단 미룸
 
     float4 scatterR = 0;
     float4 scatterM = 0;

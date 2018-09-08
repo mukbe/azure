@@ -158,12 +158,12 @@ void Scattering::CalculateLightLUTs()
 {
 	//_lightColorTexture = new CResource1D(16, LightLUTSize, nullptr);
 	//_lightColorTextureTemp = new CResource1D(16, LightLUTSize, nullptr);
-	Texture* temp = new Texture(Contents + L"Atmospheric/AmbientLUT.png", DXGI_FORMAT_R16G16B16A16_FLOAT);
+	Texture* temp = new Texture(Contents + L"Atmospheric/AmbientLUT.png");
 	_ambientLightLUT.assign(LightLUTSize, D3DXCOLOR());
 	temp->GetPixel(_ambientLightLUT);
 	SafeDelete(temp);
 
-	temp = new Texture(Contents + L"Atmospheric/DirectionalLUT.png", DXGI_FORMAT_R16G16B16A16_FLOAT);
+	temp = new Texture(Contents + L"Atmospheric/DirectionalLUT.png");
 	_directionalLightLUT.assign(LightLUTSize, D3DXCOLOR());
 	temp->GetPixel(_directionalLightLUT);
 	SafeDelete(temp);
@@ -253,22 +253,13 @@ void Scattering::UpdateDirectionalLightColor(D3DXCOLOR sunColor)
 
 void Scattering::UpdateAmbientLightColor(D3DXCOLOR ambient)
 {
-//#if UNITY_5_4_OR_NEWER
-//	RenderSettings.ambientLight = c * AmbientColorIntensity;
-//#else
-//	Vector3 color = new Vector3(c.r, c.g, c.b);
-//	float length = color.magnitude;
-//	color /= length;
-//
-//	RenderSettings.ambientLight = new Color(color.x, color.y, color.z, 1);
-//	RenderSettings.ambientIntensity = Mathf.Max(length, 0.01f) * AmbientColorIntensity;
-//#endif
-
+	//TODO Á¤¸®ÇØ¾ßµÊ
+	buffer->Data.testAmbient = ambient;
 }
 
 D3DXCOLOR Scattering::ComputeAmbientColor()
 {
-	float cosAngle = D3DXVec3Dot(&D3DXVECTOR3(0, 1, 0), &sun->GetForward());
+	float cosAngle = D3DXVec3Dot(&D3DXVECTOR3(0, -1, 0), &sun->GetForward());
 	float u = (cosAngle + 0.1f) / 1.1f;// * 0.5f + 0.5f;
 
 	u = u * LightLUTSize;
@@ -281,7 +272,7 @@ D3DXCOLOR Scattering::ComputeAmbientColor()
 	index1 = Math::Clamp(index1, 0, LightLUTSize - 1);
 
 	D3DXCOLOR c = _ambientLightLUT[index0] * weight0 + _ambientLightLUT[index1] * weight1;
-	c /= 2.2f;
+	//c /= 2.2f;
 
 	return c;
 }

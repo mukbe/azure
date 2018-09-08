@@ -44,6 +44,8 @@ cbuffer Buffers : register(b2)
     float _SunIntensity;
     float3 _inscatteringLUTSize;
 
+    float4 _testAmbient;
+
 }
 
 
@@ -203,7 +205,7 @@ float3 ComputeOpticalDepth(float2 density)
 //-----------------------------------------------------------------------------------------
 // IntegrateInscattering
 //-----------------------------------------------------------------------------------------
-float4 IntegrateInscattering(out float4 test,float3 rayStart, float3 rayDir, float rayLength, float3 planetCenter, float distanceScale, float3 lightDir, float sampleCount, out float4 extinction)
+float4 IntegrateInscattering(float3 rayStart, float3 rayDir, float rayLength, float3 planetCenter, float distanceScale, float3 lightDir, float sampleCount, out float4 extinction)
 {
     float3 step = rayDir * (rayLength / sampleCount);
     float stepSize = length(step) * distanceScale;
@@ -225,7 +227,6 @@ float4 IntegrateInscattering(out float4 test,float3 rayStart, float3 rayDir, flo
     float3 Tm = densityCPA.y * _ExtinctionM;
     float3 extinctiontemp = exp(-(Tr + Tm));
 
-    test = float4(extinctiontemp,  0);
 
 	// P - current integration point
 	// C - camera position
@@ -330,9 +331,9 @@ float4 PrecomputeAmbientLight(float3 lightDir)
         float sampleCount = 32;
         float4 extinction;
 
-        //float4 scattaring = (IntegrateInscattering(rayStart, rayDir, rayLength, planetCenter, 1, lightDir, sampleCount, extinction));
+        float4 scattaring = (IntegrateInscattering(rayStart, rayDir, rayLength, planetCenter, 1, lightDir, sampleCount, extinction));
 
-        //color += scattaring * dot(rayDir, float3(0, 1, 0));
+        color += scattaring * dot(rayDir, float3(0, 1, 0));
     }
 
     return color * 2 * PI / sampleCount;
