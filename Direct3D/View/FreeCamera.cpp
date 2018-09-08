@@ -60,7 +60,12 @@ void FreeCamera::ControlCamera()
 		maxSpeed = 50.0f;
 		if (KeyCode->Press(VK_LSHIFT))
 		{
-			maxSpeed = 200.0f;;
+			maxSpeed = 200.0f;
+		}
+
+		if (KeyCode->Press(VK_SPACE))
+		{
+			maxSpeed = 1000.f;
 		}
 
 		if (KeyCode->Press('W'))

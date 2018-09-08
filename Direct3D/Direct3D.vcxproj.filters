@@ -72,6 +72,7 @@
     <ClCompile Include="Manager\ResourceManager.cpp" />
     <ClCompile Include="Project\AnimationTool\CharacterTool + ImGui.cpp" />
     <ClCompile Include="Project\AnimationTool\CharacterTool.cpp" />
+    <ClCompile Include="Project\TerrainTool\Scattering.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renders\ShadowRenderer.h" />
@@ -154,6 +155,7 @@
     <ClInclude Include="Project\TerrainTool\TerrainSplat.h" />
     <ClInclude Include="Manager\ResourceManager.h" />
     <ClInclude Include="Project\AnimationTool\CharacterTool.h" />
+    <ClInclude Include="Project\TerrainTool\Scattering.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />
@@ -166,5 +168,9 @@
     <None Include="_Shaders\TerrainTool.hlsl" />
     <None Include="_Shaders\TerrainToolCS.hlsl" />
     <None Include="_Shaders\000_HeaderProp.hlsl" />
+    <None Include="_Shaders\AtmosphericScattering.hlsl" />
+    <None Include="_Shaders\AtmosphericScatteringSkyBox.hlsl" />
+    <None Include="_Shaders\AtmosphericScattering_Header.hlsl" />
+    <None Include="_Shaders\AtmosphericScattering_Compute.hlsl" />
   </ItemGroup>
 </Project>

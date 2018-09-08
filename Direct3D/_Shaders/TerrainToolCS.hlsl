@@ -68,6 +68,7 @@ bool IsIntersectRayToPolygon(float3 orig, float3 dir,
       && (distance >= 0.0f)
     );
 }
+
 [numthreads(16, 16, 1)]
 void CalcuPickPosition(uint3 DTid : SV_DispatchThreadID)
 {

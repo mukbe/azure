@@ -33,6 +33,7 @@
     <ClInclude Include="Environment\Sun.h" />
     <ClInclude Include="Project\AnimationTool\CharacterTool.h" />
     <ClInclude Include="Project\TerrainTool\TerrainSplat.h" />
+    <ClInclude Include="Project\TerrainTool\Scattering.h" />
     <ClInclude Include="View\FirstPersonCamera.h" />
     <ClInclude Include="Renders\Instancing\InstanceShader.h" />
     <ClInclude Include="Renders\Instancing\InstanceRenderer.h" />
@@ -115,6 +116,7 @@
     <ClCompile Include="Project\AnimationTool\CharacterTool + ImGui.cpp" />
     <ClCompile Include="Project\AnimationTool\CharacterTool.cpp" />
     <ClCompile Include="Project\TerrainTool\TerrainSplat.cpp" />
+    <ClCompile Include="Project\TerrainTool\Scattering.cpp" />
     <ClCompile Include="View\FirstPersonCamera.cpp" />
     <ClCompile Include="Renders\Instancing\InstanceShader.cpp" />
     <ClCompile Include="Renders\Instancing\InstanceRenderer.cpp" />
@@ -224,6 +226,42 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\TerrainToolCS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\AtmosphericScattering.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\AtmosphericScatteringSkyBox.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <FileType>Document</FileType>
+    </None>
+    <None Include="_Shaders\AtmosphericScattering_Header.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="_Shaders\AtmosphericScattering_Compute.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
