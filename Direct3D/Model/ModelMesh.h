@@ -22,9 +22,10 @@ public:
 private:
 	void Binding();
 
-private:
+public:
 	ModelMesh();
 	~ModelMesh();
+private:
 
 	wstring name;
 

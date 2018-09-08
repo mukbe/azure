@@ -26,5 +26,8 @@ public:
 
 	static bool IntersectsOBB(class Transform * pTransA, class BoundingBox * pBoundA, class Transform * pTransB, class BoundingBox * pBoundB);
 	static bool IntersectsOBB(D3DXMATRIX matA, class BoundingBox* pBoundA, D3DXMATRIX matB, class BoundingBox* pBoundB);
+
+	void SaveData(class BinaryWriter* w);
+	void LoadData(class BinaryReader* r);
 };
 

@@ -10,6 +10,7 @@
 #include "./Project/AnimationTool/FBX/Exporter.h"
 
 #include "./Utilities/String.h"
+#include "./Utilities/ImGuiHelper.h"
 #include "./Utilities/Path.h"
 
 #include "./View/FreeCamera.h"
@@ -31,8 +32,8 @@
 #include "./Bounding/QuadTree/QuadTreeSystem.h"
 
 CharacterTool::CharacterTool()
-	:animation(nullptr), model(nullptr),debugTransform(nullptr),targetCollider(nullptr), showDemo(false), showTool(false)
-	, showBone(false), selectBoneIndex(0), debugControl(false),  tempItemModel(nullptr)
+	:animation(nullptr), model(nullptr), debugTransform(nullptr), targetCollider(nullptr), showDemo(false), showTool(true)
+	, showBone(false), selectBoneIndex(0), debugControl(false), tempItemModel(nullptr)
 {
 	//Fbx::Exporter* exporter = new Fbx::Exporter(L"../_Assets/Test.fbx");
 	//exporter->ExportMaterial(Assets, L"Test");
@@ -40,34 +41,22 @@ CharacterTool::CharacterTool()
 	//exporter->ExportAnimation(Assets, L"Attack01");
 	//SafeDelete(exporter);
 
-	model = new Model;
-	model->ReadMaterial(L"../_Assets/Pandaren/Pandaren.material");
-	model->ReadMesh(L"../_Assets/Pandaren/Pandaren.mesh");
-	model->ReadAnimation(L"../_Assets/Pandaren/Pandaren.anim");
+	model = AssetManager->GetModel(L"../_Assets/Pandaren/Pandaren", true);
 	animation = new ModelAnimPlayer(model);
 
 	debugTransform = new DebugTransform();
 	debugTransform->ConnectTransform(new Transform);
-
 }
 
 
 CharacterTool::~CharacterTool()
 {
 	this->ReleaseCollider();
+	SafeDelete(model);
 	SafeDelete(debugTransform);
 	SafeDelete(animation);
-	SafeDelete(model);
 }
 
-void CharacterTool::Init()
-{
-}
-
-void CharacterTool::Release()
-{
-	
-}
 
 void CharacterTool::Update()
 {
@@ -192,7 +181,7 @@ void CharacterTool::SaveCollider(wstring fileName)
 		{
 			w->UInt(colliderList.size());
 			for (UINT i = 0; i < colliderList.size(); ++i)
-				GameCollider::SaveCollider(w, colliderList[i]);
+				GameCollider::SaveAnimCollider(w, colliderList[i]);
 		}
 		w->Close();
 	}
@@ -216,7 +205,7 @@ void CharacterTool::LoadCollider(wstring fileName)
 			for (UINT i = 0; i < size; ++i)
 			{
 				AnimationCollider* newCollider = new AnimationCollider(nullptr, this->animation);
-				GameCollider::LoadCollider(r, newCollider);
+				GameCollider::LoadAnimCollider(r, newCollider);
 				colliderList.push_back(newCollider);
 			}
 			colliderList[0]->Update();

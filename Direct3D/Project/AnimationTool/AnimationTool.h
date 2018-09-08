@@ -6,10 +6,14 @@ namespace Environment
 {
 	class Sun;
 }
+
 class AnimationTool :public SceneNode
 {
 private:
+	int toolType;
 	class CharacterTool* characterTool;
+	class ObjectTool* objectTool;
+
 	class FreeCamera* freeCamera;
 	class Figure* grid;
 	Environment::Sun* sun;

@@ -18,12 +18,14 @@ public:
 	virtual ~GameCollider();
 
 	virtual void Update();
-	virtual void Render(D3DXCOLOR color = D3DXCOLOR(1.f,0.f,0.f,1.f));
+	virtual void Render(D3DXCOLOR color = D3DXCOLOR(1.f,0.f,0.f,1.f),bool bZbufferOff = false);
 
 	bool IsIntersect(GameCollider* collider);
 
 	static string GetTypeName(int index);
-	static void SaveCollider(class BinaryWriter* w,class AnimationCollider* collider);
-	static void LoadCollider(class BinaryReader* r,class AnimationCollider* cillider);
+	static void SaveAnimCollider(class BinaryWriter* w,class AnimationCollider* collider);
+	static void LoadAnimCollider(class BinaryReader* r,class AnimationCollider* cillider);
+	static void SaveCollider(class BinaryWriter* w, class GameCollider* collider);
+	static void LoadCollider(class BinaryReader* r, class GameCollider* collider);
 };
 

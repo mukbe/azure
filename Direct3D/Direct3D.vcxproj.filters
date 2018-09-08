@@ -73,6 +73,9 @@
     <ClCompile Include="Project\AnimationTool\CharacterTool + ImGui.cpp" />
     <ClCompile Include="Project\AnimationTool\CharacterTool.cpp" />
     <ClCompile Include="Project\TerrainTool\Scattering.cpp" />
+    <ClCompile Include="Project\AnimationTool\ObjectTool.cpp" />
+    <ClCompile Include="Utilities\ImGuiHelper.cpp" />
+    <ClCompile Include="Object\StaticObject\StaticObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renders\ShadowRenderer.h" />
@@ -156,6 +159,9 @@
     <ClInclude Include="Manager\ResourceManager.h" />
     <ClInclude Include="Project\AnimationTool\CharacterTool.h" />
     <ClInclude Include="Project\TerrainTool\Scattering.h" />
+    <ClInclude Include="Project\AnimationTool\ObjectTool.h" />
+    <ClInclude Include="Utilities\ImGuiHelper.h" />
+    <ClInclude Include="Object\StaticObject\StaticObject.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />

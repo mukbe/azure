@@ -49,10 +49,10 @@ public:
 	void SetName(wstring name) { this->name = name; }
 	class ModelKeyframe* Keyframe(wstring name){ return keyframeMap[name]; }
 
-private:
+public:
 	ModelAnimClip();
 	~ModelAnimClip();
-
+private:
 	wstring name;
 
 	int totalFrame;

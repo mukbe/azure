@@ -34,8 +34,8 @@ void AnimationCollider::DebugUpdate(D3DXMATRIX matLocal, D3DXMATRIX matFinal)
 	this->localMatrix = matLocal;
 }
 
-void AnimationCollider::Render(D3DXCOLOR color)
+void AnimationCollider::Render(D3DXCOLOR color,bool b)
 {
-	GameCollider::Render(color);
+	GameCollider::Render(color,b);
 }
 
