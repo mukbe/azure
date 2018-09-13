@@ -168,7 +168,6 @@
     <None Include="_Shaders\TerrainTool.hlsl" />
     <None Include="_Shaders\TerrainToolCS.hlsl" />
     <None Include="_Shaders\000_HeaderProp.hlsl" />
-    <None Include="_Shaders\AtmosphericScattering.hlsl" />
     <None Include="_Shaders\AtmosphericScatteringSkyBox.hlsl" />
     <None Include="_Shaders\AtmosphericScattering_Header.hlsl" />
     <None Include="_Shaders\AtmosphericScattering_Compute.hlsl" />

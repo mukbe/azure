@@ -12,6 +12,8 @@ Scattering::Scattering(FreeCamera* camera)
 {
 	//쉐이더 초기화
 	shader = Shaders->CreateShader("Scattering", L"AtmosphericScatteringSkyBox.hlsl");
+	skyBoxShader = Shaders->CreateShader("ScatteringUseSkyBox", L"AtmosphericScatteringSkyBox.hlsl", Shader::ShaderType::Default, "UseSkyBox");
+
 	world = Buffers->FindShaderBuffer<WorldBuffer>();
 	D3DXMATRIX mat;
 	D3DXMatrixIdentity(&mat);
@@ -25,15 +27,13 @@ Scattering::Scattering(FreeCamera* camera)
 
 	_camera = camera;
 
-	particleDensityLUTComputeShader = new ComputeShader(ShaderPath + L"AtmosphericScattering.hlsl", "particleDensityLUT");
+	particleDensityLUTComputeShader = new ComputeShader(ShaderPath + L"AtmosphericScattering_Compute.hlsl", "particleDensityLUT");
 	precomputeSkyboxLUT = new ComputeShader(ShaderPath + L"AtmosphericScattering_Compute.hlsl", "SkyboxLUT");
-	ScatteringComputeShader = new ComputeShader(ShaderPath + L"AtmosphericScattering_Compute.hlsl", "InscatteringLUT");
+
 	UpdateMaterialParameters();
 
 	PrecomputeParticleDensity();
 	CalculateLightLUTs();
-
-	InitializeInscatteringLUT();
 
 	CreateBuffer();
 }
@@ -41,6 +41,14 @@ Scattering::Scattering(FreeCamera* camera)
 
 Scattering::~Scattering()
 {
+	SafeRelease(vertexBuffer);
+	SafeRelease(indexBuffer);
+
+	SafeDelete(_particleDensityLUT);
+	SafeDelete(precomputeSkyboxLUT);
+	SafeDelete(particleDensityLUTComputeShader);
+	SafeDelete(buffer);
+	SafeDelete(sun);
 }
 
 void Scattering::Updata()
@@ -56,24 +64,25 @@ void Scattering::Updata()
 
 void Scattering::Render()
 {
-	_FrustumCorners[0] = _camera->GetFrustum()->transformVertex[6];
-	_FrustumCorners[1] = _camera->GetFrustum()->transformVertex[4];
-	_FrustumCorners[2] = _camera->GetFrustum()->transformVertex[5];
-	_FrustumCorners[3] = _camera->GetFrustum()->transformVertex[7];
 
-	//컴퓨팅
-	UpdateMaterialParameters();
-	UpdateInscatteringLUT();
 	
+	//드로우
+	UpdateMaterialParameters();
+
 	Transform tranform;
 	tranform.SetWorldPosition(_camera->GetTransform()->GetWorldPosition());
 
 	D3DXMATRIX mat = tranform.GetFinalMatrix();
 	world->SetMatrix(mat);
 
-	//드로우
 	_particleDensityLUT->BindPSShaderResourceView(0);
-	shader->Render();
+	_skyboxLUT->BindPSShaderResourceView(1);
+
+	if(RenderingMode == RenderMode::Reference)
+		shader->Render();
+	else
+		skyBoxShader->Render();
+
 	world->SetPSBuffer(1);
 	world->SetVSBuffer(1);
 	buffer->SetPSBuffer(2);
@@ -113,10 +122,10 @@ void Scattering::UIRender()
 
 	ImGui::SliderFloat("LightColorIntensity", &LightColorIntensity, 0.5f, 3.f);
 	ImGui::SliderFloat("AmbientColorIntensity", &AmbientColorIntensity, 0.5f, 3.f);
-	ImGui::SliderFloat("SunIntensity", &SunIntensity, 0.f, 100.f);
+	ImGui::SliderFloat("SunIntensity", &SunIntensity, 0.f, 2.f);
 
-
-
+	const char* ThemesList[] = { "Reference" , "Optimized"  };
+	ImGui::Combo("RenderMode", (int*)&RenderingMode, ThemesList, 2);
 	ImGui::End();
 }
 
@@ -135,6 +144,7 @@ void Scattering::UpdateMaterialParameters()
 	buffer->Data._MieG = MieG;
 	buffer->Data._DistanceScale = DistanceScale;
 	buffer->Data._SunColor = _sunColor = D3DXCOLOR(0.5f,0.5f,0.5f, 1);
+	buffer->Data._SunIntensity = SunIntensity;
 
 	D3DXVECTOR3 forward =   sun->GetForward();
 	buffer->Data._LightDir = D3DXVECTOR4(forward.x, forward.y, forward.z, 1.0f / 100.f);
@@ -156,8 +166,6 @@ void Scattering::PrecomputeParticleDensity()
 
 void Scattering::CalculateLightLUTs()
 {
-	//_lightColorTexture = new CResource1D(16, LightLUTSize, nullptr);
-	//_lightColorTextureTemp = new CResource1D(16, LightLUTSize, nullptr);
 	Texture* temp = new Texture(Contents + L"Atmospheric/AmbientLUT.png");
 	_ambientLightLUT.assign(LightLUTSize, D3DXCOLOR());
 	temp->GetPixel(_ambientLightLUT);
@@ -172,14 +180,6 @@ void Scattering::CalculateLightLUTs()
 	PrecomputeSkyboxLUT();
 }
 
-void Scattering::InitializeInscatteringLUT()
-{
-	_inscatteringLUT = new CResource3D((int)_inscatteringLUTSize.x, (int)_inscatteringLUTSize.y, (int)_inscatteringLUTSize.z, DXGI_FORMAT_R16G16B16A16_FLOAT);
-	_extinctionLUT = new CResource3D((int)_inscatteringLUTSize.x, (int)_inscatteringLUTSize.y, (int)_inscatteringLUTSize.z, DXGI_FORMAT_R16G16B16A16_FLOAT);
-
-	//TODO 랜덤으로 정보를 한번 컴퓨팅 해야될긋 하다
-
-}
 
 void Scattering::PrecomputeSkyboxLUT()
 {
@@ -189,35 +189,15 @@ void Scattering::PrecomputeSkyboxLUT()
 	precomputeSkyboxLUT->BindShader();
 	buffer->SetCSBuffer(2);
 
-	_skyboxLUT->BindResource(0);
+	_skyboxLUT->BindResource(1);
 	_particleDensityLUT->BindCSShaderResourceView(0); //컴퓨팅으로 대신 그려놨음
 
 	precomputeSkyboxLUT->Dispatch((int)_skyboxLUTSize.x, (int)_skyboxLUTSize.y, (int)_skyboxLUTSize.z);
 
-	_skyboxLUT->ReleaseResource(0);
+	_skyboxLUT->ReleaseResource(1);
 	_particleDensityLUT->ReleaseCSshaderResorceView(0);
 }
 
-void Scattering::UpdateInscatteringLUT()
-{
-
-	//InscatteringLUT compute
-	buffer->SetCSBuffer(2);
-	ScatteringComputeShader->BindShader();
-	_camera->Render();
-
-	//bind Textures
-	_particleDensityLUT->BindCSShaderResourceView(0);
-	_inscatteringLUT->BindResource(1);
-	_extinctionLUT->BindResource(2);
-
-	//InscatteringLUT dispatch
-	ScatteringComputeShader->Dispatch((int)_inscatteringLUTSize.x, (int)_inscatteringLUTSize.y, 1);
-
-	_particleDensityLUT->ReleaseCSshaderResorceView(0);
-	_inscatteringLUT->ReleaseResource(1);
-	_extinctionLUT->ReleaseResource(1);
-}
 
 D3DXCOLOR Scattering::ComputeLightColor()
 {
@@ -253,8 +233,8 @@ void Scattering::UpdateDirectionalLightColor(D3DXCOLOR sunColor)
 
 void Scattering::UpdateAmbientLightColor(D3DXCOLOR ambient)
 {
-	//TODO 정리해야됨
-	buffer->Data.testAmbient = ambient;
+	//너무 어두워서 조금 보정해주는것
+	buffer->Data._AddAmbient = ambient;
 }
 
 D3DXCOLOR Scattering::ComputeAmbientColor()
@@ -282,9 +262,6 @@ void Scattering::CreateBuffer()
 	GeometryGenerator geo;
 
 	geo.CreateBox(0.5f, 0.5f, 0.5f, meshData);
-
-
-
 
 
 	//VertexBuffer

@@ -25,6 +25,7 @@ void Environment::Sun::Update()
 {
 	if (bUpdate == false) return;
 
+	//TODO 시간하고 같이 흘러가도록 조정
 
 	if (Mouse::Get()->Down(0) && Keyboard::Get()->Press(VK_SHIFT))
 		preMousePos = Mouse::Get()->GetPosition();

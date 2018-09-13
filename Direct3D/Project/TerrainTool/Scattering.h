@@ -11,7 +11,7 @@ class Scattering
 private:
 	enum RenderMode
 	{
-		Reference,
+		Reference = 0,
 		Optimized
 	};
 	class Buffer : public ShaderBuffer
@@ -44,14 +44,12 @@ private:
 
 			D3DXCOLOR _SunColor;
 
-			D3DXPLANE _FrustumCorners[4];
-
 			D3DXVECTOR4 _LightDir;
 
 			float _SunIntensity;
 			D3DXVECTOR3 _inscatteringLUTSize;
 			
-			D3DXCOLOR testAmbient;
+			D3DXCOLOR _AddAmbient;
 		}Data;
 	};
 public:
@@ -66,10 +64,9 @@ private:
 	void UpdateMaterialParameters();
 	void PrecomputeParticleDensity();
 	void CalculateLightLUTs();
-	void InitializeInscatteringLUT();
 	void PrecomputeSkyboxLUT();
 
-	void UpdateInscatteringLUT();
+
 
 	D3DXCOLOR ComputeLightColor();
 	void UpdateDirectionalLightColor(D3DXCOLOR sunColor);
@@ -80,14 +77,14 @@ private:
 private:
 	RenderMode RenderingMode = RenderMode::Optimized;
 	
-	//다른 컴퓨트 쉐이더가 필요해 질 수 있음 LUT를 유니티는 Shader PASS로 했지만 
-	//여기선 컴퓨팅을 하는게 더 쉬울거 같다
-	ComputeShader* ScatteringComputeShader;
+
 	ComputeShader* precomputeSkyboxLUT;
 
 	ComputeShader* particleDensityLUTComputeShader;
 
 	Shader* shader;
+	Shader* skyBoxShader;
+
 	WorldBuffer * world;
 
 	Environment::Sun* sun;
@@ -100,8 +97,6 @@ private:
 	CResource3D* _skyboxLUT;
 
 	D3DXVECTOR3 _inscatteringLUTSize = D3DXVECTOR3(8, 8, 64);
-	CResource3D* _inscatteringLUT;
-	CResource3D* _extinctionLUT;
 
 	const int LightLUTSize = 128;
 
@@ -151,8 +146,6 @@ private:
 	const D3DXVECTOR2 DensityScale = D3DXVECTOR2(7994.0f, 1200.0f);
 	const D3DXVECTOR3 RayleighSct = D3DXVECTOR3(5.8f, 13.5f, 33.1f) * 0.000001f;
 	const D3DXVECTOR3 MieSct = D3DXVECTOR3(2.0f, 2.0f, 2.0f) * 0.00001f;
-
-	D3DXVECTOR3 _FrustumCorners[4];
 
 
 	ID3D11Buffer* vertexBuffer, *indexBuffer;

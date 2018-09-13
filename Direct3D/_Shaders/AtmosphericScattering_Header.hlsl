@@ -9,6 +9,7 @@ cbuffer ViewProjectionBuffer : register(b0)
     matrix InvProjection;
     matrix InvViewProjection;
 }
+
 cbuffer WorldBuffer : register(b1)
 {
     matrix World;
@@ -37,18 +38,13 @@ cbuffer Buffers : register(b2)
 
     float4 _SunColor;
 
-    float4 _FrustumCorners[4];
-
     float4 _LightDir;
 
     float _SunIntensity;
     float3 _inscatteringLUTSize;
 
-    float4 _testAmbient;
-
+    float4 _AddAmbient;
 }
-
-
 
 struct G_Buffer
 {
@@ -57,6 +53,7 @@ struct G_Buffer
     float4 spec : SV_Target2;
     float4 worldPos : SV_Target3;
 };
+
 G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float SpecIntensity, float SpecPower)
 {
     G_Buffer Out = buffer;
@@ -73,17 +70,9 @@ G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float SpecI
 
 }
 
-
-
-RWTexture2D<float4> _ParticleDensityLUTCompute : register(u0);
 Texture2D<float4> _ParticleDensityLUT : register(t0);
 
-Texture2D _RandomVectors;
-
 Texture3D _SkyboxLUT : register(t1);
-
-Texture3D _InscatteringLUT;
-Texture3D _ExtinctionLUT;
 
 SamplerState _linear;
 
@@ -266,96 +255,38 @@ float4 IntegrateInscattering(float3 rayStart, float3 rayDir, float rayLength, fl
     return float4(lightInscatter, 1);
 }
 
-//-----------------------------------------------------------------------------------------
-// PrecomputeParticleDensity
-//-----------------------------------------------------------------------------------------
-float2 PrecomputeParticleDensity(float3 rayStart, float3 rayDir)
-{
-    float3 planetCenter = float3(0, -_PlanetRadius, 0);
+////-----------------------------------------------------------------------------------------
+//// PrecomputeParticleDensity
+////-----------------------------------------------------------------------------------------
+//float2 PrecomputeParticleDensity(float3 rayStart, float3 rayDir)
+//{
+//    float3 planetCenter = float3(0, -_PlanetRadius, 0);
 
-    float stepCount = 250;
+//    float stepCount = 250;
 
-    float2 intersection = RaySphereIntersection(rayStart, rayDir, planetCenter, _PlanetRadius);
-    if (intersection.x > 0)
-    {
-		// intersection with planet, write high density
-        return 1e+20;
-    }
+//    float2 intersection = RaySphereIntersection(rayStart, rayDir, planetCenter, _PlanetRadius);
+//    if (intersection.x > 0)
+//    {
+//		// intersection with planet, write high density
+//        return 1e+20;
+//    }
 
-    intersection = RaySphereIntersection(rayStart, rayDir, planetCenter, _PlanetRadius + _AtmosphereHeight);
-    float3 rayEnd = rayStart + rayDir * intersection.y;
+//    intersection = RaySphereIntersection(rayStart, rayDir, planetCenter, _PlanetRadius + _AtmosphereHeight);
+//    float3 rayEnd = rayStart + rayDir * intersection.y;
 
-	// compute density along the ray
-    float3 step = (rayEnd - rayStart) / stepCount;
-    float stepSize = length(step);
-    float2 density = 0;
+//	// compute density along the ray
+//    float3 step = (rayEnd - rayStart) / stepCount;
+//    float stepSize = length(step);
+//    float2 density = 0;
 
-    for (float s = 0.5; s < stepCount; s += 1.0)
-    {
-        float3 position = rayStart + step * s;
-        float height = abs(length(position - planetCenter) - _PlanetRadius);
-        float2 localDensity = exp(-(height.xx / _DensityScaleHeight));
+//    for (float s = 0.5; s < stepCount; s += 1.0)
+//    {
+//        float3 position = rayStart + step * s;
+//        float height = abs(length(position - planetCenter) - _PlanetRadius);
+//        float2 localDensity = exp(-(height.xx / _DensityScaleHeight));
 
-        density += localDensity * stepSize;
-    }
+//        density += localDensity * stepSize;
+//    }
 
-    return density;
-}
-
-//-----------------------------------------------------------------------------------------
-// PrecomputeAmbientLight
-//-----------------------------------------------------------------------------------------
-float4 PrecomputeAmbientLight(float3 lightDir)
-{
-    float startHeight = 0;
-    float3 rayStart = float3(0, startHeight, 0);
-    float3 planetCenter = float3(0, -_PlanetRadius + startHeight, 0);
-
-    float4 color = 0;
-
-    int sampleCount = 255;
-
-	[loop]
-    for (int ii = 0; ii < sampleCount; ++ii)
-    {
-        float3 rayDir = float3(1, 0, 0); //_RandomVectors.Sample(_linear, float2(ii + (0.5 / 255.0), 0.5));
-        rayDir.y = abs(rayDir.y);
-
-        float2 intersection = RaySphereIntersection(rayStart, rayDir, planetCenter, _PlanetRadius + _AtmosphereHeight);
-        float rayLength = intersection.y;
-
-        intersection = RaySphereIntersection(rayStart, rayDir, planetCenter, _PlanetRadius);
-        if (intersection.x > 0)
-            rayLength = min(rayLength, intersection.x);
-
-        float sampleCount = 32;
-        float4 extinction;
-
-        float4 scattaring = (IntegrateInscattering(rayStart, rayDir, rayLength, planetCenter, 1, lightDir, sampleCount, extinction));
-
-        color += scattaring * dot(rayDir, float3(0, 1, 0));
-    }
-
-    return color * 2 * PI / sampleCount;
-}
-
-//-----------------------------------------------------------------------------------------
-// PrecomputeDirLight
-//-----------------------------------------------------------------------------------------
-float4 PrecomputeDirLight(float3 rayDir)
-{
-    float startHeight = 500;
-
-    float3 rayStart = float3(0, startHeight, 0);
-
-    float3 planetCenter = float3(0, -_PlanetRadius + startHeight, 0);
-
-    float2 localDensity;
-    float2 densityToAtmosphereTop;
-
-    GetAtmosphereDensity(rayStart, planetCenter, -rayDir, localDensity, densityToAtmosphereTop);
-    float4 color;
-    color.xyz = ComputeOpticalDepth(densityToAtmosphereTop);
-    color.w = 1;
-    return color;
-}
+//    return density;
+//}
