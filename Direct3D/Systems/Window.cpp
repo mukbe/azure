@@ -2,7 +2,8 @@
 #include "Window.h"
 #include "../Program.h"
 #include "./Model/Model.h"
-Program* Window::program = NULL;
+
+Program* Window::program = nullptr;
 
 WPARAM Window::Run()
 {
@@ -21,6 +22,8 @@ WPARAM Window::Run()
 
 	Time::Create();
 	Time::Get()->Start();
+
+	ResourceManager::Create();
 
 	ShaderManager::Create();
 	Shaders->Init();
@@ -77,9 +80,12 @@ WPARAM Window::Run()
 	Buffers->Delete();
 	Shaders->Delete();
 	Models::Delete();
+	ResourceManager::Delete();
 	Time::Delete();
 	Mouse::Delete();
 	Keyboard::Delete();
+
+	
 	pRenderer->Delete();
 //=============================================================
 

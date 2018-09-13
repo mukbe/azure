@@ -1,0 +1,44 @@
+{
+   "world/lordaeron/alteracmountains/passivedoodads/trees/alteractree08_0" : {
+      "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
+      "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
+    "DiffuseFile": [ "../_Assets/Objects/trees/Tree5/ateracyellowbranch02.png" ],
+      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "EmissiveFile" : [ "" ],
+      "Name" : [
+         "world/lordaeron/alteracmountains/passivedoodads/trees/alteractree08_0"
+      ],
+      "NormalFile" : [ "" ],
+      "Shininess" : 20.0,
+      "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
+      "SpecularFile" : [ "" ]
+   },
+   "world/lordaeron/alteracmountains/passivedoodads/trees/alteractree08_1" : {
+      "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
+      "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
+    "DiffuseFile": [ "../_Assets/Objects/trees/Tree5/ateracredbranch01.png" ],
+      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "EmissiveFile" : [ "" ],
+      "Name" : [
+         "world/lordaeron/alteracmountains/passivedoodads/trees/alteractree08_1"
+      ],
+      "NormalFile" : [ "" ],
+      "Shininess" : 20.0,
+      "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
+      "SpecularFile" : [ "" ]
+   },
+   "world/lordaeron/alteracmountains/passivedoodads/trees/alteractree08_2" : {
+      "Ambient" : [ 0.69999998807907104, 0.69999998807907104, 0.69999998807907104, 1.0 ],
+      "Diffuse" : [ 0.80000001192092896, 0.80000001192092896, 0.80000001192092896, 0.0 ],
+    "DiffuseFile": [ "../_Assets/Objects/trees/Tree5/mapletreetrunk01.png" ],
+      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "EmissiveFile" : [ "" ],
+      "Name" : [
+         "world/lordaeron/alteracmountains/passivedoodads/trees/alteractree08_2"
+      ],
+      "NormalFile" : [ "" ],
+      "Shininess" : 20.0,
+      "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
+      "SpecularFile" : [ "" ]
+   }
+}
