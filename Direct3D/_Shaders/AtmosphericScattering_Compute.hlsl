@@ -1,10 +1,8 @@
 
-RWTexture3D<float4> _SkyboxLUT : register(u0);
-
-RWTexture3D<float4> _InscatteringLUT : register(u1);
-RWTexture3D<float4> _ExtinctionLUT : register(u2);
-
+RWTexture2D<float4> _ParticleDensityLUTCompute : register(u0);
 Texture2D<float4> _ParticleDensityLUT : register(t0);
+
+RWTexture3D<float4> _SkyboxLUT : register(u1);
 
 SamplerState sampler_ParticleDensityLUT;
 SamplerState PointClampSampler;
@@ -45,7 +43,6 @@ cbuffer Buffers : register(b2)
 
     float4 _SunColor;
 
-    float4 _FrustumCorners[4];
 
     float4 _LightDir;
 
@@ -194,60 +191,39 @@ ScatteringOutput IntegrateInscattering(float3 rayStart, float3 rayDir, float ray
 }
 
 //-----------------------------------------------------------------------------------------
-// PrecomputeLightScattering
+// PrecomputeParticleDensity
 //-----------------------------------------------------------------------------------------
-void PrecomputeLightScattering(float3 rayStart, float3 rayDir, float rayLength, float3 planetCenter, float3 lightDir, uint3 coords, uint sampleCount)
+float2 PrecomputeParticleDensity(float3 rayStart, float3 rayDir)
 {
-    float3 step = rayDir * (rayLength / (float) (sampleCount - 1));
-    float stepSize = length(step) * _DistanceScale;
+    float3 planetCenter = float3(0, -_PlanetRadius, 0);
 
-    float2 densityCP = 0;
-    float3 scatterR = 0;
-    float3 scatterM = 0;
+    float stepCount = 250;
 
-    float2 localDensity;
-    float2 densityPA;
-
-    float2 prevLocalDensity;
-    float3 prevLocalInscatterR, prevLocalInscatterM;
-    GetAtmosphereDensity(rayStart, planetCenter, lightDir, prevLocalDensity, densityPA);
-    ComputeLocalInscattering(prevLocalDensity, densityPA, densityCP, prevLocalInscatterR, prevLocalInscatterM);
-
-    _InscatteringLUT[coords] = float4(0, 0, 0, 1);
-    _ExtinctionLUT[coords] = float4(1, 1, 1, 1);
-
-	// P - current integration point
-	// C - camera position
-	// A - top of the atmosphere
-	[loop]
-    for (coords.z = 1; coords.z < sampleCount; coords.z += 1)
+    float2 intersection = RaySphereIntersection(rayStart, rayDir, planetCenter, _PlanetRadius);
+    if (intersection.x > 0)
     {
-        float3 p = rayStart + step * coords.z;
-
-        GetAtmosphereDensity(p, planetCenter, lightDir, localDensity, densityPA);
-        densityCP += (localDensity + prevLocalDensity) * (stepSize / 2.0);
-
-        prevLocalDensity = localDensity;
-
-        float3 localInscatterR, localInscatterM;
-        ComputeLocalInscattering(localDensity, densityPA, densityCP, localInscatterR, localInscatterM);
-
-        scatterR += (localInscatterR + prevLocalInscatterR) * (stepSize / 2.0);
-        scatterM += (localInscatterM + prevLocalInscatterM) * (stepSize / 2.0);
-
-        prevLocalInscatterR = localInscatterR;
-        prevLocalInscatterM = localInscatterM;
-
-        float3 currentScatterR = scatterR;
-        float3 currentScatterM = scatterM;
-
-        ApplyPhaseFunction(currentScatterR, currentScatterM, dot(rayDir, -lightDir.xyz));
-        float3 lightInscatter = (currentScatterR * _ScatteringR + currentScatterM * _ScatteringM) * _IncomingLight.xyz;
-        float3 lightExtinction = exp(-(densityCP.x * _ExtinctionR + densityCP.y * _ExtinctionM));
-
-        _InscatteringLUT[coords] = float4(lightInscatter, 1);
-        _ExtinctionLUT[coords] = float4(lightExtinction, 1);
+		// intersection with planet, write high density
+        return 1e+20;
     }
+
+    intersection = RaySphereIntersection(rayStart, rayDir, planetCenter, _PlanetRadius + _AtmosphereHeight);
+    float3 rayEnd = rayStart + rayDir * intersection.y;
+
+	// compute density along the ray
+    float3 step = (rayEnd - rayStart) / stepCount;
+    float stepSize = length(step);
+    float2 density = 0;
+
+    for (float s = 0.5; s < stepCount; s += 1.0)
+    {
+        float3 position = rayStart + step * s;
+        float height = abs(length(position - planetCenter) - _PlanetRadius);
+        float2 localDensity = exp(-(height.xx / _DensityScaleHeight));
+
+        density += localDensity * stepSize;
+    }
+
+    return density;
 }
 
 //-----------------------------------------------------------------------------------------
@@ -301,28 +277,23 @@ void SkyboxLUT(uint3 id : SV_DispatchThreadID)
     _SkyboxLUT[id.xyz] = float4(scattering.rayleigh.xyz, scattering.mie.x);
 
 }
+//-----------------------------------------------------------------------------------------
+// particleDensityLUT
+//-----------------------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------------------
-// InscatteringLUT
-//-----------------------------------------------------------------------------------------
-[numthreads(1, 1, 1)]
-void InscatteringLUT(uint3 id : SV_DispatchThreadID)
+[numthreads(16, 16, 1)]
+void particleDensityLUT(uint3 id : SV_DispatchThreadID)
 {
-    float w, h, d;
-    _InscatteringLUT.GetDimensions(w, h, d);
+    //_ParticleDensityLUTCompute
+    //720 * 720
+    float2 uv = id.xy / 720.f;
+    float cosAngle = uv.x * 2.0 - 1.0;
+    float sinAngle = sqrt(saturate(1 - cosAngle * cosAngle));
+    float startHeight = lerp(0.0, _AtmosphereHeight, uv.y);
+    
+    float3 rayStart = float3(0, startHeight, 0);
+    float3 rayDir = float3(sinAngle, cosAngle, 0);
+              
+    _ParticleDensityLUTCompute[id.xy] = float4(PrecomputeParticleDensity(rayStart, rayDir), 0.0f, 1.0f);
 
-    float2 coords = float2(id.x / (w - 1), id.y / (h - 1));
-
-    float3 v1 = lerp(_BottomLeftCorner.xyz, _BottomRightCorner.xyz, coords.x);
-    float3 v2 = lerp(_TopLeftCorner.xyz, _TopRightCorner.xyz, coords.x);
-
-    float3 rayEnd = lerp(v1, v2, coords.y);
-    float3 rayStart = _CameraPos.xyz;
-
-    float3 rayDir = rayEnd - rayStart;
-    float rayLength = length(rayDir);
-    rayDir /= rayLength;
-
-    float3 planetCenter = float3(0, -_PlanetRadius, 0);
-    PrecomputeLightScattering(rayStart, rayDir, rayLength, planetCenter, normalize(_LightDir).xyz, id, d);
 }
