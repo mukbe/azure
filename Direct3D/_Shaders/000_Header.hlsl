@@ -223,6 +223,13 @@ float ConvertZToLinearDepth(float depth)
     return linearDepth;
 }
 
+float3 GetTexelUV(Texture2D tex, float2 uv)
+{
+    uint width, height;
+    tex.GetDimensions(width, height);
+    return float3(uv.x * width, uv.y * height, 0.0f);
+}
+
 GBuffer_Data UnpackGBuffer(float2 uv)
 {
     GBuffer_Data Out;

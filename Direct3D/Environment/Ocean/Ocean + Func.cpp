@@ -53,9 +53,9 @@ void Ocean::ComputingOcean()
 	vertexDataBuffer->GetDatas(vertexData.data());
 	//-----------------------------------------------------------
 	//ReleaseBuffers -------------------------------------------
-	ID3D11UnorderedAccessView* view[1] = { nullptr };
-	for (UINT i = 0; i < 9; ++i)
-		DeviceContext->CSSetUnorderedAccessViews(i, 1, view, nullptr);
+	ID3D11UnorderedAccessView* nullView[1] = { nullptr };
+	for (UINT i = 0; i < 8; ++i)
+		DeviceContext->CSSetUnorderedAccessViews(i, 1, nullView, nullptr);
 
 	ID3D11Buffer* nullBuffer[1] = { nullptr };
 	DeviceContext->CSSetConstantBuffers(5, 1, nullBuffer);

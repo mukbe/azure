@@ -27,6 +27,9 @@ public:
 	static string GetFileNameWithoutExtension(string path);
 	static wstring GetFileNameWithoutExtension(wstring path);
 
+	static string GetFilePathWithoutExtension(string path);
+	static wstring GetFilePathWithoutExtension(wstring path);
+
 	const static WCHAR* ImageFilter;
 	const static WCHAR* BinModelFilter;
 	const static WCHAR* FbxModelFilter;

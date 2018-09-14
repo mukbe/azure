@@ -48,7 +48,7 @@ AnimationTool::AnimationTool()
 	objectTool = new ObjectTool;
 	objectTool->SetCamera(freeCamera);
 
-	ocean = new Ocean;
+	//ocean = new Ocean;
 }
 
 
@@ -81,12 +81,12 @@ void AnimationTool::PreUpdate()
 
 void AnimationTool::Update()
 {
-	//if (toolType == 0)
-	//	characterTool->Update();
-	//else
-	//	objectTool->Update();
+	if (toolType == 0)
+		characterTool->Update();
+	else
+		objectTool->Update();
 
-	ocean->Update();
+	//ocean->Update();
 }
 
 void AnimationTool::PostUpdate()
@@ -110,15 +110,15 @@ void AnimationTool::Render()
 {
 	freeCamera->Render();
 
-	ocean->Render();
+	//ocean->Render();
 
-	//if (toolType == 0)
-	//{
-	//	characterTool->Render();
-	//	grid->Render();
-	//}
-	//else
-	//	objectTool->Render();
+	if (toolType == 0)
+	{
+		characterTool->Render();
+		grid->Render();
+	}
+	else
+		objectTool->Render();
 
 	//camera정보를 deferred에게 언팩킹시에 필요한 정보를 보낸다
 	RenderRequest->SetUnPackGBufferProp(freeCamera->GetViewMatrix(), freeCamera->GetProjection());
@@ -129,7 +129,7 @@ void AnimationTool::Render()
 
 void AnimationTool::UIRender()
 {
-	ocean->UIRender();
+	//ocean->UIRender();
 
 	static bool showDemo = false;
 	//MainBar

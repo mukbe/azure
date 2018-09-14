@@ -89,7 +89,7 @@ float2 InitSpectrum(float time, uint indexX, uint indexY)
 [numthreads(1, 1, 1)]
 void CSMain0(uint3 DTid : SV_DispatchThreadID)
 {
-    uint bufferIndex = 64 * 64 + DTid.x + DTid.y * 64;
+    uint bufferIndex = N * N + DTid.x + DTid.y * N;
     uint bufferIndexX, bufferIndexY;
     bufferIndexY = rwHeightBuffer[bufferIndex].indexY;
     
@@ -147,10 +147,10 @@ void CSMain1(uint3 DTid : SV_DispatchThreadID)
 
     int indexX = DTid.y + DTid.z * N;
     int indexY = idx;
-    int index = indexY * 64 * 64 + indexX;
+    int index = indexY * N * N + indexX;
 
-    int idxX = 64 * 64 * idx1 + (X + DTid.z * N);
-    int idxY = 64 * 64 * idx1 + (Y + DTid.z * N);
+    int idxX = N * N * idx1 + (X + DTid.z * N);
+    int idxY = N * N * idx1 + (Y + DTid.z * N);
 
     rwHeightBuffer[index].data = FFT(w, rwHeightBuffer[idxX].data, rwHeightBuffer[idxY].data);
     rwSlopeBuffer[index].data = FFT(w, rwSlopeBuffer[idxX].data, rwSlopeBuffer[idxY].data);
@@ -173,10 +173,10 @@ void CSMain2(uint3 DTid : SV_DispatchThreadID)
 
     int indexX = DTid.y + DTid.z * N;
     int indexY = idx;
-    int index = indexY * 64 * 64 + indexX;
+    int index = indexY * N * N + indexX;
 
-    int idxX = 64 * 64 * idx1 + (DTid.y + X * N);
-    int idxY = 64 * 64 * idx1 + (DTid.y + Y * N);
+    int idxX = N * N * idx1 + (DTid.y + X * N);
+    int idxY = N * N * idx1 + (DTid.y + Y * N);
 
     rwHeightBuffer[index].data = FFT(w, rwHeightBuffer[idxX].data, rwHeightBuffer[idxY].data);
     rwSlopeBuffer[index].data = FFT(w, rwSlopeBuffer[idxX].data, rwSlopeBuffer[idxY].data);
@@ -197,7 +197,7 @@ void CSMain3(uint3 DTid : SV_DispatchThreadID)
 
     int sign = (int) signs[(DTid.x + DTid.y) & 1];
 
-    uint bufferIndex = 64 * 64 + index;
+    uint bufferIndex = N * N + index;
 
     normal = normalize(float3(-rwSlopeBuffer[bufferIndex].data.x * sign, 1.0f, -rwSlopeBuffer[bufferIndex].data.z * sign));
 

@@ -38,9 +38,13 @@ Texture2D _lookUp : register(t6);
 float Fresnel(float3 V, float3 N)
 {
     float costhetai = abs(dot(V, N));
-    //return tex2D(_lookUp, float2(costhetai, 0.0)).a;
     return _lookUp.Sample(_basicSampler, float2(costhetai, 0.0)).a;
 
+     //uint width, height;
+    //_lookUp.GetDimensions(width, height);
+    //float3 texCoord = float3(costhetai * width, 0.0f, 0.0f);
+    //return _lookUp.Load(texCoord).a;
+    //return tex2D(_lookUp, float2(costhetai, 0.0)).a;
 }
 
 
@@ -53,7 +57,6 @@ PixelInput InstanceVS(VertexInput input)
     output.normal = input.normal;
     output.uv = input.uv;
 
-
     return output;
 }
 
@@ -61,15 +64,15 @@ G_Buffer InstancePS(PixelInput input)
 {
     G_Buffer output;
 
-    float3 V = normalize(GetCameraPosition() - input.worldPos);
-    float3 N = input.normal;
-		
-    float fresnel = Fresnel(V, N);
-    float4 specColor = lerp(DiffuseColor, SunColor, fresnel);
-    float3 sunDirection = normalize(float3(1, -1, 0));
-    
-    float diffuseFactor = saturate(dot(input.normal, - sunDirection));
-    float4 diffuse = DiffuseColor * SunColor * diffuseFactor;
+   float3 V = normalize(GetCameraPosition() - input.worldPos);
+    float3 N = normalize(input.normal);
+	
+   float fresnel = Fresnel(V, N);
+   float4 specColor = lerp(DiffuseColor, SunColor, fresnel);
+   float3 sunDirection = normalize(float3(1, -1, 0));
+   
+   float diffuseFactor = saturate(dot(input.normal, - sunDirection));
+   float4 diffuse = DiffuseColor * SunColor * diffuseFactor;
 
     output.worldPos = float4(input.worldPos, 1.0f);
     output.diffuse = diffuse + specColor;

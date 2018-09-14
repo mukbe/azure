@@ -7,6 +7,8 @@
 #include "./Model/ModelMesh.h"
 
 #include "./Renders/Material.h"
+#include <io.h>
+
 
 SingletonCpp(ResourceManager)
 
@@ -33,14 +35,49 @@ ResourceManager::~ResourceManager()
 
 void ResourceManager::LoadAsset()
 {
-	this->AddModelData(Assets + L"Pandaren/Pandaren", true);
-	this->AddModelData(Assets + L"Objects/FishingBox/FishingBox");
-	this->AddModelData(Assets + L"Objects/Trees/Tree1");
-	this->AddModelData(Assets + L"Objects/Trees/Tree2");
-	this->AddModelData(Assets + L"Objects/Trees/Tree3");
-	this->AddModelData(Assets + L"Objects/Trees/Tree4");
-	this->AddModelData(Assets + L"Objects/Trees/Tree5");
+	this->LoadFolder("../Contents/Atmospheric/","*.png");
+	this->LoadFolder("../_Contents/", "*.png");
+
+	this->LoadFolder("../_Assets/Objects/Trees/", "*.material");
+	this->LoadFolder("../_Assets/Objects/Trees/", "*.png");
+	this->LoadFolder("../_Assets/Objects/FishingBox/", "*.material");
+	this->LoadFolder("../_Assets/Objects/FishingBox/", "*.png");
+	this->LoadFolder("../_Assets/Pandaren/", "*.material",true);
+	this->LoadFolder("../_Assets/Pandaren/", "*.png");
 }
+
+void ResourceManager::LoadFolder(const std::string& path, const std::string& filter, bool isAnim)
+{
+	std::string searching = path + filter;
+
+	std::vector<std::string> return_;
+
+	_finddata_t fd;
+	long handle = _findfirst(searching.c_str(), &fd);  //현재 폴더 내 모든 파일을 찾는다.
+
+	if (handle == -1)return;
+
+	int result = 0;
+	do
+	{
+		string filePath = path + fd.name;
+
+		if (filter == "*.png")
+			this->AddTexture(String::StringToWString(filePath), Path::GetFileNameWithoutExtension(fd.name));
+		else if (filter == "*.material")
+		{
+			if(isAnim)
+				this->AddModelData(Path::GetFilePathWithoutExtension(String::StringToWString(path + fd.name)), true);
+			else
+				this->AddModelData(Path::GetFilePathWithoutExtension(String::StringToWString(path + fd.name)), false);
+		}
+
+		result = _findnext(handle, &fd);
+	} while (result != -1);
+
+	_findclose(handle);
+}
+
 
 Texture * ResourceManager::AddTexture(wstring file, string keyName)
 {

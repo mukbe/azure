@@ -59,12 +59,12 @@ void Ocean::Update()
 
 	this->ComputingOcean();
 	this->UpdateBuffer();
+	
 }
 
 void Ocean::Render()
 {
 	//BindBuffers ----------------------------------------------
-
 	ID3D11ShaderResourceView* srv = fresnelLookUp->GetSRV();
 	DeviceContext->VSSetShaderResources(6, 1, &srv);
 	DeviceContext->PSSetShaderResources(6,1, &srv);
@@ -142,13 +142,14 @@ void Ocean::InitOceansData()
 {
 	this->gridCountX = 8;
 	this->gridCountZ = 8;
-	this->length = 64.0f;
+	this->length = (float)vertexLength;
 	this->waveAmp = 0.0004f;
 	this->windSpeed = D3DXVECTOR2(32.0f, 32.0f);
 	this->windDirection = D3DXVECTOR2(windSpeed.x, windSpeed.y);
 	D3DXVec2Normalize(&windDirection, &windDirection);
 
 	this->oceanColor = D3DXCOLOR(0.05f, 0.25f, 0.5f, 1.0f);
+
 }
 
 void Ocean::InitBuffers()
@@ -246,8 +247,8 @@ void Ocean::InitBuffers()
 		}
 	}
 
-	spectrum.assign(65 * 65, D3DXVECTOR2());
-	spectrum_conj.assign(65 * 65, D3DXVECTOR2());
+	spectrum.assign(nPlus1 * nPlus1, D3DXVECTOR2());
+	spectrum_conj.assign(nPlus1 * nPlus1, D3DXVECTOR2());
 
 	for (int m_prime = 0; m_prime < nPlus1; m_prime++)
 	{
@@ -306,7 +307,7 @@ void Ocean::InitBuffers()
 
 	for (UINT y = 0; y < 2; ++y)
 	{
-		for (UINT x = 0; x < 64 * 64; ++x)
+		for (UINT x = 0; x < vertexLength * vertexLength; ++x)
 		{
 			heightData.push_back(StructuredDataFloat2(D3DXVECTOR2(0.f, 0.f), x, y));
 			slopeData.push_back(StructuredDataFloat4(D3DXVECTOR4(0.f, 0.f, 0.f, 0.f), x, y));
