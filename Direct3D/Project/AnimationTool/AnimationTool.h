@@ -11,6 +11,7 @@ class AnimationTool :public SceneNode
 {
 private:
 	int toolType;
+	class Ocean* ocean;
 	class CharacterTool* characterTool;
 	class ObjectTool* objectTool;
 

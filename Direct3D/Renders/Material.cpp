@@ -60,6 +60,7 @@ void Material::UpdateBuffer()
 
 void Material::BindBuffer()
 {
+	this->buffer->SetVSBuffer(3);
 	this->buffer->SetPSBuffer(3);
 
 	if (this->diffuseMap)

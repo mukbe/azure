@@ -57,7 +57,6 @@
     <ClCompile Include="Manager\RenderManager.cpp" />
     <ClCompile Include="Project\AnimationTool\AnimationTool.cpp" />
     <ClCompile Include="Project\TerrainTool\TerrainTool.cpp" />
-    <ClCompile Include="Object\Item\GameItem.cpp" />
     <ClCompile Include="Renders\Texture.cpp" />
     <ClCompile Include="Project\TerrainTool\TerrainHeight.cpp" />
     <ClCompile Include="Project\TerrainTool\Terrain.cpp" />
@@ -76,6 +75,8 @@
     <ClCompile Include="Project\AnimationTool\ObjectTool.cpp" />
     <ClCompile Include="Utilities\ImGuiHelper.cpp" />
     <ClCompile Include="Object\StaticObject\StaticObject.cpp" />
+    <ClCompile Include="Environment\Ocean\Ocean.cpp" />
+    <ClCompile Include="Environment\Ocean\Ocean + Func.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renders\ShadowRenderer.h" />
@@ -144,7 +145,6 @@
     <ClInclude Include="Manager\RenderManager.h" />
     <ClInclude Include="Project\AnimationTool\AnimationTool.h" />
     <ClInclude Include="Project\TerrainTool\TerrainTool.h" />
-    <ClInclude Include="Object\Item\GameItem.h" />
     <ClInclude Include="Renders\Texture.h" />
     <ClInclude Include="Project\TerrainTool\TerrainHeight.h" />
     <ClInclude Include="Project\TerrainTool\Terrain.h" />
@@ -162,6 +162,7 @@
     <ClInclude Include="Project\AnimationTool\ObjectTool.h" />
     <ClInclude Include="Utilities\ImGuiHelper.h" />
     <ClInclude Include="Object\StaticObject\StaticObject.h" />
+    <ClInclude Include="Environment\Ocean\Ocean.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />
@@ -177,5 +178,7 @@
     <None Include="_Shaders\AtmosphericScatteringSkyBox.hlsl" />
     <None Include="_Shaders\AtmosphericScattering_Header.hlsl" />
     <None Include="_Shaders\AtmosphericScattering_Compute.hlsl" />
+    <None Include="_Shaders\005_Ocean.hlsl" />
+    <None Include="_Shaders\005_OceanCompute.hlsl" />
   </ItemGroup>
 </Project>

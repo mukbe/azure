@@ -2,10 +2,11 @@
 class InstanceShader
 {
 public:
-	InstanceShader(wstring  fileName);
+	InstanceShader(wstring  fileName,bool autoCreateLayout = true);
 	~InstanceShader();
 	void Render();
 
+	void CreateInputLayout(D3D11_INPUT_ELEMENT_DESC* descs, UINT layoutCount);
 private:
 	void CreateVertexShader();
 	void CreatePixelShader();

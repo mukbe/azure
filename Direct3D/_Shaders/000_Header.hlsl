@@ -25,6 +25,7 @@ cbuffer UnPacker : register(b2)
 
 cbuffer MaterialBuffer : register(b3)
 {
+    float4 AmbientColor;
     float4 DiffuseColor;
     float4 SpecColor;
     float4 EmissiveColor;
@@ -149,8 +150,6 @@ struct InstanceInputVS
 /*************************************************************
 Func
 **************************************************************/
-
-
 
 //카메라 위치 계산
 float3 GetCameraPosition()

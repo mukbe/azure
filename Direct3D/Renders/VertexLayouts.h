@@ -6,6 +6,8 @@ struct Vertex
 {
 	Vertex()
 		: position(0, 0, 0) {}
+	Vertex(D3DXVECTOR3 pos)
+		:position(pos) {}
 
 	D3DXVECTOR3 position;
 };

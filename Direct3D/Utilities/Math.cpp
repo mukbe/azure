@@ -35,6 +35,11 @@ float Math::Random(float r1, float r2)
 	return r1 + val;
 }
 
+float Math::RandF()
+{
+	return (float)(rand()) / (float)RAND_MAX;
+}
+
 float Math::Lerp(float val1, float val2, float amount)
 {
 	return val1 + (val2 - val1)* amount;
