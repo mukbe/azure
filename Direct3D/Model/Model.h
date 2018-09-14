@@ -92,9 +92,6 @@ class Models
 public:
 	friend class Model;
 public:
-	static void Create();
-	static void Delete();
-public:
 	static void LoadMaterial(wstring file, vector<Material *>* materials);
 
 	static void LoadMesh(wstring file, vector<ModelBone *>* bones, vector<ModelMesh *>* meshes);
@@ -103,14 +100,4 @@ public:
 	static void LoadAnimation(wstring file, vector<ModelAnimClip *>* clips);
 	static void ReadAnimation(wstring file,vector<ModelAnimClip*>* clips);
 
-private:
-	struct MeshData
-	{
-		vector<ModelBone *> Bones;
-		vector<ModelMesh *> Meshes;
-	};
-	
-	static map<wstring, vector<class Material *>>	materialMap;
-	static map<wstring, MeshData>					meshDataMap;
-	static map<wstring, vector<ModelAnimClip *>>	animClipMap;
 };

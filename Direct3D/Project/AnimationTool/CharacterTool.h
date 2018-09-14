@@ -15,6 +15,7 @@ private:	//For Gui
 	bool showTool;
 	bool showBone;
 	bool debugControl;
+	bool zBufferOn;
 	int selectBoneIndex;
 public:
 	CharacterTool();

@@ -24,7 +24,6 @@
 #include "./Utilities/DebugTransform.h"
 #include "./Utilities/BinaryFile.h"
 
-#include "./Object/Item/GameItem.h"
 #include "./Object/GameObject/GameObject.h"
 
 #include "./Bounding/AnimationCollider.h"
@@ -174,6 +173,8 @@ void CharacterTool::RenderColliderTool()
 	ImGui::BeginGroup();
 	{
 		//BeginCombo ColliderList ---------------------------------------------------------------
+		ImGui::Checkbox("ZBuffer", &zBufferOn);
+
 		static string comboStr = "NULL";
 		if (targetCollider)comboStr = targetCollider->GetName();
 		if (ImGui::BeginCombo("ColliderList", comboStr.c_str()))

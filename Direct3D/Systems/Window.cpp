@@ -79,13 +79,11 @@ WPARAM Window::Run()
 	Gizmo::Delete();
 	Buffers->Delete();
 	Shaders->Delete();
-	Models::Delete();
 	ResourceManager::Delete();
 	Time::Delete();
 	Mouse::Delete();
 	Keyboard::Delete();
 
-	
 	pRenderer->Delete();
 //=============================================================
 

@@ -4,7 +4,6 @@
 #include "./Model/Model.h"
 #include "./Model/ModelAnimPlayer.h"
 #include "../../Bounding/GameCollider.h"
-#include "./Object/Item/GameItem.h"
 
 GameUnit::GameUnit(string name,class Model* model)
 	:GameObject(name),model(model)
