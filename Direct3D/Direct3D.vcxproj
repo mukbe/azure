@@ -39,9 +39,7 @@
     <ClInclude Include="Utilities\ImGuiHelper.h" />
     <ClInclude Include="View\FirstPersonCamera.h" />
     <ClInclude Include="Renders\Instancing\InstanceShader.h" />
-    <ClInclude Include="Renders\Instancing\InstanceRenderer.h" />
-    <ClInclude Include="Object\Item\GameItem.h" />
-    <ClInclude Include="Manager\RenderManager.h" />
+    <ClInclude Include="Renders\Instancing\InstanceRenderer.h" />    <ClInclude Include="Manager\RenderManager.h" />
     <ClInclude Include="Manager\SceneManager.h" />
     <ClInclude Include="Manager\SceneNode.h" />
     <ClInclude Include="Project\AnimationTool\AnimationTool.h" />
@@ -125,9 +123,7 @@
     <ClCompile Include="Utilities\ImGuiHelper.cpp" />
     <ClCompile Include="View\FirstPersonCamera.cpp" />
     <ClCompile Include="Renders\Instancing\InstanceShader.cpp" />
-    <ClCompile Include="Renders\Instancing\InstanceRenderer.cpp" />
-    <ClCompile Include="Object\Item\GameItem.cpp" />
-    <ClCompile Include="Manager\RenderManager.cpp" />
+    <ClCompile Include="Renders\Instancing\InstanceRenderer.cpp" />    <ClCompile Include="Manager\RenderManager.cpp" />
     <ClCompile Include="Manager\SceneManager.cpp" />
     <ClCompile Include="Model\ModelAnimPlayer + Blending.cpp" />
     <ClCompile Include="Project\AnimationTool\AnimationTool.cpp" />
