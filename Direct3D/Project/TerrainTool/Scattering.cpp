@@ -69,9 +69,9 @@ void Scattering::Render()
 	//드로우
 	UpdateMaterialParameters();
 
+	//TODO 카메라의 world를 쓰는것이다 디퍼드랜더링에서 그려지도록 하면 카메라 객채를 뺄 수 있지 않을까
 	Transform tranform;
 	tranform.SetWorldPosition(_camera->GetTransform()->GetWorldPosition());
-
 	D3DXMATRIX mat = tranform.GetFinalMatrix();
 	world->SetMatrix(mat);
 

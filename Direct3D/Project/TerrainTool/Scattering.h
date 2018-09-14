@@ -77,48 +77,33 @@ private:
 private:
 	RenderMode RenderingMode = RenderMode::Optimized;
 	
+	Buffer* buffer;
+	WorldBuffer * world;
+	Environment::Sun* sun;
 
 	ComputeShader* precomputeSkyboxLUT;
-
 	ComputeShader* particleDensityLUTComputeShader;
+	CResource2D* _particleDensityLUT = nullptr;
+	CResource1D* _lightColorTexture;
+	CResource1D* _lightColorTextureTemp;
+	CResource3D* _skyboxLUT;
 
 	Shader* shader;
 	Shader* skyBoxShader;
 
-	WorldBuffer * world;
-
-	Environment::Sun* sun;
-	CResource2D* _particleDensityLUT = nullptr;
-	CResource1D* _lightColorTexture;
-	CResource1D* _lightColorTextureTemp;
-
-	D3DXVECTOR3 _skyboxLUTSize = D3DXVECTOR3(32, 128, 32);
-
-	CResource3D* _skyboxLUT;
-
-	D3DXVECTOR3 _inscatteringLUTSize = D3DXVECTOR3(8, 8, 64);
-
 	const int LightLUTSize = 128;
-
+	D3DXVECTOR3 _skyboxLUTSize = D3DXVECTOR3(32, 128, 32);
+	D3DXVECTOR3 _inscatteringLUTSize = D3DXVECTOR3(8, 8, 64);
 	//0~15
 	vector<D3DXCOLOR> _directionalLightLUT;
 	//0~10
 	vector<D3DXCOLOR> _ambientLightLUT;
-
-	//Material _material;
-	Buffer* buffer;
-	FreeCamera* _camera;
-
 	D3DXCOLOR _sunColor;
-
 	//1~64
 	int SampleCount = 16;
 	float MaxRayLength = 400;
-
 	//0~10
 	D3DXCOLOR IncomingLight = D3DXCOLOR(4,4,4,4);
-
-
 	//0~10
 	float RayleighScatterCoef = 1;
 	//0~10
@@ -131,9 +116,7 @@ private:
 	float MieG = 0.76f;
 	float DistanceScale = 1;
 
-
 	bool UpdateLightColor = true;
-
 	//0.5~3.0
 	float LightColorIntensity = 1.0f;
 	bool UpdateAmbientColor = true;
@@ -148,6 +131,7 @@ private:
 	const D3DXVECTOR3 MieSct = D3DXVECTOR3(2.0f, 2.0f, 2.0f) * 0.00001f;
 
 
+	FreeCamera* _camera;
 	ID3D11Buffer* vertexBuffer, *indexBuffer;
 	struct GeometryGenerator::MeshData meshData;
 
