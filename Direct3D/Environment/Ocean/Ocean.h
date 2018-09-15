@@ -36,6 +36,7 @@ private:
 	class Texture*					fresnelLookUp;
 private:
 	D3DXCOLOR						oceanColor;
+	D3DXCOLOR						testSunColor;
 	UINT							gridCountX;
 	UINT							gridCountZ;
 	UINT							vertexLength;
@@ -44,6 +45,7 @@ private:
 	float							waveAmp;
 	D3DXVECTOR2						windSpeed;
 	D3DXVECTOR2						windDirection;
+	bool							wireFrame;
 public:
 	Ocean();
 	~Ocean();

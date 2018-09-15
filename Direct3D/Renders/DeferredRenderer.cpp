@@ -78,8 +78,7 @@ void DeferredRenderer::UIRender()
 	{
 		ImGui::ImageButton(shaderResourceView[0], ImVec2(200, 150)); ImGui::SameLine();
 		ImGui::ImageButton(shaderResourceView[1], ImVec2(200, 150));
-		ImGui::ImageButton(shaderResourceView[3], ImVec2(200, 150)); ImGui::SameLine();
-
+		ImGui::ImageButton(shaderResourceView[2], ImVec2(200, 150)); ImGui::SameLine();
 		ImGui::ImageButton(depthVis->GetSRV(), ImVec2(200, 150));
 	}
 	ImGui::End();

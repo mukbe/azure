@@ -17,7 +17,8 @@ struct PixelInput
     float3 normal : NORMAL0;
 };
 
-G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float SpecIntensity, float SpecPower)
+G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float3 specColor,
+    float SpecIntensity, float SpecPower, float renderType)
 {
     G_Buffer Out = buffer;
 
@@ -25,9 +26,9 @@ G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float SpecI
     float SpecPowerNorm = max(0.0001, (SpecPower - g_SpecPowerRange.x) / g_SpecPowerRange.y);
 
 	// Pack all the data into the GBuffer structure
+    Out.normal = float4(normal * 0.5f + 0.5f, renderType);
     Out.diffuse = float4(diffuse.rgb, SpecIntensity);
-    Out.normal = float4(normal * 0.5f + 0.5f, 1.0f);
-    Out.spec = float4(SpecPowerNorm, 0.0f, 0.0f, 1.0f);
+    Out.spec = float4(specColor, SpecPowerNorm);
 
     return Out;
 
@@ -60,23 +61,24 @@ PixelInput InstanceVS(VertexInput input)
     return output;
 }
 
+
 G_Buffer InstancePS(PixelInput input)
 {
     G_Buffer output;
 
-   float3 V = normalize(GetCameraPosition() - input.worldPos);
+    float3 V = normalize(GetCameraPosition() - input.worldPos);
     float3 N = normalize(input.normal);
 	
    float fresnel = Fresnel(V, N);
-   float4 specColor = lerp(DiffuseColor, SunColor, fresnel);
-   float3 sunDirection = normalize(float3(1, -1, 0));
+   float4 specColor = lerp(DiffuseColor, AmbientColor, fresnel);
+   float3 sunDirection = normalize(float3(-1, -1, 0));
    
    float diffuseFactor = saturate(dot(input.normal, - sunDirection));
-   float4 diffuse = DiffuseColor * SunColor * diffuseFactor;
+    float4 diffuse = DiffuseColor * AmbientColor * diffuseFactor;
 
-    output.worldPos = float4(input.worldPos, 1.0f);
-    output.diffuse = diffuse + specColor;
-    output = PackGBuffer(output, input.normal, output.diffuse.rgb, 0.25f, 250.0f);
+    output.normal = float4(input.normal, 1);
+    output.diffuse = specColor;
+    output.spec = float4(0, 0, 0, 0);
 
     return output;
 }

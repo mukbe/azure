@@ -1,11 +1,14 @@
 #pragma once
-#define BUFFER_COUNT 4
+#define BUFFER_COUNT 3
 class DeferredRenderer : public Renderer
 {
-	//0 == normal
-	//1 == diffuse
-	//2 == spec
-	//3 == world;
+//MRT0 Normal.xyz, RenderType(float)
+//MRT1 Diffuse.rgb,SpecIntensity(float)
+//MRT2 Specr.rgb, SpecPower(float)
+//MRT3 DepthMap
+
+//RenderType -- 0.0f ~ 0.9f == 빛계산 함
+//RenderType -- 1.0f ~ 1.9f == 빛계산 안함(GBuffer로 넘어온 Diffuse출력) 
 private:
 	ID3D11Texture2D * renderTargetTexture[BUFFER_COUNT];
 	ID3D11RenderTargetView* renderTargetView[BUFFER_COUNT];

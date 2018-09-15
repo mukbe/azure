@@ -8,9 +8,14 @@
 #include "./ComputeShader/ComputeResource.h"
 #include "./Renders/Material.h"
 
+#include "./View/FreeCamera.h"
+
 
 Ocean::Ocean()
+	:testSunColor(1, 1, 1, 1),wireFrame(false)
 {
+
+
 	this->vertexLength = pow(2, 6);
 
 	this->InitInstanceShader();
@@ -69,8 +74,12 @@ void Ocean::Render()
 	DeviceContext->VSSetShaderResources(6, 1, &srv);
 	DeviceContext->PSSetShaderResources(6,1, &srv);
 	material->SetDiffuseColor(oceanColor);
+	material->SetAmbientColor(testSunColor);
 	material->UpdateBuffer();
 	material->BindBuffer();
+
+	if (wireFrame)
+		States::SetRasterizer(States::RasterizerStates::WIRE_CULL_OFF);
 
 	// -----------------------------------------------------------
 
@@ -92,6 +101,9 @@ void Ocean::Render()
 	ID3D11ShaderResourceView* nullSrv[1] = { nullptr };
 	DeviceContext->PSSetShaderResources(6, 1, nullSrv);
 	material->UnBindBuffer();
+
+	if (wireFrame)
+		States::SetRasterizer(States::RasterizerStates::SOLID_CULL_ON);
 	//-----------------------------------------------------------------------
 }
 
@@ -104,8 +116,13 @@ void Ocean::UIRender()
 
 		ImGui::ColorEdit4("OceanColor", (float*)&oceanColor.r,
 			ImGuiColorEditFlags_Float | ImGuiColorEditFlags_AlphaPreviewHalf);
+		ImGui::ColorEdit4("SunColor", (float*)&testSunColor.r,
+			ImGuiColorEditFlags_Float | ImGuiColorEditFlags_AlphaPreviewHalf);
 
 		ImGui::Text("FPS : %f", Time::Get()->FPS());
+
+
+		ImGui::Checkbox("WireFrame", &wireFrame);
 
 		ImGui::End();
 	}
@@ -143,7 +160,7 @@ void Ocean::InitOceansData()
 	this->gridCountX = 8;
 	this->gridCountZ = 8;
 	this->length = (float)vertexLength;
-	this->waveAmp = 0.0004f;
+	this->waveAmp = 0.0002f;
 	this->windSpeed = D3DXVECTOR2(32.0f, 32.0f);
 	this->windDirection = D3DXVECTOR2(windSpeed.x, windSpeed.y);
 	D3DXVec2Normalize(&windDirection, &windDirection);
@@ -188,8 +205,10 @@ void Ocean::InitBuffers()
 
 	int		size = vertexLength;
 	float	fSize = (float)size;
-	passes = (int)(log(fSize) / log(2.0f));
+	this->passes = (int)(log(fSize) / log(2.0f));
 
+
+	//푸리에 변환을 위한 룩업테이블 생성
 	butterflyLookupTable.assign(size * passes * 4, float());
 
 	for (int i = 0; i < passes; i++)
@@ -236,6 +255,7 @@ void Ocean::InitBuffers()
 		}
 	}
 
+	//분산 테이블 구성
 	UINT nPlus1 = vertexLength + 1;
 	dispersionTable.assign(nPlus1 * nPlus1, float());
 	for (int m_prime = 0; m_prime < nPlus1; m_prime++)
@@ -249,7 +269,7 @@ void Ocean::InitBuffers()
 
 	spectrum.assign(nPlus1 * nPlus1, D3DXVECTOR2());
 	spectrum_conj.assign(nPlus1 * nPlus1, D3DXVECTOR2());
-
+	//스펙트럼 및 정점들의 초기화 
 	for (int m_prime = 0; m_prime < nPlus1; m_prime++)
 	{
 		for (int n_prime = 0; n_prime < nPlus1; n_prime++)
@@ -293,7 +313,7 @@ void Ocean::InitBuffers()
 			index += 6;
 		}
 	}
-
+	//인스턴스 그리드 설정
 	for (UINT z = 0; z < gridCountZ; ++z)
 	{
 		for (UINT x = 0; x < gridCountX; ++x)
@@ -340,7 +360,7 @@ void Ocean::InitBuffers()
 	originVertexBuffer = new CResource1D(sizeof D3DXVECTOR3, positionData.size(), positionData.data());
 	vertexDataBuffer = new CResource1D(sizeof VertexTextureNormal, vertexData.size(), vertexData.data());
 
-
+	//정점변환을 위한 데이터들은 전부 버퍼로 바인딩 했으므로 메모리 해제.
 	heightData.clear();
 	slopeData.clear();
 	displacementData.clear();

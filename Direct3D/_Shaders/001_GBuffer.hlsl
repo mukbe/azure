@@ -6,11 +6,16 @@ Texture2D _emissiveTex : register(t2);
 Texture2D _normalTex : register(t3);
 Texture2D _detailTex : register(t4);
 
+//MRT0 Normal.xyz, RenderType(float)
+//MRT1 Diffuse.rgb, specIntensity(float)
+//MRT2 Specr.rgb, SpecPower(float)
+//MRT3 DepthMap
 
-/***************************************************************
-Basic Deferred Shading 
-****************************************************************/
-G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float SpecIntensity, float SpecPower)
+//RenderType -- 0.0f ~ 0.9f == 빛계산 함
+//RenderType -- 1.0f ~ 1.9f == 빛계산 안함(GBuffer로 넘어온 Diffuse출력) 
+
+G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float3 specColor,
+    float SpecIntensity, float SpecPower, float renderType)
 {
     G_Buffer Out = buffer;
 
@@ -18,13 +23,17 @@ G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float SpecI
     float SpecPowerNorm = max(0.0001, (SpecPower - g_SpecPowerRange.x) / g_SpecPowerRange.y);
 
 	// Pack all the data into the GBuffer structure
+    Out.normal = float4(normal * 0.5f + 0.5f, renderType);
     Out.diffuse = float4(diffuse.rgb, SpecIntensity);
-    Out.normal = float4(normal * 0.5f + 0.5f, 1.0f);
-    Out.spec = float4(SpecPowerNorm, 0.0f, 0.0f, 1.0f);
+    Out.spec = float4(specColor, SpecPowerNorm);
 
     return Out;
 
 }
+
+/***************************************************************
+Basic Deferred Shading 
+****************************************************************/
 
 struct BasicPixelInput
 {
@@ -53,9 +62,9 @@ G_Buffer BasicDeferredPS(BasicPixelInput input)
 {
     G_Buffer output;
 
-    output.worldPos = input.worldPos;
+    //output.worldPos = input.worldPos;
     output.diffuse = _diffuseTex.Sample(_basicSampler, input.uv);
-    output = PackGBuffer(output, input.normal, output.diffuse.rgb, 0.25f, 250.0f);
+    output = PackGBuffer(output, input.normal, output.diffuse.rgb, float3(1, 1, 1),1.0f,1.0f,0.5f);
 
     output.spec = _specularTex.Sample(_basicSampler, input.uv);
 
@@ -97,9 +106,9 @@ G_Buffer ColorDeferredPS(ColorNormalPixelInput input)
 {
     G_Buffer output;
 
-    output.worldPos = input.worldPos;
+    //output.worldPos = input.worldPos;
     output.diffuse = input.color;
-    output = PackGBuffer(output, input.normal, output.diffuse.rgb, 1.0f, 250.0f);
+    output = PackGBuffer(output, input.normal, output.diffuse.rgb, float3(1, 1, 1),1.0f, 1.0f,0.5f);
 
     return output;
 }
@@ -132,10 +141,12 @@ G_Buffer GizmoDeferredPS(ColorPixelInput input)
 {
     G_Buffer output;
 
-    output.worldPos = input.worldPos;
+    //output.worldPos = input.worldPos;
     output.diffuse = input.color;
     output.spec = float4(2, 2, 2, 2);
     output.normal = float4(0, 0, 0, 1);
+
+    output = PackGBuffer(output, float3(0, 0, 0), input.color.rgb, float3(0, 0, 0), 0, 0, 1.5f);
 
     return output;
 }
@@ -184,11 +195,11 @@ G_Buffer ModelDeferredPS(ModelPixelInput input)
 
     float3 diffuse = _diffuseTex.Sample(_basicSampler, input.uv).rgb;
 
-    output.worldPos = input.worldPos;
+    //output.worldPos = input.worldPos;
     output.normal = float4(NormalMapSpace(_normalTex.Sample(_basicSampler, input.uv).xyz, input.normal, input.tangent), 1);
     output.spec = float4(1, 1, 1, 2);
 
-    output = PackGBuffer(output, input.normal, diffuse, 0.25f, 250.0f);
+    output = PackGBuffer(output, input.normal, diffuse,SpecColor.rgb,SpecColor.a,Shiness,0.5f);
     return output;
 }
 
@@ -226,11 +237,11 @@ G_Buffer InstancePS(ModelPixelInput input)
 
     float3 diffuse = diffuse4.rgb;
 
-    output.worldPos = input.worldPos;
+    //output.worldPos = input.worldPos;
     output.normal = float4(NormalMapSpace(_normalTex.Sample(_basicSampler, input.uv).xyz, input.normal, input.tangent), 1);
     output.spec = float4(1, 1, 1, 2);
 
-    output = PackGBuffer(output, input.normal, diffuse, 0.25f, 250.0f);
+    output = PackGBuffer(output, input.normal, diffuse, SpecColor.rgb, SpecColor.a, Shiness, 0.5f);
     return output;
 }
 //===================================================
@@ -260,10 +271,10 @@ G_Buffer ObjectPS(ModelPixelInput input)
     float3 diffuse = _diffuseTex.Sample(_basicSampler, input.uv).rgb;
 
 
-    output.worldPos = input.worldPos;
+    //output.worldPos = input.worldPos;
     output.normal = float4(NormalMapSpace(_normalTex.Sample(_basicSampler, input.uv).xyz, input.normal, input.tangent), 1);
     output.spec = float4(1, 1, 1, 2);
 
-    output = PackGBuffer(output, input.normal, diffuse, 0.25f, 250.0f);
+    output =PackGBuffer(output, input.normal, diffuse,SpecColor.rgb,SpecColor.a,Shiness,0.5f);
     return output;
 }
