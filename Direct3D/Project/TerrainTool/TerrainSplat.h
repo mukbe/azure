@@ -19,9 +19,11 @@ class TerrainSplat
 		}Data;
 	};
 
+
 public:
 	TerrainSplat();
 	~TerrainSplat();
+	CResource2D* GetSplatMap() { return splatMap; }
 
 	//TerrainSplat to Compute
 	void Splat();

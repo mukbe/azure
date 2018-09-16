@@ -2,6 +2,7 @@
 #include "Terrain.h"
 #include "TerrainHeight.h"
 #include "TerrainSplat.h"
+#include "TerrainSmooth.h"
 
 Terrain::Terrain()
 	:height(256), width(256)
@@ -18,19 +19,14 @@ Terrain::Terrain()
 
 	vector<D3DXVECTOR4>temp;
 	temp.assign(10, D3DXVECTOR4(0,0,0,FLT_MAX));
-
 	pickPos = new CResource1D(sizeof(D3DXVECTOR4), 10, temp.data());
+
 	computePicking = new ComputeShader(ShaderPath + L"TerrainToolCS.hlsl", "CalcuPickPosition");
 
-	computeHeightEdit = new ComputeShader(ShaderPath + L"TerrainToolCS.hlsl", "HeightEdit");
-	computeCopyHeight = new ComputeShader(ShaderPath + L"TerrainToolCS.hlsl", "CopyHeightMap");
-	tempHeightMap = new CResource1D(sizeof(D3DXVECTOR4), 256 * 256, nullptr);
 
-	computeSmooth = new ComputeShader(ShaderPath + L"TerrainToolCS.hlsl", "Smooth");
-	computeALL = new ComputeShader(ShaderPath + L"TerrainToolCS.hlsl", "CopyALLHeightMap");
 
 	splat = new TerrainSplat;
-
+	smooth = new TerrainSmooth;
 }
 
 
@@ -40,12 +36,7 @@ Terrain::~Terrain()
 	SafeDelete(texture);
 	SafeDelete(heightData);
 
-	SafeDelete(computeSmooth);
-	SafeDelete(computeALL);
 
-	SafeDelete(tempHeightMap);
-	SafeDelete(computeCopyHeight);
-	SafeDelete(computeHeightEdit);
 	SafeDelete(computePicking);
 	SafeDelete(pickPos);
 
@@ -66,7 +57,18 @@ void Terrain::Update()
 		{
 			case Mode::Mode_None:
 			break;
-			case Mode::Mode_Height:HeightEdit();
+			case Mode::Mode_Height:
+			{
+				buffer->SetCSBuffer(1);
+				heightData->GetHeightBuffer()->BindCSShaderResourceView(0);
+				heightData->CopyHeight();
+				heightData->GetHeightBuffer()->ReleaseCSshaderResorceView(0);
+
+				heightData->GetHeightBuffer()->BindResource(1);
+				heightData->EditHeight();
+				heightData->GetHeightBuffer()->ReleaseResource(1);
+
+			}
 			break;
 			case Mode::Mode_Splat:
 			{	
@@ -76,9 +78,36 @@ void Terrain::Update()
 				heightData->GetHeightBuffer()->ReleaseResource(1);
 			}
 			break;
-			case Mode::Mode_Smooth:Smooth();
+			case Mode::Mode_Smooth:
+			{
+				//TODO 먹통이 됬음 해결좀
+				buffer->SetCSBuffer(1);
+				heightData->GetHeightBuffer()->BindCSShaderResourceView(0);
+				heightData->GetTempHeightBuffer()->BindResource(2);
+				smooth->CopyHeight();
+				heightData->GetHeightBuffer()->ReleaseCSshaderResorceView(0);
+
+				heightData->GetHeightBuffer()->BindResource(1);
+				smooth->EditHeight();
+				heightData->GetTempHeightBuffer()->ReleaseResource(2);
+				heightData->GetHeightBuffer()->ReleaseResource(1);
+			}
 			break;
 		}
+	}
+	if (Keyboard::Get()->Down(VK_F1))
+	{
+		//Save
+		Texture::SaveToFile(Contents + L"heightTestMap.png", heightData->GetHeightBuffer()->GetSRV());
+		Texture::SaveToFile(Contents + L"splatMap.png", splat->GetSplatMap()->GetSRV());
+	}
+	if (Keyboard::Get()->Down(VK_F2))
+	{
+		Texture* tex = new Texture(Contents + L"heightTestMap.png");
+		tex->SetCSResource(0);
+		heightData->Load();
+
+		//TODO  splat Load
 	}
 
 }
@@ -108,6 +137,7 @@ void Terrain::Render()
 	worldBuffer->SetVSBuffer(1);
 	worldBuffer->SetDSBuffer(1);
 	buffer->SetVSBuffer(5);
+	buffer->SetPSBuffer(5);
 
 	ID3D11ShaderResourceView* heightMap = heightData->GetHeightMap();
 	DeviceContext->DSSetShaderResources(0, 1, &heightMap);
@@ -128,8 +158,6 @@ void Terrain::Render()
 	ID3D11ShaderResourceView* nullsrv[1] = { nullptr };
 	DeviceContext->DSSetShaderResources(0, 1, nullsrv);
 	DeviceContext->PSSetShaderResources(0, 1, nullsrv);
-
-
 }
 
 void Terrain::UIRender()
@@ -150,6 +178,10 @@ void Terrain::UIRender()
 
 	ImGui::SliderInt("BrushStyle", &buffer->Data.BrushStyle, 0, 1);
 	ImGui::SliderFloat("BrushSize", &buffer->Data.BrushSize, 0.5f, 40.f);
+
+	ImGui::SliderFloat("GridThickness", &buffer->Data.GridThickness, 0.001f, 1.0f);
+	ImGui::Checkbox("GridView", (bool*)&buffer->Data.GridbView);
+
 
 	switch (mode)
 	{
@@ -300,56 +332,5 @@ void Terrain::CalcuMousePosition()
 	}
 
 	buffer->Data.PickPos = D3DXVECTOR3(temp[0].x, temp[0].y, temp[0].z);
-}
-
-void Terrain::HeightEdit()
-{
-	buffer->SetCSBuffer(1);
-
-	computeCopyHeight->BindShader();
-	heightData->GetHeightBuffer()->BindCSShaderResourceView(0);
-	tempHeightMap->BindResource(2);
-
-	computeCopyHeight->Dispatch(16, 16, 1);
-
-	tempHeightMap->ReleaseResource(2);
-	heightData->GetHeightBuffer()->ReleaseCSshaderResorceView(0);
-
-	//=============================================================
-	computeHeightEdit->BindShader();
-
-	heightData->GetHeightBuffer()->BindResource(1);
-	tempHeightMap->BindResource(2);
-
-	computeHeightEdit->Dispatch(16, 16, 1);
-	tempHeightMap->ReleaseResource(2);
-
-	heightData->GetHeightBuffer()->ReleaseResource(1);
-}
-
-void Terrain::Smooth()
-{
-	buffer->SetCSBuffer(1);
-
-	computeALL->BindShader();
-	heightData->GetHeightBuffer()->BindCSShaderResourceView(0);
-	tempHeightMap->BindResource(2);
-
-	computeALL->Dispatch(16, 16, 1);
-
-	tempHeightMap->ReleaseResource(2);
-	heightData->GetHeightBuffer()->ReleaseCSshaderResorceView(0);
-
-	//=============================================================
-	computeSmooth->BindShader();
-
-	heightData->GetHeightBuffer()->BindResource(1);
-	tempHeightMap->BindResource(2);
-
-	computeSmooth->Dispatch(16, 16, 1);
-
-	tempHeightMap->ReleaseResource(2);
-	heightData->GetHeightBuffer()->ReleaseResource(1);
-
 }
 

@@ -23,6 +23,16 @@ void JsonHelper::SetValue(Json::Value & parent, string name, float & vec)
 	parent[name.c_str()] = vec;
 }
 
+void JsonHelper::GetValue(Json::Value & parent, string name, int & vec)
+{
+	vec = parent[name.c_str()].asInt();
+}
+
+void JsonHelper::SetValue(Json::Value & parent, string name, int & vec)
+{
+	parent[name.c_str()] = vec;
+}
+
 void JsonHelper::GetValue(Json::Value & parent, string name, D3DXVECTOR2 & vec)
 {
 	for (int i = 0; i < 2; i++)

@@ -1,0 +1,18 @@
+{
+   "Property" : {
+      "AmbientColorIntensity" : 1.0630000829696655,
+      "IncomingLight" : [ 4.0, 4.0, 4.0, 4.0 ],
+      "LightColorIntensity" : 1.0430001020431519,
+      "MieExtinctionCoef" : 1.0670000314712524,
+      "MieG" : 0.66100001335144043,
+      "MieScatterCoef" : 1.2650001049041748,
+      "RayleighExtinctionCoef" : 1.1860001087188721,
+      "RayleighScatterCoef" : 2.6480002403259277,
+      "RenderMode" : 1,
+      "SampleCount" : 16,
+      "SunIntensity" : 0.57700002193450928
+   },
+   "test" : {
+      "SampleCount" : 16
+   }
+}

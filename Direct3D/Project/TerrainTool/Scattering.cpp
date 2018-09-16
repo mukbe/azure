@@ -8,21 +8,42 @@
 #include "./Utilities/Transform.h"
 
 
-Scattering::Scattering(FreeCamera* camera)
+Scattering::Scattering(FreeCamera* camera , string level)
 {
+	jsonRoot = new Json::Value();
+	//TODO level에서 받아오도록
+	JsonHelper::ReadData(L"ScatteringEditor.json", jsonRoot);
+	Json::Value prop = (*jsonRoot)["Property"];
+	if (prop.isNull() == false)
+	{
+		JsonHelper::GetValue(prop, "SampleCount", SampleCount);
+		JsonHelper::GetValue(prop, "IncomingLight", IncomingLight);
+		JsonHelper::GetValue(prop, "RayleighScatterCoef", RayleighScatterCoef);
+		JsonHelper::GetValue(prop, "RayleighExtinctionCoef", RayleighExtinctionCoef);
+		JsonHelper::GetValue(prop, "MieScatterCoef", MieScatterCoef);
+		JsonHelper::GetValue(prop, "MieExtinctionCoef", MieExtinctionCoef);
+		JsonHelper::GetValue(prop, "MieG", MieG);
+		JsonHelper::GetValue(prop, "LightColorIntensity", LightColorIntensity);
+		JsonHelper::GetValue(prop, "AmbientColorIntensity", AmbientColorIntensity);
+		JsonHelper::GetValue(prop, "SunIntensity", SunIntensity);
+
+		int renderMode;
+		JsonHelper::GetValue(prop, "RenderMode", renderMode);
+		RenderingMode = (RenderMode)renderMode;
+
+	}
+
 	//쉐이더 초기화
 	shader = Shaders->CreateShader("Scattering", L"AtmosphericScatteringSkyBox.hlsl");
 	skyBoxShader = Shaders->CreateShader("ScatteringUseSkyBox", L"AtmosphericScatteringSkyBox.hlsl", Shader::ShaderType::Default, "UseSkyBox");
 
 	world = Buffers->FindShaderBuffer<WorldBuffer>();
+
 	D3DXMATRIX mat;
 	D3DXMatrixIdentity(&mat);
-
 	world->SetMatrix(mat);
 
 	sun = new Environment::Sun();
-
-	//메터리얼 초기화
 	buffer = new Buffer;
 
 	_camera = camera;
@@ -41,6 +62,26 @@ Scattering::Scattering(FreeCamera* camera)
 
 Scattering::~Scattering()
 {
+	//TODO sun의 위치 
+	Json::Value prop;
+	JsonHelper::SetValue(prop, "SampleCount", SampleCount);
+	JsonHelper::SetValue(prop, "IncomingLight", IncomingLight);
+	JsonHelper::SetValue(prop, "RayleighScatterCoef", RayleighScatterCoef);
+	JsonHelper::SetValue(prop, "RayleighExtinctionCoef", RayleighExtinctionCoef);
+	JsonHelper::SetValue(prop, "MieScatterCoef", MieScatterCoef);
+	JsonHelper::SetValue(prop, "MieExtinctionCoef", MieExtinctionCoef);
+	JsonHelper::SetValue(prop, "MieG", MieG);
+	JsonHelper::SetValue(prop, "LightColorIntensity", LightColorIntensity);
+	JsonHelper::SetValue(prop, "AmbientColorIntensity", AmbientColorIntensity);
+	JsonHelper::SetValue(prop, "SunIntensity", SunIntensity);
+
+	int renderMode = RenderingMode;
+	JsonHelper::SetValue(prop, "RenderMode", renderMode);
+
+	(*jsonRoot)["Property"] = prop;
+	JsonHelper::WriteData(L"ScatteringEditor.json", jsonRoot);
+	SafeDelete(jsonRoot);
+
 	SafeRelease(vertexBuffer);
 	SafeRelease(indexBuffer);
 
@@ -69,7 +110,7 @@ void Scattering::Render()
 	//드로우
 	UpdateMaterialParameters();
 
-	//TODO 카메라의 world를 쓰는것이다 디퍼드랜더링에서 그려지도록 하면 카메라 객채를 뺄 수 있지 않을까
+	//TODO 카메라의 world를 쓰는것이다 
 	Transform tranform;
 	tranform.SetWorldPosition(_camera->GetTransform()->GetWorldPosition());
 	D3DXMATRIX mat = tranform.GetFinalMatrix();
@@ -100,7 +141,7 @@ void Scattering::Render()
 	DeviceContext->DrawIndexed(36, 0, 0);
 	pRenderer->ChangeZBuffer(true);
 	States::SetRasterizer(States::RasterizerStates::SOLID_CULL_ON);
-
+	
 }
 
 void Scattering::UIRender()
@@ -113,7 +154,9 @@ void Scattering::UIRender()
 	if (ImGui::InputInt("SampleCount", &SampleCount, 1))
 		SampleCount = Math::Clamp(SampleCount, 1, 64);
 	
-	ImGui::ColorEdit4("IncomingLight", IncomingLight);
+	if (ImGui::ColorEdit4("IncomingLight", IncomingLight))
+		IncomingLight *= 4.0f; 
+
 	ImGui::SliderFloat("RayleighScatterCoef", &RayleighScatterCoef, 0.f, 10.f);
 	ImGui::SliderFloat("RayleighExtinctionCoef", &RayleighExtinctionCoef, 0.f, 10.f);
 	ImGui::SliderFloat("MieScatterCoef", &MieScatterCoef, 0.f, 10.f);

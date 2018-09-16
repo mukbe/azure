@@ -53,7 +53,7 @@ private:
 		}Data;
 	};
 public:
-	Scattering(class FreeCamera * camera);
+	Scattering(class FreeCamera * camera , string level);
 	~Scattering();
 
 	void Updata();
@@ -75,6 +75,7 @@ private:
 	D3DXCOLOR ComputeAmbientColor();
 
 private:
+	class Json::Value* jsonRoot;
 	RenderMode RenderingMode = RenderMode::Optimized;
 	
 	Buffer* buffer;

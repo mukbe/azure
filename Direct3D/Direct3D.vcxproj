@@ -36,6 +36,7 @@
     <ClInclude Include="Project\AnimationTool\ObjectTool.h" />
     <ClInclude Include="Project\TerrainTool\TerrainSplat.h" />
     <ClInclude Include="Project\TerrainTool\Scattering.h" />
+    <ClInclude Include="Project\TerrainTool\TerrainSmooth.h" />
     <ClInclude Include="Utilities\ImGuiHelper.h" />
     <ClInclude Include="View\FirstPersonCamera.h" />
     <ClInclude Include="Renders\Instancing\InstanceShader.h" />
@@ -122,6 +123,7 @@
     <ClCompile Include="Project\AnimationTool\ObjectTool.cpp" />
     <ClCompile Include="Project\TerrainTool\TerrainSplat.cpp" />
     <ClCompile Include="Project\TerrainTool\Scattering.cpp" />
+    <ClCompile Include="Project\TerrainTool\TerrainSmooth.cpp" />
     <ClCompile Include="Utilities\ImGuiHelper.cpp" />
     <ClCompile Include="View\FirstPersonCamera.cpp" />
     <ClCompile Include="Renders\Instancing\InstanceShader.cpp" />

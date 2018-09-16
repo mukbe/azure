@@ -158,7 +158,7 @@ void CopyHeightMap(uint3 dtid : SV_DispatchThreadID)
         if (abs(index.x - position.x) <= BrushSize &&
             abs(index.y - position.z) <= BrushSize)
         {
-            float color = HeightMap[index].r + HeightAmount;
+            float color = HeightMap[index].r + HeightAmount * 0.2f;
             tempHeightMap[index.x + index.y * temp.x] = float4(color, color, color, 1);
         }
     }
@@ -171,7 +171,7 @@ void CopyHeightMap(uint3 dtid : SV_DispatchThreadID)
 
         if (distance <= BrushSize)
         {
-            float color = HeightMap[index].r + HeightAmount;
+            float color = HeightMap[index].r + HeightAmount * 0.2f;
             tempHeightMap[index.x + index.y * temp.x] = float4(color, color, color, 1);
 
         }
@@ -197,8 +197,11 @@ void HeightEdit(uint3 dtid : SV_DispatchThreadID)
         {
             float color = tempHeightMap[index.y * temp.x + index.x].r;
 
-            if (color <= 0.001f)
+            if (color <= 0.f)
+            {
+                RWHeightMap[index.xy] = float4(0, 0, 0, 1);
                 return;
+            }
 
             RWHeightMap[index.xy] = float4(color, color, color, 1);
 
@@ -215,8 +218,11 @@ void HeightEdit(uint3 dtid : SV_DispatchThreadID)
         {
             float color = tempHeightMap[index.y * temp.x + index.x].r;
 
-            if (color <= 0.001f)
+            if (color <= 0.f)
+            {
+                RWHeightMap[index.xy] = float4(0, 0, 0, 1);
                 return;
+            }
 
             RWHeightMap[index.xy] = float4(color, color, color, 1);
 

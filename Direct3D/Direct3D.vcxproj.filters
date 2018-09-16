@@ -76,6 +76,7 @@
     <ClCompile Include="Project\AnimationTool\ObjectTool.cpp" />
     <ClCompile Include="Utilities\ImGuiHelper.cpp" />
     <ClCompile Include="Object\StaticObject\StaticObject.cpp" />
+    <ClCompile Include="Project\TerrainTool\TerrainSmooth.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renders\ShadowRenderer.h" />
@@ -162,6 +163,7 @@
     <ClInclude Include="Project\AnimationTool\ObjectTool.h" />
     <ClInclude Include="Utilities\ImGuiHelper.h" />
     <ClInclude Include="Object\StaticObject\StaticObject.h" />
+    <ClInclude Include="Project\TerrainTool\TerrainSmooth.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />

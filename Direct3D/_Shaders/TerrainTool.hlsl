@@ -38,6 +38,11 @@ cbuffer TerrainTool : register(b5)
 
     float3 PickPos;
     float HeightAmount;
+
+    uint GridbView;
+    float GridThickness;
+    float2 padding;
+
 }
 
 float4 GetBrushColor(float3 pos)
@@ -235,6 +240,25 @@ G_Buffer TerrainToolPS(PixelInput input)
     output = PackGBuffer(output, input.normal, output.diffuse.rgb, 0.25f, 250.0f);
 
     output.spec = _specularTex.Sample(_basicSampler, input.uv);
+
+    if (GridbView >= 0.9f)
+    {
+        float2 pos = input.oPosition.xz ;
+
+
+        float2 floorPos = floor(pos) + 1;
+
+        float2 grid = input.oPosition.xz;
+        float2 range = abs(frac(grid - 0.5f) - 0.5f);
+        float2 speed = fwidth(grid);
+        
+        float2 pixel = range / speed;
+
+        float weight = saturate(min(pixel.x, pixel.y) - GridThickness);
+
+        output.diffuse = lerp(float4(1, 1, 1, 1), output.diffuse, weight);
+
+    }
 
     return output;
 

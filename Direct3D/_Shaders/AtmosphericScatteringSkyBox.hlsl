@@ -1,10 +1,13 @@
 #include "AtmosphericScattering_Header.hlsl"
 
 			
-struct VertexTexture
+struct VertexINPUT
 {
     float4 position : POSITION0;
     float2 uv : TEXCOORD0;
+    float3 normal : NORMAL0;
+    float3 tangent : TANGENT0;
+
 };
 
 struct PSINPUT
@@ -13,13 +16,14 @@ struct PSINPUT
     float3 vertex : TEXCOORD0;
 };
 
-PSINPUT VS(VertexTexture input)
+PSINPUT VS(VertexINPUT input)
 {
     PSINPUT o;
     float4 v = input.position;
     o.pos = mul(v, World);
     o.pos = mul(o.pos, ViewProjection);
     o.vertex = v.xyz;
+   
     return o;
 }
 			
@@ -53,7 +57,7 @@ G_Buffer PS(PSINPUT i)
     return output;
 }
 
-PSINPUT UseSkyBoxVS(VertexTexture input)
+PSINPUT UseSkyBoxVS(VertexINPUT input)
 {
     PSINPUT o;
     float4 v = input.position;
