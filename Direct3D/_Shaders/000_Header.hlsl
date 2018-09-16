@@ -25,6 +25,7 @@ cbuffer UnPacker : register(b2)
 
 cbuffer MaterialBuffer : register(b3)
 {
+    float4 AmbientColor;
     float4 DiffuseColor;
     float4 SpecColor;
     float4 EmissiveColor;
@@ -56,6 +57,13 @@ cbuffer ModelBuffer : register(b6)
     matrix _modelBones[230];
 }
 
+//MRT0 Normal.xyz, RenderType(float)
+//MRT1 Diffuse.rgb,SpecIntensity
+//MRT2 Specr.rgb, SpecPower(float)
+//MRT3 DepthMap
+
+//RenderType -- 0.0f ~ 0.9f == 빛계산 함
+//RenderType -- 1.0f ~ 1.9f == 빛계산 안함(GBuffer로 넘어온 Diffuse출력) 
 
 
 Texture2D _deferredNormal : register(t0);
@@ -117,16 +125,16 @@ struct G_Buffer
     float4 normal : SV_Target0;
     float4 diffuse : SV_Target1;
     float4 spec : SV_Target2;
-    float4 worldPos : SV_Target3;
 };
 struct GBuffer_Data
 {
     float LinearDepth;
-    float4 WorldPosition;
-    float3 Color;
+    float3 DiffuseColor;
+    float3 SpecColor;
     float3 Normal;
     float SpecPow;
     float SpecIntensity;
+    float RenderType;
 };
 
 struct InstanceInputVS
@@ -149,8 +157,6 @@ struct InstanceInputVS
 /*************************************************************
 Func
 **************************************************************/
-
-
 
 //카메라 위치 계산
 float3 GetCameraPosition()
@@ -224,19 +230,40 @@ float ConvertZToLinearDepth(float depth)
     return linearDepth;
 }
 
+float3 GetTexelUV(Texture2D tex, float2 uv)
+{
+    uint width, height;
+    tex.GetDimensions(width, height);
+    return float3(uv.x * width, uv.y * height, 0.0f);
+}
+
+//MRT0 Normal.xyz, RenderType(float)
+//MRT1 Diffuse.rgb, SpecIntensity
+//MRT2 Specr.rgb, SpecPower(float)
+//MRT3 DepthMap
+
+//RenderType -- 0.0f ~ 0.9f == 빛계산 함
+//RenderType -- 1.0f ~ 1.9f == 빛계산 안함(GBuffer로 넘어온 Diffuse출력) 
+
 GBuffer_Data UnpackGBuffer(float2 uv)
 {
     GBuffer_Data Out;
 
     float depth = _deferredDepth.Sample(_basicSampler, uv).x;
     Out.LinearDepth = ConvertZToLinearDepth(depth);
-    float4 baseColorSpecInt = _deferredAlbedo.Sample(_basicSampler, uv);
-    Out.Color = baseColorSpecInt.xyz;
-    Out.SpecIntensity = baseColorSpecInt.w;
-    Out.Normal = _deferredNormal.Sample(_basicSampler, uv).xyz;
+
+    float4 normalSample = _deferredNormal.Sample(_basicSampler, uv);
+    Out.Normal = normalSample.xyz;
     Out.Normal = normalize(Out.Normal * 2.0 - 1.0);
-    Out.SpecPow = _deferredSpecular.Sample(_basicSampler, uv).x;
-    Out.WorldPosition = _deferredWorld.Sample(_basicSampler, uv);
+    Out.RenderType = normalSample.a;
+
+    float4 diffuseSample = _deferredAlbedo.Sample(_basicSampler, uv);
+    Out.DiffuseColor = diffuseSample.rgb;
+    Out.SpecIntensity = diffuseSample.a;
+
+    float4 specSample = _deferredSpecular.Sample(_basicSampler, uv);
+    Out.SpecColor = specSample.rgb;
+    Out.SpecPow = specSample.a;
 
     return Out;
 }
@@ -246,16 +273,22 @@ GBuffer_Data UnpackGBuffer_Loc(int2 location)
     GBuffer_Data Out;
     int3 location3 = int3(location, 0);
 
-    float depth = _deferredDepth.Load(location3).x;
+    float depth = _deferredDepth.Load(location3);
     Out.LinearDepth = ConvertZToLinearDepth(depth);
-    float4 baseColorSpecInt = _deferredAlbedo.Load(location3);
-    Out.Color = baseColorSpecInt.xyz;
-    Out.SpecIntensity = baseColorSpecInt.w;
-    Out.Normal = _deferredNormal.Load(location3).xyz;
-    Out.Normal = normalize(Out.Normal * 2.0 - 1.0);
-    Out.SpecPow = _deferredSpecular.Load(location3).x;
-    Out.WorldPosition = _deferredWorld.Load(location3);
 
+    float4 normalSample = _deferredNormal.Load(location3);
+    Out.Normal = normalSample.xyz;
+    Out.Normal = normalize(Out.Normal * 2.0 - 1.0);
+    Out.RenderType = normalSample.a;
+
+    float4 diffuseSample = _deferredAlbedo.Load(location3);
+    Out.DiffuseColor = diffuseSample.rgb;
+    Out.SpecIntensity = diffuseSample.a;
+
+    float4 specSample = _deferredSpecular.Load(location3);
+    Out.SpecColor = specSample.rgb;
+    Out.SpecPow = specSample.a;
+    
     return Out;
 }
 

@@ -17,6 +17,9 @@ public:
 	static int Random(int r1, int r2);
 	static float Random(float r1, float r2);
 
+	// Returns random float in [0, 1).
+	static float RandF();
+
 	static float Lerp(float val1, float val2,float amount);
 	static float Clamp(float value, float min, float max);
 

@@ -6,9 +6,9 @@ SingletonCpp(ObjectManager)
 
 ObjectManager::ObjectManager()
 {
-	for (int i = 0; i < ObjectType::END; ++i)
+	for (int i = 0; i < ObjectType::None; ++i)
 	{
-		this->objectList.insert(make_pair((ObjectType::Enum)i, vector<GameObject*>()));
+		this->objectList.insert(make_pair((ObjectType::Tag)i, make_pair(vector<GameObject*>(),vector<GameObject*>())));
 	}
 }
 
@@ -22,13 +22,18 @@ void ObjectManager::Release()
 	ObjectContainerIter iter = this->objectList.begin();
 	for (; iter != objectList.end(); ++iter)
 	{
-		ArrObject list = iter->second;
-		for (UINT i = 0; i < list.size(); ++i)
+		ArrObject staticList = iter->second.first;
+		for (UINT i = 0; i < staticList.size(); ++i)
 		{
-			list[i]->Release();
-			SafeDelete(list[i]);
+			staticList[i]->Release();
+			SafeDelete(staticList[i]);
 		}
-		iter->second.clear();
+		ArrObject dynamicList = iter->second.second;
+		for (UINT i = 0; i < dynamicList.size(); ++i)
+		{
+			dynamicList[i]->Release();
+			SafeDelete(dynamicList[i]);
+		}
 	}
 
 	objectList.clear();
@@ -36,6 +41,15 @@ void ObjectManager::Release()
 
 void ObjectManager::PreUpdate()
 {
+	ObjectContainerIter iter = this->objectList.begin();
+	for (; iter != objectList.end(); ++iter)
+	{
+		ArrObject dynamicList = iter->second.second;
+		for (UINT i = 0; i < dynamicList.size(); ++i)
+		{
+			dynamicList[i]->PreUpdate();
+		}
+	}
 }
 
 void ObjectManager::Update()
@@ -43,65 +57,98 @@ void ObjectManager::Update()
 	ObjectContainerIter iter = this->objectList.begin();
 	for (; iter != objectList.end(); ++iter)
 	{
-		ArrObject list = iter->second;
-		for (UINT i = 0; i < list.size(); ++i)
+		ArrObject dynamicList = iter->second.second;
+		for (UINT i = 0; i < dynamicList.size(); ++i)
 		{
-			list[i]->Update();
+			dynamicList[i]->Update();
 		}
 	}
 }
 
 void ObjectManager::PostUpdate()
 {
-}
-
-void ObjectManager::AddObject(ObjectType::Enum type, GameObject * object)
-{
-	this->objectList[type].push_back(object);
-}
-
-void ObjectManager::DeleteObject(ObjectType::Enum type, string name)
-{
-	for (UINT i = 0; i < objectList[type].size(); ++i)
+	ObjectContainerIter iter = this->objectList.begin();
+	for (; iter != objectList.end(); ++iter)
 	{
-		if (objectList[type][i]->GetName() == name)
+		ArrObject dynamicList = iter->second.second;
+		for (UINT i = 0; i < dynamicList.size(); ++i)
 		{
-			objectList[type][i]->Release();
-			SafeDelete(objectList[type][i]);
-			objectList[type].erase(objectList[type].begin() + i);
+			dynamicList[i]->PostUpdate();
+		}
+	}
+}
+
+void ObjectManager::AddObject(ObjectType::Tag tag, class GameObject* object,bool isStatic)
+{
+	if (isStatic == true)
+		this->objectList[tag].first.push_back(object);
+	else 
+		this->objectList[tag].second.push_back(object);
+}
+
+void ObjectManager::DeleteObject(ObjectType::Tag tag, string name, bool isStatic)
+{
+	ArrObject* pList;
+	if (isStatic)
+		pList = &objectList[tag].first;
+	else 
+		pList = &objectList[tag].second;
+	
+	for (UINT i = 0; i < pList->size(); ++i)
+	{
+		if ((*pList)[i]->GetName() == name)
+		{
+			(*pList)[i]->Release();
+			SafeDelete((*pList)[i]);
+			pList->erase(pList->begin() + i);
 			break;
 		}
 	}
 }
 
-GameObject*  ObjectManager::FindObject(ObjectType::Enum type, string name)
+GameObject*  ObjectManager::FindObject(ObjectType::Tag tag, string name, bool isStatic)
 {
-	for (UINT i = 0; i < objectList[type].size(); ++i)
+	ArrObject list;
+	if (isStatic)
+		list = objectList[tag].first;
+	else
+		list = objectList[tag].second;
+
+	for (UINT i = 0; i < list.size(); ++i)
 	{
-		if (objectList[type][i]->GetName() == name)
+		if (list[i]->GetName() == name)
 		{
-			return objectList[type][i];
+			return list[i];
 		}
 	}
 
 	return nullptr;
 }
 
-vector<GameObject*>  ObjectManager::FindObjects(ObjectType::Enum type, string name)
+vector<GameObject*>  ObjectManager::FindObjects( ObjectType::Tag tag, string name, bool isStatic)
 {
+	ArrObject list;
+	if (isStatic)
+		list = objectList[tag].first;
+	else
+		list = objectList[tag].second;
+
 	 vector<GameObject*> findList;
-	 for (UINT i = 0; i < objectList[type].size(); ++i)
+	 for (UINT i = 0; i <list.size(); ++i)
 	 {
-		 if (objectList[type][i]->GetName() == name)
+		 if (list[i]->GetName() == name)
 		 {
-			 findList.push_back(objectList[type][i]);
+			 findList.push_back(list[i]);
 		 }
 	 }
 
 	 return findList;
 }
 
-vector< GameObject* > ObjectManager::GetObjectList(ObjectType::Enum type)
+vector< GameObject* > ObjectManager::GetObjectList( ObjectType::Tag tag, bool isStatic)
 {
-	return objectList[type];
+	if (isStatic)
+		return objectList[tag].first;
+	else
+		return objectList[tag].second;
 }

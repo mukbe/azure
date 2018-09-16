@@ -22,6 +22,7 @@
 #include "./Figure/Figure.h"
 
 #include "./Environment/Sun.h"
+#include "./Environment/Ocean.h"
 #include "./Renders/DeferredRenderer.h"
 
 AnimationTool::AnimationTool()
@@ -38,7 +39,6 @@ AnimationTool::AnimationTool()
 	sun = new Environment::Sun;
 
 	grid = new Figure(Figure::FigureType::Grid, 50.0f, ColorGray(0.4f));
-	ObjectManager::Create();
 	Objects->SetMainCamera(freeCamera);
 
 	characterTool = new CharacterTool;
@@ -46,12 +46,15 @@ AnimationTool::AnimationTool()
 
 	objectTool = new ObjectTool;
 	objectTool->SetCamera(freeCamera);
+
+	ocean = new Ocean;
 }
 
 
 AnimationTool::~AnimationTool()
 {
-	ObjectManager::Delete();
+
+	SafeDelete(ocean);
 
 	SafeDelete(grid);
 
@@ -76,10 +79,12 @@ void AnimationTool::PreUpdate()
 
 void AnimationTool::Update()
 {
-	if (toolType == 0)
-		characterTool->Update();
-	else
-		objectTool->Update();
+	//if (toolType == 0)
+	//	characterTool->Update();
+	//else
+	//	objectTool->Update();
+
+	ocean->Update();
 }
 
 void AnimationTool::PostUpdate()
@@ -103,13 +108,15 @@ void AnimationTool::Render()
 {
 	freeCamera->Render();
 
-	if (toolType == 0)
-	{
-		characterTool->Render();
-		grid->Render();
-	}
-	else
-		objectTool->Render();
+	ocean->Render();
+
+	//if (toolType == 0)
+	//{
+	//	characterTool->Render();
+	//	grid->Render();
+	//}
+	//else
+	//	objectTool->Render();
 
 	//camera정보를 deferred에게 언팩킹시에 필요한 정보를 보낸다
 	RenderRequest->SetUnPackGBufferProp(freeCamera->GetViewMatrix(), freeCamera->GetProjection());
@@ -120,6 +127,8 @@ void AnimationTool::Render()
 
 void AnimationTool::UIRender()
 {
+	ocean->UIRender();
+
 	static bool showDemo = false;
 	//MainBar
 	if (ImGui::BeginMainMenuBar())
@@ -140,10 +149,10 @@ void AnimationTool::UIRender()
 	}
 
 
-	if (toolType == 0)
-		characterTool->UIRender();
-	else
-		objectTool->UIRender();
+	//if (toolType == 0)
+	//	characterTool->UIRender();
+	//else
+	//	objectTool->UIRender();
 
 	//Demo
 	if (showDemo)

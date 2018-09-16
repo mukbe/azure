@@ -1,12 +1,14 @@
 #include "stdafx.h"
 #include "InstanceShader.h"
 
-InstanceShader::InstanceShader(wstring fileName)
+InstanceShader::InstanceShader(wstring fileName, bool autoCreateLayout)
 	:shaderFile(fileName)
 {
 	this->CreateVertexShader();
 	this->CreatePixelShader();
-	this->CreateInputLayout();
+
+	if(autoCreateLayout)
+		this->CreateInputLayout();
 }
 
 InstanceShader::~InstanceShader()
@@ -22,6 +24,7 @@ void InstanceShader::Render()
 	DeviceContext->VSSetShader(vertexShader, NULL, 0);
 	DeviceContext->PSSetShader(pixelShader, NULL, 0);
 }
+
 
 void InstanceShader::CreateVertexShader()
 {
@@ -136,6 +139,19 @@ void InstanceShader::CreateInputLayout()
 	(
 		inputLayoutDesc,
 		9,
+		vertexShaderBuffer->GetBufferPointer(),
+		vertexShaderBuffer->GetBufferSize(),
+		&layout
+	);
+	assert(SUCCEEDED(hr));
+}
+
+void InstanceShader::CreateInputLayout(D3D11_INPUT_ELEMENT_DESC * descs, UINT layoutCount)
+{
+	HRESULT hr = Device->CreateInputLayout
+	(
+		descs,
+		layoutCount,
 		vertexShaderBuffer->GetBufferPointer(),
 		vertexShaderBuffer->GetBufferSize(),
 		&layout

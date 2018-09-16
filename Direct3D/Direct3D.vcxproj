@@ -25,6 +25,8 @@
     <ClInclude Include="Bounding\BoundingBox.h" />
     <ClInclude Include="Bounding\BoundingSphere.h" />
     <ClInclude Include="Bounding\Bounding.h" />
+    <ClInclude Include="Bounding\QuadTree\QuadTreeNode.h" />
+    <ClInclude Include="Bounding\QuadTree\QuadTreeSystem.h" />
     <ClInclude Include="ComputeShader\ComputeResource.h" />
     <ClInclude Include="ComputeShader\ComputeShader.h" />
     <ClInclude Include="Bounding\GameCollider.h" />
@@ -32,6 +34,7 @@
     <ClInclude Include="Object\StaticObject\StaticObject.h" />
     <ClInclude Include="Object\Unit\GameUnit.h" />
     <ClInclude Include="Environment\Sun.h" />
+    <ClInclude Include="Environment\Ocean.h" />
     <ClInclude Include="Project\AnimationTool\CharacterTool.h" />
     <ClInclude Include="Project\AnimationTool\ObjectTool.h" />
     <ClInclude Include="Project\TerrainTool\TerrainSplat.h" />
@@ -41,7 +44,6 @@
     <ClInclude Include="View\FirstPersonCamera.h" />
     <ClInclude Include="Renders\Instancing\InstanceShader.h" />
     <ClInclude Include="Renders\Instancing\InstanceRenderer.h" />
-    <ClInclude Include="Object\Item\GameItem.h" />
     <ClInclude Include="Manager\RenderManager.h" />
     <ClInclude Include="Manager\SceneManager.h" />
     <ClInclude Include="Manager\SceneNode.h" />
@@ -111,13 +113,17 @@
     <ClCompile Include="Bounding\BoundingCapsule.cpp" />
     <ClCompile Include="Bounding\BoundingBox.cpp" />
     <ClCompile Include="Bounding\BoundingSphere.cpp" />
+    <ClCompile Include="Bounding\QuadTree\QuadTreeNode.cpp" />
+    <ClCompile Include="Bounding\QuadTree\QuadTreeSystem.cpp" />
     <ClCompile Include="ComputeShader\ComputeResource.cpp" />
     <ClCompile Include="ComputeShader\ComputeShader.cpp" />
     <ClCompile Include="Bounding\GameCollider.cpp" />
+    <ClCompile Include="Environment\Ocean + Func.cpp" />
     <ClCompile Include="Manager\ResourceManager.cpp" />
     <ClCompile Include="Object\StaticObject\StaticObject.cpp" />
     <ClCompile Include="Object\Unit\GameUnit.cpp" />
     <ClCompile Include="Environment\Sun.cpp" />
+    <ClCompile Include="Environment\Ocean.cpp" />
     <ClCompile Include="Project\AnimationTool\CharacterTool + ImGui.cpp" />
     <ClCompile Include="Project\AnimationTool\CharacterTool.cpp" />
     <ClCompile Include="Project\AnimationTool\ObjectTool.cpp" />
@@ -128,7 +134,6 @@
     <ClCompile Include="View\FirstPersonCamera.cpp" />
     <ClCompile Include="Renders\Instancing\InstanceShader.cpp" />
     <ClCompile Include="Renders\Instancing\InstanceRenderer.cpp" />
-    <ClCompile Include="Object\Item\GameItem.cpp" />
     <ClCompile Include="Manager\RenderManager.cpp" />
     <ClCompile Include="Manager\SceneManager.cpp" />
     <ClCompile Include="Model\ModelAnimPlayer + Blending.cpp" />
@@ -270,6 +275,21 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
       <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\005_OceanHigh.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\005_OceanCompute.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\005_OceanRaw.hlsl">
+      <FileType>Text</FileType>
     </None>
   </ItemGroup>
   <PropertyGroup Label="Globals">

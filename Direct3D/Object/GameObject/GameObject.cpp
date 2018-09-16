@@ -25,7 +25,7 @@ void GameObject::Release()
 	
 }
 
-void GameObject::PrevUpdate()
+void GameObject::PreUpdate()
 {
 }
 

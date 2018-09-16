@@ -22,7 +22,7 @@ public:
 
 	virtual void Init();
 	virtual void Release();
-	virtual void PrevUpdate();
+	virtual void PreUpdate();
 	virtual void Update();
 	virtual void PostUpdate();
 	virtual void PrevRender();

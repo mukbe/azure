@@ -13,6 +13,8 @@ Program::Program()
 	jsonRoot = new Json::Value();
 	JsonHelper::ReadData(L"LevelEditor.json", jsonRoot);
 
+	AssetManager->LoadAsset();
+
 	RenderRequest->AddRenderer("deferred", new DeferredRenderer);
 	RenderRequest->AddRenderer("shadow", new ShadowRenderer);
 	//Scenes->AddScene("anim", new AnimationTool);

@@ -4,19 +4,24 @@
 
 namespace ObjectType
 {
-	enum Enum
+	enum Tag
 	{
-		Object, Enemy, Ui, END
+		Enviroment = 0,Object, Unit, Ui, None
 	};
 }
+
+//ObjectPair -- first == StaticObject
+//			 -- second == DynamicObject
+
 
 class ObjectManager
 {
 	SingletonHeader(ObjectManager)
 private:
 	typedef vector<class GameObject*>								ArrObject;
-	typedef unordered_map<ObjectType::Enum, ArrObject>				ObjectContainer;
-	typedef unordered_map<ObjectType::Enum, ArrObject>::iterator	ObjectContainerIter;
+	typedef pair<ArrObject, ArrObject>								ObjectPair;
+	typedef unordered_map<ObjectType::Tag, ObjectPair>				ObjectContainer;
+	typedef unordered_map<ObjectType::Tag, ObjectPair>::iterator	ObjectContainerIter;
 
 	ObjectContainer		objectList;
 private:
@@ -27,13 +32,12 @@ public:
 	void Update();
 	void PostUpdate();
 
-	void AddObject(ObjectType::Enum type, class GameObject* object);
-	void DeleteObject(ObjectType::Enum type, string name);
+	void AddObject(ObjectType::Tag tag, class GameObject* object,bool isStatic);
+	void DeleteObject(ObjectType::Tag tag, string name, bool isStatic);
 
-	class GameObject*  FindObject(ObjectType::Enum type, string name);
-	vector<class GameObject*>  FindObjects(ObjectType::Enum type, string name);
-	vector<class GameObject*> GetObjectList(ObjectType::Enum type);
-
+	class GameObject*  FindObject(ObjectType::Tag tag, string name, bool isStatic);
+	vector<class GameObject*>  FindObjects(ObjectType::Tag tag, string name, bool isStatic);
+	vector<class GameObject*> GetObjectList (ObjectType::Tag tag, bool isStatic);
 };
 
 #define Objects ObjectManager::Get()

@@ -1,6 +1,7 @@
 #pragma once
 #include "../Renders/ShaderBuffer.h"
 #include <map>
+
 class BufferManager
 {
 	SingletonHeader(BufferManager)
@@ -25,7 +26,6 @@ template<class T> T* BufferManager::FindShaderBuffer()
 	this->bufferContainer.insert(make_pair(T::GetCode(), t));
 
 	return t;
-
 }
 
 template<class T> void BufferManager::AddShaderBuffer(class ShaderBuffer* shaderBuffer)
@@ -34,3 +34,4 @@ template<class T> void BufferManager::AddShaderBuffer(class ShaderBuffer* shader
 }
 
 #define Buffers BufferManager::Get()
+

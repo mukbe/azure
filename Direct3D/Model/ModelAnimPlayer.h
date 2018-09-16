@@ -65,11 +65,11 @@ private:
 	Synthesize(vector<D3DXMATRIX>, boneAnimation,BoneAnimation)
 
 	Synthesize(int,currentKeyframe,CurrentKeyFrame)
-	Synthesize(float, frameTime,FrameTime)			//현재 프레임에서 경과된 시간
-	Synthesize(float,keyframeFactor,KeyFrameFactor) //현재 프레임과 다음 프레임 사이의 보간 값
+	Synthesize(float, frameTime,FrameTime)										//현재 프레임에서 경과된 시간
+	Synthesize(float,keyframeFactor,KeyFrameFactor)								 //현재 프레임과 다음 프레임 사이의 보간 값
+	Synthesize(bool, useQuaternionKeyframe,UseQuaternionKeyFrame)				//쿼터니언 보간 사용여부
 
 	int nextKeyframe;
-	bool useQuaternionKeyframe;						//쿼터니언 보간 사용여부
 
 	float blendFrameTime;
 	float totalBlendingTime;

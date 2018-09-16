@@ -20,12 +20,15 @@ DeferredRenderer::DeferredRenderer()
 	unPacker = new UnPacker;
 
 	RenderRequest->AddRender("deui", bind(&DeferredRenderer::UIRender, this), RenderType::UIRender);
-
 }
 
 
 DeferredRenderer::~DeferredRenderer()
 {
+	SafeRelease(renderAlphaSRV);
+	SafeRelease(renderAlphaTargetView);
+	SafeRelease(renderAlphaTexture);
+
 	for (int i = 0; i < BUFFER_COUNT; ++i)
 	{
 		SafeRelease(this->shaderResourceView[i]);
@@ -78,8 +81,7 @@ void DeferredRenderer::UIRender()
 	{
 		ImGui::ImageButton(shaderResourceView[0], ImVec2(200, 150)); ImGui::SameLine();
 		ImGui::ImageButton(shaderResourceView[1], ImVec2(200, 150));
-		ImGui::ImageButton(shaderResourceView[3], ImVec2(200, 150)); ImGui::SameLine();
-
+		ImGui::ImageButton(shaderResourceView[2], ImVec2(200, 150)); ImGui::SameLine();
 		ImGui::ImageButton(depthVis->GetSRV(), ImVec2(200, 150));
 	}
 	ImGui::End();
@@ -118,6 +120,9 @@ bool DeferredRenderer::Create()
 		assert(SUCCEEDED(hr));
 	}
 
+	hr = Device->CreateTexture2D(&textureDesc, NULL, &renderAlphaTexture);
+	assert(SUCCEEDED(hr));
+
 	//RenderTargetViewDesc 설정
 	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
 	renderTargetViewDesc.Format = textureDesc.Format;
@@ -129,6 +134,9 @@ bool DeferredRenderer::Create()
 		hr = Device->CreateRenderTargetView(renderTargetTexture[i], &renderTargetViewDesc, &renderTargetView[i]);
 		assert(SUCCEEDED(hr));
 	}
+
+	hr = Device->CreateRenderTargetView(renderAlphaTexture, &renderTargetViewDesc, &renderAlphaTargetView);
+	assert(SUCCEEDED(hr));
 
 	//ResourceView 설정 
 	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
@@ -142,6 +150,9 @@ bool DeferredRenderer::Create()
 		hr= Device->CreateShaderResourceView(renderTargetTexture[i], &shaderResourceViewDesc, &shaderResourceView[i]);
 		assert(SUCCEEDED(hr));
 	}
+	hr = Device->CreateShaderResourceView(renderAlphaTexture, &shaderResourceViewDesc, &renderAlphaSRV);
+	assert(SUCCEEDED(hr));
+
 
 	//깊이 버퍼 텍스쳐 Desc
 	D3D11_TEXTURE2D_DESC depthBufferDesc =

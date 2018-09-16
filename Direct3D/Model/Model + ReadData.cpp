@@ -72,39 +72,9 @@ void Model::BindMeshData()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Models::Create()
-{
-}
-
-void Models::Delete()
-{
-	for (pair<wstring, vector<Material*>> temp : materialMap)
-	{
-		for (Material* material : temp.second)
-			SafeDelete(material);
-	}
-
-	for (pair<wstring, MeshData> temp : meshDataMap)
-	{
-		MeshData data = temp.second;
-
-		for (ModelBone* bone : data.Bones)
-			SafeDelete(bone);
-
-		data.Bones.clear();
-
-		for (ModelMesh* mesh : data.Meshes)
-			SafeDelete(mesh);
-
-		data.Meshes.clear();
-	}
-
-	materialMap.clear();
-	meshDataMap.clear();
-}
 
 
-map<wstring, vector<class Material *>> Models::materialMap;
+
 void Models::LoadMaterial(wstring file, vector<class Material*> * materials)
 {
 	
@@ -179,43 +149,14 @@ void Models::LoadMaterial(wstring file, vector<class Material*> * materials)
 
 		materials->push_back(material);
 
-
-		//materialMap[file] = srcMaterials;
-		//srcMaterials.clear();
 	}
 
-	//materials->clear();
-	//for (Material* material : materialMap[file])
-	//{
-	//	Material* temp = NULL;
-	//	material->Clone((void **)&temp);
-	//
-	//	materials->push_back(temp);
-	//}
+
 }
 
-map<wstring, Models::MeshData> Models::meshDataMap;
 void Models::LoadMesh(wstring file, vector<ModelBone*>* bones, vector<ModelMesh*>* meshes)
 {
-	if (meshDataMap.count(file) < 1)
-		ReadMeshData(file,bones,meshes);
-
-	//MeshData data = meshDataMap[file];
-	//for (size_t i = 0; i < data.Bones.size(); i++)
-	//{
-	//	ModelBone* bone = NULL;
-	//	data.Bones[i]->Clone((void **)&bone);
-	//
-	//	bones->push_back(bone);
-	//}
-	//
-	//for (size_t i = 0; i < data.Meshes.size(); i++)
-	//{
-	//	ModelMesh* mesh = NULL;
-	//	data.Meshes[i]->Clone((void **)&mesh);
-	//
-	//	meshes->push_back(mesh);
-	//}
+	ReadMeshData(file,bones,meshes);
 }
 
 void Models::ReadMeshData(wstring file, vector<ModelBone*>* bones, vector<ModelMesh*>* meshes)
@@ -285,28 +226,12 @@ void Models::ReadMeshData(wstring file, vector<ModelBone*>* bones, vector<ModelM
 	SafeDelete(r);
 
 
-	//MeshData data;
-	//data.Bones.assign(bones.begin(), bones.end());
-	//data.Meshes.assign(meshes.begin(), meshes.end());
-	//
-	//meshDataMap[file] = data;
 }
 
 
-map<wstring, vector<class ModelAnimClip *>> Models::animClipMap;
 void Models::LoadAnimation(wstring file, vector<class ModelAnimClip*>* clips)
 {
-	if (animClipMap.count(file) < 1)
-		ReadAnimation(file,clips);
-
-	//vector<ModelAnimClip *> data = animClipMap[file];
-	//for (ModelAnimClip * clip : data)
-	//{
-	//	ModelAnimClip* temp = NULL;
-	//	clip->Clone((void **)&temp);
-	//
-	//	clips->push_back(temp);
-	//}
+	ReadAnimation(file,clips);
 }
 
 void Models::ReadAnimation(wstring file, vector<ModelAnimClip*>* clips)
@@ -315,7 +240,6 @@ void Models::ReadAnimation(wstring file, vector<ModelAnimClip*>* clips)
 	r->Open(file);
 
 	UINT count = r->UInt();
-	//vector<ModelAnimClip *> clips;
 	for (UINT i = 0; i < count; i++)
 	{
 		ModelAnimClip* clip = new ModelAnimClip();
@@ -348,5 +272,4 @@ void Models::ReadAnimation(wstring file, vector<ModelAnimClip*>* clips)
 	r->Close();
 	SafeDelete(r);
 
-	//animClipMap[file] = clips;
 }

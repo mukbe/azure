@@ -33,6 +33,7 @@ public:
 	void Open() { this->isShow = true; }
 	void Close() { this->isShow = false; }
 	void LoadAsset();
+	void LoadFolder(const std::string& path, const std::string& filter,bool isAnim = false);
 
 	class Texture* AddTexture(wstring file, string keyName);
 	class Texture* FindTexture(string keyName);

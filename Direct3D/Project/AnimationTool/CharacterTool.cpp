@@ -27,13 +27,12 @@
 #include "./Utilities/DebugTransform.h"
 #include "./Utilities/BinaryFile.h"
 
-#include "./Object/Item/GameItem.h"
 #include "./Bounding/QuadTree/QuadTreeNode.h"
 #include "./Bounding/QuadTree/QuadTreeSystem.h"
 
 CharacterTool::CharacterTool()
 	:animation(nullptr), model(nullptr), debugTransform(nullptr), targetCollider(nullptr), showDemo(false), showTool(true)
-	, showBone(false), selectBoneIndex(0), debugControl(false), tempItemModel(nullptr)
+	, showBone(false), selectBoneIndex(0), debugControl(false), tempItemModel(nullptr), zBufferOn(false)
 {
 	//Fbx::Exporter* exporter = new Fbx::Exporter(L"../_Assets/Test.fbx");
 	//exporter->ExportMaterial(Assets, L"Test");
@@ -89,7 +88,7 @@ void CharacterTool::Render()
 	for (UINT i = 0; i < colliderList.size(); ++i)
 	{
 		if (colliderList[i] == targetCollider)
-			targetCollider->Render(ColorWhite);
+			targetCollider->Render(ColorWhite, zBufferOn);
 		else
 			colliderList[i]->Render();
 	}

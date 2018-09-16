@@ -111,6 +111,18 @@ wstring Path::GetFileNameWithoutExtension(wstring path)
 	return fileName.substr(0, index);
 }
 
+string Path::GetFilePathWithoutExtension(string path)
+{
+	size_t index = path.find_last_of('.');
+	return path.substr(0, index);
+}
+
+wstring Path::GetFilePathWithoutExtension(wstring path)
+{
+	size_t index = path.find_last_of('.');
+	return path.substr(0, index);
+}
+
 
 const WCHAR* Path::ImageFilter = L"Image\0*.png;*.bmp;*.jpg";
 const WCHAR* Path::BinModelFilter = L"Binary Model\0*.model";
