@@ -29,7 +29,7 @@ void StaticObject::Release()
 	colliderList.clear();
 }
 
-void StaticObject::PrevUpdate()
+void StaticObject::PreUpdate()
 {
 }
 

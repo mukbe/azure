@@ -31,7 +31,7 @@ G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float3 spec
 
 }
 
-/***************************************************************
+/****************************************************************
 Basic Deferred Shading 
 ****************************************************************/
 
@@ -113,7 +113,7 @@ G_Buffer ColorDeferredPS(ColorNormalPixelInput input)
     return output;
 }
 
-/***************************************************************
+/****************************************************************
 Gizmo Deferred Shading 
 ****************************************************************/
 
@@ -275,6 +275,6 @@ G_Buffer ObjectPS(ModelPixelInput input)
     output.normal = float4(NormalMapSpace(_normalTex.Sample(_basicSampler, input.uv).xyz, input.normal, input.tangent), 1);
     output.spec = float4(1, 1, 1, 2);
 
-    output =PackGBuffer(output, input.normal, diffuse,SpecColor.rgb,SpecColor.a,Shiness,0.5f);
+    output = PackGBuffer(output, input.normal, diffuse,SpecColor.rgb,SpecColor.a,Shiness,0.5f);
     return output;
 }

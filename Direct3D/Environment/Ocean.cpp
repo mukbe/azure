@@ -14,8 +14,6 @@
 Ocean::Ocean()
 	:testSunColor(1, 1, 1, 1),wireFrame(false)
 {
-
-
 	this->vertexLength = pow(2, 6);
 
 	this->InitInstanceShader();
@@ -109,7 +107,7 @@ void Ocean::Render()
 
 void Ocean::UIRender()
 {
-	if (ImGui::Begin("OceanTest"))
+	ImGui::Begin("OceanTest");
 	{
 		ID3D11ShaderResourceView* srv = fresnelLookUp->GetSRV();
 		ImGui::Image(srv, ImVec2(512, 1));
@@ -149,7 +147,7 @@ void Ocean::InitInstanceShader()
 		D3D11_INPUT_PER_INSTANCE_DATA,1 },
 	};
 	
-	instanceShader = new InstanceShader(ShaderPath + L"005_Ocean.hlsl", false);
+	instanceShader = new InstanceShader(ShaderPath + L"005_OceanRaw.hlsl", false);
 	instanceShader->CreateInputLayout(inputLayoutDesc, 4);
 
 	material = new Material;

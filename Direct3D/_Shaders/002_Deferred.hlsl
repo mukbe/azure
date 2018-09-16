@@ -29,9 +29,7 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
     float specPower = data.SpecPow;
     float specIntensity = data.SpecIntensity;
 
-    if(data.RenderType > 1.0f && data.RenderType < 2.0f)
-        return float4(albedo, 1.0f);
-    else
+    if(data.RenderType > 0.0f && data.RenderType < 1.0f)
     {
         float4 projectionToLight = mul(worldPos, SunViewProjection);
 
@@ -46,6 +44,10 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
         //	finalColor += DirLightColor.rgb * pow(NDotH, material.specPow) * material.specIntensity;
 
         return float4(diffuseColor * shadowFactor, 1.0f);
+    }
+    else
+    {
+        return float4(albedo, 1.0f);
     }
 
     return float4(0,0,0,0);

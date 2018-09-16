@@ -30,7 +30,7 @@ void GameUnit::Release()
 {
 }
 
-void GameUnit::PrevUpdate()
+void GameUnit::PreUpdate()
 {
 }
 

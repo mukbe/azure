@@ -25,6 +25,8 @@
     <ClInclude Include="Bounding\BoundingBox.h" />
     <ClInclude Include="Bounding\BoundingSphere.h" />
     <ClInclude Include="Bounding\Bounding.h" />
+    <ClInclude Include="Bounding\QuadTree\QuadTreeNode.h" />
+    <ClInclude Include="Bounding\QuadTree\QuadTreeSystem.h" />
     <ClInclude Include="ComputeShader\ComputeResource.h" />
     <ClInclude Include="ComputeShader\ComputeShader.h" />
     <ClInclude Include="Bounding\GameCollider.h" />
@@ -32,7 +34,7 @@
     <ClInclude Include="Object\StaticObject\StaticObject.h" />
     <ClInclude Include="Object\Unit\GameUnit.h" />
     <ClInclude Include="Environment\Sun.h" />
-    <ClInclude Include="Environment\Ocean\Ocean.h" />
+    <ClInclude Include="Environment\Ocean.h" />
     <ClInclude Include="Project\AnimationTool\CharacterTool.h" />
     <ClInclude Include="Project\AnimationTool\ObjectTool.h" />
     <ClInclude Include="Project\TerrainTool\TerrainSplat.h" />
@@ -110,15 +112,17 @@
     <ClCompile Include="Bounding\BoundingCapsule.cpp" />
     <ClCompile Include="Bounding\BoundingBox.cpp" />
     <ClCompile Include="Bounding\BoundingSphere.cpp" />
+    <ClCompile Include="Bounding\QuadTree\QuadTreeNode.cpp" />
+    <ClCompile Include="Bounding\QuadTree\QuadTreeSystem.cpp" />
     <ClCompile Include="ComputeShader\ComputeResource.cpp" />
     <ClCompile Include="ComputeShader\ComputeShader.cpp" />
     <ClCompile Include="Bounding\GameCollider.cpp" />
-    <ClCompile Include="Environment\Ocean\Ocean + Func.cpp" />
+    <ClCompile Include="Environment\Ocean + Func.cpp" />
     <ClCompile Include="Manager\ResourceManager.cpp" />
     <ClCompile Include="Object\StaticObject\StaticObject.cpp" />
     <ClCompile Include="Object\Unit\GameUnit.cpp" />
     <ClCompile Include="Environment\Sun.cpp" />
-    <ClCompile Include="Environment\Ocean\Ocean.cpp" />
+    <ClCompile Include="Environment\Ocean.cpp" />
     <ClCompile Include="Project\AnimationTool\CharacterTool + ImGui.cpp" />
     <ClCompile Include="Project\AnimationTool\CharacterTool.cpp" />
     <ClCompile Include="Project\AnimationTool\ObjectTool.cpp" />
@@ -272,13 +276,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="_Shaders\005_Ocean.hlsl">
+    <None Include="_Shaders\005_OceanHigh.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\005_OceanCompute.hlsl">
       <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\005_OceanRaw.hlsl">
+      <FileType>Text</FileType>
     </None>
   </ItemGroup>
   <PropertyGroup Label="Globals">

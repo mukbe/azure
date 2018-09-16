@@ -22,7 +22,7 @@
 #include "./Figure/Figure.h"
 
 #include "./Environment/Sun.h"
-#include "./Environment/Ocean/Ocean.h"
+#include "./Environment/Ocean.h"
 #include "./Renders/DeferredRenderer.h"
 
 AnimationTool::AnimationTool()
@@ -39,7 +39,6 @@ AnimationTool::AnimationTool()
 	sun = new Environment::Sun;
 
 	grid = new Figure(Figure::FigureType::Grid, 50.0f, ColorGray(0.4f));
-	ObjectManager::Create();
 	Objects->SetMainCamera(freeCamera);
 
 	characterTool = new CharacterTool;
@@ -54,7 +53,6 @@ AnimationTool::AnimationTool()
 
 AnimationTool::~AnimationTool()
 {
-	ObjectManager::Delete();
 
 	SafeDelete(ocean);
 

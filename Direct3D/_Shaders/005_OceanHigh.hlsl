@@ -22,10 +22,8 @@ G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float3 spec
 {
     G_Buffer Out = buffer;
 
-	// Normalize the specular power
     float SpecPowerNorm = max(0.0001, (SpecPower - g_SpecPowerRange.x) / g_SpecPowerRange.y);
 
-	// Pack all the data into the GBuffer structure
     Out.normal = float4(normal * 0.5f + 0.5f, renderType);
     Out.diffuse = float4(diffuse.rgb, SpecIntensity);
     Out.spec = float4(specColor, SpecPowerNorm);
@@ -40,12 +38,6 @@ float Fresnel(float3 V, float3 N)
 {
     float costhetai = abs(dot(V, N));
     return _lookUp.Sample(_basicSampler, float2(costhetai, 0.0)).a;
-
-     //uint width, height;
-    //_lookUp.GetDimensions(width, height);
-    //float3 texCoord = float3(costhetai * width, 0.0f, 0.0f);
-    //return _lookUp.Load(texCoord).a;
-    //return tex2D(_lookUp, float2(costhetai, 0.0)).a;
 }
 
 
@@ -66,17 +58,15 @@ G_Buffer InstancePS(PixelInput input)
 {
     G_Buffer output;
 
+    float3 sunDirection = normalize(float3(-1, -1, 0));
+
     float3 V = normalize(GetCameraPosition() - input.worldPos);
     float3 N = normalize(input.normal);
 	
-   float fresnel = Fresnel(V, N);
-   float4 specColor = lerp(DiffuseColor, AmbientColor, fresnel);
-   float3 sunDirection = normalize(float3(-1, -1, 0));
-   
-   float diffuseFactor = saturate(dot(input.normal, - sunDirection));
-    float4 diffuse = DiffuseColor * AmbientColor * diffuseFactor;
+    float fresnel = Fresnel(V, N);
+    float4 specColor = lerp(DiffuseColor, AmbientColor, fresnel);
 
-    output.normal = float4(input.normal, 1);
+    output.normal = float4(input.normal, 1.5f);
     output.diffuse = specColor;
     output.spec = float4(0, 0, 0, 0);
 
