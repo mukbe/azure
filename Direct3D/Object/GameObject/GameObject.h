@@ -30,6 +30,8 @@ public:
 	virtual void Render();
 	virtual void UIRender();
 
+	virtual void UIUpdate() {}
+
 	void SendMSG(struct TagMessage msg);
 	void AddCallback(string name, CallbackFunc func);
 	D3DXMATRIX GetFinalMatrix();

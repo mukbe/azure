@@ -17,6 +17,7 @@ Hierarchy::Hierarchy(ToolScene * toolScene)
 
 	freeCamera = new FreeCamera;
 	Objects->SetMainCamera(freeCamera);
+	
 	scattering = new Scattering(freeCamera, "level");
 	ocean = new Ocean();
 }
