@@ -231,7 +231,7 @@ G_Buffer TerrainToolPS(PixelInput input)
 {
     G_Buffer output;
 
-    output.worldPos = float4(SplitMap.Sample(wrapSamp, input.uv / UvAmount).rgb, 1); //input.oPosition; //  SplitMap.Sample(wrapSamp, input.uv / UvAmount);
+    //output.worldPos = float4(SplitMap.Sample(wrapSamp, input.uv / UvAmount).rgb, 1); //input.oPosition; //  SplitMap.Sample(wrapSamp, input.uv / UvAmount);
     output.diffuse = _diffuseTex.Sample(wrapSamp, input.uv);
     //==========================TEST
     output.diffuse = CalCuSplat(output.diffuse, input.uv);
@@ -240,6 +240,9 @@ G_Buffer TerrainToolPS(PixelInput input)
     output = PackGBuffer(output, input.normal, output.diffuse.rgb, 0.25f, 250.0f);
 
     output.spec = _specularTex.Sample(_basicSampler, input.uv);
+
+    output.normal = float4(input.normal.xyz, 1.0f);
+    output.normal.a = 1.5f;
 
     if (GridbView >= 0.9f)
     {
@@ -257,8 +260,9 @@ G_Buffer TerrainToolPS(PixelInput input)
         float weight = saturate(min(pixel.x, pixel.y) - GridThickness);
 
         output.diffuse = lerp(float4(1, 1, 1, 1), output.diffuse, weight);
-
     }
+
+    output.diffuse.a = 1.0f;
 
     return output;
 

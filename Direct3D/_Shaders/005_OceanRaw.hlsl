@@ -47,18 +47,19 @@ PixelInput InstanceVS(VertexInput input)
 {
     PixelInput output;
 
-    float3 worldPos = input.position.xyz + float3(input.offset.x, 0, input.offset.y);
+    float4 worldPosition = mul(input.position + float4(input.offset.x, 0, input.offset.y, 0.f), World);
+    float3 worldPos = worldPosition.xyz;
    
-    float3 sunDirection = normalize(float3(-1, -1, 0));
+    float3 sunDirection = SunDir;
 
     float3 V = normalize(GetCameraPosition() - worldPos.xyz);
     float3 N = normalize(input.normal);
 	
     float fresnel = Fresnel(V, N);
-    float4 specColor = lerp(DiffuseColor, AmbientColor, fresnel);
+    float4 specColor = lerp(DiffuseColor, SunColor, fresnel);
 
     float diffuseFactor = saturate(dot(input.normal, -sunDirection));
-    float3 diffuseColor = DiffuseColor * AmbientColor * diffuseFactor;
+    float3 diffuseColor = (DiffuseColor * SunColor * diffuseFactor).rgb;
 
     output.position = mul(float4(worldPos,input.position.w), ViewProjection);
     output.normal = input.normal;

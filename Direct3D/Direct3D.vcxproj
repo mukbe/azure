@@ -30,9 +30,11 @@
     <ClInclude Include="ComputeShader\ComputeResource.h" />
     <ClInclude Include="ComputeShader\ComputeShader.h" />
     <ClInclude Include="Bounding\GameCollider.h" />
+    <ClInclude Include="Project\Game\PlayScene.h" />
+    <ClInclude Include="Project\ToolScene\Inspector.h" />
+    <ClInclude Include="Project\ToolScene\Hierarchy.h" />
     <ClInclude Include="Manager\ResourceManager.h" />
     <ClInclude Include="Object\StaticObject\StaticObject.h" />
-    <ClInclude Include="Object\Unit\GameUnit.h" />
     <ClInclude Include="Environment\Sun.h" />
     <ClInclude Include="Environment\Ocean.h" />
     <ClInclude Include="Project\AnimationTool\CharacterTool.h" />
@@ -40,6 +42,11 @@
     <ClInclude Include="Project\TerrainTool\TerrainSplat.h" />
     <ClInclude Include="Project\TerrainTool\Scattering.h" />
     <ClInclude Include="Project\TerrainTool\TerrainSmooth.h" />
+    <ClInclude Include="Project\ToolScene\ToolBase.h" />
+    <ClInclude Include="Project\ToolScene\ToolScene.h" />
+    <ClInclude Include="UI\BaseUI.h" />
+    <ClInclude Include="UI\GameUI\ButtonUI.h" />
+    <ClInclude Include="UI\GameUI\GroupUI.h" />
     <ClInclude Include="Utilities\ImGuiHelper.h" />
     <ClInclude Include="View\FirstPersonCamera.h" />
     <ClInclude Include="Renders\Instancing\InstanceShader.h" />
@@ -119,9 +126,11 @@
     <ClCompile Include="ComputeShader\ComputeShader.cpp" />
     <ClCompile Include="Bounding\GameCollider.cpp" />
     <ClCompile Include="Environment\Ocean + Func.cpp" />
+    <ClCompile Include="Project\Game\PlayScene.cpp" />
+    <ClCompile Include="Project\ToolScene\Inspector.cpp" />
+    <ClCompile Include="Project\ToolScene\Hierarchy.cpp" />
     <ClCompile Include="Manager\ResourceManager.cpp" />
     <ClCompile Include="Object\StaticObject\StaticObject.cpp" />
-    <ClCompile Include="Object\Unit\GameUnit.cpp" />
     <ClCompile Include="Environment\Sun.cpp" />
     <ClCompile Include="Environment\Ocean.cpp" />
     <ClCompile Include="Project\AnimationTool\CharacterTool + ImGui.cpp" />
@@ -130,6 +139,10 @@
     <ClCompile Include="Project\TerrainTool\TerrainSplat.cpp" />
     <ClCompile Include="Project\TerrainTool\Scattering.cpp" />
     <ClCompile Include="Project\TerrainTool\TerrainSmooth.cpp" />
+    <ClCompile Include="Project\ToolScene\ToolScene.cpp" />
+    <ClCompile Include="UI\BaseUI.cpp" />
+    <ClCompile Include="UI\GameUI\ButtonUI.cpp" />
+    <ClCompile Include="UI\GameUI\GroupUI.cpp" />
     <ClCompile Include="Utilities\ImGuiHelper.cpp" />
     <ClCompile Include="View\FirstPersonCamera.cpp" />
     <ClCompile Include="Renders\Instancing\InstanceShader.cpp" />
@@ -290,6 +303,11 @@
   <ItemGroup>
     <None Include="_Shaders\005_OceanRaw.hlsl">
       <FileType>Text</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\006_UI.hlsl">
+      <FileType>Document</FileType>
     </None>
   </ItemGroup>
   <PropertyGroup Label="Globals">

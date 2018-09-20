@@ -107,10 +107,16 @@ void Environment::Sun::UpdateView()
 
 void Environment::Sun::Render()
 {
+	sunBuffer->SetVSBuffer(4);
 	sunBuffer->SetPSBuffer(4);
 }
 
 float * Environment::Sun::GetPosPtr()
 {
 	return sunBuffer->GetPosPtr();
+}
+
+void Environment::Sun::SetColor(D3DXCOLOR color)
+{
+	sunBuffer->SetColor(color);
 }

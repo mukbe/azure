@@ -12,7 +12,6 @@
 
 
 Ocean::Ocean()
-	:testSunColor(1, 1, 1, 1),wireFrame(false)
 {
 	this->vertexLength = pow(2, 6);
 
@@ -69,16 +68,14 @@ void Ocean::Render()
 {
 	//BindBuffers ----------------------------------------------
 	ID3D11ShaderResourceView* srv = fresnelLookUp->GetSRV();
-	DeviceContext->VSSetShaderResources(6, 1, &srv);
-	DeviceContext->PSSetShaderResources(6,1, &srv);
+	DeviceContext->VSSetShaderResources(6,1, &srv);
+	//DeviceContext->PSSetShaderResources(6,1, &srv);
 	material->SetDiffuseColor(oceanColor);
-	material->SetAmbientColor(testSunColor);
 	material->UpdateBuffer();
 	material->BindBuffer();
-
-	if (wireFrame)
-		States::SetRasterizer(States::RasterizerStates::WIRE_CULL_OFF);
-
+	worldBuffer->SetMatrix(transform->GetFinalMatrix());
+	worldBuffer->SetVSBuffer(1);
+	
 	// -----------------------------------------------------------
 
 	//Draw ----------------------------------------------------------
@@ -100,8 +97,6 @@ void Ocean::Render()
 	DeviceContext->PSSetShaderResources(6, 1, nullSrv);
 	material->UnBindBuffer();
 
-	if (wireFrame)
-		States::SetRasterizer(States::RasterizerStates::SOLID_CULL_ON);
 	//-----------------------------------------------------------------------
 }
 
@@ -114,13 +109,10 @@ void Ocean::UIRender()
 
 		ImGui::ColorEdit4("OceanColor", (float*)&oceanColor.r,
 			ImGuiColorEditFlags_Float | ImGuiColorEditFlags_AlphaPreviewHalf);
-		ImGui::ColorEdit4("SunColor", (float*)&testSunColor.r,
-			ImGuiColorEditFlags_Float | ImGuiColorEditFlags_AlphaPreviewHalf);
 
 		ImGui::Text("FPS : %f", Time::Get()->FPS());
 
 
-		ImGui::Checkbox("WireFrame", &wireFrame);
 
 		ImGui::End();
 	}
@@ -151,6 +143,8 @@ void Ocean::InitInstanceShader()
 	instanceShader->CreateInputLayout(inputLayoutDesc, 4);
 
 	material = new Material;
+
+	worldBuffer = Buffers->FindShaderBuffer<WorldBuffer>();
 }
 
 void Ocean::InitOceansData()

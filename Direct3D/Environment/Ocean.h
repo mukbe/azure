@@ -1,12 +1,13 @@
 #pragma once
 #include "./Renders/ShaderBuffer.h"
+#include "./Object/GameObject/GameObject.h"
 
-class Ocean
+class Ocean : public GameObject
 {
 private:
 	class InstanceShader*			instanceShader;
 	class Material*					material;
-	class WorldBuffe*				worldBuffer;
+	class WorldBuffer*				worldBuffer;
 	ID3D11Buffer *					vertexBuffer;
 	ID3D11Buffer*					instanceBuffer;
 	ID3D11Buffer*					indexBuffer;
@@ -36,7 +37,6 @@ private:
 	class Texture*					fresnelLookUp;
 private:
 	D3DXCOLOR						oceanColor;
-	D3DXCOLOR						testSunColor;
 	UINT							gridCountX;
 	UINT							gridCountZ;
 	UINT							vertexLength;
@@ -45,10 +45,9 @@ private:
 	float							waveAmp;
 	D3DXVECTOR2						windSpeed;
 	D3DXVECTOR2						windDirection;
-	bool							wireFrame;
 public:
 	Ocean();
-	~Ocean();
+	 ~Ocean();
 
 	void Update();
 	void Render();
