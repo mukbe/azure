@@ -1,4 +1,4 @@
-#include "../../stdafx.h"
+#include "stdafx.h"
 #include "Ocean.h"
 
 #include "./Utilities/Buffer.h"

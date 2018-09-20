@@ -1,6 +1,6 @@
 #include"stdafx.h"
 #include "TerrainSplat.h"
-
+#include "./Utilities/ImGuiHelper.h"
 
 
 TerrainSplat::TerrainSplat()
@@ -12,10 +12,8 @@ TerrainSplat::TerrainSplat()
 	tempMap = new CResource2D(256, 256);
 
 
-	for (int i = 0; i < 4; i++)
-		texture[i] = nullptr;
-
-	texture[0] = new Texture(Contents + L"Grass1.png");
+	texture.assign(4, nullptr);
+	//texture[0] = new Texture(Contents + L"Grass1.png");
 
 	buffer = new Buffer;
 }
@@ -65,6 +63,7 @@ void TerrainSplat::Render()
 			srv[i] = texture[i]->GetSRV();
 		}
 	}
+
 	DeviceContext->PSSetShaderResources(6, 4, srv);
 }
 
@@ -88,9 +87,9 @@ void TerrainSplat::TerrainUI()
 	ImGui::Selectable(str.c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Assets_Move"))
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TextureMove"))
 		{
-			UINT p;
+			UINT p = 0;	//TODO srv하고 경로 저장하게끔 
 			memcpy(&p, &payload->Data, sizeof(UINT));
 
 			texture[buffer->Data.SplatNum] = reinterpret_cast<Texture*>(p);

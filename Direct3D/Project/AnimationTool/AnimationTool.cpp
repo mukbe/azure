@@ -57,14 +57,10 @@ AnimationTool::AnimationTool()
 
 AnimationTool::~AnimationTool()
 {
-
 	SafeDelete(ocean);
-
 	SafeDelete(grid);
-
 	SafeDelete(characterTool);
 	SafeDelete(objectTool);
-
 	SafeDelete(sun);
 	SafeDelete(freeCamera);
 }

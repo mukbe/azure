@@ -38,7 +38,7 @@ private:
 	CResource2D* splatMap;
 	CResource2D* tempMap;
 
-	Texture* texture[4];
+	vector<Texture*> texture;
 
 	Buffer* buffer;
 private:
