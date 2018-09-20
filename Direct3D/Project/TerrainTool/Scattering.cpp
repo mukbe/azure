@@ -10,6 +10,8 @@
 
 Scattering::Scattering(FreeCamera* camera , string level)
 {
+	name = "Scattering";
+
 	jsonRoot = new Json::Value();
 	//TODO level에서 받아오도록
 	JsonHelper::ReadData(L"ScatteringEditor.json", jsonRoot);
@@ -92,9 +94,8 @@ Scattering::~Scattering()
 	SafeDelete(sun);
 }
 
-void Scattering::Updata()
+void Scattering::Update()
 {
-	sun->Update();
 	sun->UpdateView();
 
 	buffer->Data._SunColor = ComputeLightColor();
@@ -142,9 +143,14 @@ void Scattering::Render()
 	
 }
 
+void Scattering::UIUpdate()
+{
+	sun->Update();
+}
+
 void Scattering::UIRender()
 {
-	ImGui::Begin("Scattering");
+	//ImGui::Begin("Scattering");
 
 	D3DXMATRIX mat = _camera->GetTransform()->GetFinalMatrix();
 	ImGui::Text("CameraX : %.2f , CameraY : %.2f, CameraZ : %.2f", mat._41,mat._42,mat._43);
@@ -167,7 +173,7 @@ void Scattering::UIRender()
 
 	const char* ThemesList[] = { "Reference" , "Optimized"  };
 	ImGui::Combo("RenderMode", (int*)&RenderingMode, ThemesList, 2);
-	ImGui::End();
+	//ImGui::End();
 }
 
 void Scattering::UpdateMaterialParameters()

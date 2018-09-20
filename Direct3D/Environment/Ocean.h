@@ -49,9 +49,10 @@ public:
 	Ocean();
 	 ~Ocean();
 
-	void Update();
-	void Render();
-	void UIRender();
+	virtual void Update();
+	virtual void Render();
+	virtual void UIUpdate();
+	virtual void UIRender();
 private:
 	void InitInstanceShader();
 	void InitOceansData();

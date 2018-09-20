@@ -13,8 +13,9 @@
 
 Ocean::Ocean()
 {
+	this->name = "Ocean";
 	this->vertexLength = pow(2, 6);
-
+	
 	this->InitInstanceShader();
 	this->InitOceansData();
 	this->CreateFresnelLookUpTable();
@@ -100,22 +101,22 @@ void Ocean::Render()
 	//-----------------------------------------------------------------------
 }
 
+void Ocean::UIUpdate()
+{
+}
+
 void Ocean::UIRender()
 {
-	ImGui::Begin("OceanTest");
-	{
-		ID3D11ShaderResourceView* srv = fresnelLookUp->GetSRV();
-		ImGui::Image(srv, ImVec2(512, 1));
+	ImGui::Text("GridX : %d , GridZ : %d", this->gridCountX,this->gridCountZ);
+	ImGui::Text("FPS : %f", Time::Get()->FPS());
 
-		ImGui::ColorEdit4("OceanColor", (float*)&oceanColor.r,
-			ImGuiColorEditFlags_Float | ImGuiColorEditFlags_AlphaPreviewHalf);
+	ImGui::ColorEdit4("OceanColor", (float*)&oceanColor.r,
+		ImGuiColorEditFlags_Float | ImGuiColorEditFlags_AlphaPreviewHalf);
 
-		ImGui::Text("FPS : %f", Time::Get()->FPS());
+	ImGui::Separator();
+	
+	transform->UIRender();
 
-
-
-		ImGui::End();
-	}
 }
 
 void Ocean::UpdateBuffer()
@@ -157,7 +158,7 @@ void Ocean::InitOceansData()
 	this->windDirection = D3DXVECTOR2(windSpeed.x, windSpeed.y);
 	D3DXVec2Normalize(&windDirection, &windDirection);
 
-	this->oceanColor = D3DXCOLOR(0.05f, 0.25f, 0.5f, 1.0f);
+	this->oceanColor = D3DXCOLOR(0.021f, 0.08f, 0.309f,1.0f);
 
 }
 

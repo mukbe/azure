@@ -43,6 +43,12 @@ void FreeCamera::Render()
 	CameraBase::Render();
 }
 
+void FreeCamera::UIRender()
+{
+	D3DXVECTOR3 pos = transform->GetWorldPosition();
+	ImGui::Text("Position : %f , %f , %f", pos.x, pos.y, pos.z);
+}
+
 void FreeCamera::ControlCamera()
 {
 	if (Keyboard::Get()->Down(VK_RBUTTON))

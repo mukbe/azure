@@ -4,6 +4,8 @@
 #include "ToolScene.h"
 #include "Hierarchy.h"
 
+#include "./Object/GameObject/GameObject.h"
+
 #include "../TerrainTool/Terrain.h"
 #include "../TerrainTool/Scattering.h"
 
@@ -34,6 +36,9 @@ void Inspector::PreUpdate()
 
 void Inspector::Update()
 {
+	GameObject* object = hierarchy->GetTargetObject();
+	if (object)
+		object->UIUpdate();
 }
 
 void Inspector::PostUpdate()
@@ -50,4 +55,17 @@ void Inspector::Render()
 
 void Inspector::UIRender()
 {
+	ImGui::Begin("Inspector");
+	{
+		GameObject* object = hierarchy->GetTargetObject();
+		if (object)
+		{
+			ImGui::BeginGroup();
+			ImGui::Text(object->GetName().c_str());
+			ImGui::Separator();
+			object->UIRender();
+			ImGui::EndGroup();
+		}
+	}
+	ImGui::End();
 }

@@ -6,7 +6,7 @@ namespace ObjectType
 {
 	enum class Tag
 	{
-		Enviroment = 0,Object = 1 , Unit = 2, Ui = 3, None = 4
+		View = 0,Enviroment ,Object  , Ui , None
 	};
 
 	enum class Type
@@ -18,6 +18,7 @@ namespace ObjectType
 
 class ObjectManager
 {
+	friend class Hierarchy;
 	SingletonHeader(ObjectManager)
 private:
 	typedef vector<class GameObject*>								ArrObject;
@@ -34,6 +35,9 @@ public:
 	void PreUpdate();
 	void Update();
 	void PostUpdate();
+	void PreRender();
+	void Render();
+	void PostRender();
 
 	void AddObject(ObjectType::Type type , ObjectType::Tag tag, class GameObject* object);
 	void DeleteObject(ObjectType::Type type, ObjectType::Tag tag, string name);
@@ -41,6 +45,8 @@ public:
 	class GameObject*  FindObject(ObjectType::Type type, ObjectType::Tag tag, string name);
 	vector<class GameObject*>  FindObjects(ObjectType::Type type, ObjectType::Tag tag, string name);
 	vector<class GameObject*>* GetObjectList (ObjectType::Type type, ObjectType::Tag tag);
+
+	string GetTagName(ObjectType::Tag tag);
 };
 
 #define Objects ObjectManager::Get()

@@ -40,7 +40,7 @@ void TerrainTool::PreUpdate()
 void TerrainTool::Update()
 {
 	terrain->Update();
-	test->Updata();
+	test->Update();
 }
 
 void TerrainTool::PostUpdate()

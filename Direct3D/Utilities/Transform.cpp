@@ -16,6 +16,18 @@ Transform::~Transform()
 
 }
 
+void Transform::UIRender()
+{
+	ImGui::InputFloat3("Position", &position.x);
+	ImGui::InputFloat3("Scale", &scale.x);
+	ImGui::Separator();
+
+	ImGui::SliderFloat3("Pos", &position.x, -100.f, 100.f);
+	ImGui::SliderFloat3("Scaled", &scale.x, 0.01f, 10.f);
+
+	this->UpdateTransform();
+}
+
 void Transform::RenderGizmo()
 {
 	pRenderer->ChangeZBuffer(false);

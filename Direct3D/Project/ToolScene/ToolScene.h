@@ -5,10 +5,10 @@
 class ToolBase;
 class ToolScene : public SceneNode
 {
-	enum class ToolType{ Hierarchy ,Inspector,Unknown,End};
+	enum class ToolType{ Hierarchy = 0 ,Inspector,Unknown,End};
 private:
-	multimap<ToolType, ToolBase*> toolList;
-	typedef multimap<ToolType, ToolBase*>::iterator ToolIter;
+	unordered_map<ToolType, ToolBase*> toolList;
+	typedef unordered_map<ToolType, ToolBase*>::iterator ToolIter;
 public:
 	ToolScene();
 	~ToolScene();
@@ -23,7 +23,7 @@ public:
 	void Render();
 	void UIRender();
 
-	multimap<ToolType, ToolBase*> GetToolList()const { return this->toolList; }
+	unordered_map<ToolType, ToolBase*> GetToolList()const { return this->toolList; }
 	template<class T>
 	T* GetTool(string name);
 };

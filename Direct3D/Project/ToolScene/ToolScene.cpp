@@ -52,7 +52,7 @@ void ToolScene::Release()
 
 void ToolScene::PreUpdate()
 {
-	
+	Objects->PreUpdate();
 }
 
 void ToolScene::Update()
@@ -62,11 +62,12 @@ void ToolScene::Update()
 	{
 		iter->second->Update();
 	}
-
+	Objects->Update();
 }
 
 void ToolScene::PostUpdate()
 {
+	Objects->PostUpdate();
 }
 
 void ToolScene::PreRender()
@@ -81,13 +82,35 @@ void ToolScene::Render()
 	{
 		iter->second->Render();
 	}
+
+	Objects->Render();
 }
 
 void ToolScene::UIRender()
 {
-	ToolIter iter = toolList.begin();
-	for (; iter != toolList.end(); ++iter)
+	static bool isHierarchyOn = true;
+	static bool isInspectorOn = true;
+
+	ImGui::BeginMainMenuBar();
 	{
-		iter->second->UIRender();
+		if (ImGui::BeginMenu("File"))
+		{
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Tool"))
+		{
+			if (ImGui::MenuItem("Hierarchy"))
+				isHierarchyOn = !isHierarchyOn;
+			if (ImGui::MenuItem("Inspector"))
+				isInspectorOn = !isInspectorOn;
+			
+			ImGui::EndMenu();
+		}
 	}
+	ImGui::EndMainMenuBar();
+
+	if (isHierarchyOn)
+		toolList[ToolType::Hierarchy]->UIRender();
+	if (isInspectorOn)
+		toolList[ToolType::Inspector]->UIRender();
 }

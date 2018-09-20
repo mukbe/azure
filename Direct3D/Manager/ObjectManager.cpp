@@ -17,6 +17,7 @@ ObjectManager::ObjectManager()
 
 		objectContainer.insert(make_pair((ObjectType::Type)i, list));
 	}
+
 }
 
 
@@ -89,6 +90,27 @@ void ObjectManager::PostUpdate()
 
 }
 
+void ObjectManager::PreRender()
+{
+}
+
+void ObjectManager::Render()
+{
+	ObjectList* pList = &objectContainer[ObjectType::Type::Dynamic];
+	ObjectListIter listIter = pList->begin();
+	for (; listIter != pList->end(); ++listIter)
+	{
+		for (UINT i = 0; i < listIter->second.size(); ++i)
+		{
+			listIter->second[i]->Render();
+		}
+	}
+}
+
+void ObjectManager::PostRender()
+{
+}
+
 void ObjectManager::AddObject(ObjectType::Type type, ObjectType::Tag tag, class GameObject* object)
 {
 	objectContainer[type][tag].push_back(object);
@@ -144,4 +166,18 @@ vector<GameObject*>  ObjectManager::FindObjects(ObjectType::Type type, ObjectTyp
 vector< GameObject* >* ObjectManager::GetObjectList(ObjectType::Type type, ObjectType::Tag tag)
 {
 	return &objectContainer[type][tag];
+}
+
+string ObjectManager::GetTagName(ObjectType::Tag tag)
+{
+	if (tag == ObjectType::Tag::Enviroment)
+		return "Enviroment";
+	else if (tag == ObjectType::Tag::View)
+		return "View";
+	else if (tag == ObjectType::Tag::Object)
+		return "Object";
+	else if (tag == ObjectType::Tag::Ui)
+		return "UI";
+
+	return "Unknown";
 }
