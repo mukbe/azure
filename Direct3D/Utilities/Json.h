@@ -8,6 +8,9 @@ namespace JsonHelper
 	void GetValue(Json::Value& parent, string name, float& vec);
 	void SetValue(Json::Value& parent, string name, float& vec);
 
+	void GetValue(Json::Value& parent, string name, int& vec);
+	void SetValue(Json::Value& parent, string name, int& vec);
+
 	void GetValue(Json::Value& parent, string name, D3DXVECTOR2& vec);
 	void SetValue(Json::Value& parent, string name, D3DXVECTOR2& vec);
 

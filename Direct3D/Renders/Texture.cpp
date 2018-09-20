@@ -13,6 +13,47 @@ void Texture::Initialize()
 	isSlot = ShaderSlot::None;
 }
 
+void Texture::SaveToFile(wstring fileFullPath, ID3D11ShaderResourceView * srv)
+{
+	HRESULT hr;
+	ScratchImage out;
+	GUID guid;
+
+	wstring ext = Path::GetExtension(fileFullPath);
+
+	//get GUID code
+	if (ext == L"png")
+		guid = GetWICCodec(WICCodecs::WIC_CODEC_PNG);
+	else if (ext == L"bmp")
+		guid = GetWICCodec(WICCodecs::WIC_CODEC_BMP);
+	else if (ext == L"jpeg")
+		guid = GetWICCodec(WICCodecs::WIC_CODEC_JPEG);
+	else if (ext == L"tiff")
+		guid = GetWICCodec(WICCodecs::WIC_CODEC_TIFF);
+	else if (ext == L"gif")
+		guid = GetWICCodec(WICCodecs::WIC_CODEC_GIF);
+	else if (ext == L"wmp")
+		guid = GetWICCodec(WICCodecs::WIC_CODEC_WMP);
+	else if (ext == L"ico")
+		guid = GetWICCodec(WICCodecs::WIC_CODEC_ICO);
+
+	//get srv resorce
+	ID3D11Resource* res;
+	srv->GetResource(&res);
+
+	//capture resource to scratchImage
+	hr = CaptureTexture(Device, DeviceContext, res, out);
+	assert(SUCCEEDED(hr));
+
+	//get ImageCount, images
+	const Image* image = out.GetImages();
+	size_t num = out.GetImageCount();
+
+	hr = SaveToWICFile(*image, DirectX::WIC_FLAGS_NONE, guid, (fileFullPath).c_str());
+	assert(SUCCEEDED(hr));
+
+}
+
 Texture::Texture(DXGI_FORMAT format)
 {
 	Initialize();

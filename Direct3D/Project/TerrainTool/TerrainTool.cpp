@@ -14,7 +14,7 @@ TerrainTool::TerrainTool()
 	terrain = new Terrain;
 	freeCamera = new FreeCamera;
 	sun = new Environment::Sun;
-	test = new Scattering(freeCamera);
+	test = new Scattering(freeCamera, "level");
 }
 
 

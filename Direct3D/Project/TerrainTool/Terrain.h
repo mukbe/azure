@@ -15,6 +15,8 @@ private:
 			Data.BrushStyle = 1;
 			Data.BrushSize = 4.0f;
 			Data.HeightEditAmount = 0.01f;
+			Data.GridbView = 0;
+			Data.GridThickness = 1.0f;
 		}
 
 		struct Struct
@@ -25,6 +27,10 @@ private:
 
 			D3DXVECTOR3 PickPos;
 			float HeightEditAmount;
+
+			UINT GridbView;
+			float GridThickness;
+			D3DXVECTOR2 padding;
 
 
 		}Data;
@@ -44,8 +50,6 @@ public:
 private:
 	void CreateTerrain();
 	void CalcuMousePosition();
-	void HeightEdit();
-	void Smooth();
 
 
 	vector<VertexTextureNormal> vertexData;
@@ -61,8 +65,9 @@ private:
 	class Shader* shader;
 	class TerrainHeight* heightData;
 	class TerrainSplat* splat;
-
+	class TerrainSmooth* smooth;
 	Mode mode;
+
 private:
 	//지형 텍스처
 	class Texture* texture;
@@ -72,12 +77,7 @@ private:
 	ComputeShader* computePicking;
 	CResource1D* pickPos;
 
-	ComputeShader* computeHeightEdit;
-	ComputeShader* computeCopyHeight;
-	CResource1D* tempHeightMap;
 
-	ComputeShader* computeSmooth;
-	ComputeShader* computeALL;
 
 };
 
