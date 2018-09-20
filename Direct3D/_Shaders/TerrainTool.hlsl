@@ -188,21 +188,22 @@ SamplerState wrapSamp : register(s1);
 /***************************************************************
 Basic Deferred Shading 
 ****************************************************************/
-G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float SpecIntensity, float SpecPower)
+G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float3 specColor,
+    float SpecIntensity, float SpecPower, float renderType)
 {
     G_Buffer Out = buffer;
 
 	// Normalize the specular power
-    float SpecPowerNorm = max(0.0001, (SpecPower - g_SpecPowerRange.x) / g_SpecPowerRange.y);
+    float SpecPowerNorm = 0.0f; //max(0.0001, (SpecPower - g_SpecPowerRange.x) / g_SpecPowerRange.y);
 
 	// Pack all the data into the GBuffer structure
+    Out.normal = float4(normal * 0.5f + 0.5f, renderType);
     Out.diffuse = float4(diffuse.rgb, SpecIntensity);
-    Out.normal = float4(normal * 0.5f + 0.5f, 1.0f);
-    Out.spec = float4(SpecPowerNorm, 0.0f, 0.0f, 1.0f);
+    Out.spec = float4(specColor, SpecPowerNorm);
 
     return Out;
-
 }
+
 
 Texture2D<float4> SplitMap : register(t5);
 Texture2D srcTex[4] : register(t6);
@@ -231,13 +232,12 @@ G_Buffer TerrainToolPS(PixelInput input)
 {
     G_Buffer output;
 
-    output.worldPos = float4(SplitMap.Sample(wrapSamp, input.uv / UvAmount).rgb, 1); //input.oPosition; //  SplitMap.Sample(wrapSamp, input.uv / UvAmount);
     output.diffuse = _diffuseTex.Sample(wrapSamp, input.uv);
     //==========================TEST
     output.diffuse = CalCuSplat(output.diffuse, input.uv);
     //==============================
     output.diffuse += input.BrushColor;
-    output = PackGBuffer(output, input.normal, output.diffuse.rgb, 0.25f, 250.0f);
+    output = PackGBuffer(output, input.normal, output.diffuse.rgb, float3(1, 1, 1), 1.0f, 1.0f, 0);
 
     output.spec = _specularTex.Sample(_basicSampler, input.uv);
 

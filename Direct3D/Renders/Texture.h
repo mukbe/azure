@@ -1,6 +1,6 @@
 #pragma once
 
-class Texture
+class Texture 
 {
 public:
 	static void SaveToFile(wstring fileFullPath, ID3D11ShaderResourceView* srv);

@@ -64,7 +64,7 @@ cbuffer ModelBuffer : register(b6)
 
 //RenderType -- 0.0f ~ 0.9f == 빛계산 함
 //RenderType -- 1.0f ~ 1.9f == 빛계산 안함(GBuffer로 넘어온 Diffuse출력) 
-
+ 
 
 Texture2D _deferredNormal : register(t0);
 Texture2D _deferredAlbedo : register(t1);
