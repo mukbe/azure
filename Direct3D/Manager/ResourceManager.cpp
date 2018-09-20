@@ -42,6 +42,7 @@ void ResourceManager::LoadAsset()
 	this->LoadFolder("../_Assets/Objects/Trees/", "*.png");
 	this->LoadFolder("../_Assets/Objects/FishingBox/", "*.material");
 	this->LoadFolder("../_Assets/Objects/FishingBox/", "*.png");
+	
 	this->LoadFolder("../_Assets/Pandaren/", "*.material",true);
 	this->LoadFolder("../_Assets/Pandaren/", "*.png");
 }
@@ -182,12 +183,26 @@ void ResourceManager::UIRender()
 	ImGui::Begin("Assets");
 	{
 		//Textures ----------------------------------------------------------------------------
+		ImGui::BeginGroup();
 		if (ImGui::TreeNode("Textures"))
 		{
+			ImVec2 winSize = ImGui::GetWindowSize();
+			
+			float startOffset = 200.0f;
+			float currentX = startOffset;
+
 			TextureIter iter = textures.begin();
 			for (; iter != textures.end(); ++iter)
 			{
-				ImGui::Selectable(iter->first.c_str());
+				ImGui::ImageButton(iter->second->GetSRV(), ImVec2(50,50));
+
+				if (currentX < winSize.x - 10.0f)
+				{
+					currentX += (60.0f);
+					ImGui::SameLine();
+				}
+				else
+					currentX = startOffset;
 
 				if (ImGui::BeginDragDropSource(src_flags))
 				{
@@ -203,8 +218,10 @@ void ResourceManager::UIRender()
 
 			ImGui::TreePop();
 		}
+		ImGui::EndGroup();
 		//--------------------------------------------------------------------------------------
 		//Models ----------------------------------------------------------------------------
+		ImGui::BeginGroup();
 		if (ImGui::TreeNode("Models"))
 		{
 			ModelContainerIter iter = models.begin();
@@ -224,6 +241,7 @@ void ResourceManager::UIRender()
 			}
 			ImGui::TreePop();
 		}
+		ImGui::EndGroup();
 
 	}
 	ImGui::End();

@@ -188,22 +188,21 @@ SamplerState wrapSamp : register(s1);
 /***************************************************************
 Basic Deferred Shading 
 ****************************************************************/
-G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float3 specColor,
-    float SpecIntensity, float SpecPower, float renderType)
+G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float SpecIntensity, float SpecPower)
 {
     G_Buffer Out = buffer;
 
 	// Normalize the specular power
-    float SpecPowerNorm = 0.0f; //max(0.0001, (SpecPower - g_SpecPowerRange.x) / g_SpecPowerRange.y);
+    float SpecPowerNorm = max(0.0001, (SpecPower - g_SpecPowerRange.x) / g_SpecPowerRange.y);
 
 	// Pack all the data into the GBuffer structure
-    Out.normal = float4(normal * 0.5f + 0.5f, renderType);
     Out.diffuse = float4(diffuse.rgb, SpecIntensity);
-    Out.spec = float4(specColor, SpecPowerNorm);
+    Out.normal = float4(normal * 0.5f + 0.5f, 1.0f);
+    Out.spec = float4(SpecPowerNorm, 0.0f, 0.0f, 1.0f);
 
     return Out;
-}
 
+}
 
 Texture2D<float4> SplitMap : register(t5);
 Texture2D srcTex[4] : register(t6);
@@ -232,14 +231,18 @@ G_Buffer TerrainToolPS(PixelInput input)
 {
     G_Buffer output;
 
+    //output.worldPos = float4(SplitMap.Sample(wrapSamp, input.uv / UvAmount).rgb, 1); //input.oPosition; //  SplitMap.Sample(wrapSamp, input.uv / UvAmount);
     output.diffuse = _diffuseTex.Sample(wrapSamp, input.uv);
     //==========================TEST
     output.diffuse = CalCuSplat(output.diffuse, input.uv);
     //==============================
     output.diffuse += input.BrushColor;
-    output = PackGBuffer(output, input.normal, output.diffuse.rgb, float3(1, 1, 1), 1.0f, 1.0f, 0);
+    output = PackGBuffer(output, input.normal, output.diffuse.rgb, 0.25f, 250.0f);
 
     output.spec = _specularTex.Sample(_basicSampler, input.uv);
+
+    output.normal = float4(input.normal.xyz, 1.0f);
+    output.normal.a = 1.5f;
 
     if (GridbView >= 0.9f)
     {
@@ -257,8 +260,9 @@ G_Buffer TerrainToolPS(PixelInput input)
         float weight = saturate(min(pixel.x, pixel.y) - GridThickness);
 
         output.diffuse = lerp(float4(1, 1, 1, 1), output.diffuse, weight);
-
     }
+
+    output.diffuse.a = 1.0f;
 
     return output;
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "./Utilities/Transform.h"
-
+#include "./Object/GameObject/GameObject.h"
 class SunBuffer;
 namespace Environment
 {
@@ -16,6 +16,7 @@ namespace Environment
 
 		D3DXVECTOR3 GetForward() { return dir; }
 		float* GetPosPtr();
+		void SetColor(D3DXCOLOR color);
 	private:
 
 		SunBuffer* sunBuffer;

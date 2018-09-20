@@ -188,3 +188,19 @@ void Math::ComputeTangentAngBinormal(vector<VertexTextureBlendNT>& vertexDatas, 
 	tangents.clear();
 	binormals.clear();
 }
+
+bool Math::IsPointInAABB(D3DXVECTOR2 rectPos, D3DXVECTOR2 rectSize, D3DXVECTOR2 ptPos)
+{
+	float left, top, right, bottom;
+	left = rectPos.x;
+	top = rectPos.y;
+	right = rectPos.x + rectSize.x;
+	bottom = rectPos.y - rectSize.y;
+
+	if (ptPos.x < left || ptPos.x > right)
+		return false;
+	else if (ptPos.y < bottom || ptPos.y > top)
+		return false;
+
+	return true;
+}

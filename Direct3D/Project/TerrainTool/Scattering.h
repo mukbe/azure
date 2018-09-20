@@ -1,12 +1,11 @@
 #pragma once
 #include "./Utilities/GeometryGenerator.h"
-
+#include "./Object/GameObject/GameObject.h"
 namespace Environment
 {
 	class Sun;
 }
-
-class Scattering
+class Scattering : public GameObject
 {
 private:
 	enum RenderMode

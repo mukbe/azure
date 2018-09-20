@@ -19,11 +19,14 @@
 
 #include "./View/FreeCamera.h"
 #include "./Utilities/Transform.h"
+#include "./Utilities/ImGuiHelper.h"
 #include "./Figure/Figure.h"
 
 #include "./Environment/Sun.h"
 #include "./Environment/Ocean.h"
 #include "./Renders/DeferredRenderer.h"
+
+#include "./UI/GameUI/ButtonUI.h"
 
 AnimationTool::AnimationTool()
 	:toolType(0)
@@ -48,6 +51,7 @@ AnimationTool::AnimationTool()
 	objectTool->SetCamera(freeCamera);
 
 	ocean = new Ocean;
+
 }
 
 
@@ -144,11 +148,10 @@ void AnimationTool::UIRender()
 		ImGui::EndMainMenuBar();
 	}
 
-
-	//if (toolType == 0)
-	//	characterTool->UIRender();
-	//else
-	//	objectTool->UIRender();
+	if (toolType == 0)
+		characterTool->UIRender();
+	else
+		objectTool->UIRender();
 
 	//Demo
 	if (showDemo)

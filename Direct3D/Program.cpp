@@ -6,6 +6,7 @@
 #include "./Project/AnimationTool/AnimationTool.h"
 
 #include "./Project/TerrainTool/TerrainTool.h"
+#include "./Project/ToolScene/ToolScene.h"
 Program::Program()
 {
 	States::Create();
@@ -18,7 +19,8 @@ Program::Program()
 	RenderRequest->AddRenderer("deferred", new DeferredRenderer);
 	RenderRequest->AddRenderer("shadow", new ShadowRenderer);
 	//Scenes->AddScene("anim", new AnimationTool);
-	Scenes->AddScene("terrain", new TerrainTool);
+	Scenes->AddScene("tool", new ToolScene);
+	//Scenes->AddScene("terrain", new TerrainTool);
 
 }
 

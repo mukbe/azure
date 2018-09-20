@@ -61,4 +61,6 @@ public:
 		DWORD NumTris,							//»ï°¢Çü °¹¼ö		
 		DWORD NumVertices						//Á¤Á¡ °¹¼ö	
 	);
+
+	static bool IsPointInAABB(D3DXVECTOR2 rectPos, D3DXVECTOR2 rectSize, D3DXVECTOR2 ptPos);
 };

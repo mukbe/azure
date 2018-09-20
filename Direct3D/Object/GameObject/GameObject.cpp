@@ -4,8 +4,15 @@
 #include "TagMessage.h"
 
 GameObject::GameObject(string name)
-	:name(name),isLive(true),transform(new Transform),isRender(true)
+	:name(name),isLive(true),isRender(true)
 {
+	transform = new Transform;
+}
+
+GameObject::GameObject()
+	: name("Unknown"), isLive(true), isRender(true)
+{
+	transform = new Transform;
 }
 
 GameObject::~GameObject()
@@ -61,7 +68,7 @@ void GameObject::Render()
 {
 }
 
-void GameObject::PostRender()
+void GameObject::UIRender()
 {
 }
 

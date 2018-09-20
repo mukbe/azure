@@ -1,6 +1,6 @@
 #pragma once
-
-class Terrain
+#include "./Object/GameObject/GameObject.h"
+class Terrain : public GameObject
 {
 	enum Mode : int
 	{

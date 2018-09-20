@@ -57,7 +57,6 @@
     <ClCompile Include="Project\TerrainTool\Terrain.cpp" />
     <ClCompile Include="Bounding\AnimationCollider.cpp" />
     <ClCompile Include="Bounding\GameCollider.cpp" />
-    <ClCompile Include="Object\Unit\GameUnit.cpp" />
     <ClCompile Include="View\FirstPersonCamera.cpp" />
     <ClCompile Include="Renders\Instancing\InstanceShader.cpp" />
     <ClCompile Include="Renders\Instancing\InstanceRenderer.cpp" />
@@ -79,6 +78,14 @@
     <ClCompile Include="Environment\Ocean.cpp" />
     <ClCompile Include="Bounding\QuadTree\QuadTreeNode.cpp" />
     <ClCompile Include="Bounding\QuadTree\QuadTreeSystem.cpp" />
+    <ClCompile Include="Project\TerrainTool\TerrainSmooth.cpp" />
+    <ClCompile Include="UI\GameUI\ButtonUI.cpp" />
+    <ClCompile Include="UI\GameUI\GroupUI.cpp" />
+    <ClCompile Include="UI\BaseUI.cpp" />
+    <ClCompile Include="Project\ToolScene\ToolScene.cpp" />
+    <ClCompile Include="Project\ToolScene\Hierarchy.cpp" />
+    <ClCompile Include="Project\ToolScene\Inspector.cpp" />
+    <ClCompile Include="Project\Game\PlayScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renders\ShadowRenderer.h" />
@@ -146,7 +153,6 @@
     <ClInclude Include="Project\TerrainTool\Terrain.h" />
     <ClInclude Include="Bounding\AnimationCollider.h" />
     <ClInclude Include="Bounding\GameCollider.h" />
-    <ClInclude Include="Object\Unit\GameUnit.h" />
     <ClInclude Include="View\FirstPersonCamera.h" />
     <ClInclude Include="Renders\Instancing\InstanceShader.h" />
     <ClInclude Include="Renders\Instancing\InstanceRenderer.h" />
@@ -167,6 +173,15 @@
     <ClInclude Include="Environment\Ocean.h" />
     <ClInclude Include="Bounding\QuadTree\QuadTreeNode.h" />
     <ClInclude Include="Bounding\QuadTree\QuadTreeSystem.h" />
+    <ClInclude Include="Project\TerrainTool\TerrainSmooth.h" />
+    <ClInclude Include="UI\GameUI\ButtonUI.h" />
+    <ClInclude Include="UI\GameUI\GroupUI.h" />
+    <ClInclude Include="UI\BaseUI.h" />
+    <ClInclude Include="Project\ToolScene\ToolScene.h" />
+    <ClInclude Include="Project\ToolScene\Hierarchy.h" />
+    <ClInclude Include="Project\ToolScene\Inspector.h" />
+    <ClInclude Include="Project\ToolScene\ToolBase.h" />
+    <ClInclude Include="Project\Game\PlayScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />
@@ -185,5 +200,6 @@
     <None Include="_Shaders\005_OceanCompute.hlsl" />
     <None Include="_Shaders\005_OceanRaw.hlsl" />
     <None Include="_Shaders\005_OceanHigh.hlsl" />
+    <None Include="_Shaders\006_UI.hlsl" />
   </ItemGroup>
 </Project>

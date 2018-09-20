@@ -18,6 +18,7 @@ protected:
 	vector<struct TagMessage> reserveMessageList;
 public:
 	GameObject(string name);
+	GameObject();
 	virtual ~GameObject();
 
 	virtual void Init();
@@ -27,7 +28,7 @@ public:
 	virtual void PostUpdate();
 	virtual void PrevRender();
 	virtual void Render();
-	virtual void PostRender();
+	virtual void UIRender();
 
 	void SendMSG(struct TagMessage msg);
 	void AddCallback(string name, CallbackFunc func);
@@ -36,3 +37,7 @@ public:
 	bool IsSame(GameObject* object);
 };
 
+/*
+string name;
+D3DXMATRIX matrix;
+*/

@@ -4,14 +4,16 @@
 
 namespace ObjectType
 {
-	enum Tag
+	enum class Tag
 	{
-		Enviroment = 0,Object, Unit, Ui, None
+		Enviroment = 0,Object = 1 , Unit = 2, Ui = 3, None = 4
+	};
+
+	enum class Type
+	{
+		Static = 0 ,Dynamic = 1
 	};
 }
-
-//ObjectPair -- first == StaticObject
-//			 -- second == DynamicObject
 
 
 class ObjectManager
@@ -19,11 +21,12 @@ class ObjectManager
 	SingletonHeader(ObjectManager)
 private:
 	typedef vector<class GameObject*>								ArrObject;
-	typedef pair<ArrObject, ArrObject>								ObjectPair;
-	typedef unordered_map<ObjectType::Tag, ObjectPair>				ObjectContainer;
-	typedef unordered_map<ObjectType::Tag, ObjectPair>::iterator	ObjectContainerIter;
+	typedef unordered_map<ObjectType::Tag, ArrObject>				ObjectList;
+	typedef unordered_map<ObjectType::Tag, ArrObject>::iterator		ObjectListIter;
+	typedef unordered_map<ObjectType::Type, ObjectList>				ObjectContainer;
+	typedef unordered_map<ObjectType::Type, ObjectList>::iterator	ObjectContainerIter;
 
-	ObjectContainer		objectList;
+	ObjectContainer	objectContainer;
 private:
 	Synthesize(class CameraBase*, mainCamera,MainCamera)
 public:
@@ -32,12 +35,12 @@ public:
 	void Update();
 	void PostUpdate();
 
-	void AddObject(ObjectType::Tag tag, class GameObject* object,bool isStatic);
-	void DeleteObject(ObjectType::Tag tag, string name, bool isStatic);
+	void AddObject(ObjectType::Type type , ObjectType::Tag tag, class GameObject* object);
+	void DeleteObject(ObjectType::Type type, ObjectType::Tag tag, string name);
 
-	class GameObject*  FindObject(ObjectType::Tag tag, string name, bool isStatic);
-	vector<class GameObject*>  FindObjects(ObjectType::Tag tag, string name, bool isStatic);
-	vector<class GameObject*> GetObjectList (ObjectType::Tag tag, bool isStatic);
+	class GameObject*  FindObject(ObjectType::Type type, ObjectType::Tag tag, string name);
+	vector<class GameObject*>  FindObjects(ObjectType::Type type, ObjectType::Tag tag, string name);
+	vector<class GameObject*>* GetObjectList (ObjectType::Type type, ObjectType::Tag tag);
 };
 
 #define Objects ObjectManager::Get()

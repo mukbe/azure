@@ -13,7 +13,7 @@ DeferredRenderer::DeferredRenderer()
 
 	D3DDesc desc;
 	DxRenderer::GetDesc(&desc);
-	this->orthoWindow = new OrthoWindow(2,2);
+	this->orthoWindow = new OrthoWindow(D3DXVECTOR2(-WinSizeX/2, WinSizeY/2),D3DXVECTOR2(WinSizeX,WinSizeY));
 
 	this->Create();
 	depthVis = new DepthVis;
@@ -70,7 +70,7 @@ void DeferredRenderer::Render()
 	unPacker->SetPSBuffer(2);
 
 	shader->Render();
-	DeviceContext->DrawIndexed(6, 0, 0);
+	orthoWindow->DrawIndexed();
 
 	depthVis->CalcuDepth(depthSRV);
 }
@@ -150,6 +150,7 @@ bool DeferredRenderer::Create()
 		hr= Device->CreateShaderResourceView(renderTargetTexture[i], &shaderResourceViewDesc, &shaderResourceView[i]);
 		assert(SUCCEEDED(hr));
 	}
+
 	hr = Device->CreateShaderResourceView(renderAlphaTexture, &shaderResourceViewDesc, &renderAlphaSRV);
 	assert(SUCCEEDED(hr));
 
