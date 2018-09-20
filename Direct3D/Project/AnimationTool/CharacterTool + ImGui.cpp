@@ -36,7 +36,7 @@ void CharacterTool::UIRender()
 	//ToolPage
 	if (showTool)
 	{
-		if (ImGui::Begin("Tool"))
+		ImGui::Begin("Tool");
 		{
 		//-------------------------------------------------------------
 			{

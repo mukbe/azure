@@ -43,6 +43,8 @@ public:
 
 	void SetMousePos(int x, int y);
 
+	D3DXVECTOR2 GetMousePosInWorld();
+
 private:
 	Mouse();
 	~Mouse();

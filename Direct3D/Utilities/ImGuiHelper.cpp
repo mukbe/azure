@@ -18,22 +18,18 @@ void ImGuiHelper::RenderImageButton(ID3D11ShaderResourceView *& srv,ImVec2 size)
 	}
 }
 
-void ImGuiHelper::RenderImageButton(Texture *& texture, ImVec2 size)
+void ImGuiHelper::RenderImageButton(Texture ** lpTexture, ImVec2 size)
 {
-	if (texture == nullptr)
+	if(*lpTexture != nullptr)
 	{
-		ImGui::Text("TextureIsNullptr");
-	}
-	else
-	{
-		ImGui::ImageButton(texture->GetSRV(), size);
+		ImGui::ImageButton((*lpTexture)->GetSRV(), size);
 		if (ImGui::BeginDragDropTarget())
 		{
 			const ImGuiPayload* payload = new ImGuiPayload;
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TextureMove"))
 			{
 				const Texture* tex = reinterpret_cast<const Texture*>(payload->Data);
-				texture = const_cast<Texture*>(tex);
+				(*lpTexture) = const_cast<Texture*>(tex);
 			}
 			ImGui::EndDragDropTarget();
 		}

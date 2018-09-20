@@ -15,13 +15,13 @@
 #include "./Utilities/Buffer.h"
 
 InstanceRenderer::InstanceRenderer(string name,UINT maxInstance)
-	:name(name),maxInstanceCount(maxInstance),drawInstanceCout(0)
+	:name(name),maxInstanceCount(maxInstance), drawInstanceCount(0)
 {
 	shader = new InstanceShader(L"./_Shaders/001_GBuffer.hlsl");
 }
 
 InstanceRenderer::InstanceRenderer(string name,wstring fileName)
-	:name(name), drawInstanceCout(0),maxInstanceCount(0)
+	:name(name), drawInstanceCount(0),maxInstanceCount(0)
 {
 	shader = new InstanceShader(L"./_Shaders/001_GBuffer.hlsl");
 }
@@ -140,7 +140,7 @@ void InstanceRenderer::InitData(wstring materialFile, wstring meshFile)
 
 void InstanceRenderer::UpdateBuffer()
 {
-	this->drawInstanceCout = 0;
+	this->drawInstanceCount = 0;
 
 	D3D11_MAPPED_SUBRESOURCE mapData;
 	DeviceContext->Map(instanceBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapData);
@@ -152,10 +152,10 @@ void InstanceRenderer::UpdateBuffer()
 			if (instanceList[i]->GetIsRender())
 			{
 				D3DXMATRIX mat = instanceList[i]->GetFinalMatrix();
-				dataView[drawInstanceCout].data[0] = D3DXVECTOR4(mat._11, mat._12, mat._13, mat._41);
-				dataView[drawInstanceCout].data[1] = D3DXVECTOR4(mat._21, mat._22, mat._23, mat._42);
-				dataView[drawInstanceCout].data[2] = D3DXVECTOR4(mat._31, mat._32, mat._33, mat._43);
-				drawInstanceCout++;
+				dataView[drawInstanceCount].data[0] = D3DXVECTOR4(mat._11, mat._12, mat._13, mat._41);
+				dataView[drawInstanceCount].data[1] = D3DXVECTOR4(mat._21, mat._22, mat._23, mat._42);
+				dataView[drawInstanceCount].data[2] = D3DXVECTOR4(mat._31, mat._32, mat._33, mat._43);
+				drawInstanceCount++;
 			}
 		}
 	}
@@ -185,7 +185,7 @@ void InstanceRenderer::Render()
 
 			shader->Render();
 
-			DeviceContext->DrawIndexedInstanced(part->GetIndexCount(), this->drawInstanceCout, 0, 0, 0);
+			DeviceContext->DrawIndexedInstanced(part->GetIndexCount(), this->drawInstanceCount, 0, 0, 0);
 
 			part->material->UnBindBuffer();
 		}

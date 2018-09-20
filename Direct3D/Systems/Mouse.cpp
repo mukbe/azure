@@ -32,6 +32,14 @@ void Mouse::SetMousePos(int x, int y)
 	SetCursorPos(setMousePos.x, setMousePos.y);
 }
 
+D3DXVECTOR2 Mouse::GetMousePosInWorld()
+{
+	D3DXVECTOR2 value;
+	value.x = this->position.x - (float)(WinSizeX / 2);
+	value.y = -(this->position.y - (float)(WinSizeY / 2));
+	return value;
+}
+
 Mouse::Mouse()
 {
 	position = D3DXVECTOR3(0, 0, 0);

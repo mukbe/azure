@@ -10,7 +10,7 @@ class InstanceRenderer
 private:
 	Synthesize(string,name,Name)
 	UINT maxInstanceCount;
-	UINT drawInstanceCout;
+	UINT drawInstanceCount;
 	class InstanceShader* shader;
 	ID3D11Buffer* instanceBuffer;
 private:

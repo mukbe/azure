@@ -36,3 +36,7 @@ public:
 	bool IsSame(GameObject* object);
 };
 
+/*
+string name;
+D3DXMATRIX matrix;
+*/
