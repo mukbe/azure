@@ -12,6 +12,8 @@
 
 #include "./Environment/Ocean.h"
 
+#include "./Utilities/ImGuiHelper.h"
+
 
 ToolScene::ToolScene()
 {
@@ -25,6 +27,8 @@ ToolScene::ToolScene()
 	ToolIter iter = toolList.begin();
 	for (; iter != toolList.end(); ++iter)
 		iter->second->Init();
+
+	testTexture = nullptr;
 
 }
 
@@ -77,24 +81,28 @@ void ToolScene::PreRender()
 
 void ToolScene::Render()
 {
+	Objects->Render();
+
 	ToolIter iter = toolList.begin();
 	for (; iter != toolList.end(); ++iter)
 	{
 		iter->second->Render();
 	}
-
-	Objects->Render();
 }
 
 void ToolScene::UIRender()
 {
+	static bool isDemoOn = false;
 	static bool isHierarchyOn = true;
 	static bool isInspectorOn = true;
+	static bool isAssetOn = false;
 
 	ImGui::BeginMainMenuBar();
 	{
 		if (ImGui::BeginMenu("File"))
 		{
+			if (ImGui::MenuItem("Demo"))
+				isDemoOn = !isDemoOn;
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Tool"))
@@ -103,14 +111,21 @@ void ToolScene::UIRender()
 				isHierarchyOn = !isHierarchyOn;
 			if (ImGui::MenuItem("Inspector"))
 				isInspectorOn = !isInspectorOn;
+			if (ImGui::MenuItem("Asset"))
+				isAssetOn = !isAssetOn;
 			
 			ImGui::EndMenu();
 		}
 	}
 	ImGui::EndMainMenuBar();
 
+	if (isDemoOn)
+		ImGui::ShowDemoWindow();
 	if (isHierarchyOn)
 		toolList[ToolType::Hierarchy]->UIRender();
 	if (isInspectorOn)
 		toolList[ToolType::Inspector]->UIRender();
+	if (isAssetOn)
+		AssetManager->UIRender();
+
 }

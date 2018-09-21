@@ -108,7 +108,7 @@ G_Buffer ColorDeferredPS(ColorNormalPixelInput input)
 
     //output.worldPos = input.worldPos;
     output.diffuse = input.color;
-    output = PackGBuffer(output, input.normal, output.diffuse.rgb, float3(1, 1, 1),1.0f, 1.0f,0.5f);
+    output = PackGBuffer(output, input.normal, output.diffuse.rgb, float3(1, 1, 1),1.0f, 1.0f,1.5f);
 
     return output;
 }
@@ -141,12 +141,7 @@ G_Buffer GizmoDeferredPS(ColorPixelInput input)
 {
     G_Buffer output;
 
-    //output.worldPos = input.worldPos;
-    output.diffuse = input.color;
-    output.spec = float4(2, 2, 2, 2);
-    output.normal = float4(0, 0, 0, 1);
-
-    output = PackGBuffer(output, float3(0, 0, 0), input.color.rgb, float3(0, 0, 0), 0, 0, 1.5f);
+    output = PackGBuffer(output, float3(0, 0, 0), input.color.rgb, float3(0, 0, 0), 1.0f, 1.0f, 1.5f);
 
     return output;
 }
@@ -238,7 +233,7 @@ G_Buffer InstancePS(ModelPixelInput input)
     float3 diffuse = diffuse4.rgb;
 
     //output.worldPos = input.worldPos;
-    output.normal = float4(NormalMapSpace(_normalTex.Sample(_basicSampler, input.uv).xyz, input.normal, input.tangent), 1);
+    output.normal = float4(NormalMapSpace(_normalTex.Sample(_basicSampler, input.uv).xyz, input.normal, input.tangent), 0.5f);
     output.spec = float4(1, 1, 1, 2);
 
     output = PackGBuffer(output, input.normal, diffuse, SpecColor.rgb, SpecColor.a, Shiness, 0.5f);

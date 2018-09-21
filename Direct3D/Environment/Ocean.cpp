@@ -10,6 +10,8 @@
 
 #include "./View/FreeCamera.h"
 
+#include "./Object/GameObject/TagMessage.h"
+
 
 Ocean::Ocean()
 {
@@ -20,6 +22,11 @@ Ocean::Ocean()
 	this->InitOceansData();
 	this->CreateFresnelLookUpTable();
 	this->InitBuffers();
+
+	this->AddCallback("Delete", [this](TagMessage msg) 
+	{
+		this->isLive = false;
+	});
 }
 
 
@@ -101,9 +108,6 @@ void Ocean::Render()
 	//-----------------------------------------------------------------------
 }
 
-void Ocean::UIUpdate()
-{
-}
 
 void Ocean::UIRender()
 {

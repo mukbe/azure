@@ -36,6 +36,7 @@ struct Message_GameObject : public TagMessage
 	class GameObject* targetData;
 };
 
+
 struct Message_GameObjectList : public TagMessage
 {
 	vector<class GameObject*> targetListData;

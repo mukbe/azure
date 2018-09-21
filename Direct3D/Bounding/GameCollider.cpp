@@ -18,6 +18,21 @@ GameCollider::~GameCollider()
 	SafeDelete(boundingBox);
 }
 
+void GameCollider::Clone(void ** clone)
+{
+	BoundingBox* box = new BoundingBox;
+	box->minPos = this->boundingBox->minPos;
+	box->maxPos = this->boundingBox->maxPos;
+	box->halfSize = this->boundingBox->halfSize;
+
+	GameCollider* collider = new GameCollider(nullptr,box);
+	collider->name = this->name;
+	collider->type = this->type;
+	collider->finalMatrix = this->finalMatrix;
+
+	*clone = collider;
+}
+
 void GameCollider::Update()
 {
 	

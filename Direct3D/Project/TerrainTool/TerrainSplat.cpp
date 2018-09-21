@@ -84,20 +84,7 @@ void TerrainSplat::TerrainUI()
 	else
 		str = "None";
 
-	ImGui::Selectable(str.c_str());
-	if (ImGui::BeginDragDropTarget())
-	{
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TextureMove"))
-		{
-			UINT p = 0;	//TODO srv하고 경로 저장하게끔 
-			memcpy(&p, &payload->Data, sizeof(UINT));
-
-			texture[buffer->Data.SplatNum] = reinterpret_cast<Texture*>(p);
-		}
-		ImGui::EndDragDropTarget();
-	}
+	ImGuiHelper::RenderImageButton(&texture[buffer->Data.SplatNum],ImVec2(100,100));
 
 
-	if (texture[buffer->Data.SplatNum] != nullptr)
-		ImGui::ImageButton(texture[buffer->Data.SplatNum]->GetSRV(),ImVec2(150,150));
 }

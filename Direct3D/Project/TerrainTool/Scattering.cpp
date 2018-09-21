@@ -140,7 +140,6 @@ void Scattering::Render()
 	DeviceContext->DrawIndexed(36, 0, 0);
 	pRenderer->ChangeZBuffer(true);
 	States::SetRasterizer(States::RasterizerStates::SOLID_CULL_ON);
-	
 }
 
 void Scattering::UIUpdate()

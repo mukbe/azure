@@ -11,11 +11,14 @@ private:
 	typedef map<string, CallbackFunc>::iterator CallbackIter;
 protected:
 	Synthesize(string, name, Name)
+	Synthesize(bool, isActive, isActive)
 	Synthesize(bool,isLive,IsLive)
 	Synthesize(bool,isRender,IsRender)
 	Synthesize(Transform*,transform,Transform)
 	CallbackList callbackList;
 	vector<struct TagMessage> reserveMessageList;
+public:
+	bool* GetPIsActive() { return &isActive; }
 public:
 	GameObject(string name);
 	GameObject();
@@ -29,8 +32,9 @@ public:
 	virtual void PrevRender();
 	virtual void Render();
 	virtual void UIRender();
-
+	virtual void ShadowRender();
 	virtual void UIUpdate() {}
+	virtual void DebugRender() {}
 
 	void SendMSG(struct TagMessage msg);
 	void AddCallback(string name, CallbackFunc func);

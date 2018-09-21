@@ -7,6 +7,13 @@
 #include "./Model/ModelMesh.h"
 
 #include "./Renders/Material.h"
+
+#include "./Bounding/GameCollider.h"
+#include "./Bounding/BoundingBox.h"
+
+#include "./Utilities/BinaryFile.h"
+
+
 #include <io.h>
 
 
@@ -121,6 +128,19 @@ ModelData ResourceManager::AddModelData(wstring file, string keyName,bool isAnim
 	if(isAnimation)
 		Models::LoadAnimation(file + L".anim", &data.animations);
 
+	BinaryReader* reader = new BinaryReader();
+	reader->Open(file + L".collider");
+	{
+		UINT size = reader->UInt();
+		for (UINT i = 0; i < size; ++i)
+		{
+			GameCollider* collider = new GameCollider(nullptr, new BoundingBox());
+			GameCollider::LoadCollider(reader, collider);
+			data.colliders.push_back(collider);
+		}
+	}
+	reader->Close();
+
 	this->models.insert(make_pair(keyName, data));
 
 	return data;
@@ -211,7 +231,7 @@ void ResourceManager::UIRender()
 						ImGui::Text("%s", iter->first.c_str());
 						ImGui::Image(iter->second->GetSRV(), ImVec2(50, 50));
 					}
-					ImGui::SetDragDropPayload("TextureMove", iter->second, sizeof(Texture));
+					ImGui::SetDragDropPayload("TextureMove", &iter->second, sizeof(UINT));
 					ImGui::EndDragDropSource();
 				}
 			}
@@ -251,7 +271,7 @@ void ResourceManager::UIRender()
 
 
 void ModelData::Clone(vector<class Material*>* pMaterials, vector<class ModelBone*>* pBones, 
-	vector<class ModelMesh*>* pMeshes, vector<class ModelAnimClip*>* pAnim)
+	vector<class ModelMesh*>* pMeshes, vector<class ModelAnimClip*>* pAnim, vector<class GameCollider*>* colliders)
 {
 	pMaterials->clear();
 	for (Material* material : materials)
@@ -280,13 +300,27 @@ void ModelData::Clone(vector<class Material*>* pMaterials, vector<class ModelBon
 		pMeshes->push_back(temp);
 	}
 
-	pAnim->clear();
-	for (ModelAnimClip* clip : animations)
+	if (pAnim)
 	{
-		ModelAnimClip* temp = nullptr;
-		clip->Clone((void**)&temp);
+		pAnim->clear();
+		for (ModelAnimClip* clip : animations)
+		{
+			ModelAnimClip* temp = nullptr;
+			clip->Clone((void**)&temp);
 
-		pAnim->push_back(temp);
+			pAnim->push_back(temp);
+		}
+	}
+
+	if (colliders)
+	{
+		colliders->clear();
+		for (GameCollider* collider : this->colliders)
+		{
+			GameCollider* newCollider = nullptr;
+			collider->Clone((void**)&newCollider);
+			colliders->push_back(newCollider);
+		}
 	}
 }
 
@@ -319,4 +353,9 @@ void ModelData::Release()
 		SafeDelete(clip);
 	}
 	animations.clear();
+
+	for (GameCollider* collider : colliders)
+		SafeDelete(collider);
+
+	colliders.clear();
 }

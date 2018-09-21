@@ -12,6 +12,8 @@
 
 #include "./Environment/Ocean.h"
 
+#include "./Renders/Instancing/InstanceRenderer.h"
+
 Hierarchy::Hierarchy(ToolScene * toolScene)
 	:ToolBase(toolScene), targetObject(nullptr)
 {
@@ -26,6 +28,11 @@ Hierarchy::Hierarchy(ToolScene * toolScene)
 	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::View, freeCamera);
 	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Enviroment, scattering);
 	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Enviroment, ocean);
+	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Enviroment, new Terrain);
+
+	InstanceRenderer* renderer = new InstanceRenderer("BoxRenderer", 10);
+	renderer->InitializeData("FishingBox");
+	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Instancing, renderer);
 }
 
 Hierarchy::~Hierarchy()
@@ -82,11 +89,21 @@ void Hierarchy::UIRender()
 				for (UINT i = 0; i < list.size(); ++i)
 				{
 					if (ImGui::Selectable(list[i]->GetName().c_str()))
+					{
 						targetObject = list[i];
+					}
 				}
 				ImGui::TreePop();
+
 			}
 		}
 	}
 	ImGui::End();
 }
+
+void Hierarchy::SetNullTarget()
+{
+	this->targetObject = nullptr;
+}
+
+

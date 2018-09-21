@@ -4,6 +4,7 @@ class Inspector : public ToolBase
 {
 private:
 	class Hierarchy* hierarchy;
+	class DebugTransform* debugTransform;
 public:
 	Inspector(class ToolScene* toolScene);
 	~Inspector();

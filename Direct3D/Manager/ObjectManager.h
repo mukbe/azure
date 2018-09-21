@@ -6,7 +6,7 @@ namespace ObjectType
 {
 	enum class Tag
 	{
-		View = 0,Enviroment ,Object  , Ui , None
+		View = 0,Enviroment ,Object,Instancing, Ui , None
 	};
 
 	enum class Type

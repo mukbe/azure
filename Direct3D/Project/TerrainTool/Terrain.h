@@ -46,7 +46,7 @@ public:
 	void PreRender();
 	void Render();
 	void UIRender();
-
+	void UIUpdate();
 private:
 	void CreateTerrain();
 	void CalcuMousePosition();

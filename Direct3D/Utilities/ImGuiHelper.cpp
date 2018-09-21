@@ -5,16 +5,31 @@
 
 void ImGuiHelper::RenderImageButton(ID3D11ShaderResourceView *& srv,ImVec2 size)
 {
-	ImGui::ImageButton(srv, size);
-	if (ImGui::BeginDragDropTarget())
+	if (srv != nullptr)
 	{
-		const ImGuiPayload* payload = new ImGuiPayload;
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TextureMove"))
+		ImGui::ImageButton(srv, size);
+		if (ImGui::BeginDragDropTarget())
 		{
-			const Texture* tex = reinterpret_cast<const Texture*>(payload->Data);
-			srv = (const_cast<Texture*>(tex))->GetSRV();
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TextureMove"))
+			{
+				const Texture*const* tex = reinterpret_cast<const Texture*const*>(payload->Data);
+				srv = (const_cast<Texture*>(*tex))->GetSRV();
+			}
+			ImGui::EndDragDropTarget();
 		}
-		ImGui::EndDragDropTarget();
+	}
+	else
+	{
+		ImGui::Selectable("NullSRV");
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TextureMove"))
+			{
+				const Texture*const* tex = reinterpret_cast<const Texture*const*>(payload->Data);
+				srv = (const_cast<Texture*>(*tex))->GetSRV();
+			}
+			ImGui::EndDragDropTarget();
+		}
 	}
 }
 
@@ -25,11 +40,23 @@ void ImGuiHelper::RenderImageButton(Texture ** lpTexture, ImVec2 size)
 		ImGui::ImageButton((*lpTexture)->GetSRV(), size);
 		if (ImGui::BeginDragDropTarget())
 		{
-			const ImGuiPayload* payload = new ImGuiPayload;
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TextureMove"))
 			{
-				const Texture* tex = reinterpret_cast<const Texture*>(payload->Data);
-				(*lpTexture) = const_cast<Texture*>(tex);
+				const Texture*const* tex = reinterpret_cast<const Texture*const*>(payload->Data);
+				(*lpTexture) = const_cast<Texture*>(*tex);
+			}
+			ImGui::EndDragDropTarget();
+		}
+	}
+	else
+	{
+		ImGui::Selectable("NullTexture");
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TextureMove"))
+			{
+				const Texture*const* tex = reinterpret_cast<const Texture*const*>(payload->Data);
+				(*lpTexture) = const_cast<Texture*>(*tex);
 			}
 			ImGui::EndDragDropTarget();
 		}
@@ -42,7 +69,6 @@ void ImGuiHelper::RenderModelSelectable(string name, function<void(struct ModelD
 	ImGui::Selectable(name.c_str(),&b,0, size);
 	if (ImGui::BeginDragDropTarget())
 	{
-		const ImGuiPayload* payload = new ImGuiPayload;
 		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ModelMove"))
 		{
 			UINT p;

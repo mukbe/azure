@@ -23,7 +23,7 @@ ObjectManager::ObjectManager()
 
 ObjectManager::~ObjectManager()
 {
-	this->Release();
+	//this->Release();
 }
 
 void ObjectManager::Release()
@@ -38,8 +38,9 @@ void ObjectManager::Release()
 		{
 			for (UINT i = 0; i < listIter->second.size(); ++i)
 			{
-				listIter->second[i]->Release();
-				SafeDelete(listIter->second[i]);
+				GameObject* object = listIter->second[i];
+				object->Release();
+				SafeDelete(object);
 			}
 			listIter->second.clear();
 		}
@@ -57,7 +58,16 @@ void ObjectManager::PreUpdate()
 	{
 		for (UINT i = 0; i < listIter->second.size(); ++i)
 		{
-			listIter->second[i]->PreUpdate();
+			if (listIter->second[i]->GetIsLive() == false)
+			{
+				listIter->second[i]->Release();
+				SafeDelete(listIter->second[i]);
+				listIter->second.erase(listIter->second.begin() + i);
+				--i;
+				continue;
+			}
+			if(listIter->second[i]->GetisActive())
+				listIter->second[i]->PreUpdate();
 		}
 	}
 }
@@ -70,7 +80,8 @@ void ObjectManager::Update()
 	{
 		for (UINT i = 0; i < listIter->second.size(); ++i)
 		{
-			listIter->second[i]->Update();
+			if (listIter->second[i]->GetisActive())
+				listIter->second[i]->Update();
 		}
 	}
 	
@@ -84,7 +95,8 @@ void ObjectManager::PostUpdate()
 	{
 		for (UINT i = 0; i < listIter->second.size(); ++i)
 		{
-			listIter->second[i]->PostUpdate();
+			if (listIter->second[i]->GetisActive())
+				listIter->second[i]->PostUpdate();
 		}
 	}
 
@@ -102,7 +114,8 @@ void ObjectManager::Render()
 	{
 		for (UINT i = 0; i < listIter->second.size(); ++i)
 		{
-			listIter->second[i]->Render();
+			if (listIter->second[i]->GetisActive())
+				listIter->second[i]->Render();
 		}
 	}
 }
@@ -176,6 +189,8 @@ string ObjectManager::GetTagName(ObjectType::Tag tag)
 		return "View";
 	else if (tag == ObjectType::Tag::Object)
 		return "Object";
+	else if (tag == ObjectType::Tag::Instancing)
+		return "Instancing";
 	else if (tag == ObjectType::Tag::Ui)
 		return "UI";
 

@@ -40,16 +40,16 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
         //CalcLighting
         float diffuseFactor = saturate(dot(worldNormal.xyz, -SunDir));
 
-        float3 diffuseColor = albedo * diffuseFactor * SunColor.rgb * 2.0f;
+        float3 diffuseColor = albedo * diffuseFactor * SunColor.rgb * 1.5f;
         //	finalColor += DirLightColor.rgb * pow(NDotH, material.specPow) * material.specIntensity;
 
-        return float4(diffuseColor * shadowFactor, 1.0f);
+        return float4(albedo, 1.0f);
     }
     else
     {
         return float4(albedo, 1.0f);
     }
 
-    return float4(0,0,0,0);
+    return float4(albedo, 1.0f);
 }
 

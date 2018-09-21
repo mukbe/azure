@@ -9,6 +9,7 @@ class ToolScene : public SceneNode
 private:
 	unordered_map<ToolType, ToolBase*> toolList;
 	typedef unordered_map<ToolType, ToolBase*>::iterator ToolIter;
+	Texture* testTexture;
 public:
 	ToolScene();
 	~ToolScene();

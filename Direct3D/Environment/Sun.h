@@ -16,6 +16,7 @@ namespace Environment
 
 		D3DXVECTOR3 GetForward() { return dir; }
 		float* GetPosPtr();
+		D3DXVECTOR3 GetPos();
 		void SetColor(D3DXCOLOR color);
 	private:
 

@@ -21,7 +21,6 @@ Program::Program()
 	//Scenes->AddScene("anim", new AnimationTool);
 	Scenes->AddScene("tool", new ToolScene);
 	//Scenes->AddScene("terrain", new TerrainTool);
-
 }
 
 Program::~Program()

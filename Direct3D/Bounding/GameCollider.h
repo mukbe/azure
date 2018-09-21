@@ -1,9 +1,9 @@
 #pragma once
-
+#include "Interfaces/ICloneable.h"
 class BoundingBox;
 class GameObject;
 
-class GameCollider
+class GameCollider : public ICloneable
 {
 public:
 	enum ColliderType {RigidBody = 0,Attack,HeatBox,Static,UnKnown};
@@ -16,6 +16,8 @@ protected:
 public:
 	GameCollider(class GameObject* parentObject,class BoundingBox* boundingBox);
 	virtual ~GameCollider();
+
+	virtual void Clone(void** clone);
 
 	virtual void Update();
 	virtual void Render(D3DXCOLOR color = D3DXCOLOR(1.f,0.f,0.f,1.f),bool bZbufferOff = false);

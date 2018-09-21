@@ -569,3 +569,4 @@ ID3D11Texture2D * Texture::GetReadBuffer()
 
 	return readBuffer;
 }
+

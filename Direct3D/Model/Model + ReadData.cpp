@@ -60,7 +60,6 @@ void Model::BindMeshData()
 		}
 		else
 			bone->parent = nullptr;
-
 	}
 
 	for (size_t i = 0; i < meshes.size(); i++)
