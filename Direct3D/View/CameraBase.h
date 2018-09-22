@@ -21,4 +21,3 @@ public:
 	virtual D3DXMATRIX GetProjection();
 	class Ray GetRay();
 };
-

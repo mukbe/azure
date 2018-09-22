@@ -30,6 +30,8 @@
     <ClInclude Include="ComputeShader\ComputeResource.h" />
     <ClInclude Include="ComputeShader\ComputeShader.h" />
     <ClInclude Include="Bounding\GameCollider.h" />
+    <ClInclude Include="Manager\DataBase.h" />
+    <ClInclude Include="Project\ToolScene\Picking.h" />
     <ClInclude Include="Project\Game\PlayScene.h" />
     <ClInclude Include="Project\ToolScene\Inspector.h" />
     <ClInclude Include="Project\ToolScene\Hierarchy.h" />
@@ -125,7 +127,9 @@
     <ClCompile Include="ComputeShader\ComputeResource.cpp" />
     <ClCompile Include="ComputeShader\ComputeShader.cpp" />
     <ClCompile Include="Bounding\GameCollider.cpp" />
+    <ClCompile Include="Manager\DataBase.cpp" />
     <ClCompile Include="Environment\Ocean + Func.cpp" />
+    <ClCompile Include="Project\ToolScene\Picking.cpp" />
     <ClCompile Include="Project\Game\PlayScene.cpp" />
     <ClCompile Include="Project\ToolScene\Inspector.cpp" />
     <ClCompile Include="Project\ToolScene\Hierarchy.cpp" />

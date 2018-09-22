@@ -210,7 +210,7 @@ ModelPixelInput InstanceVS(InstanceInputVS input)
 
     output.position = output.worldPos = mul(input.position, finalMatrix);
 
-    output.normal = mul(input.normal, (float3x3) finalMatrix);
+    output.normal = normalize(mul(input.normal, (float3x3) finalMatrix));
     output.tangent = mul(input.tangent, (float3x3) finalMatrix);
 
     output.position = mul(output.position, ViewProjection);
@@ -230,13 +230,11 @@ G_Buffer InstancePS(ModelPixelInput input)
     if (diffuse4.a < 0.1f)
         discard;
 
-    float3 diffuse = diffuse4.rgb;
-
     //output.worldPos = input.worldPos;
-    output.normal = float4(NormalMapSpace(_normalTex.Sample(_basicSampler, input.uv).xyz, input.normal, input.tangent), 0.5f);
+    //output.normal = input.normal; //float4(NormalMapSpace(_normalTex.Sample(_basicSampler, input.uv).xyz, input.normal, input.tangent), 0.5f);
     output.spec = float4(1, 1, 1, 2);
 
-    output = PackGBuffer(output, input.normal, diffuse, SpecColor.rgb, SpecColor.a, Shiness, 0.5f);
+    output = PackGBuffer(output, input.normal, diffuse4.rgb, SpecColor.rgb, SpecColor.a, Shiness, 0.9f);
     return output;
 }
 //===================================================

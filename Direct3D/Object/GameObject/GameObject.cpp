@@ -85,7 +85,8 @@ void GameObject::SendMSG(TagMessage msg)
 		//찾았다면
 		if (iter != callbackList.end())
 		{
-			iter->second(msg);
+			TagMessage newMessage = msg;
+			iter->second(newMessage);
 			return;
 		}
 	}

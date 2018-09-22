@@ -5,6 +5,7 @@ struct TagMessage
 {
 	string name;
 	float delayTime;
+	void* data;
 
 	TagMessage():name(""),delayTime(0.0f){}
 	TagMessage(string name, float delayTime = 0.0f):name(name),delayTime(delayTime) {}

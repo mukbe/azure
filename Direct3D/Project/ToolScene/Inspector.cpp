@@ -15,7 +15,7 @@
 #include "./View/FreeCamera.h"
 
 Inspector::Inspector(ToolScene * toolScene)
-	:ToolBase(toolScene)
+	:ToolBase(toolScene), targetObject(nullptr)
 {
 	name = "Inspector";
 	debugTransform = new DebugTransform();
@@ -41,13 +41,12 @@ void Inspector::PreUpdate()
 
 void Inspector::Update()
 {
-	GameObject* object = hierarchy->GetTargetObject();
-	if (object)
+	if (targetObject)
 	{
-		debugTransform->ConnectTransform(object->GetTransform());
+		debugTransform->ConnectTransform(targetObject->GetTransform());
 		debugTransform->Update();
 
-		object->UIUpdate();
+		targetObject->UIUpdate();
 	}
 }
 
@@ -61,10 +60,9 @@ void Inspector::PreRender()
 
 void Inspector::Render()
 {
-	GameObject* object = hierarchy->GetTargetObject();
-	if (object)
+	if (targetObject)
 	{
-		object->DebugRender();
+		targetObject->DebugRender();
 		debugTransform->RenderGizmo();
 	}
 }
@@ -73,22 +71,22 @@ void Inspector::UIRender()
 {
 	ImGui::Begin("Inspector");
 	{
-		GameObject* object = hierarchy->GetTargetObject();
-		if (object)
+		if (targetObject)
 		{
 			ImGui::BeginGroup();
-			ImGui::Text(object->GetName().c_str());
-			ImGui::Checkbox("IsActive", object->GetPIsActive());
+			ImGui::Text(targetObject->GetName().c_str());
+			ImGui::Checkbox("IsActive", targetObject->GetPIsActive());
 			ImGui::SameLine();
 			if (ImGui::Button("Delete"))
 			{
-				object->SendMSG(TagMessage("Delete"));
+				targetObject->SendMSG(TagMessage("Delete"));
 				this->debugTransform->ConnectTransform(nullptr);
-				this->hierarchy->SetNullTarget();
-			
+				targetObject = nullptr;
 			}
-			ImGui::Separator();
-			object->UIRender();
+
+			debugTransform->RenderGUI();
+			if(targetObject)
+				targetObject->UIRender();
 			ImGui::EndGroup();
 		}
 	}

@@ -56,6 +56,16 @@ bool GameCollider::IsIntersect(GameCollider * collider)
 	return BoundingBox::IntersectsOBB(this->finalMatrix, this->boundingBox, collider->GetFinalMatrix(), collider->boundingBox);
 }
 
+void GameCollider::GetCorners(vector<D3DXVECTOR3>& output)
+{
+	this->boundingBox->GetCorners(output, this->finalMatrix);
+}
+
+void GameCollider::GetWorldCenterRadius(D3DXVECTOR3 * pOutCenter, float * pOutRadius)
+{
+	this->boundingBox->GetWorldCenterAndRadius(pOutCenter, pOutRadius,this->finalMatrix);
+}
+
 string GameCollider::GetTypeName(int index)
 {
 	if (index == 0)

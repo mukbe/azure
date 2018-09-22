@@ -4,12 +4,13 @@ class StaticObject : public GameObject
 {
 private:
 	Synthesize(class InstanceRenderer*, instanceRenderer,InstanceRenderer)
-	vector<class GameCollider*> colliderList;
+	Synthesize(vector<class GameCollider*>, colliderList,ColliderList)
 public:
 	StaticObject(string name);
 	virtual ~StaticObject();
 
 	virtual void Release()override;
+	virtual void Update()override;
 	virtual void DebugRender()override;
 	virtual void UIUpdate()override;
 	virtual void UIRender()override;

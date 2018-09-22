@@ -2,6 +2,7 @@
 #include "Hierarchy.h"
 
 #include "ToolScene.h"
+#include "Inspector.h"
 
 #include "./Object/GameObject/GameObject.h"
 
@@ -15,7 +16,7 @@
 #include "./Renders/Instancing/InstanceRenderer.h"
 
 Hierarchy::Hierarchy(ToolScene * toolScene)
-	:ToolBase(toolScene), targetObject(nullptr)
+	:ToolBase(toolScene)
 {
 	name = "Hierarchy";
 
@@ -30,9 +31,17 @@ Hierarchy::Hierarchy(ToolScene * toolScene)
 	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Enviroment, ocean);
 	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Enviroment, new Terrain);
 
-	InstanceRenderer* renderer = new InstanceRenderer("BoxRenderer", 10);
-	renderer->InitializeData("FishingBox");
-	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Instancing, renderer);
+	InstanceRenderer* fishingBox = new InstanceRenderer("FishingBox", 30);
+	fishingBox->InitializeData("FishingBox");
+	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Instancing, fishingBox);
+
+	InstanceRenderer* tree1 = new InstanceRenderer("Tree1", 30);
+	tree1->InitializeData("Tree1");
+	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Instancing, tree1);
+
+	InstanceRenderer* tree2 = new InstanceRenderer("Tree2", 30);
+	tree2->InitializeData("Tree2");
+	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Instancing, tree2);
 }
 
 Hierarchy::~Hierarchy()
@@ -70,7 +79,6 @@ void Hierarchy::PreRender()
 
 void Hierarchy::Render()
 {
-	
 }
 
 void Hierarchy::UIRender()
@@ -90,7 +98,7 @@ void Hierarchy::UIRender()
 				{
 					if (ImGui::Selectable(list[i]->GetName().c_str()))
 					{
-						targetObject = list[i];
+						inspector->SetTargetObject(list[i]);
 					}
 				}
 				ImGui::TreePop();
@@ -101,9 +109,5 @@ void Hierarchy::UIRender()
 	ImGui::End();
 }
 
-void Hierarchy::SetNullTarget()
-{
-	this->targetObject = nullptr;
-}
 
 

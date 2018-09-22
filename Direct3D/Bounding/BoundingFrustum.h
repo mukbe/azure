@@ -22,6 +22,7 @@ public:
 	bool IsAABBInFrustum(class BoundingBox* boundingBox);
 	bool IsSphereInFrustum(D3DXVECTOR3* p, float radius);
 	bool IsSphereInFrustum(class BoundingBox* boundingBox);
+	bool IsSphereInFrustum(class GameCollider* gameCollider);
 
 	void UpdateFrustum(D3DXMATRIX viewProj);
 	void Render();

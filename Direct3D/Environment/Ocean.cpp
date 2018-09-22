@@ -68,6 +68,7 @@ void Ocean::Update()
 	oceanComputeBuffer->data.time += Time::Delta();
 
 	this->ComputingOcean();
+	this->FrustumCulling();
 	this->UpdateBuffer();
 	
 }
@@ -77,7 +78,7 @@ void Ocean::Render()
 	//BindBuffers ----------------------------------------------
 	ID3D11ShaderResourceView* srv = fresnelLookUp->GetSRV();
 	DeviceContext->VSSetShaderResources(6,1, &srv);
-	//DeviceContext->PSSetShaderResources(6,1, &srv);
+	
 	material->SetDiffuseColor(oceanColor);
 	material->UpdateBuffer();
 	material->BindBuffer();
@@ -119,8 +120,6 @@ void Ocean::UIRender()
 
 	ImGui::Separator();
 	
-	transform->UIRender();
-
 }
 
 void Ocean::UpdateBuffer()

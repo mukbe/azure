@@ -52,6 +52,7 @@ public:
 	virtual void Update()override;
 	virtual void Render()override;
 	virtual void UIRender()override;
+	Texture* GetFresnel() { return this->fresnelLookUp; }
 private:
 	void InitInstanceShader();
 	void InitOceansData();
@@ -59,6 +60,7 @@ private:
 	void CreateFresnelLookUpTable();
 	void UpdateBuffer();
 	void ComputingOcean();
+	void FrustumCulling();
 private:
 	D3DXVECTOR2 GetSpectrum(int n_prime, int m_prime);
 	D3DXVECTOR2 GaussianRandomVariable();

@@ -17,6 +17,7 @@ public:
 	void GetCorners(vector<D3DXVECTOR3>& pOut);
 	void GetCorners(vector<D3DXVECTOR3>& pOut, D3DXMATRIX mat);
 	void GetCenterAndRadius(D3DXVECTOR3* pOutCenter,float* pOutRadius);
+	void GetWorldCenterAndRadius(D3DXVECTOR3* pOutCenter, float* pOutRadius, D3DXMATRIX mat);
 	
 	bool IntersectsAABB(class BoundingBox box);
 	bool Intersects(class BoundingFrustum frustum);

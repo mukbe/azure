@@ -62,6 +62,10 @@ void Ocean::ComputingOcean()
 	//---------------------------------------------------------------
 }
 
+void Ocean::FrustumCulling()
+{
+}
+
 D3DXVECTOR2 Ocean::GetSpectrum(int n_prime, int m_prime)
 {
 	D3DXVECTOR2 r = GaussianRandomVariable();

@@ -86,6 +86,8 @@
     <ClCompile Include="Utilities\Path.cpp" />
     <ClCompile Include="Utilities\String.cpp" />
     <ClCompile Include="Utilities\Transform.cpp" />
+    <ClCompile Include="Project\ToolScene\Picking.cpp" />
+    <ClCompile Include="Manager\DataBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renders\ShadowRenderer.h" />
@@ -182,6 +184,8 @@
     <ClInclude Include="Utilities\Path.h" />
     <ClInclude Include="Utilities\String.h" />
     <ClInclude Include="Utilities\Transform.h" />
+    <ClInclude Include="Project\ToolScene\Picking.h" />
+    <ClInclude Include="Manager\DataBase.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />

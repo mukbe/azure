@@ -1,19 +1,12 @@
 #pragma once
 #include "ToolBase.h"
-
-class GameObject;
-class Hierarchy : public ToolBase
+class Picking : public ToolBase
 {
 private:
 	class Inspector* inspector;
-private:		//View
-	class FreeCamera *freeCamera;
-private:		//Enviroment
-	class Scattering* scattering;
-	class Ocean* ocean;
 public:
-	Hierarchy(class ToolScene* toolScene);
-	~Hierarchy();
+	Picking(class ToolScene* toolScene);
+	~Picking();
 
 	virtual void Init();
 	virtual void Release();
@@ -23,6 +16,5 @@ public:
 	virtual void Render();
 	virtual void PreRender();
 	virtual void UIRender();
-
 };
 

@@ -20,6 +20,7 @@ void Transform::UIRender()
 {
 	ImGui::InputFloat3("Position", &position.x);
 	ImGui::InputFloat3("Scale", &scale.x);
+
 	ImGui::Separator();
 
 	ImGui::SliderFloat3("Pos", &position.x, -100.f, 100.f);

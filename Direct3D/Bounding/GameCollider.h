@@ -23,6 +23,8 @@ public:
 	virtual void Render(D3DXCOLOR color = D3DXCOLOR(1.f,0.f,0.f,1.f),bool bZbufferOff = false);
 
 	bool IsIntersect(GameCollider* collider);
+	void GetCorners(vector<D3DXVECTOR3>& output);
+	void GetWorldCenterRadius(D3DXVECTOR3* pOutCenter, float* pOutRadius);
 
 	static string GetTypeName(int index);
 	static void SaveAnimCollider(class BinaryWriter* w,class AnimationCollider* collider);

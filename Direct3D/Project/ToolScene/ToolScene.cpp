@@ -4,6 +4,7 @@
 #include "ToolBase.h"
 #include "Hierarchy.h"
 #include "Inspector.h"
+#include "Picking.h"
 
 #include "../TerrainTool/Terrain.h"
 #include "../TerrainTool/Scattering.h"
@@ -23,6 +24,7 @@ ToolScene::ToolScene()
 
 	toolList.insert(make_pair(ToolType::Hierarchy, new Hierarchy(this)));
 	toolList.insert(make_pair(ToolType::Inspector, new Inspector(this)));
+	toolList.insert(make_pair(ToolType::Unknown, new Picking(this)));
 
 	ToolIter iter = toolList.begin();
 	for (; iter != toolList.end(); ++iter)
@@ -88,6 +90,8 @@ void ToolScene::Render()
 	{
 		iter->second->Render();
 	}
+
+
 }
 
 void ToolScene::UIRender()

@@ -18,7 +18,6 @@
 #include "./View/FreeCamera.h"
 
 
-
 InstanceRenderer::InstanceRenderer(string name,UINT maxInstance)
 	:maxInstanceCount(maxInstance), drawInstanceCount(0)
 {
@@ -27,10 +26,9 @@ InstanceRenderer::InstanceRenderer(string name,UINT maxInstance)
 
 	this->AddCallback("DeleteObject", [this](TagMessage msg) 
 	{
-		Message_UINT message = *reinterpret_cast<Message_UINT*>(&msg);
 		for (UINT i = 0; i < instanceList.size(); ++i)
 		{
-			if (instanceList[i] == reinterpret_cast<StaticObject*>(message.UintData));
+			if (instanceList[i]->GetName() == *reinterpret_cast<string*>(msg.data))
 			{
 				instanceList.erase(instanceList.begin() + i);
 				break;
@@ -47,10 +45,9 @@ InstanceRenderer::InstanceRenderer(string name,wstring fileName)
 
 	this->AddCallback("DeleteObject", [this](TagMessage msg)
 	{
-		Message_UINT message = *reinterpret_cast<Message_UINT*>(&msg);
 		for (UINT i = 0; i < instanceList.size(); ++i)
 		{
-			if (instanceList[i] == reinterpret_cast<StaticObject*>(message.UintData));
+			if (instanceList[i]->GetName() == *reinterpret_cast<string*>(msg.data))
 			{
 				instanceList.erase(instanceList.begin() + i);
 				break;
@@ -240,12 +237,20 @@ void InstanceRenderer::Render()
 
 void InstanceRenderer::UIRender()
 {
-	if (ImGui::Button("AddInstance"))
+	static float autoSize = 0.3f;
+	ImGui::Text("InstanceRendering");
+	ImGui::Text("DrawCount : %d", drawInstanceCount);
+	ImGui::InputFloat("CreateSize", &autoSize);
+
+	if (ImGui::Button("AddInstance",ImVec2(100,20)))
 	{
-		StaticObject* object = new StaticObject("BoxInstnace");
+		char str[48];
+		sprintf_s(str,"%s %d",name.c_str(),instanceList.size());
+
+		StaticObject* object = new StaticObject(str);
 		object->GetTransform()->SetWorldPosition(MainCamera->GetTransform()->GetWorldPosition() + 
 			MainCamera->GetTransform()->GetForward() * 50.0f);
-		object->GetTransform()->SetScale(0.3f, 0.3f, 0.3f);
+		object->GetTransform()->SetScale(autoSize, autoSize, autoSize);
 
 		for (UINT i = 0; i < colliders.size(); ++i)
 			object->AddCollider(colliders[i]);

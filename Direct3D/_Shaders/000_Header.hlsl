@@ -57,6 +57,12 @@ cbuffer ModelBuffer : register(b6)
     matrix _modelBones[230];
 }
 
+cbuffer CameraBuffer : register(b7)
+{
+    float3 _camPos;
+    float _camPadding;
+}
+
 //MRT0 Normal.xyz, RenderType(float)
 //MRT1 Diffuse.rgb,SpecIntensity
 //MRT2 Specr.rgb, SpecPower(float)
@@ -73,7 +79,6 @@ Texture2D _deferredWorld : register(t3);
 Texture2D _deferredDepth : register(t4);
 
 Texture2D _sunLightsahdowMap : register(t5);
-
 
 SamplerState _basicSampler : register(s0);
 SamplerComparisonState _shadowSampler : register(s2);
@@ -449,3 +454,5 @@ bool IntersectTri(float3 origin, float3 dir, float3 v0, float3 v1, float3 v2, ou
 
     //    return true;
 }
+
+

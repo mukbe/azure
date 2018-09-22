@@ -117,6 +117,6 @@ G_Buffer UseSkyBoxPS(PSINPUT i)
     float4 color = _AddAmbient;
     color *= 0.2f;
     output.diffuse = float4(last.xyz + color.xyz, 1);
-
+    output.normal.a = 1.5f;
     return output;
 }

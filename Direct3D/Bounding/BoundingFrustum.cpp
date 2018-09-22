@@ -3,6 +3,7 @@
 #include "Bounding.h"
 #include "BoundingBox.h"
 #include "BoundingSphere.h"
+#include "GameCollider.h"
 
 
 BoundingFrustum::BoundingFrustum()
@@ -139,5 +140,13 @@ bool BoundingFrustum::IsSphereInFrustum(BoundingBox* boundingBox)
 	D3DXVECTOR3 center;
 	float radius;
 	boundingBox->GetCenterAndRadius(&center, &radius);
+	return IsSphereInFrustum(&center, radius);
+}
+
+bool BoundingFrustum::IsSphereInFrustum(GameCollider * gameCollider)
+{
+	D3DXVECTOR3 center;
+	float radius;
+	gameCollider->GetWorldCenterRadius(&center, &radius);
 	return IsSphereInFrustum(&center, radius);
 }

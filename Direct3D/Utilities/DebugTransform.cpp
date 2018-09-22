@@ -26,7 +26,12 @@ DebugTransform::~DebugTransform()
 
 void DebugTransform::ConnectTransform(Transform * transform)
 {
-	this->transform = transform;
+	static Transform* savePtr = nullptr;
+	if (savePtr != transform)
+	{
+		angle = saveAngle = D3DXVECTOR3(0.f, 0.f, 0.f);
+	}
+	this->transform = savePtr = transform;
 }
 
 void DebugTransform::Update()
@@ -96,22 +101,24 @@ void DebugTransform::RenderGUI()
 {
 	if (this->transform != NULL)
 	{
-		ImGui::Begin("Transform");
-		{
-			ImGui::RadioButton("World", reinterpret_cast<int*>(&spaceType), 0); ImGui::SameLine();
-			ImGui::RadioButton("Local", reinterpret_cast<int*>(&spaceType), 1);
-			ImGui::Separator();
+		ImGui::BeginGroup();
+		ImGui::Separator();
+		ImGui::Separator();
+		ImGui::Text("Transform");
 
-			ImGui::InputFloat3("Position", &transform->position.x);
-			ImGui::InputFloat3("Scale", &transform->scale.x);
-			ImGui::InputFloat3("Rotate", &angle.x);
-			ImGui::Separator();
+		ImGui::RadioButton("World", reinterpret_cast<int*>(&spaceType), 0); ImGui::SameLine();
+		ImGui::RadioButton("Local", reinterpret_cast<int*>(&spaceType), 1);
+		ImGui::Separator();
 
-			ImGui::SliderFloat3("Pos", &transform->position.x,-100.f,100.f);
-			ImGui::SliderFloat3("Scaled", &transform->scale.x,0.01f,10.f);
-			ImGui::SliderFloat3("Rot", &angle.x,-6.28f,6.28f);
-		}
-		ImGui::End();
+		ImGui::InputFloat3("Position", &transform->position.x);
+		ImGui::InputFloat3("Scale", &transform->scale.x);
+		ImGui::InputFloat3("Rotate", &angle.x);
+		ImGui::Separator();
+
+		ImGui::SliderFloat3("Pos", &transform->position.x,-100.f,100.f);
+		ImGui::SliderFloat3("Scaled", &transform->scale.x,0.01f,10.f);
+		ImGui::SliderFloat3("Rot", &angle.x,-6.28f,6.28f);
+		
 
 		if (this->angle != this->saveAngle)
 		{
@@ -120,6 +127,9 @@ void DebugTransform::RenderGUI()
 
 		this->transform->UpdateTransform();
 		this->saveAngle = this->angle;
+		ImGui::Separator();
+		ImGui::Separator();
+		ImGui::EndGroup();
 	}
 }
 

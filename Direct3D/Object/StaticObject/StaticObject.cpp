@@ -3,10 +3,14 @@
 
 #include "./Bounding/GameCollider.h"
 #include "./Bounding/BoundingBox.h"
+#include "./Bounding/BoundingFrustum.h"
+
 #include "./Utilities/Transform.h"
 #include "./Object/GameObject/TagMessage.h"
 
 #include "./Renders/Instancing/InstanceRenderer.h"
+
+#include "./View/FreeCamera.h"
 
 StaticObject::StaticObject(string name)
 	:GameObject(name), instanceRenderer(nullptr)
@@ -14,9 +18,9 @@ StaticObject::StaticObject(string name)
 	this->AddCallback("Delete", [this](TagMessage msg) 
 	{
 		this->isLive = false;
-		Message_UINT message;
+		TagMessage message;
 		message.name = "DeleteObject";
-		message.UintData = reinterpret_cast<UINT>(this);
+		message.data = &this->name;
 		if (instanceRenderer)
 			instanceRenderer->SendMSG(message);
 	});
@@ -37,10 +41,18 @@ void StaticObject::Release()
 	colliderList.clear();
 }
 
+void StaticObject::Update()
+{
+	if (Scenes->GetIsTool())
+	{
+		this->isRender = MainCamera->GetFrustum()->IsSphereInFrustum(colliderList[0]);
+	}
+}
+
 void StaticObject::DebugRender()
 {
 	for (UINT i = 0; i < colliderList.size(); ++i)
-		colliderList[i]->Render();
+		colliderList[i]->Render(ColorRed,true);
 }
 
 
@@ -52,7 +64,7 @@ void StaticObject::UIUpdate()
 
 void StaticObject::UIRender()
 {
-	transform->UIRender();
+	
 }
 
 void StaticObject::AddCollider(GameCollider * collider)

@@ -5,6 +5,7 @@
 class SceneManager
 {
 	SingletonHeader(SceneManager)
+	Synthesize(bool,isTool,IsTool)
 private:
 	typedef unordered_map<string, class SceneNode*> Nodes;
 public:

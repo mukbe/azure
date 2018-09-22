@@ -6,7 +6,7 @@ SingletonCpp(SceneManager)
 
 
 SceneManager::SceneManager()
-	:current(nullptr)
+	:current(nullptr),isTool(true)
 {
 }
 

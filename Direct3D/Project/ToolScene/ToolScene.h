@@ -2,6 +2,10 @@
 
 #include "./Manager/SceneNode.h"
 #include <map>
+
+#include "./Renders/ShaderBuffer.h"
+
+
 class ToolBase;
 class ToolScene : public SceneNode
 {
@@ -43,3 +47,4 @@ T* ToolScene::GetTool(string name)
 		return nullptr;
 	}
 }
+
