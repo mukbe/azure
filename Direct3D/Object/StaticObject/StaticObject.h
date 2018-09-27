@@ -13,8 +13,10 @@ public:
 	virtual void Update()override;
 	virtual void DebugRender()override;
 	virtual void UIUpdate()override;
+	virtual void Render()override;
 	virtual void UIRender()override;
 
 	void AddCollider(class GameCollider* collider);
+	void AttachQuadTree(class QuadTreeSystem* quadTree);
 };
 

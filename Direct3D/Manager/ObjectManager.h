@@ -30,6 +30,7 @@ private:
 	ObjectContainer	objectContainer;
 private:
 	Synthesize(class CameraBase*, mainCamera,MainCamera)
+	Synthesize(bool ,isDebug,IsDebug)
 public:
 	void Release();
 	void PreUpdate();
@@ -38,6 +39,7 @@ public:
 	void PreRender();
 	void Render();
 	void PostRender();
+	void DebugRender();
 
 	void AddObject(ObjectType::Type type , ObjectType::Tag tag, class GameObject* object);
 	void DeleteObject(ObjectType::Type type, ObjectType::Tag tag, string name);

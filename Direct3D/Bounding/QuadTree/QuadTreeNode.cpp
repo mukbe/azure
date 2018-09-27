@@ -2,20 +2,22 @@
 #include "QuadTreeNode.h"
 
 #include "./Bounding/BoundingBox.h"
+#include "./Bounding/BoundingSphere.h"
 #include "./Bounding/BoundingFrustum.h"
 #include "./View/CameraBase.h"
+#include "./Object/StaticObject/StaticObject.h"
+#include "./Bounding/GameCollider.h"
 
 UINT QuadTreeNode::_renderingNodeCount = 0;
 
 QuadTreeNode::QuadTreeNode(int level , D3DXVECTOR3 minPos, D3DXVECTOR3 maxPos)
-	:level(level), isInFrustum(false)
+	:level(level)
 {
 	this->boundingBox = new BoundingBox(minPos, maxPos);
 	this->SubDevide();
 }
 
 QuadTreeNode::QuadTreeNode(QuadTreeNode * parent, CornerType cornerType)
-	:isInFrustum(false)
 {
 	D3DXVECTOR3 parentMin, parentMax,newMinPos,newMaxPos;
 	float width, height;
@@ -62,38 +64,47 @@ QuadTreeNode::~QuadTreeNode()
 	for (UINT i = 0; i < childs.size(); ++i)
 		SafeDelete(childs[i]);
 	childs.clear();
+	objectList.clear();
 }
 
-void QuadTreeNode::UpdateNode(BoundingFrustum * pFrustum)
+
+
+void QuadTreeNode::Update(class BoundingFrustum* pFrustum)
 {
-	if (CanDeepInTo(level) == true)
+	if (CanDeepInTo(level) == false)
 	{
-		isInFrustum = this->IsInFrustum(pFrustum);
+		bool isInFrustum = this->IsInFrustum(pFrustum);
+		if (isInFrustum)
+		{
+			for (UINT i = 0; i < objectList.size(); ++i)
+				objectList[i]->SetIsRender(true);
+
+			QuadTreeNode::_renderingNodeCount++;
+		}
 	}
 	else
 	{
-		isInFrustum = this->IsInFrustum(pFrustum);
+		bool isInFrustum = this->IsInFrustum(pFrustum);
 		if (isInFrustum)
 		{
-			childs[0]->UpdateNode(pFrustum);
-			childs[1]->UpdateNode(pFrustum);
-			childs[2]->UpdateNode(pFrustum);
-			childs[3]->UpdateNode(pFrustum);
-		}
-		else
-		{
-			childs[0]->SetIsInfrustum(false);
-			childs[1]->SetIsInfrustum(false);
-			childs[2]->SetIsInfrustum(false);
-			childs[3]->SetIsInfrustum(false);
-			
+			childs[0]->Update(pFrustum);
+			childs[1]->Update(pFrustum);
+			childs[2]->Update(pFrustum);
+			childs[3]->Update(pFrustum);
 		}
 	}
 }
 
 void QuadTreeNode::Render()
 {
-	if (CanDeepInTo(level) == true)
+	if (CanDeepInTo(level) == false)
+	{
+		if (this->IsInFrustum(MainCamera->GetFrustum()))
+		{
+			this->boundingBox->RenderAABB();
+		}
+	}
+	else
 	{
 		if (this->IsInFrustum(MainCamera->GetFrustum()))
 		{
@@ -103,12 +114,47 @@ void QuadTreeNode::Render()
 			childs[3]->Render();
 		}
 	}
+}
+
+void QuadTreeNode::AddObject(StaticObject * object)
+{
+	if (CanDeepInTo(level) == false)
+	{
+		bool intersects = false;
+		vector<GameCollider*> list = object->GetColliderList();
+		for (UINT i = 0; i < list.size(); ++i)
+		{
+			D3DXVECTOR3 worldCenter;
+			float radius;
+			list[i]->GetWorldCenterRadius(&worldCenter, &radius);
+			BoundingSphere sphere(worldCenter, radius);
+			intersects = this->boundingBox->Intersects(sphere);
+		}
+
+		if (intersects)
+		{
+			this->objectList.push_back(object);
+		}
+	}
 	else
 	{
-		if (this->IsInFrustum(MainCamera->GetFrustum()))
+		bool intersects = false;
+		vector<GameCollider*> list = object->GetColliderList();
+		for (UINT i = 0; i < list.size(); ++i)
 		{
-			QuadTreeNode::_renderingNodeCount++;
-			this->boundingBox->RenderAABB();
+			D3DXVECTOR3 worldCenter;
+			float radius;
+			list[i]->GetWorldCenterRadius(&worldCenter, &radius);
+			BoundingSphere sphere(worldCenter, radius);
+			intersects = this->boundingBox->Intersects(sphere);
+		}
+
+		if (intersects)
+		{
+			childs[0]->AddObject(object);
+			childs[1]->AddObject(object);
+			childs[2]->AddObject(object);
+			childs[3]->AddObject(object);
 		}
 	}
 }
@@ -128,14 +174,14 @@ bool QuadTreeNode::SubDevide()
 //TODO AABB 프러스텀 충돌 구현 후 추가 작업
 bool QuadTreeNode::IsInFrustum(BoundingFrustum* pFrustum)
 {
-	return isInFrustum = pFrustum->IsSphereInFrustum(boundingBox);
+	return pFrustum->IsSphereInFrustum(boundingBox);
 }
 
 void QuadTreeNode::SetIsInfrustum(bool b)
 {
 	if (CanDeepInTo(level) == true)
 	{
-		isInFrustum = b;
+		
 	}
 	else
 	{

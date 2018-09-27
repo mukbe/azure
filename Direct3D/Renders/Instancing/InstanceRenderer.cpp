@@ -15,7 +15,9 @@
 #include "./Renders/Instancing/InstanceShader.h"
 #include "./Renders/WorldBuffer.h"
 #include "./Utilities/Buffer.h"
+#include "./Utilities/BinaryFile.h"
 #include "./View/FreeCamera.h"
+#include "./Bounding/QuadTree/QuadTreeSystem.h"
 
 
 InstanceRenderer::InstanceRenderer(string name,UINT maxInstance)
@@ -54,6 +56,22 @@ InstanceRenderer::InstanceRenderer(string name,wstring fileName)
 			}
 		}
 	});
+
+	ModelData data = AssetManager->GetModelData(name);
+	vector<ModelAnimClip*> temp;
+	data.Clone(&materials, &bones, &meshes, &temp, &colliders);
+	temp.clear();
+	this->BindMeshData();
+	this->LoadData();
+	this->CreateBuffer();
+	this->UpdateBuffer();
+
+	
+	QuadTreeSystem* quadTree = (QuadTreeSystem*)Objects->FindObject(ObjectType::Type::Dynamic, ObjectType::Tag::View, "QuadTreeSystem");
+	if (quadTree) {
+		for (UINT i = 0; i < instanceList.size(); ++i)
+			((StaticObject*)instanceList[i])->AttachQuadTree(quadTree);
+	}
 }
 
 
@@ -171,6 +189,12 @@ void InstanceRenderer::Release()
 	SafeRelease(instanceBuffer);
 }
 
+void InstanceRenderer::PreUpdate()
+{
+	for (UINT i = 0; i < instanceList.size(); ++i)
+		instanceList[i]->SetIsRender(false);
+}
+
 void InstanceRenderer::PostUpdate()
 {
 	this->UpdateBuffer();
@@ -201,22 +225,7 @@ void InstanceRenderer::UpdateBuffer()
 	DeviceContext->Unmap(instanceBuffer, 0);
 }
 
-void InstanceRenderer::AddInstance(float autoSize)
-{
-	char str[48];
-	sprintf_s(str, "%s %d", name.c_str(), instanceList.size());
 
-	StaticObject* object = new StaticObject(str);
-	object->GetTransform()->SetWorldPosition(MainCamera->GetTransform()->GetWorldPosition() +
-		MainCamera->GetTransform()->GetForward() * 50.0f);
-	object->GetTransform()->SetScale(autoSize, autoSize, autoSize);
-
-	for (UINT i = 0; i < colliders.size(); ++i)
-		object->AddCollider(colliders[i]);
-	object->SetInstanceRenderer(this);
-	this->AddInstanceData(object);
-	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Object, object);
-}
 
 void InstanceRenderer::Render()
 {
@@ -247,6 +256,7 @@ void InstanceRenderer::Render()
 			part->material->UnBindBuffer();
 		}
 	}
+
 }
 
 void InstanceRenderer::UIRender()
@@ -258,6 +268,9 @@ void InstanceRenderer::UIRender()
 
 	if (ImGui::Button("AddInstance", ImVec2(100, 20)))
 		this->AddInstance(autoSize);
+	ImGui::SameLine();
+	if (ImGui::Button("SaveData", ImVec2(100, 20)))
+		this->SaveData();
 
 	ImGui::Separator();
 	
@@ -282,4 +295,70 @@ void InstanceRenderer::AddInstanceData(GameObject* object)
 	if (instanceList.size() >= maxInstanceCount)return;
 
 	this->instanceList.push_back(object);
+}
+
+void InstanceRenderer::SaveData()
+{
+	wstring file = L"../_Scenes/" + String::StringToWString(name) + L".data";
+
+	UINT size = instanceList.size(); 
+
+	BinaryWriter* w = new BinaryWriter();
+	w->Open(file);
+	{
+		w->UInt(size);
+		for (UINT i = 0; i < instanceList.size(); ++i)
+		{
+			string instanceName = instanceList[i]->GetName();
+			w->String(instanceName);
+			w->Byte(&instanceList[i]->GetFinalMatrix(), sizeof D3DXMATRIX);
+		}
+	}
+	w->Close();
+
+	SafeDelete(w);
+}
+
+void InstanceRenderer::LoadData()
+{
+	wstring file = L"../_Scenes/" + String::StringToWString(name) + L".data";
+
+	BinaryReader* r = new BinaryReader();
+	r->Open(file);
+	{
+		this->maxInstanceCount = r->UInt();
+
+		for (UINT i = 0; i < maxInstanceCount; ++i)
+		{
+			StaticObject* object = new StaticObject(r->String());
+			void* byte; D3DXMATRIX mat;
+			byte = &mat;
+			r->Byte(&byte, sizeof D3DXMATRIX);
+			object->GetTransform()->SetTransform(mat);
+			for (UINT i = 0; i < colliders.size(); ++i)
+				object->AddCollider(colliders[i]);
+			object->SetInstanceRenderer(this);
+			this->AddInstanceData(object);
+			Objects->AddObject(ObjectType::Type::Static, ObjectType::Tag::Object, object);
+		}
+	}
+	r->Close();
+	SafeDelete(r);
+}
+
+void InstanceRenderer::AddInstance(float autoSize)
+{
+	char str[48];
+	sprintf_s(str, "%s %d", name.c_str(), instanceList.size());
+
+	StaticObject* object = new StaticObject(str);
+	object->GetTransform()->SetWorldPosition(MainCamera->GetTransform()->GetWorldPosition() +
+		MainCamera->GetTransform()->GetForward() * 50.0f);
+	object->GetTransform()->SetScale(autoSize, autoSize, autoSize);
+
+	for (UINT i = 0; i < colliders.size(); ++i)
+		object->AddCollider(colliders[i]);
+	object->SetInstanceRenderer(this);
+	this->AddInstanceData(object);
+	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Object, object);
 }

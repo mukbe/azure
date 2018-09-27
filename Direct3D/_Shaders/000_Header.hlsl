@@ -212,7 +212,7 @@ float3 GetSpecular(float3 color,float3 lightDir,float3 normal,float3 toEye,float
 {
     float3 v = reflect(-lightDir, normal);
     float specFactor = pow(max(dot(v, toEye), 0.0f), specPower);
-    return color * specPower;
+    return color * specFactor;
 }
 
 //노멀맵 공간으로 변환

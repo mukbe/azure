@@ -5,6 +5,7 @@
 SingletonCpp(ObjectManager)
 
 ObjectManager::ObjectManager()
+	:isDebug(false)
 {
 	for (UINT i = 0; i < 2; ++i)
 	{
@@ -108,20 +109,44 @@ void ObjectManager::PreRender()
 
 void ObjectManager::Render()
 {
-	ObjectList* pList = &objectContainer[ObjectType::Type::Dynamic];
-	ObjectListIter listIter = pList->begin();
-	for (; listIter != pList->end(); ++listIter)
+	ObjectContainerIter containerIter = objectContainer.begin();
+
+	for (; containerIter != objectContainer.end(); ++containerIter)
 	{
-		for (UINT i = 0; i < listIter->second.size(); ++i)
+		ObjectList* pList = &containerIter->second;
+		ObjectListIter listIter = pList->begin();
+		for (; listIter != pList->end(); ++listIter)
 		{
-			if (listIter->second[i]->GetisActive())
-				listIter->second[i]->Render();
+			for (UINT i = 0; i < listIter->second.size(); ++i)
+			{
+				if (listIter->second[i]->GetisActive())
+					listIter->second[i]->Render();
+			}
 		}
 	}
 }
 
 void ObjectManager::PostRender()
 {
+}
+
+void ObjectManager::DebugRender()
+{
+	ObjectContainerIter containerIter = objectContainer.begin();
+
+	for (; containerIter != objectContainer.end(); ++containerIter)
+	{
+		ObjectList* pList = &containerIter->second;
+		ObjectListIter listIter = pList->begin();
+		for (; listIter != pList->end(); ++listIter)
+		{
+			for (UINT i = 0; i < listIter->second.size(); ++i)
+			{
+				if (listIter->second[i]->GetisActive())
+					listIter->second[i]->DebugRender();
+			}
+		}
+	}
 }
 
 void ObjectManager::AddObject(ObjectType::Type type, ObjectType::Tag tag, class GameObject* object)

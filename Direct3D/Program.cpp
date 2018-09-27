@@ -8,6 +8,7 @@
 #include "./Project/AnimationTool/AnimationTool.h"
 #include "./Project/TerrainTool/TerrainTool.h"
 #include "./Project/ToolScene/ToolScene.h"
+#include "./Project/Game/PlayScene.h"
 
 
 Program::Program()
@@ -27,7 +28,7 @@ Program::Program()
 	RenderRequest->AddRenderer("alpha", alpha);
 
 	//Scenes->AddScene("anim", new AnimationTool);
-	Scenes->AddScene("tool", new ToolScene);
+	Scenes->AddScene("tool", new PlayScene);
 	//Scenes->AddScene("terrain", new TerrainTool);
 }
 

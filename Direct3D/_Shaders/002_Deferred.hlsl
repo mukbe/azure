@@ -8,6 +8,7 @@ struct BasicPixelInput
     float2 uv : TEXCOORD0;
 };
 
+
 BasicPixelInput BasicDeferredVS(VertexTexture input)
 {
     BasicPixelInput output;
@@ -30,8 +31,6 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
     float3 specColor = data.SpecColor;
     float specPower = data.SpecPow;
 
-    return worldPos;
-
     if(data.RenderType <= 1.0f)
     {
         float4 projectionToLight = mul(worldPos, SunViewProjection);
@@ -41,8 +40,13 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
         float diffuseFactor = saturate(dot(worldNormal.xyz, -SunDir));
         float3 ambient = albedo * SunColor.rgb * albedoBias;
         float3 diffuseColor = albedo * SunColor.rgb * diffuseFactor;
-
-        return float4(ambient + diffuseColor, 1.0f);
+        float3 specColor = float3(0, 0, 0);
+       if(diffuseFactor > 0.0f)
+        {
+            float3 reflection = normalize(2.0f *  worldNormal - (-SunDir));
+            specColor = data.SpecColor * SunColor.rgb * saturate(pow(saturate(dot(reflection, normalize(GetCameraPosition() - worldPos.xyz))), specPower));
+        }
+        return float4(ambient + diffuseColor + specColor, 1.0f);
     }
     else if (data.RenderType > 1.0f && data.RenderType <= 2.0f)
     {

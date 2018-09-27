@@ -30,7 +30,7 @@ G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float3 spec
 	// Pack all the data into the GBuffer structure
     Out.normal = float4(normal * 0.5f + 0.5f, renderType);
     Out.diffuse = float4(diffuse.rgb, depth);
-    Out.spec = float4(specColor, SpecPowerNorm);
+    Out.spec = float4(specColor, SpecPower);
 
     return Out;
 
@@ -100,7 +100,7 @@ ColorNormalPixelInput ColorDeferredVS(VertexColorNormal input)
     output.position = output.worldPos = mul(input.position, World);
     output.position = mul(output.position, ViewProjection);
 
-    output.normal = mul(input.normal, (float3x3) World);
+    output.normal = normalize(mul(input.normal, (float3x3) World));
 
     output.color = input.color;
 
@@ -110,10 +110,7 @@ ColorNormalPixelInput ColorDeferredVS(VertexColorNormal input)
 G_Buffer ColorDeferredPS(ColorNormalPixelInput input)
 {
     G_Buffer output;
-
-    //output.worldPos = input.worldPos;
-    output.diffuse = input.color;
-    output = PackGBuffer(output, input.normal, output.diffuse.rgb, float3(1, 1, 1),1.0f, 1.0f,1.5f);
+    output = PackGBuffer(output, normalize(input.normal), input.color.rgb, float3(1, 1, 1), 1.0f, 20.0f, 0.5f);
 
     return output;
 }

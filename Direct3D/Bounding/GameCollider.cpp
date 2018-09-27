@@ -6,6 +6,8 @@
 #include "AnimationCollider.h"
 #include "../Utilities/BinaryFile.h"
 
+#include "BoundingSphere.h"
+
 GameCollider::GameCollider(GameObject* parentObject,BoundingBox* bounding)
 	:parentObject(parentObject),boundingBox(bounding),name("Collider"),type(UnKnown)
 {
@@ -54,6 +56,24 @@ void GameCollider::Render(D3DXCOLOR color,bool bZbufferOn)
 bool GameCollider::IsIntersect(GameCollider * collider)
 {
 	return BoundingBox::IntersectsOBB(this->finalMatrix, this->boundingBox, collider->GetFinalMatrix(), collider->boundingBox);
+}
+
+bool GameCollider::IsIntersectSphere(GameCollider * box)
+{
+	D3DXVECTOR3 worldPosA,worldPosB;
+	float worldRadiusA,worldRadiusB;
+	this->GetWorldCenterRadius(&worldPosA, &worldRadiusA);
+	box->GetWorldCenterRadius(&worldPosB, &worldRadiusB);
+
+	float result = D3DXVec3LengthSq(&(worldPosA - worldPosB));
+
+	if ((double)worldRadiusA * (double)worldRadiusA + 2.0 * (double)worldRadiusA * (double)worldRadiusB
+		+ (double)worldRadiusB * (double)worldRadiusB <= (double)result)
+		return false;
+	else
+		return true;
+	
+	return false;
 }
 
 void GameCollider::GetCorners(vector<D3DXVECTOR3>& output)

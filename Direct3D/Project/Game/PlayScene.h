@@ -12,7 +12,11 @@ public:
 	void Update();
 	void PostUpdate();
 	void ShadowRender();
+	void PreRender();
 	void Render();
 	void UIRender();
+
+	void InitHungyn();
+	void InitSoonwoo();
 };
 
