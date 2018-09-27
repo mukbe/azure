@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Object\GameUnit\GameUnit.h" />
+    <ClInclude Include="Particle\ParticleSystem.h" />
+    <ClInclude Include="Renders\AlphaRenderer.h" />
     <ClInclude Include="Bounding\AnimationCollider.h" />
     <ClInclude Include="Bounding\BoundingFrustum.h" />
     <ClInclude Include="Bounding\BoundingCapsule.h" />
@@ -31,6 +34,7 @@
     <ClInclude Include="ComputeShader\ComputeShader.h" />
     <ClInclude Include="Bounding\GameCollider.h" />
     <ClInclude Include="Manager\DataBase.h" />
+    <ClInclude Include="Project\LoadingScene\LoadingScene.h" />
     <ClInclude Include="Project\ToolScene\Picking.h" />
     <ClInclude Include="Project\Game\PlayScene.h" />
     <ClInclude Include="Project\ToolScene\Inspector.h" />
@@ -117,6 +121,9 @@
     <ClInclude Include="View\Projection.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Object\GameUnit\GameUnit.cpp" />
+    <ClCompile Include="Particle\ParticleSystem.cpp" />
+    <ClCompile Include="Renders\AlphaRenderer.cpp" />
     <ClCompile Include="Bounding\AnimationCollider.cpp" />
     <ClCompile Include="Bounding\BoundingFrustum.cpp" />
     <ClCompile Include="Bounding\BoundingCapsule.cpp" />
@@ -129,6 +136,7 @@
     <ClCompile Include="Bounding\GameCollider.cpp" />
     <ClCompile Include="Manager\DataBase.cpp" />
     <ClCompile Include="Environment\Ocean + Func.cpp" />
+    <ClCompile Include="Project\LoadingScene\LoadingScene.cpp" />
     <ClCompile Include="Project\ToolScene\Picking.cpp" />
     <ClCompile Include="Project\Game\PlayScene.cpp" />
     <ClCompile Include="Project\ToolScene\Inspector.cpp" />
@@ -313,6 +321,9 @@
     <None Include="_Shaders\006_UI.hlsl">
       <FileType>Document</FileType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\007_Alpha.hlsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F89A7778-CBF0-4E22-B019-B7729ABB8281}</ProjectGuid>

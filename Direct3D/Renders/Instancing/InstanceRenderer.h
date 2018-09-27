@@ -22,11 +22,13 @@ private:
 	vector<class GameObject*>			instanceList;
 	vector<D3DXMATRIX>					localTransforms;
 private:
-	Material * GetMaterialByName(wstring name);
+	class Material * GetMaterialByName(wstring name);
 	void BindMeshData();
 	void CreateBuffer();
 	void UpdateBuffer();
-	void AddInstance();
+	void AddInstance(float autoSize);
+
+	
 public:
 	InstanceRenderer(string name,UINT maxInstance);		//툴작업용 생성자
 	InstanceRenderer(string name,wstring fileName);		//플레이씬용 생정자 

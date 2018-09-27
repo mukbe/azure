@@ -40,12 +40,14 @@ private:
 	void PreRender();
 	void Render();
 	void PostRender();
+	void AlphaRender();
 	void UIRender();
 
 	Rendering rendering;
 
 	Renderer* shadow;
 	Renderer* deferred;
+	Renderer* alpha;
 };
 
 #define RenderRequest RenderManager::Get()

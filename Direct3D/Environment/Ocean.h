@@ -13,6 +13,7 @@ private:
 	ID3D11Buffer*					indexBuffer;
 
 	vector<D3DXVECTOR2>				instanceData;
+	vector<D3DXVECTOR2>				drawInsatnceData;
 	vector<VertexTextureNormal>		vertexData;
 	vector<UINT>					indexData;
 private:

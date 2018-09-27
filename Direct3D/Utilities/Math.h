@@ -54,6 +54,12 @@ public:
 
 	static float Angle(D3DXVECTOR3 v1, D3DXVECTOR3 v2);
 
+	static void ComputeNormal
+	(
+		vector<VertexTextureNormal>& vertexDatas,
+		vector<UINT>& indexDatas
+	);
+
 	static void ComputeTangentAngBinormal
 	(
 		vector<VertexTextureBlendNT>& vertexDatas,

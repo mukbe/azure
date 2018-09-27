@@ -55,6 +55,7 @@ void Picking::Update()
 			for (UINT i = 0; i < staticListPtr->size(); ++i)
 			{
 				StaticObject* object = (StaticObject*)((*staticListPtr)[i]);
+				if (object->GetIsRender() == false)continue;
 				vector<GameCollider*> colliderList = object->GetColliderList();
 				for (UINT j = 0; j < colliderList.size(); ++j)
 				{

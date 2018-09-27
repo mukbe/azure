@@ -21,8 +21,10 @@ Hierarchy::Hierarchy(ToolScene * toolScene)
 	name = "Hierarchy";
 
 	freeCamera = new FreeCamera;
+	//freeCamera->GetTransform()->SetWorldPosition(278.f, 22.f, 566.f);
+	//freeCamera->GetTransform()->RotateSelf(0.f, 180.f * ONE_RAD, 0.f);
 	Objects->SetMainCamera(freeCamera);
-	
+
 	scattering = new Scattering(freeCamera, "level");
 	ocean = new Ocean();
 
@@ -31,15 +33,15 @@ Hierarchy::Hierarchy(ToolScene * toolScene)
 	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Enviroment, ocean);
 	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Enviroment, new Terrain);
 
-	InstanceRenderer* fishingBox = new InstanceRenderer("FishingBox", 30);
+	InstanceRenderer* fishingBox = new InstanceRenderer("FishingBox", 20);
 	fishingBox->InitializeData("FishingBox");
 	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Instancing, fishingBox);
 
-	InstanceRenderer* tree1 = new InstanceRenderer("Tree1", 30);
+	InstanceRenderer* tree1 = new InstanceRenderer("Tree1", 20);
 	tree1->InitializeData("Tree1");
 	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Instancing, tree1);
 
-	InstanceRenderer* tree2 = new InstanceRenderer("Tree2", 30);
+	InstanceRenderer* tree2 = new InstanceRenderer("Tree2", 20);
 	tree2->InitializeData("Tree2");
 	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Instancing, tree2);
 }

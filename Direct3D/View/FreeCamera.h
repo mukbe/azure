@@ -1,5 +1,7 @@
 #pragma once
 #include "CameraBase.h"
+
+
 class FreeCamera : public CameraBase
 {
 private:

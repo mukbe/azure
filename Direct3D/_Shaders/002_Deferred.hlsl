@@ -7,16 +7,18 @@ struct BasicPixelInput
     float2 uv : TEXCOORD0;
 };
 
+
 BasicPixelInput BasicDeferredVS(VertexTexture input)
 {
     BasicPixelInput output;
 
     output.position = float4(input.position.xy, 0.0f, 1.0f);
-
+    
     output.uv = output.position.xy;
    
     return output;
 }
+
 
 float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
 {
@@ -27,22 +29,17 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
     float3 albedo = data.DiffuseColor;
     float3 specColor = data.SpecColor;
     float specPower = data.SpecPow;
-    float specIntensity = data.SpecIntensity;
 
 
-    if(data.RenderType > 0.0f && data.RenderType <= 1.0f)
+    if(data.RenderType <= 1.0f)
     {
         float4 projectionToLight = mul(worldPos, SunViewProjection);
-
-        //return _sunLightsahdowMap.Sample(_basicSampler, input.uv);
-
+     
         float shadowFactor = CalcShadowFactor(projectionToLight, _sunLightsahdowMap, _shadowSampler);
 
-        //CalcLighting
         float diffuseFactor = saturate(dot(worldNormal.xyz, -SunDir));
-        float3 ambient = albedo * SunColor.rgb * 0.5;
+        float3 ambient = albedo * SunColor.rgb * 0.4f;
         float3 diffuseColor = albedo * diffuseFactor * SunColor.rgb;
-        //	finalColor += DirLightColor.rgb * pow(NDotH, material.specPow) * material.specIntensity;
 
         return float4(ambient + diffuseColor, 1.0f);
     }

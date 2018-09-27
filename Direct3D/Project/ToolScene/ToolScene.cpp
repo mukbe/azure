@@ -29,9 +29,7 @@ ToolScene::ToolScene()
 	ToolIter iter = toolList.begin();
 	for (; iter != toolList.end(); ++iter)
 		iter->second->Init();
-
-	testTexture = nullptr;
-
+	camBuffer = new CamBuffer;
 }
 
 
@@ -63,12 +61,13 @@ void ToolScene::PreUpdate()
 
 void ToolScene::Update()
 {
+	Objects->Update();
+
 	ToolIter iter = toolList.begin();
 	for (; iter != toolList.end(); ++iter)
 	{
 		iter->second->Update();
 	}
-	Objects->Update();
 }
 
 void ToolScene::PostUpdate()
@@ -91,7 +90,8 @@ void ToolScene::Render()
 		iter->second->Render();
 	}
 
-
+	camBuffer->data.pos = MainCamera->GetTransform()->GetWorldPosition();
+	camBuffer->SetPSBuffer(7);
 }
 
 void ToolScene::UIRender()

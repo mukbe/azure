@@ -38,19 +38,22 @@ void GameObject::PreUpdate()
 
 void GameObject::Update()
 {
-	for (UINT i = 0; i < reserveMessageList.size(); ++i)
+	if (reserveMessageList.empty() == false)
 	{
-		reserveMessageList[i].delayTime -= DeltaTime;
-
-		if (reserveMessageList[i].delayTime < 0.0f)
+		for (UINT i = 0; i < reserveMessageList.size(); ++i)
 		{
-			CallbackIter iter = callbackList.find(reserveMessageList[i].name);
+			reserveMessageList[i].delayTime -= DeltaTime;
 
-			if (iter != callbackList.end())
-				iter->second(reserveMessageList[i]);
+			if (reserveMessageList[i].delayTime < 0.0f)
+			{
+				CallbackIter iter = callbackList.find(reserveMessageList[i].name);
 
-			reserveMessageList.erase(reserveMessageList.begin() + i--);
-			Sleep(1);
+				if (iter != callbackList.end())
+					iter->second(reserveMessageList[i]);
+
+				reserveMessageList.erase(reserveMessageList.begin() + i--);
+				Sleep(1);
+			}
 		}
 	}
 }

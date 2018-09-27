@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Ocean.h"
 
+#include "./Bounding/BoundingSphere.h"
+
 #include "./Utilities/Buffer.h"
 #include "./Renders/Texture.h"
 #include "./Renders/Instancing/InstanceShader.h"
@@ -64,6 +66,7 @@ void Ocean::ComputingOcean()
 
 void Ocean::FrustumCulling()
 {
+
 }
 
 D3DXVECTOR2 Ocean::GetSpectrum(int n_prime, int m_prime)

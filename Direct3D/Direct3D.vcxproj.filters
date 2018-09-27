@@ -88,6 +88,10 @@
     <ClCompile Include="Utilities\Transform.cpp" />
     <ClCompile Include="Project\ToolScene\Picking.cpp" />
     <ClCompile Include="Manager\DataBase.cpp" />
+    <ClCompile Include="Project\LoadingScene\LoadingScene.cpp" />
+    <ClCompile Include="Renders\AlphaRenderer.cpp" />
+    <ClCompile Include="Particle\ParticleSystem.cpp" />
+    <ClCompile Include="Object\GameUnit\GameUnit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renders\ShadowRenderer.h" />
@@ -186,6 +190,10 @@
     <ClInclude Include="Utilities\Transform.h" />
     <ClInclude Include="Project\ToolScene\Picking.h" />
     <ClInclude Include="Manager\DataBase.h" />
+    <ClInclude Include="Project\LoadingScene\LoadingScene.h" />
+    <ClInclude Include="Renders\AlphaRenderer.h" />
+    <ClInclude Include="Particle\ParticleSystem.h" />
+    <ClInclude Include="Object\GameUnit\GameUnit.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />
@@ -205,5 +213,6 @@
     <None Include="_Shaders\005_OceanRaw.hlsl" />
     <None Include="_Shaders\005_OceanHigh.hlsl" />
     <None Include="_Shaders\006_UI.hlsl" />
+    <None Include="_Shaders\007_Alpha.hlsl" />
   </ItemGroup>
 </Project>

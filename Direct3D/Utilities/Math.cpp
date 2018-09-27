@@ -82,6 +82,50 @@ float Math::Angle(D3DXVECTOR3 v1, D3DXVECTOR3 v2)
 	return angle;
 }
 
+void Math::ComputeNormal(vector<VertexTextureNormal>& vertexDatas,vector<UINT>& indexDatas)
+{
+	//초기화 하고 시작
+	for (UINT i = 0; i < vertexDatas.size(); ++i)
+		vertexDatas[i].normal = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	//삼각형 갯수
+	DWORD triNum = indexDatas.size() / 3;
+
+	for (DWORD i = 0; i < triNum; i++)
+	{
+		//해당 삼각형의 정점 인덱스
+		DWORD i0 = indexDatas[(i * 3) + 0];
+		DWORD i1 = indexDatas[(i * 3) + 1];
+		DWORD i2 = indexDatas[(i * 3) + 2];
+
+		//정점 3개
+		D3DXVECTOR3 v0 = vertexDatas[i0].position;
+		D3DXVECTOR3 v1 = vertexDatas[i1].position;
+		D3DXVECTOR3 v2 = vertexDatas[i2].position;
+
+		//Edge
+		D3DXVECTOR3 edge1 = v1 - v0;
+		D3DXVECTOR3 edge2 = v2 - v0;
+
+		//Cross
+		D3DXVECTOR3 cross;
+		D3DXVec3Cross(&cross, &edge1, &edge2);
+
+		//Normal
+		D3DXVECTOR3 normal;
+		D3DXVec3Normalize(&normal, &cross);
+
+		//증가 시킨다.
+		vertexDatas[i0].normal += normal;
+		vertexDatas[i1].normal += normal;
+		vertexDatas[i2].normal += normal;
+	}
+
+	//최종 적으로 Normalvector 정규화한다.
+	for (DWORD i = 0; i < vertexDatas.size(); i++)
+		D3DXVec3Normalize(&vertexDatas[i].normal, &vertexDatas[i].normal);
+}
+
 void Math::ComputeTangentAngBinormal(vector<VertexTextureBlendNT>& vertexDatas, vector<UINT> inputIndicis, DWORD NumTris, DWORD NumVertices)
 {
 	

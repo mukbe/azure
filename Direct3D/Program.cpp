@@ -3,10 +3,13 @@
 
 #include "./Renders/DeferredRenderer.h"
 #include "./Renders/ShadowRenderer.h"
-#include "./Project/AnimationTool/AnimationTool.h"
+#include "./Renders/AlphaRenderer.h"
 
+#include "./Project/AnimationTool/AnimationTool.h"
 #include "./Project/TerrainTool/TerrainTool.h"
 #include "./Project/ToolScene/ToolScene.h"
+
+
 Program::Program()
 {
 	States::Create();
@@ -15,9 +18,14 @@ Program::Program()
 	JsonHelper::ReadData(L"LevelEditor.json", jsonRoot);
 
 	AssetManager->LoadAsset();
-
-	RenderRequest->AddRenderer("deferred", new DeferredRenderer);
+	
+	DeferredRenderer* deferred = new DeferredRenderer;
+	RenderRequest->AddRenderer("deferred", deferred);
 	RenderRequest->AddRenderer("shadow", new ShadowRenderer);
+	AlphaRenderer* alpha = new AlphaRenderer;
+	alpha->SetDepthStencilView(deferred->GetDepthStencilView());
+	RenderRequest->AddRenderer("alpha", alpha);
+
 	//Scenes->AddScene("anim", new AnimationTool);
 	Scenes->AddScene("tool", new ToolScene);
 	//Scenes->AddScene("terrain", new TerrainTool);

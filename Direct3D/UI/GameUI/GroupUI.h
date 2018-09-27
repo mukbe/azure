@@ -1,5 +1,6 @@
 #pragma once
-class GroupUI
+#include "../BaseUI.h"
+class GroupUI : public BaseUI
 {
 private:
 	

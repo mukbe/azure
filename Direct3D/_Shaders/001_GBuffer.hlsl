@@ -7,7 +7,7 @@ Texture2D _normalTex : register(t3);
 Texture2D _detailTex : register(t4);
 
 //MRT0 Normal.xyz, RenderType(float)
-//MRT1 Diffuse.rgb, specIntensity(float)
+//MRT1 Diffuse.rgb,depth
 //MRT2 Specr.rgb, SpecPower(float)
 //MRT3 DepthMap
 
@@ -15,7 +15,7 @@ Texture2D _detailTex : register(t4);
 //RenderType -- 1.0f ~ 1.9f == 빛계산 안함(GBuffer로 넘어온 Diffuse출력) 
 
 G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float3 specColor,
-    float SpecIntensity, float SpecPower, float renderType)
+    float depth, float SpecPower, float renderType)
 {
     G_Buffer Out = buffer;
 
@@ -24,8 +24,8 @@ G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float3 spec
 
 	// Pack all the data into the GBuffer structure
     Out.normal = float4(normal * 0.5f + 0.5f, renderType);
-    Out.diffuse = float4(diffuse.rgb, SpecIntensity);
-    Out.spec = float4(specColor, SpecPowerNorm);
+    Out.diffuse = float4(diffuse.rgb, depth);
+    Out.spec = float4(specColor, SpecPower);
 
     return Out;
 
@@ -157,6 +157,7 @@ struct ModelPixelInput
     float2 uv : TEXCOORD0;
     float3 normal : NORMAL0;
     float3 tangent : TANGENT0;
+    float depth : TEXCOOORD1;
 };
 
 
@@ -180,6 +181,8 @@ ModelPixelInput ModelDeferredVS(VertexTextureBlendNT input)
 
     output.uv = input.uv;
 
+    output.depth = output.position.z / output.position.w;
+
     return output;
 }
 
@@ -194,12 +197,12 @@ G_Buffer ModelDeferredPS(ModelPixelInput input)
     output.normal = float4(NormalMapSpace(_normalTex.Sample(_basicSampler, input.uv).xyz, input.normal, input.tangent), 1);
     output.spec = float4(1, 1, 1, 2);
 
-    output = PackGBuffer(output, input.normal, diffuse,SpecColor.rgb,SpecColor.a,Shiness,0.5f);
+    output = PackGBuffer(output, input.normal, diffuse,SpecColor.rgb,input.depth,Shiness,0.5f);
     return output;
 }
 
 //===================================================
-//Deferred Object
+//Deferred Instancing Object
 //===================================================
 
 ModelPixelInput InstanceVS(InstanceInputVS input)
@@ -214,8 +217,10 @@ ModelPixelInput InstanceVS(InstanceInputVS input)
     output.tangent = mul(input.tangent, (float3x3) finalMatrix);
 
     output.position = mul(output.position, ViewProjection);
-
+    
     output.uv = input.uv;
+
+    output.depth = output.position.z / output.position.w;
 
     return output;
 }
@@ -229,12 +234,8 @@ G_Buffer InstancePS(ModelPixelInput input)
 
     if (diffuse4.a < 0.1f)
         discard;
-
-    //output.worldPos = input.worldPos;
-    //output.normal = input.normal; //float4(NormalMapSpace(_normalTex.Sample(_basicSampler, input.uv).xyz, input.normal, input.tangent), 0.5f);
-    output.spec = float4(1, 1, 1, 2);
-
-    output = PackGBuffer(output, input.normal, diffuse4.rgb, SpecColor.rgb, SpecColor.a, Shiness, 0.9f);
+    
+    output = PackGBuffer(output, input.normal, diffuse4.rgb, SpecColor.rgb, input.depth, Shiness, 0.9f);
     return output;
 }
 //===================================================
