@@ -44,6 +44,7 @@ public:
 	Transform();
 	~Transform();
 
+	void UIRender();
 	void RenderGizmo();
 
 	D3DXMATRIX GetFinalMatrix()const { return this->matFinal; }

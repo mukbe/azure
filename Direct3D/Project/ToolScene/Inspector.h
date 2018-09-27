@@ -4,6 +4,8 @@ class Inspector : public ToolBase
 {
 private:
 	class Hierarchy* hierarchy;
+	class DebugTransform* debugTransform;
+	Synthesize(class GameObject*, targetObject,TargetObject)
 public:
 	Inspector(class ToolScene* toolScene);
 	~Inspector();

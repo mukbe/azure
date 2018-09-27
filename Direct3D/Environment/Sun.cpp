@@ -116,6 +116,11 @@ float * Environment::Sun::GetPosPtr()
 	return sunBuffer->GetPosPtr();
 }
 
+D3DXVECTOR3 Environment::Sun::GetPos()
+{
+	return sunBuffer->GetPos();
+}
+
 void Environment::Sun::SetColor(D3DXCOLOR color)
 {
 	sunBuffer->SetColor(color);

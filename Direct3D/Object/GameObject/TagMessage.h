@@ -5,6 +5,7 @@ struct TagMessage
 {
 	string name;
 	float delayTime;
+	void* data;
 
 	TagMessage():name(""),delayTime(0.0f){}
 	TagMessage(string name, float delayTime = 0.0f):name(name),delayTime(delayTime) {}
@@ -35,6 +36,7 @@ struct Message_GameObject : public TagMessage
 {
 	class GameObject* targetData;
 };
+
 
 struct Message_GameObjectList : public TagMessage
 {

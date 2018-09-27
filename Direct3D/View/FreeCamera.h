@@ -1,5 +1,7 @@
 #pragma once
 #include "CameraBase.h"
+
+
 class FreeCamera : public CameraBase
 {
 private:
@@ -17,7 +19,7 @@ public:
 	virtual void Releaes();
 	virtual void Update();
 	virtual void Render();
-
+	virtual void UIRender();
 private:
 	void ControlCamera();
 	void UpdateView();

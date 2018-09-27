@@ -4,6 +4,7 @@
 #include "ToolBase.h"
 #include "Hierarchy.h"
 #include "Inspector.h"
+#include "Picking.h"
 
 #include "../TerrainTool/Terrain.h"
 #include "../TerrainTool/Scattering.h"
@@ -11,6 +12,8 @@
 #include "./View/FreeCamera.h"
 
 #include "./Environment/Ocean.h"
+
+#include "./Utilities/ImGuiHelper.h"
 
 
 ToolScene::ToolScene()
@@ -21,11 +24,12 @@ ToolScene::ToolScene()
 
 	toolList.insert(make_pair(ToolType::Hierarchy, new Hierarchy(this)));
 	toolList.insert(make_pair(ToolType::Inspector, new Inspector(this)));
+	toolList.insert(make_pair(ToolType::Unknown, new Picking(this)));
 
 	ToolIter iter = toolList.begin();
 	for (; iter != toolList.end(); ++iter)
 		iter->second->Init();
-
+	camBuffer = new CamBuffer;
 }
 
 
@@ -52,21 +56,23 @@ void ToolScene::Release()
 
 void ToolScene::PreUpdate()
 {
-	
+	Objects->PreUpdate();
 }
 
 void ToolScene::Update()
 {
+	Objects->Update();
+
 	ToolIter iter = toolList.begin();
 	for (; iter != toolList.end(); ++iter)
 	{
 		iter->second->Update();
 	}
-
 }
 
 void ToolScene::PostUpdate()
 {
+	Objects->PostUpdate();
 }
 
 void ToolScene::PreRender()
@@ -76,18 +82,54 @@ void ToolScene::PreRender()
 
 void ToolScene::Render()
 {
+	Objects->Render();
+
 	ToolIter iter = toolList.begin();
 	for (; iter != toolList.end(); ++iter)
 	{
 		iter->second->Render();
 	}
+
+	camBuffer->data.pos = MainCamera->GetTransform()->GetWorldPosition();
+	camBuffer->SetPSBuffer(7);
 }
 
 void ToolScene::UIRender()
 {
-	ToolIter iter = toolList.begin();
-	for (; iter != toolList.end(); ++iter)
+	static bool isDemoOn = false;
+	static bool isHierarchyOn = true;
+	static bool isInspectorOn = true;
+	static bool isAssetOn = false;
+
+	ImGui::BeginMainMenuBar();
 	{
-		iter->second->UIRender();
+		if (ImGui::BeginMenu("File"))
+		{
+			if (ImGui::MenuItem("Demo"))
+				isDemoOn = !isDemoOn;
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Tool"))
+		{
+			if (ImGui::MenuItem("Hierarchy"))
+				isHierarchyOn = !isHierarchyOn;
+			if (ImGui::MenuItem("Inspector"))
+				isInspectorOn = !isInspectorOn;
+			if (ImGui::MenuItem("Asset"))
+				isAssetOn = !isAssetOn;
+			
+			ImGui::EndMenu();
+		}
 	}
+	ImGui::EndMainMenuBar();
+
+	if (isDemoOn)
+		ImGui::ShowDemoWindow();
+	if (isHierarchyOn)
+		toolList[ToolType::Hierarchy]->UIRender();
+	if (isInspectorOn)
+		toolList[ToolType::Inspector]->UIRender();
+	if (isAssetOn)
+		AssetManager->UIRender();
+
 }

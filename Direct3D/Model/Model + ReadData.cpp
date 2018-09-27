@@ -60,7 +60,6 @@ void Model::BindMeshData()
 		}
 		else
 			bone->parent = nullptr;
-
 	}
 
 	for (size_t i = 0; i < meshes.size(); i++)
@@ -89,6 +88,7 @@ void Models::LoadMaterial(wstring file, vector<class Material*> * materials)
 
 		string name;
 		JsonHelper::GetValue(value, "Name", name);
+		name = Path::GetFileNameWithoutExtension(name);
 		material->SetName(String::StringToWString(name));
 
 		D3DXCOLOR color;
@@ -194,7 +194,7 @@ void Models::ReadMeshData(wstring file, vector<ModelBone*>* bones, vector<ModelM
 			ModelMeshPart* meshPart = new ModelMeshPart();
 
 			meshPart->parent = mesh;
-			meshPart->materialName = String::StringToWString(r->String());
+			meshPart->materialName = Path::GetFileNameWithoutExtension(String::StringToWString(r->String()));
 
 			//VertexData
 			{

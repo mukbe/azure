@@ -1,4 +1,7 @@
 #pragma once
+
+#define ScaleOffset 10.0f
+
 class DebugTransform
 {
 private:

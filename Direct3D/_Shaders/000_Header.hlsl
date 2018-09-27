@@ -34,6 +34,7 @@ cbuffer MaterialBuffer : register(b3)
     float DetailFactor;
     float2 MaterialPadding;
 }
+
 cbuffer SunBuffer : register(b4)
 {
     matrix SunView;
@@ -58,7 +59,7 @@ cbuffer ModelBuffer : register(b6)
 }
 
 //MRT0 Normal.xyz, RenderType(float)
-//MRT1 Diffuse.rgb,SpecIntensity
+//MRT1 Diffuse.rgb,Depth
 //MRT2 Specr.rgb, SpecPower(float)
 //MRT3 DepthMap
 
@@ -69,11 +70,10 @@ cbuffer ModelBuffer : register(b6)
 Texture2D _deferredNormal : register(t0);
 Texture2D _deferredAlbedo : register(t1);
 Texture2D _deferredSpecular : register(t2);
-Texture2D _deferredWorld : register(t3);
+Texture2D _defferedWorld : register(t3);
 Texture2D _deferredDepth : register(t4);
 
 Texture2D _sunLightsahdowMap : register(t5);
-
 
 SamplerState _basicSampler : register(s0);
 SamplerComparisonState _shadowSampler : register(s2);
@@ -126,6 +126,12 @@ struct G_Buffer
     float4 diffuse : SV_Target1;
     float4 spec : SV_Target2;
 };
+
+struct G_Alpha
+{
+    float4 alpha : SV_Target3;
+};
+
 struct GBuffer_Data
 {
     float LinearDepth;
@@ -133,7 +139,7 @@ struct GBuffer_Data
     float3 SpecColor;
     float3 Normal;
     float SpecPow;
-    float SpecIntensity;
+    float depth;
     float RenderType;
 };
 
@@ -193,10 +199,20 @@ float4 GetSpecularColor(float4 color, float3 direction, float3 normal, float3 ey
     //float3 reflection = reflect(direction, normal);
     //return color * pow(saturate(dot(reflection, eye)), power);
 
+    //float3 v = reflect(-direction, normal);
+    //float specFactor = pow(max(dot(v, eye), 0.0f), power);
+
     float3 temp = normalize(direction * -1.0f + eye);
     float specular = pow(dot(normal, temp), power);
 
-    return float4(color.rgb * specular, 0);
+    return saturate(float4(color.rgb * specular, 0));
+}
+
+float3 GetSpecular(float3 color,float3 lightDir,float3 normal,float3 toEye,float specPower )
+{
+    float3 v = reflect(-lightDir, normal);
+    float specFactor = pow(max(dot(v, toEye), 0.0f), specPower);
+    return color * specPower;
 }
 
 //노멀맵 공간으로 변환
@@ -238,7 +254,7 @@ float3 GetTexelUV(Texture2D tex, float2 uv)
 }
 
 //MRT0 Normal.xyz, RenderType(float)
-//MRT1 Diffuse.rgb, SpecIntensity
+//MRT1 Diffuse.rgb, Depth
 //MRT2 Specr.rgb, SpecPower(float)
 //MRT3 DepthMap
 
@@ -259,7 +275,7 @@ GBuffer_Data UnpackGBuffer(float2 uv)
 
     float4 diffuseSample = _deferredAlbedo.Sample(_basicSampler, uv);
     Out.DiffuseColor = diffuseSample.rgb;
-    Out.SpecIntensity = diffuseSample.a;
+    Out.depth = diffuseSample.a;
 
     float4 specSample = _deferredSpecular.Sample(_basicSampler, uv);
     Out.SpecColor = specSample.rgb;
@@ -273,7 +289,7 @@ GBuffer_Data UnpackGBuffer_Loc(int2 location)
     GBuffer_Data Out;
     int3 location3 = int3(location, 0);
 
-    float depth = _deferredDepth.Load(location3);
+    float depth = _deferredDepth.Load(location3).x;
     Out.LinearDepth = ConvertZToLinearDepth(depth);
 
     float4 normalSample = _deferredNormal.Load(location3);
@@ -283,7 +299,7 @@ GBuffer_Data UnpackGBuffer_Loc(int2 location)
 
     float4 diffuseSample = _deferredAlbedo.Load(location3);
     Out.DiffuseColor = diffuseSample.rgb;
-    Out.SpecIntensity = diffuseSample.a;
+    Out.depth = diffuseSample.a;
 
     float4 specSample = _deferredSpecular.Load(location3);
     Out.SpecColor = specSample.rgb;
@@ -449,3 +465,5 @@ bool IntersectTri(float3 origin, float3 dir, float3 v0, float3 v1, float3 v2, ou
 
     //    return true;
 }
+
+

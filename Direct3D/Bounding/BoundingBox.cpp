@@ -146,6 +146,26 @@ void BoundingBox::GetCenterAndRadius(D3DXVECTOR3 * pOutCenter, float * pOutRadiu
 	*pOutRadius = sphere.radius;
 }
 
+void BoundingBox::GetWorldCenterAndRadius(D3DXVECTOR3 * pOutCenter, float * pOutRadius, D3DXMATRIX mat)
+{
+	//월드 센터 
+	D3DXVECTOR3 center = this->minPos + halfSize;
+
+	D3DXVec3TransformCoord(pOutCenter, &center, &mat);
+
+	D3DXVECTOR3 scale;
+	scale.x = D3DXVec3Length(&D3DXVECTOR3(mat._11, mat._12, mat._13));
+	scale.y = D3DXVec3Length(&D3DXVECTOR3(mat._21, mat._22, mat._23));
+	scale.z = D3DXVec3Length(&D3DXVECTOR3(mat._31, mat._32, mat._33));
+	//구의 반지름
+	D3DXVECTOR3 halfLength;
+	halfLength.x = this->halfSize.x * scale.x;
+	halfLength.y = this->halfSize.y * scale.y;
+	halfLength.z = this->halfSize.z * scale.z;
+
+	*pOutRadius = D3DXVec3Length(&halfLength);
+}
+
 bool BoundingBox::IntersectsAABB(BoundingBox box)
 {
 	if ((double)maxPos.x < (double)box.minPos.x || (double)minPos.x >(double)box.maxPos.x || ((double)maxPos.y < (double)box.minPos.y
@@ -169,7 +189,6 @@ bool BoundingBox::Intersects(Ray ray, float * result)
 {
 	float num1 = 0.0f;
 	float num2 = Math::FloatMax;
-
 
 	//1. ray.Direction.X
 	if ((double)Math::Abs(ray.direction.x) < 9.99999997475243E-07)

@@ -4,13 +4,13 @@
 #include "TagMessage.h"
 
 GameObject::GameObject(string name)
-	:name(name),isLive(true),isRender(true)
+	:name(name),isLive(true),isRender(true),isActive(true)
 {
 	transform = new Transform;
 }
 
 GameObject::GameObject()
-	: name("Unknown"), isLive(true), isRender(true)
+	: name("Unknown"), isLive(true), isRender(true),isActive(true)
 {
 	transform = new Transform;
 }
@@ -38,19 +38,22 @@ void GameObject::PreUpdate()
 
 void GameObject::Update()
 {
-	for (UINT i = 0; i < reserveMessageList.size(); ++i)
+	if (reserveMessageList.empty() == false)
 	{
-		reserveMessageList[i].delayTime -= DeltaTime;
-
-		if (reserveMessageList[i].delayTime < 0.0f)
+		for (UINT i = 0; i < reserveMessageList.size(); ++i)
 		{
-			CallbackIter iter = callbackList.find(reserveMessageList[i].name);
+			reserveMessageList[i].delayTime -= DeltaTime;
 
-			if (iter != callbackList.end())
-				iter->second(reserveMessageList[i]);
+			if (reserveMessageList[i].delayTime < 0.0f)
+			{
+				CallbackIter iter = callbackList.find(reserveMessageList[i].name);
 
-			reserveMessageList.erase(reserveMessageList.begin() + i--);
-			Sleep(1);
+				if (iter != callbackList.end())
+					iter->second(reserveMessageList[i]);
+
+				reserveMessageList.erase(reserveMessageList.begin() + i--);
+				Sleep(1);
+			}
 		}
 	}
 }
@@ -72,6 +75,10 @@ void GameObject::UIRender()
 {
 }
 
+void GameObject::ShadowRender()
+{
+}
+
 void GameObject::SendMSG(TagMessage msg)
 {
 	//딜레이타임이 없다면 바로 메세지 처리
@@ -81,7 +88,8 @@ void GameObject::SendMSG(TagMessage msg)
 		//찾았다면
 		if (iter != callbackList.end())
 		{
-			iter->second(msg);
+			TagMessage newMessage = msg;
+			iter->second(newMessage);
 			return;
 		}
 	}

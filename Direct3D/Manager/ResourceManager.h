@@ -11,9 +11,10 @@ struct ModelData
 	vector<class Material*>			materials;
 	MeshDatas						meshDatas;
 	vector<class ModelAnimClip*>	animations;
+	vector<class GameCollider*>		colliders;
 
 	void Clone(vector<class Material*>* pMaterials, vector<class ModelBone*>* pBones, 
-		vector<class ModelMesh*>* pMeshes, vector<class ModelAnimClip*>* pAnim);
+		vector<class ModelMesh*>* pMeshes, vector<class ModelAnimClip*>* pAnim,vector<class GameCollider*>* colliders = nullptr);
 	void Clone(class Model* model);
 
 	void Release();

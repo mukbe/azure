@@ -23,6 +23,7 @@
 #include "./Renders/Gizmo.h"
 
 #include "./Manager/ResourceManager.h"
+#include "./Manager/DataBase.h"
 
 #define KeyCode Keyboard::Get()
 #define GameMouse Mouse::Get()

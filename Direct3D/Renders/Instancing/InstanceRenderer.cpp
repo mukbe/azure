@@ -9,46 +9,86 @@
 
 
 #include "Object/GameObject/GameObject.h"
+#include "Object/StaticObject/StaticObject.h"
+#include "./Object/GameObject/TagMessage.h"
 #include "Renders/Material.h"
 #include "./Renders/Instancing/InstanceShader.h"
 #include "./Renders/WorldBuffer.h"
 #include "./Utilities/Buffer.h"
+#include "./View/FreeCamera.h"
+
 
 InstanceRenderer::InstanceRenderer(string name,UINT maxInstance)
-	:name(name),maxInstanceCount(maxInstance), drawInstanceCount(0)
+	:maxInstanceCount(maxInstance), drawInstanceCount(0)
 {
+	this->name = name;
 	shader = new InstanceShader(L"./_Shaders/001_GBuffer.hlsl");
+
+	this->AddCallback("DeleteObject", [this](TagMessage msg) 
+	{
+		for (UINT i = 0; i < instanceList.size(); ++i)
+		{
+			if (instanceList[i]->GetName() == *reinterpret_cast<string*>(msg.data))
+			{
+				instanceList.erase(instanceList.begin() + i);
+				break;
+			}
+		}
+	});
 }
 
 InstanceRenderer::InstanceRenderer(string name,wstring fileName)
-	:name(name), drawInstanceCount(0),maxInstanceCount(0)
+	: drawInstanceCount(0),maxInstanceCount(0)
 {
+	this->name = name;
 	shader = new InstanceShader(L"./_Shaders/001_GBuffer.hlsl");
+
+	this->AddCallback("DeleteObject", [this](TagMessage msg)
+	{
+		for (UINT i = 0; i < instanceList.size(); ++i)
+		{
+			if (instanceList[i]->GetName() == *reinterpret_cast<string*>(msg.data))
+			{
+				instanceList.erase(instanceList.begin() + i);
+				break;
+			}
+		}
+	});
 }
 
 
 InstanceRenderer::~InstanceRenderer()
 {
-	SafeDelete(shader);
-
-	for (ModelMesh* mesh : meshes)
-		SafeDelete(mesh);
-
-	for (ModelBone* bone : bones)
-		SafeDelete(bone);
-
-	materials.clear();
-	meshes.clear();
-	bones.clear();
-
-	localTransforms.clear();
-	instanceList.clear();
-
-	SafeRelease(instanceBuffer);
+	
 }
 
-void InstanceRenderer::CopyAbsoluteBoneTo()
+void InstanceRenderer::BindMeshData()
 {
+	for (ModelMesh* mesh : meshes)
+	{
+		for (ModelMeshPart* part : mesh->meshParts)
+			part->material = GetMaterialByName(part->materialName);
+	}
+
+
+	this->root = bones[0];
+	for (ModelBone* bone : bones)
+	{
+		if (bone->parentIndex > -1)
+		{
+			bone->parent = bones[bone->parentIndex];
+			bone->parent->childs.push_back(bone);
+		}
+		else
+			bone->parent = nullptr;
+	}
+
+	for (size_t i = 0; i < meshes.size(); i++)
+	{
+		meshes[i]->parentBone = bones[meshes[i]->parentBoneIndex];
+		meshes[i]->Binding();
+	}
+
 	localTransforms.clear();
 	localTransforms.assign(bones.size(), D3DXMATRIX());
 
@@ -80,41 +120,7 @@ Material * InstanceRenderer::GetMaterialByName(wstring name)
 }
 
 
-void InstanceRenderer::ReadMaterial(wstring file)
-{
-	Models::LoadMaterial(file, &materials);
-}
 
-void InstanceRenderer::ReadMesh(wstring file)
-{
-	Models::LoadMesh(file, &bones, &meshes);
-
-	for (ModelMesh* mesh : meshes)
-	{
-		for (ModelMeshPart* part : mesh->meshParts)
-			part->material = GetMaterialByName(part->materialName);
-	}
-
-
-	this->root = bones[0];
-	for (ModelBone* bone : bones)
-	{
-		if (bone->parentIndex > -1)
-		{
-			bone->parent = bones[bone->parentIndex];
-			bone->parent->childs.push_back(bone);
-		}
-		else
-			bone->parent = nullptr;
-
-	}
-
-	for (size_t i = 0; i < meshes.size(); i++)
-	{
-		meshes[i]->parentBone = bones[meshes[i]->parentBoneIndex];
-		meshes[i]->Binding();
-	}
-}
 
 void InstanceRenderer::CreateBuffer()
 {
@@ -130,13 +136,46 @@ void InstanceRenderer::CreateBuffer()
 	assert(SUCCEEDED(hr));
 }
 
-void InstanceRenderer::InitData(wstring materialFile, wstring meshFile)
+void InstanceRenderer::InitializeData(string keyName)
 {
-	this->ReadMaterial(materialFile);
-	this->ReadMesh(meshFile);
+	ModelData data = AssetManager->GetModelData(keyName);
+	vector<ModelAnimClip*> temp;
+	data.Clone(&materials, &bones, &meshes,&temp,&colliders);
+	temp.clear();
+
+	this->BindMeshData();
 	this->CreateBuffer();
-	this->CopyAbsoluteBoneTo();
 }
+
+void InstanceRenderer::Release()
+{
+	SafeDelete(shader);
+
+	for (ModelMesh* mesh : meshes)
+		SafeDelete(mesh);
+
+	for (ModelBone* bone : bones)
+		SafeDelete(bone);
+
+	for (GameCollider* collider : colliders)
+		SafeDelete(collider);
+
+	materials.clear();
+	meshes.clear();
+	bones.clear();
+	colliders.clear();
+
+	localTransforms.clear();
+	instanceList.clear();
+
+	SafeRelease(instanceBuffer);
+}
+
+void InstanceRenderer::PostUpdate()
+{
+	this->UpdateBuffer();
+}
+
 
 void InstanceRenderer::UpdateBuffer()
 {
@@ -162,6 +201,23 @@ void InstanceRenderer::UpdateBuffer()
 	DeviceContext->Unmap(instanceBuffer, 0);
 }
 
+void InstanceRenderer::AddInstance(float autoSize)
+{
+	char str[48];
+	sprintf_s(str, "%s %d", name.c_str(), instanceList.size());
+
+	StaticObject* object = new StaticObject(str);
+	object->GetTransform()->SetWorldPosition(MainCamera->GetTransform()->GetWorldPosition() +
+		MainCamera->GetTransform()->GetForward() * 50.0f);
+	object->GetTransform()->SetScale(autoSize, autoSize, autoSize);
+
+	for (UINT i = 0; i < colliders.size(); ++i)
+		object->AddCollider(colliders[i]);
+	object->SetInstanceRenderer(this);
+	this->AddInstanceData(object);
+	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Object, object);
+}
+
 void InstanceRenderer::Render()
 {
 	for (ModelMesh* mesh : meshes)
@@ -176,7 +232,8 @@ void InstanceRenderer::Render()
 			UINT stride[2] = { sizeof VertexTextureBlendNT,sizeof InstanceData};
 			UINT offset[2] = { 0,0 };
 			ID3D11Buffer* buffers[2] = { part->vertexBuffer,instanceBuffer };
-
+			
+			part->material->UpdateBuffer();
 			part->material->BindBuffer();
 
 			DeviceContext->IASetVertexBuffers(0, 2, buffers, stride, offset);
@@ -190,6 +247,34 @@ void InstanceRenderer::Render()
 			part->material->UnBindBuffer();
 		}
 	}
+}
+
+void InstanceRenderer::UIRender()
+{
+	static float autoSize = 0.05f;
+	ImGui::Text("InstanceRendering");
+	ImGui::Text("DrawCount : %d", drawInstanceCount);
+	ImGui::InputFloat("CreateSize", &autoSize);
+
+	if (ImGui::Button("AddInstance", ImVec2(100, 20)))
+		this->AddInstance(autoSize);
+
+	ImGui::Separator();
+	
+	for (UINT i = 0; i < materials.size(); ++i)
+	{
+		string name = String::WStringToString(materials[i]->GetName());
+		if (ImGui::TreeNode(name.c_str()))
+		{
+			materials[i]->UIRender();
+			ImGui::TreePop();
+		}
+	}
+}
+
+void InstanceRenderer::UIUpdate()
+{
+
 }
 
 void InstanceRenderer::AddInstanceData(GameObject* object)

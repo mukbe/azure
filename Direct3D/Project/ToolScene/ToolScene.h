@@ -2,13 +2,32 @@
 
 #include "./Manager/SceneNode.h"
 #include <map>
+
+#include "./Renders/ShaderBuffer.h"
+
+class CamBuffer : public ShaderBuffer
+{
+public:
+	struct Struct
+	{
+		D3DXVECTOR3 pos;
+		float padding;
+	}data;
+
+	CamBuffer()
+		:ShaderBuffer(&data, sizeof Struct)
+	{}
+};
+
+
 class ToolBase;
 class ToolScene : public SceneNode
 {
-	enum class ToolType{ Hierarchy ,Inspector,Unknown,End};
+	enum class ToolType{ Hierarchy = 0 ,Inspector,Unknown,End};
 private:
-	multimap<ToolType, ToolBase*> toolList;
-	typedef multimap<ToolType, ToolBase*>::iterator ToolIter;
+	unordered_map<ToolType, ToolBase*> toolList;
+	typedef unordered_map<ToolType, ToolBase*>::iterator ToolIter;
+	CamBuffer* camBuffer;
 public:
 	ToolScene();
 	~ToolScene();
@@ -23,7 +42,7 @@ public:
 	void Render();
 	void UIRender();
 
-	multimap<ToolType, ToolBase*> GetToolList()const { return this->toolList; }
+	unordered_map<ToolType, ToolBase*> GetToolList()const { return this->toolList; }
 	template<class T>
 	T* GetTool(string name);
 };
@@ -42,3 +61,4 @@ T* ToolScene::GetTool(string name)
 		return nullptr;
 	}
 }
+

@@ -10,6 +10,7 @@
 DeferredRenderer::DeferredRenderer()
 {
 	this->shader = new Shader(ShaderPath + L"002_Deferred.hlsl",Shader::ShaderType::Default,"BasicDeferred");
+	this->alphaRender = nullptr;
 
 	D3DDesc desc;
 	DxRenderer::GetDesc(&desc);
@@ -41,6 +42,7 @@ DeferredRenderer::~DeferredRenderer()
 	SafeRelease(depthBufferTexture);
 	SafeRelease(depthStencilView);
 
+	SafeDelete(alphaRender);
 	SafeDelete(shader);
 	SafeDelete(orthoWindow);
 	SafeDelete(unPacker);
@@ -64,6 +66,7 @@ void DeferredRenderer::SetRTV()
 
 void DeferredRenderer::Render()
 {
+	pRenderer->ChangeZBuffer(false);
 	orthoWindow->Render();
 	DeviceContext->PSSetShaderResources(0, BUFFER_COUNT, &shaderResourceView[0]);
 	DeviceContext->PSSetShaderResources(4, 1, &depthSRV);
@@ -73,6 +76,7 @@ void DeferredRenderer::Render()
 	orthoWindow->DrawIndexed();
 
 	depthVis->CalcuDepth(depthSRV);
+	pRenderer->ChangeZBuffer(true);
 }
 
 void DeferredRenderer::UIRender()

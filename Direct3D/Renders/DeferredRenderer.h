@@ -4,9 +4,9 @@
 class DeferredRenderer : public Renderer
 {
 //MRT0 Normal.xyz, RenderType(float)
-//MRT1 Diffuse.rgb,SpecIntensity(float)
+//MRT1 Diffuse.rgb,Depth
 //MRT2 Specr.rgb, SpecPower(float)
-//MRT3 DepthMap
+//MRT4 DepthMap
 
 //RenderType -- 0.0f ~ 0.9f == 빛계산 함
 //RenderType -- 1.0f ~ 1.9f == 빛계산 안함(GBuffer로 넘어온 Diffuse출력) 
@@ -27,6 +27,7 @@ private:
 	D3D11_VIEWPORT viewport;
 	
 	class Shader*			shader;
+	class Shader*			alphaRender;
 	class OrthoWindow*		orthoWindow;
 	class DepthVis*			depthVis;
 	class UnPacker*			unPacker;
@@ -39,6 +40,7 @@ public:
 
 	void UIRender();
 	void SetUnPackInfo(D3DXMATRIX view, D3DXMATRIX projection);
+	ID3D11DepthStencilView* GetDepthStencilView()const { return this->depthStencilView; }
 private:
 	bool Create();
 

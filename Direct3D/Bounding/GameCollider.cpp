@@ -18,6 +18,21 @@ GameCollider::~GameCollider()
 	SafeDelete(boundingBox);
 }
 
+void GameCollider::Clone(void ** clone)
+{
+	BoundingBox* box = new BoundingBox;
+	box->minPos = this->boundingBox->minPos;
+	box->maxPos = this->boundingBox->maxPos;
+	box->halfSize = this->boundingBox->halfSize;
+
+	GameCollider* collider = new GameCollider(nullptr,box);
+	collider->name = this->name;
+	collider->type = this->type;
+	collider->finalMatrix = this->finalMatrix;
+
+	*clone = collider;
+}
+
 void GameCollider::Update()
 {
 	
@@ -39,6 +54,16 @@ void GameCollider::Render(D3DXCOLOR color,bool bZbufferOn)
 bool GameCollider::IsIntersect(GameCollider * collider)
 {
 	return BoundingBox::IntersectsOBB(this->finalMatrix, this->boundingBox, collider->GetFinalMatrix(), collider->boundingBox);
+}
+
+void GameCollider::GetCorners(vector<D3DXVECTOR3>& output)
+{
+	this->boundingBox->GetCorners(output, this->finalMatrix);
+}
+
+void GameCollider::GetWorldCenterRadius(D3DXVECTOR3 * pOutCenter, float * pOutRadius)
+{
+	this->boundingBox->GetWorldCenterAndRadius(pOutCenter, pOutRadius,this->finalMatrix);
 }
 
 string GameCollider::GetTypeName(int index)

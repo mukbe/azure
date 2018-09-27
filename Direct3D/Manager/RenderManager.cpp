@@ -5,7 +5,7 @@
 SingletonCpp(RenderManager)
 
 RenderManager::RenderManager()
-	:deferred(nullptr),shadow(nullptr)
+	:deferred(nullptr),shadow(nullptr),alpha(nullptr)
 {
 }
 
@@ -14,6 +14,7 @@ RenderManager::~RenderManager()
 {
 	SafeDelete(deferred);
 	SafeDelete(shadow);
+	SafeDelete(alpha);
 }
 
 void RenderManager::Draw()
@@ -28,6 +29,7 @@ void RenderManager::Draw()
 	pRenderer->BeginDraw();
 	{
 		PostRender();
+		AlphaRender();
 		UIRender();
 	}
 	pRenderer->EndDraw();
@@ -70,6 +72,8 @@ void RenderManager::AddRenderer(string key, Renderer * renderer)
 		shadow = renderer;
 	if (strstr(key.c_str(), "deferred"))
 		deferred = renderer;
+	if (strstr(key.c_str(), "alpha"))
+		alpha = renderer;
 }
 
 void RenderManager::SetUnPackGBufferProp(D3DXMATRIX view, D3DXMATRIX proj)
@@ -141,6 +145,16 @@ void RenderManager::PostRender()
 	//gbuffer 바인딩, 스크린에 출력
 	deferred->Render();
 }
+
+void RenderManager::AlphaRender()
+{
+	if (alpha)
+	{
+		alpha->SetRTV();
+		alpha->Render();
+	}
+}
+
 void RenderManager::UIRender()
 {
 	//imgui

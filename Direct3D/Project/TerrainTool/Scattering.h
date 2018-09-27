@@ -55,10 +55,10 @@ public:
 	Scattering(class FreeCamera * camera , string level);
 	~Scattering();
 
-	void Updata();
-	void Render();
-	void UIRender();
-
+	virtual void Update();
+	virtual void Render();
+	virtual void UIUpdate();
+	virtual void UIRender();
 private:
 	void UpdateMaterialParameters();
 	void PrecomputeParticleDensity();

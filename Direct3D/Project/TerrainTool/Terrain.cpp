@@ -7,6 +7,8 @@
 Terrain::Terrain()
 	:height(256), width(256)
 {
+	this->name = "Terrain";
+
 	CreateTerrain();
 	shader = Shaders->CreateShader("TerrainTool", L"TerrainTool.hlsl", Shader::ShaderType::useHS, "TerrainTool");
 	
@@ -51,63 +53,7 @@ void Terrain::PreUpdate()
 
 void Terrain::Update()
 {
-	if (Mouse::Get()->Press(0) && Keyboard::Get()->Press(VK_CONTROL))
-	{
-		switch (mode)
-		{
-			case Mode::Mode_None:
-			break;
-			case Mode::Mode_Height:
-			{
-				buffer->SetCSBuffer(1);
-				heightData->GetHeightBuffer()->BindCSShaderResourceView(0);
-				heightData->CopyHeight();
-				heightData->GetHeightBuffer()->ReleaseCSshaderResorceView(0);
-
-				heightData->GetHeightBuffer()->BindResource(1);
-				heightData->EditHeight();
-				heightData->GetHeightBuffer()->ReleaseResource(1);
-
-			}
-			break;
-			case Mode::Mode_Splat:
-			{	
-				buffer->SetCSBuffer(1);
-				heightData->GetHeightBuffer()->BindResource(1);
-				splat->Splat();
-				heightData->GetHeightBuffer()->ReleaseResource(1);
-			}
-			break;
-			case Mode::Mode_Smooth:
-			{
-				//TODO 먹통이 됬음 해결좀
-				buffer->SetCSBuffer(1);
-				heightData->GetHeightBuffer()->BindCSShaderResourceView(0);
-				heightData->GetTempHeightBuffer()->BindResource(2);
-				smooth->CopyHeight();
-				heightData->GetHeightBuffer()->ReleaseCSshaderResorceView(0);
-
-				heightData->GetHeightBuffer()->BindResource(1);
-				smooth->EditHeight();
-				heightData->GetTempHeightBuffer()->ReleaseResource(2);
-				heightData->GetHeightBuffer()->ReleaseResource(1);
-			}
-			break;
-		}
-	}
-	if (Keyboard::Get()->Down(VK_F1))
-	{
-		//Save
-		Texture::SaveToFile(Contents + L"heightTestMap.png", heightData->GetHeightBuffer()->GetSRV());
-		Texture::SaveToFile(Contents + L"splatMap.png", splat->GetSplatMap()->GetSRV());
-	}
-	if (Keyboard::Get()->Down(VK_F2))
-	{
-		Texture* tex = new Texture(Contents + L"heightTestMap.png");
-		tex->SetCSResource(0);
-		heightData->Load();
-		//TODO  splat Load
-	}
+	
 
 }
 
@@ -161,7 +107,25 @@ void Terrain::Render()
 
 void Terrain::UIRender()
 {
-	ImGui::Begin("Terrain");
+	//ImGui::Begin("Terrain");
+
+	if (ImGui::Button("Save", ImVec2(150, 30)))
+	{
+		//Save
+		Texture::SaveToFile(Contents + L"heightTestMap.png", heightData->GetHeightBuffer()->GetSRV());
+		Texture::SaveToFile(Contents + L"splatMap.png", splat->GetSplatMap()->GetSRV());
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Load", ImVec2(150, 30)))
+	{
+		//Load
+		Texture* tex = new Texture(Contents + L"heightTestMap.png");
+		tex->SetCSResource(0);
+		heightData->Load();
+		SafeDelete(tex);
+	}
+	ImGui::Separator();
+
 	const char*  str[4] = { "None","Height","Splat","Smooth" };
 	static int modeCheck = 0;
 	for (int i = 0; i < Mode::Mode_End; i++)
@@ -200,7 +164,68 @@ void Terrain::UIRender()
 	}
 
 
-	ImGui::End();
+	//ImGui::End();
+}
+
+void Terrain::UIUpdate()
+{
+	if (Mouse::Get()->Press(0) && Keyboard::Get()->Press(VK_CONTROL))
+	{
+		switch (mode)
+		{
+		case Mode::Mode_None:
+			break;
+		case Mode::Mode_Height:
+		{
+			buffer->SetCSBuffer(1);
+			heightData->GetHeightBuffer()->BindCSShaderResourceView(0);
+			heightData->CopyHeight();
+			heightData->GetHeightBuffer()->ReleaseCSshaderResorceView(0);
+
+			heightData->GetHeightBuffer()->BindResource(1);
+			heightData->EditHeight();
+			heightData->GetHeightBuffer()->ReleaseResource(1);
+
+		}
+		break;
+		case Mode::Mode_Splat:
+		{
+			buffer->SetCSBuffer(1);
+			heightData->GetHeightBuffer()->BindResource(1);
+			splat->Splat();
+			heightData->GetHeightBuffer()->ReleaseResource(1);
+		}
+		break;
+		case Mode::Mode_Smooth:
+		{
+			//TODO 먹통이 됬음 해결좀
+			buffer->SetCSBuffer(1);
+			heightData->GetHeightBuffer()->BindCSShaderResourceView(0);
+			heightData->GetTempHeightBuffer()->BindResource(2);
+			smooth->CopyHeight();
+			heightData->GetHeightBuffer()->ReleaseCSshaderResorceView(0);
+
+			heightData->GetHeightBuffer()->BindResource(1);
+			smooth->EditHeight();
+			heightData->GetTempHeightBuffer()->ReleaseResource(2);
+			heightData->GetHeightBuffer()->ReleaseResource(1);
+		}
+		break;
+		}
+	}
+	//if (Keyboard::Get()->Down(VK_F1))
+	//{
+	//	//Save
+	//	Texture::SaveToFile(Contents + L"heightTestMap.png", heightData->GetHeightBuffer()->GetSRV());
+	//	Texture::SaveToFile(Contents + L"splatMap.png", splat->GetSplatMap()->GetSRV());
+	//}
+	//if (Keyboard::Get()->Down(VK_F2))
+	//{
+	//	Texture* tex = new Texture(Contents + L"heightTestMap.png");
+	//	tex->SetCSResource(0);
+	//	heightData->Load();
+	//	//TODO  splat Load
+	//}
 }
 
 void Terrain::CreateTerrain()

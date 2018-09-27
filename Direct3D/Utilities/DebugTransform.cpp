@@ -7,6 +7,7 @@
 #include "./Bounding/Ray.h"
 #include "./View/CameraBase.h"
 #include "./Utilities/Math.h"
+
 DebugTransform::DebugTransform()
 	:transform(NULL), debugType(DebugType::Translation),spaceType(SpaceType::Local),
 	pickType(PickType::None),camera(NULL), saveMousePos(0.f, 0.f, 0.f),angle(0,0,0),saveAngle(0,0,0)
@@ -25,7 +26,12 @@ DebugTransform::~DebugTransform()
 
 void DebugTransform::ConnectTransform(Transform * transform)
 {
-	this->transform = transform;
+	static Transform* savePtr = nullptr;
+	if (savePtr != transform)
+	{
+		angle = saveAngle = D3DXVECTOR3(0.f, 0.f, 0.f);
+	}
+	this->transform = savePtr = transform;
 }
 
 void DebugTransform::Update()
@@ -60,16 +66,27 @@ void DebugTransform::RenderGizmo()
 			else if (pickType == PickType::Forward)
 				forwardColor = ColorWhite;
 
-			if(this->spaceType == SpaceType::Local)
+			if (this->spaceType == SpaceType::Local)
+			{
+				D3DXVECTOR3 scale = transform->GetScale();
+				scale.x = Math::Clamp(scale.x, ScaleOffset, 100.0f);
+				scale.y = Math::Clamp(scale.y, ScaleOffset, 100.0f);
+				scale.z = Math::Clamp(scale.z, ScaleOffset, 100.0f);
 				GizmoRenderer->LocalGizmo(transform->position, 1.0f,
-					transform->GetScaleAxis(AXIS_X) / 2.0f, transform->GetScaleAxis(AXIS_Y) / 2.0f, transform->GetScaleAxis(AXIS_Z) / 2.0f,
+					transform->GetRight() * scale.x / 2.0f, transform->GetUp() * scale.y / 2.0f,
+					transform->GetForward() * scale.z/ 2.0f,
 					rightColor, upColor, forwardColor);
+			}
 			else
 			{
+				D3DXVECTOR3 scale = transform->GetScale();
+				scale.x = Math::Clamp(scale.x, ScaleOffset, 100.0f);
+				scale.y = Math::Clamp(scale.y, ScaleOffset, 100.0f);
+				scale.z = Math::Clamp(scale.z, ScaleOffset, 100.0f);
 				GizmoRenderer->LocalGizmo(transform->position, 1.0f,
-					D3DXVECTOR3(0.5f,0.f,0.f) * transform->scale.x, 
-					D3DXVECTOR3(0.f,0.5f,0.f) * transform->scale.y,
-					D3DXVECTOR3(0.f,0.f,0.5f) * transform->scale.z,
+					D3DXVECTOR3(0.5f,0.f,0.f) * scale.x, 
+					D3DXVECTOR3(0.f,0.5f,0.f) * scale.y,
+					D3DXVECTOR3(0.f,0.f,0.5f) * scale.z,
 					rightColor, upColor, forwardColor);
 			}
 
@@ -84,22 +101,24 @@ void DebugTransform::RenderGUI()
 {
 	if (this->transform != NULL)
 	{
-		ImGui::Begin("Transform");
-		{
-			ImGui::RadioButton("World", reinterpret_cast<int*>(&spaceType), 0); ImGui::SameLine();
-			ImGui::RadioButton("Local", reinterpret_cast<int*>(&spaceType), 1);
-			ImGui::Separator();
+		ImGui::BeginGroup();
+		ImGui::Separator();
+		ImGui::Separator();
+		ImGui::Text("Transform");
 
-			ImGui::InputFloat3("Position", &transform->position.x);
-			ImGui::InputFloat3("Scale", &transform->scale.x);
-			ImGui::InputFloat3("Rotate", &angle.x);
-			ImGui::Separator();
+		ImGui::RadioButton("World", reinterpret_cast<int*>(&spaceType), 0); ImGui::SameLine();
+		ImGui::RadioButton("Local", reinterpret_cast<int*>(&spaceType), 1);
+		ImGui::Separator();
 
-			ImGui::SliderFloat3("Pos", &transform->position.x,-100.f,100.f);
-			ImGui::SliderFloat3("Scaled", &transform->scale.x,0.01f,10.f);
-			ImGui::SliderFloat3("Rot", &angle.x,-6.28f,6.28f);
-		}
-		ImGui::End();
+		ImGui::InputFloat3("Position", &transform->position.x);
+		ImGui::InputFloat3("Scale", &transform->scale.x);
+		ImGui::InputFloat3("Rotate", &angle.x);
+		ImGui::Separator();
+
+		ImGui::SliderFloat3("Pos", &transform->position.x,-100.f,100.f);
+		ImGui::SliderFloat3("Scaled", &transform->scale.x,0.01f,10.f);
+		ImGui::SliderFloat3("Rot", &angle.x,-6.28f,6.28f);
+		
 
 		if (this->angle != this->saveAngle)
 		{
@@ -108,6 +127,9 @@ void DebugTransform::RenderGUI()
 
 		this->transform->UpdateTransform();
 		this->saveAngle = this->angle;
+		ImGui::Separator();
+		ImGui::Separator();
+		ImGui::EndGroup();
 	}
 }
 
@@ -130,16 +152,21 @@ DebugTransform::PickType DebugTransform::IsPick()
 
 	Ray ray = camera->GetRay();
 
+	D3DXVECTOR3 scaleAxis = transform->GetScale();
+	scaleAxis.x = Math::Clamp(scaleAxis.x, ScaleOffset, 100.0f);
+	scaleAxis.y = Math::Clamp(scaleAxis.y, ScaleOffset, 100.0f);
+	scaleAxis.z = Math::Clamp(scaleAxis.z, ScaleOffset, 100.0f);
+
 	for (int i = 0; i < 3; ++i)
 	{
 		bool isPick = false;
 
 		if (i == 0)
-			D3DXMatrixScaling(&scale, transform->scale.x * 0.5f, 1.f, 1.f);
+			D3DXMatrixScaling(&scale, scaleAxis.x * 0.5f, 1.f, 1.f);
 		else if (i == 1)
-			D3DXMatrixScaling(&scale, 1.f, transform->scale.y * 0.5f, 1.f);
+			D3DXMatrixScaling(&scale, 1.f, scaleAxis.y * 0.5f, 1.f);
 		else if (i == 2)
-			D3DXMatrixScaling(&scale, 1.f, 1.f, transform->scale.z * 0.5f);
+			D3DXMatrixScaling(&scale, 1.f, 1.f, scaleAxis.z * 0.5f);
 		D3DXMATRIX finalMatrix = scale * rotate * translation;
 
 		vector<D3DXVECTOR3> corners;
@@ -239,14 +266,20 @@ void DebugTransform::RenderAxisBounding()
 	else
 		D3DXMatrixIdentity(&rotate);
 
+
+	D3DXVECTOR3 scaleAxis = transform->GetScale();
+	scaleAxis.x = Math::Clamp(scaleAxis.x, ScaleOffset, 100.0f);
+	scaleAxis.y = Math::Clamp(scaleAxis.y, ScaleOffset, 100.0f);
+	scaleAxis.z = Math::Clamp(scaleAxis.z, ScaleOffset, 100.0f);
+
 	for (int i = 0; i < 3; ++i)
 	{
 		if (i == 0)
-			D3DXMatrixScaling(&scale, transform->scale.x * 0.5f, 1.f, 1.f);
+			D3DXMatrixScaling(&scale, scaleAxis.x * 0.5f, 1.f, 1.f);
 		else if (i == 1)
-			D3DXMatrixScaling(&scale, 1.f, transform->scale.y * 0.5f, 1.f);
+			D3DXMatrixScaling(&scale, 1.f, scaleAxis.y * 0.5f, 1.f);
 		else if (i == 2)
-			D3DXMatrixScaling(&scale, 1.f, 1.f, transform->scale.z * 0.5f);
+			D3DXMatrixScaling(&scale, 1.f, 1.f, scaleAxis.z * 0.5f);
 		D3DXMATRIX finalMatrix = scale * rotate * translation;
 		axisBounding[i]->Render(finalMatrix, false, ColorWhite);
 	}

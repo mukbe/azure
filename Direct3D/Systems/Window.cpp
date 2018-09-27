@@ -35,6 +35,7 @@ WPARAM Window::Run()
 	RenderManager::Create();
 	SceneManager::Create();
 	ObjectManager::Create();
+	DataBase::Create();
 
 	ImGui::Create(desc.Handle, Device, DeviceContext);
 	ImGui::StyleColorsDark();
@@ -57,7 +58,6 @@ WPARAM Window::Run()
 
 			if (ImGui::IsMouseHoveringAnyWindow() == false)
 			{
-				
 				Keyboard::Get()->Update();
 				Mouse::Get()->Update();
 			}
@@ -75,6 +75,7 @@ WPARAM Window::Run()
 
 //================Release Manager===============================
 	ImGui::Delete();
+	DataBase::Delete();
 	ObjectManager::Get()->Release();
 	ObjectManager::Delete();
 	Scenes->Delete();

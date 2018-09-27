@@ -92,6 +92,7 @@ void Material::UnBindBuffer()
 
 void Material::UIRender()
 {
+
 	ImGuiHelper::RenderImageButton(diffuseMap);
 	ImGui::SameLine();
 	ImGui::Text("DiffuseMap");
@@ -125,6 +126,8 @@ void Material::UIRender()
 
 	ImGui::ColorEdit4("EmissiveColor", (float*)&emissiveColor.r,
 		ImGuiColorEditFlags_Float | ImGuiColorEditFlags_AlphaPreviewHalf);
+
+	ImGui::InputFloat("Shiness", &shiness);
 
 	ImGui::Separator();
 

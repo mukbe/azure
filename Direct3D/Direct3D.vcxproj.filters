@@ -8,9 +8,6 @@
     <ClCompile Include="Systems\DxRenderer.cpp" />
     <ClCompile Include="Renders\Gizmo.cpp" />
     <ClCompile Include="Renders\Shader.cpp" />
-    <ClCompile Include="Utilities\Buffer.cpp" />
-    <ClCompile Include="Utilities\GeometryGenerator.cpp" />
-    <ClCompile Include="Utilities\Transform.cpp" />
     <ClCompile Include="View\FreeCamera.cpp" />
     <ClCompile Include="View\Perspective.cpp" />
     <ClCompile Include="View\CameraBase.cpp" />
@@ -22,11 +19,6 @@
     <ClCompile Include="Systems\Mouse.cpp" />
     <ClCompile Include="Systems\Time.cpp" />
     <ClCompile Include="Systems\Window.cpp" />
-    <ClCompile Include="Utilities\BinaryFile.cpp" />
-    <ClCompile Include="Utilities\Json.cpp" />
-    <ClCompile Include="Utilities\Math.cpp" />
-    <ClCompile Include="Utilities\Path.cpp" />
-    <ClCompile Include="Utilities\String.cpp" />
     <ClCompile Include="Bounding\BoundingFrustum.cpp" />
     <ClCompile Include="Bounding\BoundingCapsule.cpp" />
     <ClCompile Include="Bounding\BoundingBox.cpp" />
@@ -40,7 +32,6 @@
     <ClCompile Include="Systems\Event.cpp" />
     <ClCompile Include="Project\AnimationTool\FBX\Exporter.cpp" />
     <ClCompile Include="Project\AnimationTool\FBX\FbxUtility.cpp" />
-    <ClCompile Include="Utilities\DebugTransform.cpp" />
     <ClCompile Include="Object\GameObject\GameObject.cpp" />
     <ClCompile Include="Model\Model + ReadData.cpp" />
     <ClCompile Include="Model\ModelAnimPlayer.cpp" />
@@ -66,7 +57,6 @@
     <ClCompile Include="Project\AnimationTool\CharacterTool.cpp" />
     <ClCompile Include="Project\TerrainTool\Scattering.cpp" />
     <ClCompile Include="Project\AnimationTool\ObjectTool.cpp" />
-    <ClCompile Include="Utilities\ImGuiHelper.cpp" />
     <ClCompile Include="Object\StaticObject\StaticObject.cpp" />
     <ClCompile Include="Manager\BufferManager.cpp" />
     <ClCompile Include="Manager\ObjectManager.cpp" />
@@ -86,6 +76,22 @@
     <ClCompile Include="Project\ToolScene\Hierarchy.cpp" />
     <ClCompile Include="Project\ToolScene\Inspector.cpp" />
     <ClCompile Include="Project\Game\PlayScene.cpp" />
+    <ClCompile Include="Utilities\BinaryFile.cpp" />
+    <ClCompile Include="Utilities\Buffer.cpp" />
+    <ClCompile Include="Utilities\DebugTransform.cpp" />
+    <ClCompile Include="Utilities\GeometryGenerator.cpp" />
+    <ClCompile Include="Utilities\ImGuiHelper.cpp" />
+    <ClCompile Include="Utilities\Json.cpp" />
+    <ClCompile Include="Utilities\Math.cpp" />
+    <ClCompile Include="Utilities\Path.cpp" />
+    <ClCompile Include="Utilities\String.cpp" />
+    <ClCompile Include="Utilities\Transform.cpp" />
+    <ClCompile Include="Project\ToolScene\Picking.cpp" />
+    <ClCompile Include="Manager\DataBase.cpp" />
+    <ClCompile Include="Project\LoadingScene\LoadingScene.cpp" />
+    <ClCompile Include="Renders\AlphaRenderer.cpp" />
+    <ClCompile Include="Particle\ParticleSystem.cpp" />
+    <ClCompile Include="Object\GameUnit\GameUnit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renders\ShadowRenderer.h" />
@@ -98,9 +104,6 @@
     <ClInclude Include="Renders\Gizmo.h" />
     <ClInclude Include="Renders\WorldBuffer.h" />
     <ClInclude Include="Renders\Shader.h" />
-    <ClInclude Include="Utilities\Buffer.h" />
-    <ClInclude Include="Utilities\GeometryGenerator.h" />
-    <ClInclude Include="Utilities\Transform.h" />
     <ClInclude Include="View\FreeCamera.h" />
     <ClInclude Include="View\Perspective.h" />
     <ClInclude Include="View\CameraBase.h" />
@@ -115,11 +118,6 @@
     <ClInclude Include="Systems\Mouse.h" />
     <ClInclude Include="Systems\Time.h" />
     <ClInclude Include="Systems\Window.h" />
-    <ClInclude Include="Utilities\BinaryFile.h" />
-    <ClInclude Include="Utilities\Json.h" />
-    <ClInclude Include="Utilities\Math.h" />
-    <ClInclude Include="Utilities\Path.h" />
-    <ClInclude Include="Utilities\String.h" />
     <ClInclude Include="View\Projection.h" />
     <ClInclude Include="Bounding\BoundingFrustum.h" />
     <ClInclude Include="Bounding\BoundingCapsule.h" />
@@ -137,7 +135,6 @@
     <ClInclude Include="Project\AnimationTool\FBX\Exporter.h" />
     <ClInclude Include="Project\AnimationTool\FBX\FbxUtility.h" />
     <ClInclude Include="Project\AnimationTool\FBX\Type.h" />
-    <ClInclude Include="Utilities\DebugTransform.h" />
     <ClInclude Include="Object\GameObject\GameObject.h" />
     <ClInclude Include="Object\GameObject\TagMessage.h" />
     <ClInclude Include="Model\ModelAnimPlayer.h" />
@@ -161,7 +158,6 @@
     <ClInclude Include="Project\AnimationTool\CharacterTool.h" />
     <ClInclude Include="Project\TerrainTool\Scattering.h" />
     <ClInclude Include="Project\AnimationTool\ObjectTool.h" />
-    <ClInclude Include="Utilities\ImGuiHelper.h" />
     <ClInclude Include="Object\StaticObject\StaticObject.h" />
     <ClInclude Include="Manager\BufferManager.h" />
     <ClInclude Include="Manager\ObjectManager.h" />
@@ -182,6 +178,22 @@
     <ClInclude Include="Project\ToolScene\Inspector.h" />
     <ClInclude Include="Project\ToolScene\ToolBase.h" />
     <ClInclude Include="Project\Game\PlayScene.h" />
+    <ClInclude Include="Utilities\BinaryFile.h" />
+    <ClInclude Include="Utilities\Buffer.h" />
+    <ClInclude Include="Utilities\DebugTransform.h" />
+    <ClInclude Include="Utilities\GeometryGenerator.h" />
+    <ClInclude Include="Utilities\ImGuiHelper.h" />
+    <ClInclude Include="Utilities\Json.h" />
+    <ClInclude Include="Utilities\Math.h" />
+    <ClInclude Include="Utilities\Path.h" />
+    <ClInclude Include="Utilities\String.h" />
+    <ClInclude Include="Utilities\Transform.h" />
+    <ClInclude Include="Project\ToolScene\Picking.h" />
+    <ClInclude Include="Manager\DataBase.h" />
+    <ClInclude Include="Project\LoadingScene\LoadingScene.h" />
+    <ClInclude Include="Renders\AlphaRenderer.h" />
+    <ClInclude Include="Particle\ParticleSystem.h" />
+    <ClInclude Include="Object\GameUnit\GameUnit.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />
@@ -201,5 +213,6 @@
     <None Include="_Shaders\005_OceanRaw.hlsl" />
     <None Include="_Shaders\005_OceanHigh.hlsl" />
     <None Include="_Shaders\006_UI.hlsl" />
+    <None Include="_Shaders\007_Alpha.hlsl" />
   </ItemGroup>
 </Project>
