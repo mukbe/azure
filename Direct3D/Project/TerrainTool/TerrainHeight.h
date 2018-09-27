@@ -17,7 +17,7 @@ private:
 	CResource2D* heightMap;
 
 	class Texture* texture;
-
+	
 
 	ComputeShader* computeHeightEdit;
 	ComputeShader* computeCopyHeight;

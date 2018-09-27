@@ -54,6 +54,7 @@ private:
 
 	vector<VertexTextureNormal> vertexData;
 	vector<UINT>indexData;
+	vector<UINT>normalIndexData;
 
 	ID3D11Buffer* vertexBuffer;
 	ID3D11Buffer* indexBuffer;

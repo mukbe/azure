@@ -30,7 +30,6 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
     float3 specColor = data.SpecColor;
     float specPower = data.SpecPow;
 
-    return worldPos;
 
     if(data.RenderType <= 1.0f)
     {
