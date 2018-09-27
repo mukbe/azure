@@ -73,7 +73,7 @@ G_Buffer InstancePS(PixelInput input)
 {
     G_Buffer output;
 
-    output.normal = float4(input.normal, 1.5f);
+    output.normal = float4(input.normal * 2.0f - 1.0f, 1.5f);
     output.diffuse = float4(input.color, 1.0f);
     output.spec = float4(1,1,1,1);
 

@@ -58,7 +58,7 @@ Figure::Figure(FigureType type, float radius,D3DXCOLOR color)
 	}
 	else
 	{
-		geo.CreateSphere(radius, 30, 30, data);
+		geo.CreateSphere(radius, 50, 50, data);
 		vector<VertexType> vertex;
 		vertex.assign(data.Vertices.size(), VertexColorNormal());
 

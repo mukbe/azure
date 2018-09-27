@@ -31,17 +31,21 @@ private:
 	
 public:
 	InstanceRenderer(string name,UINT maxInstance);		//툴작업용 생성자
-	InstanceRenderer(string name,wstring fileName);		//플레이씬용 생정자 
+	InstanceRenderer(string name,wstring fileName = L"");		//플레이씬용 생정자 
 	~InstanceRenderer();
 
 	void InitializeData(string keyName);
 
 	virtual void Release()override;
+	virtual void PreUpdate()override;
 	virtual void PostUpdate()override;
 	virtual void Render()override;
 	virtual void UIRender()override;
 	virtual void UIUpdate()override;
 
 	void AddInstanceData(class GameObject* pOject);
+
+	void SaveData();
+	void LoadData();
 };
 

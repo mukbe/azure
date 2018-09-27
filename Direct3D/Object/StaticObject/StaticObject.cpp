@@ -12,6 +12,8 @@
 
 #include "./View/FreeCamera.h"
 
+#include "./Bounding/QuadTree/QuadTreeSystem.h"
+
 StaticObject::StaticObject(string name)
 	:GameObject(name), instanceRenderer(nullptr)
 {
@@ -24,6 +26,8 @@ StaticObject::StaticObject(string name)
 		if (instanceRenderer)
 			instanceRenderer->SendMSG(message);
 	});
+
+	
 }
 
 
@@ -51,8 +55,11 @@ void StaticObject::Update()
 
 void StaticObject::DebugRender()
 {
-	for (UINT i = 0; i < colliderList.size(); ++i)
-		colliderList[i]->Render(ColorRed,true);
+	if (this->isRender)
+	{
+		for (UINT i = 0; i < colliderList.size(); ++i)
+			colliderList[i]->Render(ColorRed, true);
+	}
 }
 
 
@@ -60,6 +67,11 @@ void StaticObject::UIUpdate()
 {
 	for (UINT i = 0; i < colliderList.size(); ++i)
 		colliderList[i]->SetFinalMatrix(transform->GetFinalMatrix());
+}
+
+void StaticObject::Render()
+{
+	
 }
 
 void StaticObject::UIRender()
@@ -75,4 +87,10 @@ void StaticObject::AddCollider(GameCollider * collider)
 	newCollider->SetFinalMatrix(newCollider->GetFinalMatrix() * transform->GetFinalMatrix());
 	newCollider->SetParentObject(this);
 	this->colliderList.push_back(newCollider);
+}
+
+void StaticObject::AttachQuadTree(QuadTreeSystem * quadTree)
+{
+	if (quadTree)
+		quadTree->AddObject(this);
 }

@@ -5,20 +5,6 @@
 
 #include "./Renders/ShaderBuffer.h"
 
-class CamBuffer : public ShaderBuffer
-{
-public:
-	struct Struct
-	{
-		D3DXVECTOR3 pos;
-		float padding;
-	}data;
-
-	CamBuffer()
-		:ShaderBuffer(&data, sizeof Struct)
-	{}
-};
-
 
 class ToolBase;
 class ToolScene : public SceneNode
@@ -27,7 +13,6 @@ class ToolScene : public SceneNode
 private:
 	unordered_map<ToolType, ToolBase*> toolList;
 	typedef unordered_map<ToolType, ToolBase*>::iterator ToolIter;
-	CamBuffer* camBuffer;
 public:
 	ToolScene();
 	~ToolScene();

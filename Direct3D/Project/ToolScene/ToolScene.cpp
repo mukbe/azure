@@ -13,7 +13,11 @@
 
 #include "./Environment/Ocean.h"
 
+#include "./Utilities/Transform.h"
 #include "./Utilities/ImGuiHelper.h"
+
+#include "./Figure/Figure.h"
+
 
 
 ToolScene::ToolScene()
@@ -29,7 +33,7 @@ ToolScene::ToolScene()
 	ToolIter iter = toolList.begin();
 	for (; iter != toolList.end(); ++iter)
 		iter->second->Init();
-	camBuffer = new CamBuffer;
+
 }
 
 

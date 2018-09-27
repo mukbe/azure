@@ -8,7 +8,7 @@
 #include "./Utilities/Transform.h"
 
 
-Scattering::Scattering(FreeCamera* camera , string level)
+Scattering::Scattering(FreeCamera* camera, string level)
 {
 	name = "Scattering";
 
@@ -98,16 +98,14 @@ void Scattering::Update()
 {
 	sun->UpdateView();
 
-	_sunColor = ComputeLightColor();
-	UpdateDirectionalLightColor(_sunColor);
+	buffer->Data._SunColor = ComputeLightColor();
+	UpdateDirectionalLightColor(buffer->Data._SunColor);
 	UpdateAmbientLightColor(ComputeAmbientColor());
 
 }
 
 void Scattering::Render()
 {
-
-	
 	//드로우
 	UpdateMaterialParameters();
 
@@ -120,7 +118,7 @@ void Scattering::Render()
 	_particleDensityLUT->BindPSShaderResourceView(0);
 	_skyboxLUT->BindPSShaderResourceView(1);
 
-	if(RenderingMode == RenderMode::Reference)
+	if (RenderingMode == RenderMode::Reference)
 		shader->Render();
 	else
 		skyBoxShader->Render();
@@ -128,7 +126,7 @@ void Scattering::Render()
 	world->SetPSBuffer(1);
 	world->SetVSBuffer(1);
 	buffer->SetPSBuffer(2);
-
+	sun->Render();
 
 	UINT stride = sizeof(VertexTextureNormalTangent);
 	UINT offset = 0;
@@ -142,6 +140,7 @@ void Scattering::Render()
 	DeviceContext->DrawIndexed(36, 0, 0);
 	pRenderer->ChangeZBuffer(true);
 	States::SetRasterizer(States::RasterizerStates::SOLID_CULL_ON);
+
 }
 
 void Scattering::UIUpdate()
@@ -154,13 +153,13 @@ void Scattering::UIRender()
 	//ImGui::Begin("Scattering");
 
 	D3DXMATRIX mat = _camera->GetTransform()->GetFinalMatrix();
-	ImGui::Text("CameraX : %.2f , CameraY : %.2f, CameraZ : %.2f", mat._41,mat._42,mat._43);
+	ImGui::Text("CameraX : %.2f , CameraY : %.2f, CameraZ : %.2f", mat._41, mat._42, mat._43);
 
 	if (ImGui::InputInt("SampleCount", &SampleCount, 1))
 		SampleCount = Math::Clamp(SampleCount, 1, 64);
-	
+
 	if (ImGui::ColorEdit4("IncomingLight", IncomingLight))
-		IncomingLight *= 4.0f; 
+		IncomingLight *= 4.0f;
 
 	ImGui::SliderFloat("RayleighScatterCoef", &RayleighScatterCoef, 0.f, 10.f);
 	ImGui::SliderFloat("RayleighExtinctionCoef", &RayleighExtinctionCoef, 0.f, 10.f);
@@ -172,7 +171,7 @@ void Scattering::UIRender()
 	ImGui::SliderFloat("AmbientColorIntensity", &AmbientColorIntensity, 0.5f, 3.f);
 	ImGui::SliderFloat("SunIntensity", &SunIntensity, 0.f, 2.f);
 
-	const char* ThemesList[] = { "Reference" , "Optimized"  };
+	const char* ThemesList[] = { "Reference" , "Optimized" };
 	ImGui::Combo("RenderMode", (int*)&RenderingMode, ThemesList, 2);
 	//ImGui::End();
 }
@@ -191,22 +190,24 @@ void Scattering::UpdateMaterialParameters()
 	buffer->Data._IncomingLight = IncomingLight;
 	buffer->Data._MieG = MieG;
 	buffer->Data._DistanceScale = DistanceScale;
-	buffer->Data._SunColor = _sunColor;
+	//buffer->Data._SunColor = _sunColor;
 	buffer->Data._SunIntensity = SunIntensity;
 
-	D3DXVECTOR3 forward =   sun->GetForward();
+	sun->SetColor(buffer->Data._SunColor);
+
+	D3DXVECTOR3 forward = sun->GetForward();
 	buffer->Data._LightDir = D3DXVECTOR4(forward.x, forward.y, forward.z, 1.0f / 100.f);
 }
 
 void Scattering::PrecomputeParticleDensity()
 {
 	_particleDensityLUT = new CResource2D(720, 720);
-	
+
 	particleDensityLUTComputeShader->BindShader();
 	buffer->SetCSBuffer(2);
 
 	_particleDensityLUT->BindResource(0);
-	particleDensityLUTComputeShader->Dispatch(45,45, 1);
+	particleDensityLUTComputeShader->Dispatch(45, 45, 1);
 
 	_particleDensityLUT->ReleaseResource(0);
 
@@ -231,7 +232,7 @@ void Scattering::CalculateLightLUTs()
 
 void Scattering::PrecomputeSkyboxLUT()
 {
-	_skyboxLUT = new CResource3D((int)_skyboxLUTSize.x, (int)_skyboxLUTSize.y ,(int)_skyboxLUTSize.z,DXGI_FORMAT_R16G16B16A16_FLOAT);
+	_skyboxLUT = new CResource3D((int)_skyboxLUTSize.x, (int)_skyboxLUTSize.y, (int)_skyboxLUTSize.z, DXGI_FORMAT_R16G16B16A16_FLOAT);
 
 	//SkyboxLUT compute dispatch;
 	precomputeSkyboxLUT->BindShader();
@@ -249,7 +250,7 @@ void Scattering::PrecomputeSkyboxLUT()
 
 D3DXCOLOR Scattering::ComputeLightColor()
 {
-	
+	//TODO SunForward반대로 되있으므로 트랜스폼 점검
 	float cosAngle = -D3DXVec3Dot(&D3DXVECTOR3(0, 1, 0), &sun->GetForward());
 	float u = (cosAngle + 0.1f) / 1.1f;// * 0.5f + 0.5f;
 
@@ -264,7 +265,7 @@ D3DXCOLOR Scattering::ComputeLightColor()
 
 	D3DXCOLOR c = _directionalLightLUT[index0] * weight0 + _directionalLightLUT[index1] * weight1;
 	c /= 2.2f;
-	
+
 	return c;
 }
 
@@ -276,7 +277,6 @@ void Scattering::UpdateDirectionalLightColor(D3DXCOLOR sunColor)
 
 	buffer->Data._SunColor = D3DXCOLOR(Math::Max(color.x, 0.01f), Math::Max(color.y, 0.01f), Math::Max(color.z, 0.01f), 1);
 	buffer->Data._SunIntensity = Math::Max(length, 0.01f) * LightColorIntensity; // make sure unity doesn't disable this light
-
 }
 
 void Scattering::UpdateAmbientLightColor(D3DXCOLOR ambient)
