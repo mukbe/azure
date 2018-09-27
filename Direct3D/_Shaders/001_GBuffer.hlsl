@@ -6,6 +6,11 @@ Texture2D _emissiveTex : register(t2);
 Texture2D _normalTex : register(t3);
 Texture2D _detailTex : register(t4);
 
+static const int UseDeiffuseMap = 1;
+static const int UseNormalMap = 2;
+static const int UseSpecularMap = 4;
+static const int UseEmissiveMap = 8;
+
 //MRT0 Normal.xyz, RenderType(float)
 //MRT1 Diffuse.rgb,depth
 //MRT2 Specr.rgb, SpecPower(float)
@@ -25,7 +30,7 @@ G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float3 spec
 	// Pack all the data into the GBuffer structure
     Out.normal = float4(normal * 0.5f + 0.5f, renderType);
     Out.diffuse = float4(diffuse.rgb, depth);
-    Out.spec = float4(specColor, SpecPower);
+    Out.spec = float4(specColor, SpecPowerNorm);
 
     return Out;
 
@@ -192,8 +197,8 @@ G_Buffer ModelDeferredPS(ModelPixelInput input)
     G_Buffer output;
 
     float3 diffuse = _diffuseTex.Sample(_basicSampler, input.uv).rgb;
+    
 
-    //output.worldPos = input.worldPos;
     output.normal = float4(NormalMapSpace(_normalTex.Sample(_basicSampler, input.uv).xyz, input.normal, input.tangent), 1);
     output.spec = float4(1, 1, 1, 2);
 
@@ -234,8 +239,21 @@ G_Buffer InstancePS(ModelPixelInput input)
 
     if (diffuse4.a < 0.1f)
         discard;
-    
-    output = PackGBuffer(output, input.normal, diffuse4.rgb, SpecColor.rgb, input.depth, Shiness, 0.9f);
+
+    float3 normal;
+    float specPower;
+
+    if (TextureCheck & UseNormalMap)
+        normal = normalize(NormalMapSpace(_normalTex.Sample(_basicSampler, input.uv).xyz, input.normal, input.tangent));
+    else 
+        normal = normalize(input.normal);
+
+    if(TextureCheck & UseSpecularMap)
+        specPower = _specularTex.Sample(_basicSampler, input.uv).r;
+    else 
+        specPower = Shiness;
+
+    output = PackGBuffer(output, normal, diffuse4.rgb, SpecColor.rgb, input.depth, specPower, 0.9f);
     return output;
 }
 //===================================================

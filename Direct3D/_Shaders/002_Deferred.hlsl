@@ -1,12 +1,12 @@
 #include "000_Header.hlsl"
 
+static const float albedoBias = 0.4f;
 
 struct BasicPixelInput
 {
     float4 position : SV_POSITION;
     float2 uv : TEXCOORD0;
 };
-
 
 BasicPixelInput BasicDeferredVS(VertexTexture input)
 {
@@ -30,6 +30,7 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
     float3 specColor = data.SpecColor;
     float specPower = data.SpecPow;
 
+    return worldPos;
 
     if(data.RenderType <= 1.0f)
     {
@@ -38,8 +39,8 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
         float shadowFactor = CalcShadowFactor(projectionToLight, _sunLightsahdowMap, _shadowSampler);
 
         float diffuseFactor = saturate(dot(worldNormal.xyz, -SunDir));
-        float3 ambient = albedo * SunColor.rgb * 0.4f;
-        float3 diffuseColor = albedo * diffuseFactor * SunColor.rgb;
+        float3 ambient = albedo * SunColor.rgb * albedoBias;
+        float3 diffuseColor = albedo * SunColor.rgb * diffuseFactor;
 
         return float4(ambient + diffuseColor, 1.0f);
     }

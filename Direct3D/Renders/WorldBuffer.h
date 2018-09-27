@@ -159,6 +159,7 @@ public:
 
 		Data.Shininess = 1;
 		Data.DetailFactor = 1;
+		Data.textureCheck = 0;
 	}
 
 	struct Struct
@@ -170,8 +171,9 @@ public:
 
 		float Shininess;
 		float DetailFactor;
+		int textureCheck;
 
-		float Padding[2];
+		float Padding;
 	}Data;
 
 	ShaderBuffer_Mecro(MaterialBuffer)

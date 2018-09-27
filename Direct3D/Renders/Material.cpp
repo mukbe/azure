@@ -56,6 +56,16 @@ void Material::UpdateBuffer()
 	this->buffer->Data.Emissive = this->emissiveColor;
 	this->buffer->Data.Shininess = this->shiness;
 	this->buffer->Data.DetailFactor = this->detailFactor;
+	
+	this->buffer->Data.textureCheck = 0;
+	if (diffuseMap)
+		this->buffer->Data.textureCheck |= UseDeiffuseMap;
+	if (normalMap)
+		this->buffer->Data.textureCheck |= UseNormalMap;
+	if (specularMap)
+		this->buffer->Data.textureCheck |= UseSpecularMap;
+	if (emissiveMap)
+		this->buffer->Data.textureCheck |= UseEmissiveMap;
 }
 
 void Material::BindBuffer()

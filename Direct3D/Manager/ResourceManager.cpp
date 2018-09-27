@@ -22,7 +22,8 @@ SingletonCpp(ResourceManager)
 ResourceManager::ResourceManager()
 	:isShow(true)
 {
-
+	Texture* nullTexture = new Texture;
+	textures.insert(make_pair("NullTexture", nullTexture));
 }
 ResourceManager::~ResourceManager()
 {

@@ -30,3 +30,7 @@ public:
 	void UIRender();
 };
 
+#define UseDeiffuseMap 1
+#define UseNormalMap 2
+#define UseSpecularMap 4
+#define UseEmissiveMap 8

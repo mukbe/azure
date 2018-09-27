@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Object\Particle\ParticleSystem.h" />
+    <ClInclude Include="Renders\GrassRenderer\GrassRenderer.h" />
     <ClInclude Include="Object\GameUnit\GameUnit.h" />
     <ClInclude Include="Particle\ParticleSystem.h" />
     <ClInclude Include="Renders\AlphaRenderer.h" />
@@ -121,6 +123,8 @@
     <ClInclude Include="View\Projection.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Object\Particle\ParticleSystem.cpp" />
+    <ClCompile Include="Renders\GrassRenderer\GrassRenderer.cpp" />
     <ClCompile Include="Object\GameUnit\GameUnit.cpp" />
     <ClCompile Include="Particle\ParticleSystem.cpp" />
     <ClCompile Include="Renders\AlphaRenderer.cpp" />
@@ -324,6 +328,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\007_Alpha.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\008_Grass.hlsl">
+      <FileType>Text</FileType>
+    </None>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F89A7778-CBF0-4E22-B019-B7729ABB8281}</ProjectGuid>

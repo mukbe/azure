@@ -32,7 +32,8 @@ cbuffer MaterialBuffer : register(b3)
 
     float Shiness;
     float DetailFactor;
-    float2 MaterialPadding;
+    int TextureCheck;
+    float MaterialPadding;
 }
 
 cbuffer SunBuffer : register(b4)
@@ -95,8 +96,6 @@ struct VertexColorNormal
     float3 normal : NORMAL0;
 };
 
-
-
 struct VertexTexture
 {
     float4 position : POSITION0;
@@ -156,6 +155,7 @@ struct InstanceInputVS
     float4 world1 : WORLD1;
     float4 world2 : WORLD2;
 };
+
 
 
 #define EyePosition (InvView[3].xyz)
@@ -225,7 +225,7 @@ float3 NormalMapSpace(float3 normalMap, float3 normal, float3 tangent)
     float3 B = cross(N, T);
 
     float3x3 TBN = float3x3(T, B, N);
-
+    
     return mul(unpack, TBN);
 }
 

@@ -77,7 +77,7 @@ void ToolScene::PostUpdate()
 
 void ToolScene::PreRender()
 {
-
+	RenderRequest->SetUnPackGBufferProp(MainCamera->GetViewMatrix(), MainCamera->GetProjection());
 }
 
 void ToolScene::Render()
@@ -89,9 +89,6 @@ void ToolScene::Render()
 	{
 		iter->second->Render();
 	}
-
-	camBuffer->data.pos = MainCamera->GetTransform()->GetWorldPosition();
-	camBuffer->SetPSBuffer(7);
 }
 
 void ToolScene::UIRender()
