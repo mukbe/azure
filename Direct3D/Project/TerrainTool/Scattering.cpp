@@ -97,14 +97,16 @@ void Scattering::Updata()
 	sun->Update();
 	sun->UpdateView();
 
-	buffer->Data._SunColor = ComputeLightColor();
-	UpdateDirectionalLightColor(buffer->Data._SunColor);
+	_sunColor = ComputeLightColor();
+	UpdateDirectionalLightColor(_sunColor);
 	UpdateAmbientLightColor(ComputeAmbientColor());
 
 }
 
 void Scattering::Render()
 {
+
+	
 	//드로우
 	UpdateMaterialParameters();
 
@@ -125,7 +127,7 @@ void Scattering::Render()
 	world->SetPSBuffer(1);
 	world->SetVSBuffer(1);
 	buffer->SetPSBuffer(2);
-	sun->Render();
+
 
 	UINT stride = sizeof(VertexTextureNormalTangent);
 	UINT offset = 0;
@@ -184,12 +186,10 @@ void Scattering::UpdateMaterialParameters()
 	buffer->Data._IncomingLight = IncomingLight;
 	buffer->Data._MieG = MieG;
 	buffer->Data._DistanceScale = DistanceScale;
-	//buffer->Data._SunColor = _sunColor;
+	buffer->Data._SunColor = _sunColor;
 	buffer->Data._SunIntensity = SunIntensity;
 
-	sun->SetColor(buffer->Data._SunColor);
-
-	D3DXVECTOR3 forward = sun->GetForward();
+	D3DXVECTOR3 forward =   sun->GetForward();
 	buffer->Data._LightDir = D3DXVECTOR4(forward.x, forward.y, forward.z, 1.0f / 100.f);
 }
 
@@ -244,7 +244,7 @@ void Scattering::PrecomputeSkyboxLUT()
 
 D3DXCOLOR Scattering::ComputeLightColor()
 {
-	//TODO SunForward반대로 되있으므로 트랜스폼 점검
+	
 	float cosAngle = -D3DXVec3Dot(&D3DXVECTOR3(0, 1, 0), &sun->GetForward());
 	float u = (cosAngle + 0.1f) / 1.1f;// * 0.5f + 0.5f;
 
@@ -271,6 +271,7 @@ void Scattering::UpdateDirectionalLightColor(D3DXCOLOR sunColor)
 
 	buffer->Data._SunColor = D3DXCOLOR(Math::Max(color.x, 0.01f), Math::Max(color.y, 0.01f), Math::Max(color.z, 0.01f), 1);
 	buffer->Data._SunIntensity = Math::Max(length, 0.01f) * LightColorIntensity; // make sure unity doesn't disable this light
+
 }
 
 void Scattering::UpdateAmbientLightColor(D3DXCOLOR ambient)

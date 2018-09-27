@@ -106,7 +106,6 @@ void Terrain::Update()
 		Texture* tex = new Texture(Contents + L"heightTestMap.png");
 		tex->SetCSResource(0);
 		heightData->Load();
-
 		//TODO  splat Load
 	}
 
