@@ -5,9 +5,10 @@ class GameUnit : public GameObject
 protected:
 	class Model* model;
 	class ModelAnimPlayer* animation;
-	vector<class GameCollider*> colliderList;
+	vector<class AnimationCollider*> colliderList;
 public:
 	GameUnit(string name,class Model* model);
+	GameUnit(string name);
 	~GameUnit();
 
 	virtual void Init();

@@ -9,6 +9,7 @@
 #include "./Renders/Material.h"
 
 #include "./Bounding/GameCollider.h"
+#include "./Bounding/AnimationCollider.h"
 #include "./Bounding/BoundingBox.h"
 
 #include "./Utilities/BinaryFile.h"
@@ -126,23 +127,43 @@ ModelData ResourceManager::AddModelData(wstring file, string keyName,bool isAnim
 	Models::LoadMaterial(file + L".material", &data.materials);
 	Models::LoadMesh(file + L".mesh", &data.meshDatas.Bones, &data.meshDatas.Meshes);
 
-	if(isAnimation)
+	if (isAnimation)
+	{
 		Models::LoadAnimation(file + L".anim", &data.animations);
 
-	BinaryReader* reader = new BinaryReader();
-	reader->Open(file + L".collider");
-	{
-		UINT size = reader->UInt();
-		for (UINT i = 0; i < size; ++i)
+		BinaryReader* reader = new BinaryReader();
+		reader->Open(file + L".collider");
 		{
-			GameCollider* collider = new GameCollider(nullptr, new BoundingBox());
-			GameCollider::LoadCollider(reader, collider);
-			data.colliders.push_back(collider);
+			UINT size = reader->UInt();
+			for (UINT i = 0; i < size; ++i)
+			{
+				AnimationCollider* collider = new AnimationCollider(nullptr,nullptr);
+				GameCollider::LoadAnimCollider(reader, collider);
+				data.colliders.push_back(collider);
+			}
 		}
+		reader->Close();
+		SafeDelete(reader);
 	}
-	reader->Close();
-
+	else
+	{
+		BinaryReader* reader = new BinaryReader();
+		reader->Open(file + L".collider");
+		{
+			UINT size = reader->UInt();
+			for (UINT i = 0; i < size; ++i)
+			{
+				GameCollider* collider = new GameCollider(nullptr, new BoundingBox());
+				GameCollider::LoadCollider(reader, collider);
+				data.colliders.push_back(collider);
+			}
+		}
+		reader->Close();
+		SafeDelete(reader);
+	}
 	this->models.insert(make_pair(keyName, data));
+
+
 
 	return data;
 }

@@ -4,6 +4,7 @@
 #include "ToolScene.h"
 #include "Inspector.h"
 
+#include "./Object/GameUnit/GameUnit.h"
 #include "./Object/GameObject/GameObject.h"
 
 #include "../TerrainTool/Terrain.h"
@@ -14,6 +15,7 @@
 #include "./Environment/Ocean.h"
 
 #include "./Renders/Instancing/InstanceRenderer.h"
+
 
 Hierarchy::Hierarchy(ToolScene * toolScene)
 	:ToolBase(toolScene)
@@ -85,8 +87,28 @@ void Hierarchy::Render()
 
 void Hierarchy::UIRender()
 {
+
 	ImGui::Begin("Hierarchy");
 	{
+		if (ImGui::Button("Create", ImVec2(100, 20)))
+			ImGui::OpenPopup("CreateList");
+
+		if (ImGui::BeginPopup("CreateList"))
+		{
+			if (ImGui::TreeNode("Unit"))
+			{
+				if (ImGui::Selectable("Pandaren"))
+				{
+					this->CreateUnit("Pandaren");
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::TreePop();
+			}
+
+			ImGui::EndPopup();
+		}
+
+		ImGui::Separator();
 		ObjectManager::ObjectList objectList = ObjectManager::Get()->objectContainer[ObjectType::Type::Dynamic];
 		ObjectManager::ObjectListIter iter = objectList.begin();
 
@@ -109,6 +131,12 @@ void Hierarchy::UIRender()
 		}
 	}
 	ImGui::End();
+}
+
+void Hierarchy::CreateUnit(string name)
+{
+	GameUnit* newUnit = new GameUnit(name);
+	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Unit, newUnit);
 }
 
 

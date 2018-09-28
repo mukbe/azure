@@ -9,7 +9,7 @@ class InstanceRenderer : public GameObject
 {
 private:
 	UINT maxInstanceCount;
-	UINT drawInstanceCount;
+	Synthesize(UINT, drawInstanceCount,DrawIntanceCount)
 	class InstanceShader* shader;
 	ID3D11Buffer* instanceBuffer;
 private:

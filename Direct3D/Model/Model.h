@@ -41,6 +41,7 @@ class Model
 	friend class ModelData;
 public:
 	Model();
+	Model(struct ModelData data);
 	~Model();
 
 	void ReadMaterial(wstring file);

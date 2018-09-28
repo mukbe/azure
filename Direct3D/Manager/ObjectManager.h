@@ -6,7 +6,7 @@ namespace ObjectType
 {
 	enum class Tag
 	{
-		View = 0,Enviroment ,Object,Instancing, Ui , None
+		View = 0,Enviroment = 1 ,Unit = 2,Object = 3,Instancing = 4, Ui = 5 , None
 	};
 
 	enum class Type
@@ -32,6 +32,7 @@ private:
 	Synthesize(class CameraBase*, mainCamera,MainCamera)
 	Synthesize(bool ,isDebug,IsDebug)
 public:
+	void Init();
 	void Release();
 	void PreUpdate();
 	void Update();

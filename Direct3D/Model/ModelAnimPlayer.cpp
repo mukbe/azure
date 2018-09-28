@@ -12,7 +12,7 @@ ModelAnimPlayer::ModelAnimPlayer(Model * model)
 	: model(model), currentClip(nullptr), mode(Mode::Play),
 	currentKeyframe(0), frameTime(0.0f), keyframeFactor(0.0f),
 	nextKeyframe(0), useQuaternionKeyframe(true), playState(PlayState::Normal),
-	blendFrameTime(0.f),totalBlendingTime(0.f),blendTimeFactor(0.f),blendStartKeyframe(0)
+	blendFrameTime(0.f),totalBlendingTime(0.f),blendTimeFactor(0.f),blendStartKeyframe(0),transform(nullptr)
 {
 	//TODO 모델 세이더 추가 시에 작업
 	shader = Shaders->FindShader("modelShader");
@@ -170,7 +170,12 @@ void ModelAnimPlayer::UpdateBone()
 
 		int parentIndex = bone->ParentIndex();
 		if (parentIndex < 0)
-			D3DXMatrixIdentity(&matParentAnimation);
+		{
+			if (transform)
+				matParentAnimation = transform->GetFinalMatrix();
+			else
+				D3DXMatrixIdentity(&matParentAnimation);
+		}
 		else
 			matParentAnimation = boneAnimation[parentIndex];
 

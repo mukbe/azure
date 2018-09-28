@@ -114,6 +114,7 @@ void Ocean::UIRender()
 {
 	ImGui::Text("GridX : %d , GridZ : %d", this->gridCountX,this->gridCountZ);
 	ImGui::Text("FPS : %f", Time::Get()->FPS());
+	ImGui::Text("DrawGridCount : %d", drawInsatnceData.size());
 
 	ImGui::ColorEdit4("OceanColor", (float*)&oceanColor.r,
 		ImGuiColorEditFlags_Float | ImGuiColorEditFlags_AlphaPreviewHalf);
@@ -125,6 +126,7 @@ void Ocean::UIRender()
 void Ocean::UpdateBuffer()
 {
 	Buffer::UpdateBuffer(&vertexBuffer, vertexData.data(), sizeof VertexTextureNormal * vertexData.size());
+	//Buffer::UpdateBuffer(&instanceBuffer, drawInsatnceData.data(), sizeof D3DXVECTOR2 * drawInsatnceData.size());
 }
 
 
@@ -153,8 +155,8 @@ void Ocean::InitInstanceShader()
 
 void Ocean::InitOceansData()
 {
-	this->gridCountX = 8;
-	this->gridCountZ = 8;
+	this->gridCountX = 4;
+	this->gridCountZ = 4;
 	this->length = (float)vertexLength;
 	this->waveAmp = 0.0002f;
 	this->windSpeed = D3DXVECTOR2(32.0f, 32.0f);

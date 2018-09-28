@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Project\ToolScene\FactoryTool.h" />
     <ClInclude Include="Object\Particle\ParticleSystem.h" />
     <ClInclude Include="Renders\GrassRenderer\GrassRenderer.h" />
     <ClInclude Include="Object\GameUnit\GameUnit.h" />
@@ -123,6 +124,7 @@
     <ClInclude Include="View\Projection.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Project\ToolScene\FactoryTool.cpp" />
     <ClCompile Include="Object\Particle\ParticleSystem.cpp" />
     <ClCompile Include="Project\Game\PlayScene + hyunjin.cpp" />
     <ClCompile Include="Project\Game\PlayScene + soonwoo.cpp" />

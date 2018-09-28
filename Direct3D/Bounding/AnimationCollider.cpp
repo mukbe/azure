@@ -16,6 +16,23 @@ AnimationCollider::~AnimationCollider()
 {
 }
 
+void AnimationCollider::Clone(void ** clone)
+{
+	BoundingBox* box = new BoundingBox;
+	box->minPos = this->boundingBox->minPos;
+	box->maxPos = this->boundingBox->maxPos;
+	box->halfSize = this->boundingBox->halfSize;
+
+	AnimationCollider* collider = new AnimationCollider(nullptr, nullptr);
+	collider->name = this->name;
+	collider->type = this->type;
+	collider->finalMatrix = this->finalMatrix;
+	collider->localMatrix = this->localMatrix;
+	collider->parentBoneIndex = this->parentBoneIndex;
+
+	*clone = collider;
+}
+
 void AnimationCollider::Update()
 {
 	D3DXMatrixIdentity(&this->finalMatrix);

@@ -96,6 +96,7 @@
     <ClCompile Include="Project\Game\PlayScene + hyunjin.cpp" />
     <ClCompile Include="Project\Game\PlayScene + soonwoo.cpp" />
     <ClCompile Include="Project\Game\PlayScene.cpp" />
+    <ClCompile Include="Project\ToolScene\FactoryTool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renders\ShadowRenderer.h" />
@@ -200,6 +201,7 @@
     <ClInclude Include="Project\ToolScene\ToolScene.h" />
     <ClInclude Include="Object\Particle\ParticleSystem.h" />
     <ClInclude Include="Project\Game\PlayScene.h" />
+    <ClInclude Include="Project\ToolScene\FactoryTool.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />

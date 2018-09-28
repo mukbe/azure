@@ -27,6 +27,19 @@ ObjectManager::~ObjectManager()
 	//this->Release();
 }
 
+void ObjectManager::Init()
+{
+	ObjectList* pList = &objectContainer[ObjectType::Type::Dynamic];
+	ObjectListIter listIter = pList->begin();
+	for (; listIter != pList->end(); ++listIter)
+	{
+		for (UINT i = 0; i < listIter->second.size(); ++i)
+		{
+			listIter->second[i]->Init();
+		}
+	}
+}
+
 void ObjectManager::Release()
 {
 	ObjectContainerIter containerIter = objectContainer.begin();
@@ -203,7 +216,8 @@ vector<GameObject*>  ObjectManager::FindObjects(ObjectType::Type type, ObjectTyp
 
 vector< GameObject* >* ObjectManager::GetObjectList(ObjectType::Type type, ObjectType::Tag tag)
 {
-	return &objectContainer[type][tag];
+	vector<GameObject*>* returnPtr = &objectContainer[type][tag];
+	return returnPtr;
 }
 
 string ObjectManager::GetTagName(ObjectType::Tag tag)
@@ -214,6 +228,8 @@ string ObjectManager::GetTagName(ObjectType::Tag tag)
 		return "View";
 	else if (tag == ObjectType::Tag::Object)
 		return "Object";
+	else if (tag == ObjectType::Tag::Unit)
+		return "Unit";
 	else if (tag == ObjectType::Tag::Instancing)
 		return "Instancing";
 	else if (tag == ObjectType::Tag::Ui)

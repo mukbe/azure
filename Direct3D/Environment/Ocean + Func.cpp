@@ -11,6 +11,9 @@
 
 #include "./Utilities/Math.h"
 
+#include "./View/FreeCamera.h"
+#include "./Bounding/BoundingFrustum.h"
+
 #define Gravity 9.81f
 
 void Ocean::ComputingOcean()
@@ -66,7 +69,7 @@ void Ocean::ComputingOcean()
 
 void Ocean::FrustumCulling()
 {
-
+	
 }
 
 D3DXVECTOR2 Ocean::GetSpectrum(int n_prime, int m_prime)

@@ -856,7 +856,7 @@ void ImGui::ShowDemoWindow(bool* p_open)
             static ImVec4 backup_color;
             bool open_ = ImGui::ColorButton("MyColor##3b", color, misc_flags);
             ImGui::SameLine();
-            open_popup |= ImGui::Button("Palette");
+            open_|= ImGui::Button("Palette");
             if (open_popup)
             {
                 ImGui::OpenPopup("mypicker");

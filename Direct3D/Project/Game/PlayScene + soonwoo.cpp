@@ -15,6 +15,7 @@
 #include "./Utilities/ImGuiHelper.h"
 
 #include "./Figure/Figure.h"
+#include "./Object/GameUnit/GameUnit.h"
 
 #include "./Bounding/QuadTree/QuadTreeSystem.h"
 
@@ -40,4 +41,7 @@ void PlayScene::InitSoonwoo()
 
 	InstanceRenderer* tree2 = new InstanceRenderer("Tree2");
 	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Instancing, tree2);
+
+	GameUnit* player = new GameUnit("Pandaren");
+	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Unit, player);
 }

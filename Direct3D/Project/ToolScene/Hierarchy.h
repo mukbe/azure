@@ -23,5 +23,7 @@ public:
 	virtual void Render();
 	virtual void PreRender();
 	virtual void UIRender();
+private:
+	void CreateUnit(string name);
 };
 

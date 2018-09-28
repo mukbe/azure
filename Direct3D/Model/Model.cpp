@@ -18,6 +18,18 @@ Model::Model()
 	buffer = new ModelBuffer;
 }
 
+Model::Model(ModelData data)
+{
+	buffer = new ModelBuffer;
+
+	this->materials = data.materials;
+	this->bones = data.meshDatas.Bones;
+	this->meshes = data.meshDatas.Meshes;
+	this->clips = data.animations;
+
+	this->BindMeshData();
+}
+
 
 Model::~Model()
 {
