@@ -8,6 +8,7 @@ TerrainHeight::TerrainHeight()
 	heightSet = new ComputeShader(ShaderPath + L"Copy.hlsl", "CopyTexture");
 	heightMap = new CResource2D(256, 256, DXGI_FORMAT_R8G8B8A8_UNORM);
 
+
 	texture = new Texture(Contents + L"HeightMap256.png");
 
 	computeHeightEdit = new ComputeShader(ShaderPath + L"TerrainToolCS.hlsl", "HeightEdit");
@@ -52,6 +53,7 @@ void TerrainHeight::EditHeight()
 
 	computeHeightEdit->Dispatch(16, 16, 1);
 	tempHeightMap->ReleaseResource(2);
+
 }
 
 void TerrainHeight::Load()

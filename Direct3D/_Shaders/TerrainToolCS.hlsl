@@ -32,6 +32,7 @@ RWStructuredBuffer<float4> tempHeightMap : register(u2);
 RWTexture2D<float4> SplatMap : register(u3);
 Texture2D TempSplatMap : register(t3);
 
+
 void GetRay(float2 mouse, out float3 dir, out float3 cameraPos)
 {
     dir = float3(0, 0, 0);
@@ -336,5 +337,5 @@ void Splat(uint3 dtid : SV_DispatchThreadID)
             SplatMap[index.xy] = color;
         }
     }
-
 }
+

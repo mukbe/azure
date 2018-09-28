@@ -5,7 +5,7 @@
 #include "TerrainSmooth.h"
 
 Terrain::Terrain()
-	:height(256), width(256)
+	:height(255), width(255)
 {
 	this->name = "Terrain";
 
@@ -114,6 +114,36 @@ void Terrain::UIRender()
 		//Save
 		Texture::SaveToFile(Contents + L"heightTestMap.png", heightData->GetHeightBuffer()->GetSRV());
 		Texture::SaveToFile(Contents + L"splatMap.png", splat->GetSplatMap()->GetSRV());
+
+		//heightRatio = 250.f
+
+		buffer->SetCSBuffer(1);
+		heightData->GetHeightBuffer()->BindCSShaderResourceView(0);
+		heightData->GetTempHeightBuffer()->BindResource(2);
+		smooth->CopyHeight();
+		heightData->GetHeightBuffer()->ReleaseCSshaderResorceView(0);
+		vector<D3DXVECTOR4> heightColor;
+		heightColor.assign(256 * 256, D3DXVECTOR4());
+		heightData->GetTempHeightBuffer()->GetDatas(heightColor.data());
+
+		for (size_t i = 0; i < vertexData.size(); i++)
+			vertexData[i].position.y = heightColor[i].x * 250.f;
+
+		Math::ComputeNormal(vertexData, normalIndexData);
+		Texture* normalData = new Texture(DXGI_FORMAT_R8G8B8A8_UNORM);
+
+		vector<D3DXCOLOR> data;
+		data.assign(256 * 256, D3DXCOLOR(0,0,0,1));
+		for (size_t i = 0; i < vertexData.size(); i++)
+		{
+			memcpy(&data[i], &vertexData[i].normal, sizeof(D3DXVECTOR3));
+		}
+
+		normalData->SetPixel(data, 256, 256);
+		Texture::SaveToFile(Contents + L"normalMap.png", normalData->GetSRV());
+
+
+
 	}
 	ImGui::SameLine();
 	if (ImGui::Button("Load", ImVec2(150, 30)))
@@ -255,18 +285,13 @@ void Terrain::CreateTerrain()
 	UINT indexCount = width * height * 4;
 	indexData.assign(indexCount, UINT());
 
+	normalIndexData.assign(indexCount / 4 * 6, UINT());
+
 	index = 0;
 	for (UINT z = 0; z < height; z++)
 	{
 		for (UINT x = 0; x < width; x++)
 		{
-			//indexData[index + 0] = (width + 1) * z + x;
-			//indexData[index + 1] = (width + 1) * (z + 1) + x;
-			//indexData[index + 2] = (width + 1) * z + x + 1;
-			//indexData[index + 3] = (width + 1) * z + x + 1;
-			//indexData[index + 4] = (width + 1) * (z + 1) + x;
-			//indexData[index + 5] = (width + 1) * (z + 1) + (x + 1);
-
 			indexData[index + 0] = (width + 1) * z + x;
 			indexData[index + 1] = (width + 1) * (z + 1) + x;
 			indexData[index + 2] = (width + 1) * z + x + 1;
@@ -277,6 +302,26 @@ void Terrain::CreateTerrain()
 		}
 	}
 
+	index = 0;
+	for (UINT z = 0; z < height; z++)
+	{
+		for (UINT x = 0; x < width; x++)
+		{
+			normalIndexData[index + 0] = (width + 1) * z + x;
+			normalIndexData[index + 1] = (width + 1) * (z + 1) + x;
+			normalIndexData[index + 2] = (width + 1) * z + x + 1;
+			normalIndexData[index + 3] = (width + 1) * z + x + 1;
+			normalIndexData[index + 4] = (width + 1) * (z + 1) + x;
+			normalIndexData[index + 5] = (width + 1) * (z + 1) + (x + 1);
+
+
+			index += 6;
+		}
+	}
+
+
+
+	
 	//VertexBuffer
 	{
 		D3D11_BUFFER_DESC desc = { 0 };
