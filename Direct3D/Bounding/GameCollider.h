@@ -10,6 +10,7 @@ public:
 protected:
 	Synthesize(string,name,Name)
 	Synthesize(BoundingBox*, boundingBox,Bounding)
+	Synthesize(D3DXMATRIX,localMatrix,LocalMatrix)
 	Synthesize(D3DXMATRIX, finalMatrix,FinalMatrix)
 	Synthesize(GameObject*, parentObject,ParentObject)
 	Synthesize(ColliderType,type,Type)

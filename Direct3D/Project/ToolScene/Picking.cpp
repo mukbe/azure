@@ -49,7 +49,7 @@ void Picking::Update()
 			// | 3-----|-2
 			// |/      |/
 			// 7-------6 
-			vector<GameObject*>* staticListPtr = Objects->GetObjectList(ObjectType::Type::Dynamic, (ObjectType::Tag)3);
+			vector<GameObject*>* staticListPtr = Objects->GetObjectList(ObjectType::Type::Static, (ObjectType::Tag)3);
 			Ray ray = MainCamera->GetRay();
 			vector<GameObject*> pickList;
 			for (UINT i = 0; i < staticListPtr->size(); ++i)
@@ -144,5 +144,13 @@ void Picking::PreRender()
 }
 
 void Picking::UIRender()
+{
+}
+
+void Picking::SaveData()
+{
+}
+
+void Picking::LoadData()
 {
 }

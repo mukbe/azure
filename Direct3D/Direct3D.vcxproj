@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Manager\FactoryManager.h" />
     <ClInclude Include="Project\ToolScene\FactoryTool.h" />
-    <ClInclude Include="Object\Particle\ParticleSystem.h" />
     <ClInclude Include="Renders\GrassRenderer\GrassRenderer.h" />
     <ClInclude Include="Object\GameUnit\GameUnit.h" />
     <ClInclude Include="Particle\ParticleSystem.h" />
@@ -124,8 +124,8 @@
     <ClInclude Include="View\Projection.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Manager\FactoryManager.cpp" />
     <ClCompile Include="Project\ToolScene\FactoryTool.cpp" />
-    <ClCompile Include="Object\Particle\ParticleSystem.cpp" />
     <ClCompile Include="Project\Game\PlayScene + hyunjin.cpp" />
     <ClCompile Include="Project\Game\PlayScene + soonwoo.cpp" />
     <ClCompile Include="Renders\GrassRenderer\GrassRenderer.cpp" />
@@ -311,11 +311,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="_Shaders\005_OceanHigh.hlsl">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="_Shaders\005_OceanCompute.hlsl">
       <FileType>Document</FileType>
     </None>
@@ -336,6 +331,11 @@
   <ItemGroup>
     <None Include="_Shaders\008_Grass.hlsl">
       <FileType>Text</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\005_OceanDeferred.hlsl">
+      <FileType>Document</FileType>
     </None>
   </ItemGroup>
   <PropertyGroup Label="Globals">

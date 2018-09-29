@@ -7,11 +7,11 @@ private:
 	Synthesize(UINT,number,Number)
 	Synthesize(wstring,name,Name)
 	Synthesize(MaterialBuffer*, buffer,Buffer)
-	Synthesize(ID3D11ShaderResourceView*,diffuseMap,DiffuseMap)
-	Synthesize(ID3D11ShaderResourceView*,specularMap,SpecularMap)
-	Synthesize(ID3D11ShaderResourceView*,emissiveMap,EmissiveMap)
-	Synthesize(ID3D11ShaderResourceView*,normalMap,NormalMap)
-	Synthesize(ID3D11ShaderResourceView*,detailMap,DetailMap)
+	Synthesize(Texture*,diffuseMap,DiffuseMap)
+	Synthesize(Texture*,specularMap,SpecularMap)
+	Synthesize(Texture*,emissiveMap,EmissiveMap)
+	Synthesize(Texture*,normalMap,NormalMap)
+	Synthesize(Texture*,detailMap,DetailMap)
 	Synthesize(D3DXCOLOR, ambientColor, AmbientColor)
 	Synthesize(D3DXCOLOR, diffuseColor,DiffuseColor)
 	Synthesize(D3DXCOLOR, specColor, SpecColor)
@@ -28,6 +28,8 @@ public:
 	void BindBuffer();
 	void UnBindBuffer();
 	void UIRender();
+
+	void SaveData(Json::Value* parent);
 };
 
 #define UseDeiffuseMap 1

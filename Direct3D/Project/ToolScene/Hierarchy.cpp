@@ -22,30 +22,9 @@ Hierarchy::Hierarchy(ToolScene * toolScene)
 {
 	name = "Hierarchy";
 
-	freeCamera = new FreeCamera;
-	//freeCamera->GetTransform()->SetWorldPosition(278.f, 22.f, 566.f);
-	//freeCamera->GetTransform()->RotateSelf(0.f, 180.f * ONE_RAD, 0.f);
-	Objects->SetMainCamera(freeCamera);
-
-	scattering = new Scattering(freeCamera, "level");
-	ocean = new Ocean();
-
-	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::View, freeCamera);
-	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Enviroment, scattering);
-	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Enviroment, ocean);
-	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Enviroment, new Terrain);
-
-	InstanceRenderer* fishingBox = new InstanceRenderer("FishingBox", 20);
-	fishingBox->InitializeData("FishingBox");
-	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Instancing, fishingBox);
-
-	InstanceRenderer* tree1 = new InstanceRenderer("Tree1", 20);
-	tree1->InitializeData("Tree1");
-	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Instancing, tree1);
-
-	InstanceRenderer* tree2 = new InstanceRenderer("Tree2", 20);
-	tree2->InitializeData("Tree2");
-	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Instancing, tree2);
+	//freeCamera = new FreeCamera;
+	//Objects->SetMainCamera(freeCamera);
+	//Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::System, freeCamera);
 }
 
 Hierarchy::~Hierarchy()
@@ -95,6 +74,25 @@ void Hierarchy::UIRender()
 
 		if (ImGui::BeginPopup("CreateList"))
 		{
+			if (ImGui::TreeNode("Enviroment"))
+			{
+				if (ImGui::Selectable("Ocean"))
+				{
+					this->CreateEnviroment("Ocean");
+					ImGui::CloseCurrentPopup();
+				}
+				if (ImGui::Selectable("Terrain"))
+				{
+					this->CreateEnviroment("Terrain");
+					ImGui::CloseCurrentPopup();
+				}
+				if (ImGui::Selectable("Scattering"))
+				{
+					this->CreateEnviroment("Scattering");
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::TreePop();
+			}
 			if (ImGui::TreeNode("Unit"))
 			{
 				if (ImGui::Selectable("Pandaren"))
@@ -104,39 +102,113 @@ void Hierarchy::UIRender()
 				}
 				ImGui::TreePop();
 			}
-
+			if (ImGui::TreeNode("Instancing"))
+			{
+				if (ImGui::Selectable("InstanceRenderer"))
+				{
+					this->CreaetInstanceRenderer();
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::TreePop();
+			}
 			ImGui::EndPopup();
 		}
 
 		ImGui::Separator();
-		ObjectManager::ObjectList objectList = ObjectManager::Get()->objectContainer[ObjectType::Type::Dynamic];
-		ObjectManager::ObjectListIter iter = objectList.begin();
 
-		for (; iter != objectList.end(); ++iter)
+		ObjectManager::ObjectContainer container = ObjectManager::Get()->objectContainer;
+		ObjectManager::ObjectContainerIter containerIter = container.begin();
+		for (; containerIter != container.end(); ++containerIter)
 		{
-			string category = ObjectManager::Get()->GetTagName(iter->first);
-			if (ImGui::TreeNode(category.c_str()))
+			string typeName;
+			if (containerIter->first == ObjectType::Type::Dynamic)
+				typeName = "Dynamic";
+			else
+				typeName = "Static";
+
+			if (ImGui::TreeNode(typeName.c_str()))
 			{
-				ObjectManager::ArrObject list = iter->second;
-				for (UINT i = 0; i < list.size(); ++i)
+				ObjectManager::ObjectList objectList = containerIter->second;
+				ObjectManager::ObjectListIter iter = objectList.begin();
+
+				for (; iter != objectList.end(); ++iter)
 				{
-					if (ImGui::Selectable(list[i]->GetName().c_str()))
+					string category = ObjectManager::Get()->GetTagName(iter->first);
+					if (ImGui::TreeNode(category.c_str()))
 					{
-						inspector->SetTargetObject(list[i]);
+						ObjectManager::ArrObject list = iter->second;
+						for (UINT i = 0; i < list.size(); ++i)
+						{
+							if (ImGui::Selectable(list[i]->GetName().c_str()))
+							{
+								inspector->SetTargetObject(list[i]);
+							}
+						}
+						ImGui::TreePop();
+
 					}
 				}
-				ImGui::TreePop();
 
+				ImGui::TreePop();
 			}
 		}
 	}
 	ImGui::End();
 }
 
+void Hierarchy::SaveData()
+{
+
+}
+
+void Hierarchy::LoadData()
+{
+}
+
 void Hierarchy::CreateUnit(string name)
 {
 	GameUnit* newUnit = new GameUnit(name);
+	newUnit->GetTransform()->SetWorldPosition(MainCamera->GetTransform()->GetWorldPosition() +
+		MainCamera->GetTransform()->GetForward() * 50.0f);
+	newUnit->GetTransform()->SetScale(0.3f, 0.3f, 0.3f);
 	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Unit, newUnit);
+}
+
+void Hierarchy::CreateEnviroment(string name)
+{
+	if (name == "Ocean")
+	{
+		Ocean* ocean = new Ocean;
+		ocean->Init();
+		Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Enviroment, ocean);
+	}
+	else if (name == "Terrain")
+	{
+		Terrain* terrain = new Terrain;
+		Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Enviroment, terrain);
+	}
+	else if (name == "Scattering")
+	{
+		Scattering* scattering = new Scattering((FreeCamera*)MainCamera, "level");
+		Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Enviroment, scattering);
+		Objects->ObjectSortingFront(ObjectType::Type::Dynamic, ObjectType::Tag::Enviroment, "Scattering");
+	}
+}
+
+void Hierarchy::CreaetInstanceRenderer(wstring fileName)
+{
+	if (fileName.length() > 0)
+	{
+		string key = String::WStringToString(fileName);
+		key = Path::GetFileNameWithoutExtension(key) + InstanceRenderer::Renderer;
+		InstanceRenderer* renderer = new InstanceRenderer(key, 30);
+		Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Instancing, renderer);
+	}
+	else
+	{
+		function<void(wstring)> func = bind(&Hierarchy::CreaetInstanceRenderer, this, placeholders::_1);
+		Path::OpenFileDialog(L"", Path::MaterialFilter, Assets, func);
+	}
 }
 
 

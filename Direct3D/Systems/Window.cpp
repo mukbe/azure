@@ -35,6 +35,7 @@ WPARAM Window::Run()
 	RenderManager::Create();
 	SceneManager::Create();
 	ObjectManager::Create();
+	FactoryManager::Create();
 	DataBase::Create();
 
 	ImGui::Create(desc.Handle, Device, DeviceContext);
@@ -76,6 +77,7 @@ WPARAM Window::Run()
 //================Release Manager===============================
 	ImGui::Delete();
 	DataBase::Delete();
+	FactoryManager::Delete();
 	ObjectManager::Get()->Release();
 	ObjectManager::Delete();
 	Scenes->Delete();

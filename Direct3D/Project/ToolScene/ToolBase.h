@@ -17,4 +17,7 @@ public:
 	virtual void PreRender() = 0;
 	virtual void Render() = 0;
 	virtual void UIRender() = 0;
+
+	virtual void SaveData() = 0;
+	virtual void LoadData() = 0;
 };

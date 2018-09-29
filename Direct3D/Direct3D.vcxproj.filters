@@ -46,13 +46,6 @@
     <ClCompile Include="Renders\Instancing\InstanceShader.cpp" />
     <ClCompile Include="Renders\Instancing\InstanceRenderer.cpp" />
     <ClCompile Include="Environment\Sun.cpp" />
-    <ClCompile Include="Object\StaticObject\StaticObject.cpp" />
-    <ClCompile Include="Manager\BufferManager.cpp" />
-    <ClCompile Include="Manager\ObjectManager.cpp" />
-    <ClCompile Include="Manager\RenderManager.cpp" />
-    <ClCompile Include="Manager\ResourceManager.cpp" />
-    <ClCompile Include="Manager\SceneManager.cpp" />
-    <ClCompile Include="Manager\ShaderManager.cpp" />
     <ClCompile Include="Environment\Ocean + Func.cpp" />
     <ClCompile Include="Environment\Ocean.cpp" />
     <ClCompile Include="Bounding\QuadTree\QuadTreeNode.cpp" />
@@ -70,7 +63,6 @@
     <ClCompile Include="Utilities\Path.cpp" />
     <ClCompile Include="Utilities\String.cpp" />
     <ClCompile Include="Utilities\Transform.cpp" />
-    <ClCompile Include="Manager\DataBase.cpp" />
     <ClCompile Include="Renders\AlphaRenderer.cpp" />
     <ClCompile Include="Particle\ParticleSystem.cpp" />
     <ClCompile Include="Object\GameUnit\GameUnit.cpp" />
@@ -92,11 +84,19 @@
     <ClCompile Include="Project\ToolScene\Inspector.cpp" />
     <ClCompile Include="Project\ToolScene\Picking.cpp" />
     <ClCompile Include="Project\ToolScene\ToolScene.cpp" />
-    <ClCompile Include="Object\Particle\ParticleSystem.cpp" />
     <ClCompile Include="Project\Game\PlayScene + hyunjin.cpp" />
     <ClCompile Include="Project\Game\PlayScene + soonwoo.cpp" />
     <ClCompile Include="Project\Game\PlayScene.cpp" />
     <ClCompile Include="Project\ToolScene\FactoryTool.cpp" />
+    <ClCompile Include="Object\StaticObject\StaticObject.cpp" />
+    <ClCompile Include="Manager\BufferManager.cpp" />
+    <ClCompile Include="Manager\DataBase.cpp" />
+    <ClCompile Include="Manager\FactoryManager.cpp" />
+    <ClCompile Include="Manager\ObjectManager.cpp" />
+    <ClCompile Include="Manager\RenderManager.cpp" />
+    <ClCompile Include="Manager\ResourceManager.cpp" />
+    <ClCompile Include="Manager\SceneManager.cpp" />
+    <ClCompile Include="Manager\ShaderManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renders\ShadowRenderer.h" />
@@ -151,14 +151,6 @@
     <ClInclude Include="Renders\Instancing\InstanceShader.h" />
     <ClInclude Include="Renders\Instancing\InstanceRenderer.h" />
     <ClInclude Include="Environment\Sun.h" />
-    <ClInclude Include="Object\StaticObject\StaticObject.h" />
-    <ClInclude Include="Manager\BufferManager.h" />
-    <ClInclude Include="Manager\ObjectManager.h" />
-    <ClInclude Include="Manager\RenderManager.h" />
-    <ClInclude Include="Manager\ResourceManager.h" />
-    <ClInclude Include="Manager\SceneManager.h" />
-    <ClInclude Include="Manager\SceneNode.h" />
-    <ClInclude Include="Manager\ShaderManager.h" />
     <ClInclude Include="Environment\Ocean.h" />
     <ClInclude Include="Bounding\QuadTree\QuadTreeNode.h" />
     <ClInclude Include="Bounding\QuadTree\QuadTreeSystem.h" />
@@ -175,7 +167,6 @@
     <ClInclude Include="Utilities\Path.h" />
     <ClInclude Include="Utilities\String.h" />
     <ClInclude Include="Utilities\Transform.h" />
-    <ClInclude Include="Manager\DataBase.h" />
     <ClInclude Include="Renders\AlphaRenderer.h" />
     <ClInclude Include="Particle\ParticleSystem.h" />
     <ClInclude Include="Object\GameUnit\GameUnit.h" />
@@ -199,9 +190,18 @@
     <ClInclude Include="Project\ToolScene\Picking.h" />
     <ClInclude Include="Project\ToolScene\ToolBase.h" />
     <ClInclude Include="Project\ToolScene\ToolScene.h" />
-    <ClInclude Include="Object\Particle\ParticleSystem.h" />
     <ClInclude Include="Project\Game\PlayScene.h" />
     <ClInclude Include="Project\ToolScene\FactoryTool.h" />
+    <ClInclude Include="Object\StaticObject\StaticObject.h" />
+    <ClInclude Include="Manager\BufferManager.h" />
+    <ClInclude Include="Manager\DataBase.h" />
+    <ClInclude Include="Manager\FactoryManager.h" />
+    <ClInclude Include="Manager\ObjectManager.h" />
+    <ClInclude Include="Manager\RenderManager.h" />
+    <ClInclude Include="Manager\ResourceManager.h" />
+    <ClInclude Include="Manager\SceneManager.h" />
+    <ClInclude Include="Manager\SceneNode.h" />
+    <ClInclude Include="Manager\ShaderManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />
@@ -218,10 +218,10 @@
     <None Include="_Shaders\AtmosphericScattering_Compute.hlsl" />
     <None Include="_Shaders\005_OceanCompute.hlsl" />
     <None Include="_Shaders\005_OceanRaw.hlsl" />
-    <None Include="_Shaders\005_OceanHigh.hlsl" />
     <None Include="_Shaders\006_UI.hlsl" />
     <None Include="_Shaders\007_Alpha.hlsl" />
     <None Include="_Shaders\008_Grass.hlsl" />
     <None Include="Project\Game\Header.hlsli" />
+    <None Include="_Shaders\005_OceanDeferred.hlsl" />
   </ItemGroup>
 </Project>

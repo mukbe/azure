@@ -30,6 +30,9 @@ public:
 	unordered_map<ToolType, ToolBase*> GetToolList()const { return this->toolList; }
 	template<class T>
 	T* GetTool(string name);
+
+	void SaveData();
+	void LoadData();
 };
 
 template<class T>

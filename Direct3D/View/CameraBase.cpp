@@ -52,6 +52,31 @@ void CameraBase::Render()
 	perspective->Render();
 }
 
+void CameraBase::SaveData(Json::Value * parent)
+{
+	Json::Value value;
+	{
+		JsonHelper::SetValue(value, "Name", this->name);
+		string nullString = "";
+		JsonHelper::SetValue(value, "FileName", nullString);
+		JsonHelper::SetValue(value, "Position", transform->GetWorldPosition());
+		JsonHelper::SetValue(value, "Rotate", transform->GetAngle());
+		JsonHelper::SetValue(value, "IsActive", isActive);
+	}
+	(*parent)[this->name.c_str()] = value;
+}
+
+void CameraBase::LoadData(Json::Value * parent)
+{
+	D3DXVECTOR3 pos, angle;
+	GameObject::LoadData(parent);
+	JsonHelper::GetValue(*parent, "Position", pos);
+	JsonHelper::GetValue(*parent, "Rotate", angle);
+
+	transform->SetWorldPosition(pos);
+	transform->RotateWorld(angle.x, angle.y, angle.z);
+}
+
 D3DXMATRIX CameraBase::GetProjection()
 {
 	return perspective->GetMatrix();

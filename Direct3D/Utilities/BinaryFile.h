@@ -39,7 +39,7 @@ public:
 	BinaryReader();
 	~BinaryReader();
 
-	void Open(wstring filePath);
+	bool Open(wstring filePath);
 	void Close();
 
 	bool Bool();

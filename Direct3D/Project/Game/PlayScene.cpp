@@ -86,7 +86,7 @@ void PlayScene::UIRender()
 
 	ImGui::Text("FPS : %f", Time::Get()->FPS());
 
-	Objects->FindObject(ObjectType::Type::Dynamic, ObjectType::Tag::View, "QuadTreeSystem")->UIRender();
+	Objects->FindObject(ObjectType::Type::Dynamic, ObjectType::Tag::System, "QuadTreeSystem")->UIRender();
 	int objectCount = 0;
 	vector<GameObject*>* pList = Objects->GetObjectList(ObjectType::Type::Dynamic, ObjectType::Tag::Instancing);
 	for (UINT i = 0; i < pList->size(); ++i)

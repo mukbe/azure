@@ -47,10 +47,12 @@ void ResourceManager::LoadAsset()
 	this->LoadFolder("../Contents/Atmospheric/","*.png");
 	this->LoadFolder("../_Contents/", "*.png");
 
-	this->LoadFolder("../_Assets/Objects/Trees/", "*.material");
 	this->LoadFolder("../_Assets/Objects/Trees/", "*.png");
-	this->LoadFolder("../_Assets/Objects/FishingBox/", "*.material");
+	this->LoadFolder("../_Assets/Objects/Trees/", "*.material");
 	this->LoadFolder("../_Assets/Objects/FishingBox/", "*.png");
+	this->LoadFolder("../_Assets/Objects/FishingBox/", "*.material");
+	this->LoadFolder("../_Assets/Objects/Blacksmeeth/", "*.png");
+	this->LoadFolder("../_Assets/Objects/Blacksmeeth/", "*.material");
 	
 	this->LoadFolder("../_Assets/Pandaren/", "*.material",true);
 	this->LoadFolder("../_Assets/Pandaren/", "*.png");
@@ -101,6 +103,17 @@ Texture * ResourceManager::AddTexture(wstring file, string keyName)
 	return newTexture;
 }
 
+Texture * ResourceManager::AddTexture(string key, Texture * texture)
+{
+	TextureIter iter = textures.find(key);
+	if (iter != textures.end())
+		return iter->second;
+
+	this->textures.insert(make_pair(key, texture));
+
+	return texture;
+}
+
 Texture * ResourceManager::FindTexture(string keyName)
 {
 	TextureIter iter = textures.find(keyName);
@@ -123,7 +136,7 @@ ModelData ResourceManager::AddModelData(wstring file, string keyName,bool isAnim
 		return iter->second;
 
 	ModelData data;
-
+	data.file = file;
 	Models::LoadMaterial(file + L".material", &data.materials);
 	Models::LoadMesh(file + L".mesh", &data.meshDatas.Bones, &data.meshDatas.Meshes);
 
@@ -148,7 +161,7 @@ ModelData ResourceManager::AddModelData(wstring file, string keyName,bool isAnim
 	else
 	{
 		BinaryReader* reader = new BinaryReader();
-		reader->Open(file + L".collider");
+		if(reader->Open(file + L".collider"))
 		{
 			UINT size = reader->UInt();
 			for (UINT i = 0; i < size; ++i)
@@ -157,13 +170,12 @@ ModelData ResourceManager::AddModelData(wstring file, string keyName,bool isAnim
 				GameCollider::LoadCollider(reader, collider);
 				data.colliders.push_back(collider);
 			}
+			reader->Close();
 		}
-		reader->Close();
 		SafeDelete(reader);
 	}
+
 	this->models.insert(make_pair(keyName, data));
-
-
 
 	return data;
 }

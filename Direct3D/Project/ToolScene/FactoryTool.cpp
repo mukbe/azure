@@ -59,3 +59,11 @@ void FactoryTool::UIRender()
 	}
 	ImGui::End();
 }
+
+void FactoryTool::SaveData()
+{
+}
+
+void FactoryTool::LoadData()
+{
+}

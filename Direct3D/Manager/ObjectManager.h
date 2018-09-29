@@ -6,7 +6,7 @@ namespace ObjectType
 {
 	enum class Tag
 	{
-		View = 0,Enviroment = 1 ,Unit = 2,Object = 3,Instancing = 4, Ui = 5 , None
+		System = 0,Enviroment = 1 ,Unit = 2,Object = 3,Instancing = 4, Ui = 5 , None
 	};
 
 	enum class Type
@@ -29,7 +29,7 @@ private:
 
 	ObjectContainer	objectContainer;
 private:
-	Synthesize(class CameraBase*, mainCamera,MainCamera)
+	class CameraBase* mainCamera;
 	Synthesize(bool ,isDebug,IsDebug)
 public:
 	void Init();
@@ -49,7 +49,15 @@ public:
 	vector<class GameObject*>  FindObjects(ObjectType::Type type, ObjectType::Tag tag, string name);
 	vector<class GameObject*>* GetObjectList (ObjectType::Type type, ObjectType::Tag tag);
 
+	void ObjectSortingFront(ObjectType::Type type, ObjectType::Tag tag, string name);
+
 	string GetTagName(ObjectType::Tag tag);
+
+	void LoadData(Json::Value* parent);
+	void SaveData(Json::Value* parent);
+
+	class CameraBase* GetMainCamera();
+	void SetMainCamera(class CameraBase* camera) { this->mainCamera = camera; }
 };
 
 #define Objects ObjectManager::Get()

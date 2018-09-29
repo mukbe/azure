@@ -31,7 +31,12 @@
 AnimationTool::AnimationTool()
 	:toolType(0)
 {
-	AssetManager->LoadAsset();
+	//wstring filePath = L"../_Assets/Objects/Blacksmeeth/";
+	//Fbx::Exporter* exporter = new Fbx::Exporter(filePath + L"Blacksmeeth.fbx");
+	//exporter->ExportMaterial(filePath, L"Blacksmeeth");
+	//exporter->ExportMesh(filePath, L"Blacksmeeth");
+	////exporter->ExportAnimation(filePath, L"Blacksmeeth");
+	//SafeDelete(exporter);
 
 	RenderRequest->AddRender("AnimationToolUIRender", bind(&AnimationTool::UIRender, this), RenderType::UIRender);
 	RenderRequest->AddRender("AnimationToolshadow", bind(&AnimationTool::ShadowRender, this), RenderType::Shadow);
@@ -50,14 +55,12 @@ AnimationTool::AnimationTool()
 	objectTool = new ObjectTool;
 	objectTool->SetCamera(freeCamera);
 
-	ocean = new Ocean;
 
 }
 
 
 AnimationTool::~AnimationTool()
 {
-	SafeDelete(ocean);
 	SafeDelete(grid);
 	SafeDelete(characterTool);
 	SafeDelete(objectTool);
@@ -79,12 +82,12 @@ void AnimationTool::PreUpdate()
 
 void AnimationTool::Update()
 {
-	//if (toolType == 0)
-	//	characterTool->Update();
-	//else
-	//	objectTool->Update();
+	if (toolType == 0)
+		characterTool->Update();
+	else
+		objectTool->Update();
 
-	ocean->Update();
+
 }
 
 void AnimationTool::PostUpdate()
@@ -108,15 +111,14 @@ void AnimationTool::Render()
 {
 	freeCamera->Render();
 
-	ocean->Render();
 
-	//if (toolType == 0)
-	//{
-	//	characterTool->Render();
-	//	grid->Render();
-	//}
-	//else
-	//	objectTool->Render();
+	if (toolType == 0)
+	{
+		characterTool->Render();
+		grid->Render();
+	}
+	else
+		objectTool->Render();
 
 	//camera정보를 deferred에게 언팩킹시에 필요한 정보를 보낸다
 	RenderRequest->SetUnPackGBufferProp(freeCamera->GetViewMatrix(), freeCamera->GetProjection());
@@ -127,9 +129,8 @@ void AnimationTool::Render()
 
 void AnimationTool::UIRender()
 {
-	ocean->UIRender();
-
 	static bool showDemo = false;
+	static bool isAsset = false;
 	//MainBar
 	if (ImGui::BeginMainMenuBar())
 	{
@@ -139,6 +140,8 @@ void AnimationTool::UIRender()
 				toolType = 0;
 			if (ImGui::MenuItem("ObjectTool"))
 				toolType = 1;
+			if (ImGui::MenuItem("Asset"))
+				isAsset = !isAsset;
 			if (ImGui::MenuItem("Demo"))
 				showDemo = !showDemo;
 
@@ -153,6 +156,9 @@ void AnimationTool::UIRender()
 	else
 		objectTool->UIRender();
 
+
+	if (isAsset)
+		AssetManager->UIRender();
 	//Demo
 	if (showDemo)
 		ImGui::ShowDemoWindow();

@@ -31,8 +31,7 @@
 
 void CharacterTool::UIRender()
 {
-	AssetManager->UIRender();
-
+	
 	//ToolPage
 	if (showTool)
 	{
@@ -70,7 +69,7 @@ void CharacterTool::UIRender()
 	if (targetCollider)
 	{
 		debugTransform->RenderGUI();
-		targetCollider->SetlocalMatrix(debugTransform->GetTransform()->GetFinalMatrix());
+		targetCollider->SetLocalMatrix(debugTransform->GetTransform()->GetFinalMatrix());
 	}
 }
 

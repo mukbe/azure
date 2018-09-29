@@ -69,6 +69,19 @@ void Model::BindMeshData()
 	}
 }
 
+void Model::UIRender()
+{
+	for (UINT i = 0; i < materials.size(); ++i)
+	{
+		string name = String::WStringToString(materials[i]->GetName());
+		if (ImGui::TreeNode(name.c_str()))
+		{
+			materials[i]->UIRender();
+			ImGui::TreePop();
+		}
+	}
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -117,7 +130,7 @@ void Models::LoadMaterial(wstring file, vector<class Material*> * materials)
 			string key = Path::GetFileNameWithoutExtension(textureFile);
 			wstring file = String::StringToWString(textureFile);
 			Texture* texture = AssetManager->AddTexture(file, key);
-			material->SetDiffuseMap(texture->GetSRV());
+			material->SetDiffuseMap(texture);
 		}
 		
 		JsonHelper::GetValue(value, "SpecularFile", textureFile);
@@ -126,7 +139,7 @@ void Models::LoadMaterial(wstring file, vector<class Material*> * materials)
 			string key = Path::GetFileNameWithoutExtension(textureFile);
 			wstring file = String::StringToWString(textureFile);
 			Texture* texture = AssetManager->AddTexture(file, key);
-			material->SetSpecularMap(texture->GetSRV());
+			material->SetSpecularMap(texture);
 		}
 		
 		JsonHelper::GetValue(value, "EmissiveFile", textureFile);
@@ -135,7 +148,8 @@ void Models::LoadMaterial(wstring file, vector<class Material*> * materials)
 			string key = Path::GetFileNameWithoutExtension(textureFile);
 			wstring file = String::StringToWString(textureFile);
 			Texture* texture = AssetManager->AddTexture(file, key);
-			material->SetEmissiveMap(texture->GetSRV());
+			material->SetEmissiveMap(texture);
+			
 		}
 		
 		JsonHelper::GetValue(value, "NormalFile", textureFile);
@@ -144,7 +158,7 @@ void Models::LoadMaterial(wstring file, vector<class Material*> * materials)
 			string key = Path::GetFileNameWithoutExtension(textureFile);
 			wstring file = String::StringToWString(textureFile);
 			Texture* texture = AssetManager->AddTexture(file, key);
-			material->SetNormalMap(texture->GetSRV());
+			material->SetNormalMap(texture);
 		}
 
 		materials->push_back(material);

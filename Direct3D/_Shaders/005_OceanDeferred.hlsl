@@ -12,9 +12,8 @@ struct VertexInput
 struct PixelInput
 {
     float4 position : SV_POSITION0;
-    float3 worldPos : POSITION0;
-    float2 uv : TEXCOORD0;
     float3 normal : NORMAL0;
+    float3 color : TEXCOORD0;
 };
 
 G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float3 specColor,
@@ -32,23 +31,15 @@ G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float3 spec
 
 }
 
-Texture2D _lookUp : register(t6);
-
-float Fresnel(float3 V, float3 N)
-{
-    float costhetai = abs(dot(V, N));
-    return _lookUp.Sample(_basicSampler, float2(costhetai, 0.0)).a;
-}
-
-
 PixelInput InstanceVS(VertexInput input)
 {
     PixelInput output;
-    output.worldPos = input.position.xyz + float3(input.offset.x, 0, input.offset.y);
-    output.position = mul(input.position + float4(input.offset.x, 0, input.offset.y, 0), ViewProjection);
-    
+
+    float4 worldPosition = mul(input.position + float4(input.offset.x, 0, input.offset.y, 0.f), World);
+    output.position = mul(worldPosition, ViewProjection);
+    output.color = DiffuseColor;
     output.normal = input.normal;
-    output.uv = input.uv;
+
 
     return output;
 }
@@ -57,18 +48,10 @@ PixelInput InstanceVS(VertexInput input)
 G_Buffer InstancePS(PixelInput input)
 {
     G_Buffer output;
-
-    float3 sunDirection = normalize(float3(-1, -1, 0));
-
-    float3 V = normalize(GetCameraPosition() - input.worldPos);
-    float3 N = normalize(input.normal);
-	
-    float fresnel = Fresnel(V, N);
-    float4 specColor = lerp(DiffuseColor, AmbientColor, fresnel);
-
-    output.normal = float4(input.normal, 1.5f);
-    output.diffuse = specColor;
-    output.spec = float4(0, 0, 0, 0);
+    float3 normal = normalize(input.normal);
+    output.normal = float4(normal * 2.0f - 1.0f, 2.5f);
+    output.diffuse = float4(input.color, 1.0f);
+    output.spec = float4(1, 1, 1, 1);
 
     return output;
 }

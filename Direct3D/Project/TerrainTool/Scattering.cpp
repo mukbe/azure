@@ -96,6 +96,9 @@ Scattering::~Scattering()
 
 void Scattering::Update()
 {
+	if (_camera == nullptr)
+		_camera = (FreeCamera*)MainCamera;
+
 	sun->UpdateView();
 
 	buffer->Data._SunColor = ComputeLightColor();

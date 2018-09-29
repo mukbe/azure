@@ -83,10 +83,14 @@ void DeferredRenderer::UIRender()
 {
 	ImGui::Begin("Deferred");
 	{
-		ImGui::ImageButton(shaderResourceView[0], ImVec2(200, 150)); ImGui::SameLine();
-		ImGui::ImageButton(shaderResourceView[1], ImVec2(200, 150));
-		ImGui::ImageButton(shaderResourceView[2], ImVec2(200, 150)); ImGui::SameLine();
-		ImGui::ImageButton(depthVis->GetSRV(), ImVec2(200, 150));
+		static float fSize = 300.0f;
+		ImGui::SliderFloat("ImageSize",&fSize,50.0f,500.0f);
+		ImVec2 size = ImVec2(fSize, fSize);
+
+		ImGui::ImageButton(shaderResourceView[0], size); ImGui::SameLine();
+		ImGui::ImageButton(shaderResourceView[1], size);
+		ImGui::ImageButton(shaderResourceView[2], size); ImGui::SameLine();
+		ImGui::ImageButton(depthVis->GetSRV(), size);
 	}
 	ImGui::End();
 }

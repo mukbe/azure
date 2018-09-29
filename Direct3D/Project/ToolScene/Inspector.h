@@ -18,5 +18,8 @@ public:
 	virtual void Render();
 	virtual void PreRender() ;
 	virtual void UIRender();
+
+	virtual void SaveData();
+	virtual void LoadData();
 };
 

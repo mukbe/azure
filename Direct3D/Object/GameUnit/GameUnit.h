@@ -18,6 +18,11 @@ public:
 	virtual void PostUpdate();
 	virtual void PrevRender();
 	virtual void Render();
-	virtual void PostRender();
+	virtual void UIRender();
+
+	virtual void SaveData(Json::Value* parent);
+	virtual void LoadData(Json::Value* parent);
+private:
+	void SaveMaterial(wstring file);
 };
 

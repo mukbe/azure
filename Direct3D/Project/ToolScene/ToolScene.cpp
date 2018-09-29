@@ -24,6 +24,7 @@
 ToolScene::ToolScene()
 {
 	Scenes->SetIsTool(true);
+	DataBase::Get()->Load();
 
 	RenderRequest->AddRender("ToolUIRender", bind(&ToolScene::UIRender, this), RenderType::UIRender);
 	RenderRequest->AddRender("ToolRender", bind(&ToolScene::Render, this), RenderType::Render);
@@ -37,6 +38,8 @@ ToolScene::ToolScene()
 	ToolIter iter = toolList.begin();
 	for (; iter != toolList.end(); ++iter)
 		iter->second->Init();
+
+	ObjectManager::Get()->LoadData(DataBase::Get()->GetValue());
 }
 
 
@@ -110,6 +113,8 @@ void ToolScene::UIRender()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
+			if(ImGui::MenuItem("Save"))
+				DataBase::Get()->Save();
 			if (ImGui::MenuItem("Demo"))
 				isDemoOn = !isDemoOn;
 			ImGui::EndMenu();
@@ -143,4 +148,18 @@ void ToolScene::UIRender()
 		AssetManager->UIRender();
 
 
+}
+
+void ToolScene::SaveData()
+{
+	ToolIter iter = toolList.begin();
+	for (; iter != toolList.end(); ++iter)
+		iter->second->SaveData();
+}
+
+void ToolScene::LoadData()
+{
+	ToolIter iter = toolList.begin();
+	for (; iter != toolList.end(); ++iter)
+		iter->second->LoadData();
 }

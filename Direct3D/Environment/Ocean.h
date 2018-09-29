@@ -50,9 +50,12 @@ public:
 	Ocean();
 	 ~Ocean();
 
+	 virtual void Init()override;
 	virtual void Update()override;
 	virtual void Render()override;
 	virtual void UIRender()override;
+	virtual void SaveData(Json::Value* parent);
+	virtual void LoadData(Json::Value* parent);
 	Texture* GetFresnel() { return this->fresnelLookUp; }
 private:
 	void InitInstanceShader();

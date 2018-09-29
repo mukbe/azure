@@ -34,10 +34,11 @@ CharacterTool::CharacterTool()
 	:animation(nullptr), model(nullptr), debugTransform(nullptr), targetCollider(nullptr), showDemo(false), showTool(true)
 	, showBone(false), selectBoneIndex(0), debugControl(false), tempItemModel(nullptr), zBufferOn(false)
 {
-	//Fbx::Exporter* exporter = new Fbx::Exporter(L"../_Assets/Test.fbx");
-	//exporter->ExportMaterial(Assets, L"Test");
-	//exporter->ExportMesh(Assets, L"Test");
-	//exporter->ExportAnimation(Assets, L"Attack01");
+	//wstring filePath = L"../_Assets/Objects/Blacksmeeth/";
+	//Fbx::Exporter* exporter = new Fbx::Exporter(filePath + L"Blacksmeeth.fbx");
+	//exporter->ExportMaterial(filePath, L"Blacksmeeth");
+	//exporter->ExportMesh(filePath, L"Blacksmeeth");
+	////exporter->ExportAnimation(filePath, L"Blacksmeeth");
 	//SafeDelete(exporter);
 
 	model = AssetManager->GetModel(L"../_Assets/Pandaren/Pandaren", true);
@@ -68,7 +69,7 @@ void CharacterTool::Update()
 			this->ControlCollider();
 		}
 		else
-			targetCollider->SetlocalMatrix(debugTransform->GetTransform()->GetFinalMatrix());
+			targetCollider->SetLocalMatrix(debugTransform->GetTransform()->GetFinalMatrix());
 	}
 
 
@@ -124,7 +125,7 @@ void CharacterTool::Render()
 void CharacterTool::SetCamera(FreeCamera * camera)
 {
 	this->freeCamera = camera;
-	debugTransform->SetCamera(freeCamera);
+
 }
 
 
@@ -268,7 +269,7 @@ void CharacterTool::ChangeTargetCollider(AnimationCollider * collider, bool isFi
 		if (debugControl)
 			debugTransform->GetTransform()->SetTransform(collider->GetFinalMatrix());
 		else
-			debugTransform->GetTransform()->SetTransform(collider->GetlocalMatrix());
+			debugTransform->GetTransform()->SetTransform(collider->GetLocalMatrix());
 	}
 	this->targetCollider = collider;
 	
@@ -284,7 +285,7 @@ void CharacterTool::ControlCollider()
 	D3DXMATRIX inv;
 	D3DXMatrixInverse(&inv, nullptr, &mAnimation);
 	D3DXMATRIX mLocal = mFinal * inv;
-	targetCollider->SetlocalMatrix(mLocal);
+	targetCollider->SetLocalMatrix(mLocal);
 	targetCollider->SetFinalMatrix(mFinal);
 }
 

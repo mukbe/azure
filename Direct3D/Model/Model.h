@@ -74,6 +74,8 @@ public:
 	void SaveAnimationData(wstring fileName);
 	void AddAnimationData(wstring fileName);
 	void BindMeshData();
+
+	void UIRender();
 private:
 	Material * GetMaterialByName(wstring name);
 private:

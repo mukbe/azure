@@ -99,7 +99,6 @@ void ModelAnimPlayer::UpdateTime()
 		currentKeyframe = (currentKeyframe + 1) % keyframeCount;
 		nextKeyframe = (currentKeyframe + 1) % keyframeCount;
 
-
 		frameTime -= invFrameRate;
 	}
 
@@ -179,11 +178,10 @@ void ModelAnimPlayer::UpdateBone()
 		else
 			matParentAnimation = boneAnimation[parentIndex];
 
-		boneAnimation[index] = matAnimation * matParentAnimation;
-		skinTransform[index] = matInvBindpose * boneAnimation[index];
+		D3DXMatrixMultiply(&boneAnimation[index], &matAnimation,&matParentAnimation);
+		D3DXMatrixMultiply(&skinTransform[index], &matInvBindpose, &boneAnimation[index]);
 
 		++index;
-
 	}//for(model->BoneCount())
 }
 

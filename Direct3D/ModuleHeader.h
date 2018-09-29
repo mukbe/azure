@@ -21,7 +21,7 @@
 #include "./Manager/ObjectManager.h"
 
 #include "./Renders/Gizmo.h"
-
+#include "./Manager/FactoryManager.h"
 #include "./Manager/ResourceManager.h"
 #include "./Manager/DataBase.h"
 

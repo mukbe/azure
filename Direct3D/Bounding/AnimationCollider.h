@@ -5,7 +5,6 @@ class AnimationCollider : public GameCollider
 {
 private:
 	Synthesize(int, parentBoneIndex, ParentBoneIndex)
-	Synthesize(D3DXMATRIX, localMatrix, localMatrix)
 	Synthesize(ModelAnimPlayer*, animation, Animation)
 public:
 	AnimationCollider(class GameObject* parentObject,class ModelAnimPlayer* animation);

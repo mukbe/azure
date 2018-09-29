@@ -10,7 +10,7 @@
 
 DebugTransform::DebugTransform()
 	:transform(NULL), debugType(DebugType::Translation),spaceType(SpaceType::Local),
-	pickType(PickType::None),camera(NULL), saveMousePos(0.f, 0.f, 0.f),angle(0,0,0),saveAngle(0,0,0)
+	pickType(PickType::None), saveMousePos(0.f, 0.f, 0.f),angle(0,0,0),saveAngle(0,0,0)
 {
 	axisBounding[AXIS_X] = new BoundingBox(D3DXVECTOR3(0.f, -0.5f, -0.5f), D3DXVECTOR3(1.f, 0.5f, 0.5f));
 	axisBounding[AXIS_Y] = new BoundingBox(D3DXVECTOR3(-0.5f, 0.0f, -0.5f), D3DXVECTOR3(0.5f, 1.f, 0.5f));
@@ -150,7 +150,7 @@ DebugTransform::PickType DebugTransform::IsPick()
 	else
 		D3DXMatrixIdentity(&rotate);
 
-	Ray ray = camera->GetRay();
+	Ray ray = MainCamera->GetRay();
 
 	D3DXVECTOR3 scaleAxis = transform->GetScale();
 	scaleAxis.x = Math::Clamp(scaleAxis.x, ScaleOffset, 100.0f);
@@ -224,17 +224,17 @@ void DebugTransform::ControlGizmo()
 			float factor;
 			if (this->pickType == PickType::Right)
 			{
-				factor = Math::NegativeChecking(D3DXVec3Dot(&(camera->GetTransform()->GetRight()), &transform->GetRight()));
+				factor = Math::NegativeChecking(D3DXVec3Dot(&(MainCamera->GetTransform()->GetRight()), &transform->GetRight()));
 				transform->MovePositionLocal(D3DXVECTOR3(factor * (moveLocation.x + moveLocation.y) * 0.1f, 0.f, 0.f));
 			}
 			else if (this->pickType == PickType::Up)
 			{
-				factor = Math::NegativeChecking(D3DXVec3Dot(&(camera->GetTransform()->GetUp()), &transform->GetUp()));
+				factor = Math::NegativeChecking(D3DXVec3Dot(&(MainCamera->GetTransform()->GetUp()), &transform->GetUp()));
 				transform->MovePositionLocal(D3DXVECTOR3(0.f, factor * (moveLocation.x + moveLocation.y)* 0.1f, 0.f));
 			}
 			else if (this->pickType == PickType::Forward)
 			{
-				factor = Math::NegativeChecking(D3DXVec3Dot(&(camera->GetTransform()->GetForward()), &transform->GetForward()));
+				factor = Math::NegativeChecking(D3DXVec3Dot(&(MainCamera->GetTransform()->GetForward()), &transform->GetForward()));
 				transform->MovePositionLocal(D3DXVECTOR3(0.f, 0.f, factor * (moveLocation.x + moveLocation.y) * 0.1f));
 			}
 		}
