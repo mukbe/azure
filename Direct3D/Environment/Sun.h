@@ -7,7 +7,7 @@ namespace Environment
 	class Sun
 	{
 	public:
-		Sun();
+		Sun(D3DXVECTOR3 vec = D3DXVECTOR3(0, 0, 1));
 		~Sun();
 
 		void Update();
@@ -15,6 +15,7 @@ namespace Environment
 		void Render();
 
 		D3DXVECTOR3 GetForward() { return dir; }
+		void SetForword(D3DXVECTOR3 vec) { dir = vec; }
 		float* GetPosPtr();
 		D3DXVECTOR3 GetPos();
 		void SetColor(D3DXCOLOR color);

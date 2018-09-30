@@ -69,6 +69,19 @@ void JsonHelper::SetValue(Json::Value & parent, string name, D3DXCOLOR & vec)
 		parent[name.c_str()].append(vec[i]);
 }
 
+void JsonHelper::GetValue(Json::Value & parent, string name, D3DXMATRIX & vec)
+{
+	for (int i = 0; i < 16; i++)
+		vec[i] = parent[name.c_str()][i].asFloat();
+}
+
+void JsonHelper::SetValue(Json::Value & parent, string name, D3DXMATRIX & vec)
+{
+	for (int i = 0; i < 16; i++)
+		parent[name.c_str()].append(vec[i]);
+
+}
+
 void JsonHelper::GetValue(Json::Value & parent, string name, string & value)
 {
 	value = "";

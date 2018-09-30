@@ -175,7 +175,6 @@ G_Buffer TerrainPS(PixelInput input)
     output.diffuse = _diffuseTex.Sample(wrapSamp, input.uv);
     //==========================TEST
     output.diffuse = CalCuSplat(output.diffuse, input.uv);
-    output.diffuse = float4(input.normal,1);
     //==============================
     output = PackGBuffer(output, input.normal, output.diffuse.rgb, 0.25f, 250.0f);
 

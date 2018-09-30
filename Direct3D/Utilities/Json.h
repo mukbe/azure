@@ -20,6 +20,9 @@ namespace JsonHelper
 	void GetValue(Json::Value& parent, string name, D3DXCOLOR& vec);
 	void SetValue(Json::Value& parent, string name, D3DXCOLOR& vec);
 
+	void GetValue(Json::Value& parent, string name, D3DXMATRIX& vec);
+	void SetValue(Json::Value& parent, string name, D3DXMATRIX& vec);
+
 	void GetValue(Json::Value& parent, string name, string& value);
 	void SetValue(Json::Value& parent, string name, string& value);
 

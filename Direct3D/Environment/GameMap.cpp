@@ -169,6 +169,8 @@ void GameMap::Render()
 	DeviceContext->DSSetShaderResources(1, 1, &normalView);
 	ID3D11ShaderResourceView* splatView = splatMap->GetSRV();
 	DeviceContext->PSSetShaderResources(5, 1, &splatView);
+	ID3D11ShaderResourceView* diffuseView = diffuseMap->GetSRV();
+	DeviceContext->PSSetShaderResources(0, 1, &diffuseView);
 
 	DeviceContext->PSSetShaderResources(6, 4, splatTexView);
 
@@ -190,4 +192,11 @@ void GameMap::Render()
 
 void GameMap::UIRender()
 {
+	if (ImGui::InputInt("Edge", &buffer->Data.Edge))
+	{
+		buffer->Data.Inside = buffer->Data.Edge * 0.5f;
+	}
+	ImGuiInputTextFlags flag = 0;
+	flag |= ImGuiInputTextFlags_ReadOnly;
+	ImGui::InputInt("Inside", &buffer->Data.Inside, flag);
 }

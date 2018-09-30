@@ -33,6 +33,8 @@ public:
 
 	//Terrain cpp UIRender
 	void TerrainUI();
+
+	vector<Texture*> GetTextures() { return texture; }
 private:
 	ComputeShader * computeAlphaSplat;
 	CResource2D* splatMap;
