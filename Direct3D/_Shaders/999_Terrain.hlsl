@@ -183,7 +183,7 @@ G_Buffer TerrainPS(PixelInput input)
     output.normal = float4(input.normal.xyz, 1.0f);
     output.normal.a = 1.5f;
 
-    output.diffuse.a = 1.0f;
+    output.diffuse.a = 0.9f;
 
     return output;
 

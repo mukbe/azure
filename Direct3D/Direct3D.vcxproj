@@ -129,7 +129,6 @@
     <ClCompile Include="Manager\FactoryManager.cpp" />
     <ClCompile Include="Project\Game\PlayScene + Huynjin.cpp" />
     <ClCompile Include="Project\ToolScene\FactoryTool.cpp" />
-    <ClCompile Include="Project\Game\PlayScene + hyunjin.cpp" />
     <ClCompile Include="Project\Game\PlayScene + soonwoo.cpp" />
     <ClCompile Include="Renders\GrassRenderer\GrassRenderer.cpp" />
     <ClCompile Include="Object\GameUnit\GameUnit.cpp" />
