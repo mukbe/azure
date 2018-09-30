@@ -21,11 +21,11 @@ GameMap::GameMap(string level)
 		JsonHelper::GetValue(prop, "SplatMap", splatMapPath);
 		JsonHelper::GetValue(prop, "NormalMap", normalMapPath);
 
-		JsonHelper::GetValue(prop, "splat0", diffusePath);
-		JsonHelper::GetValue(prop, "splat1", splatTexPath[0]);
-		JsonHelper::GetValue(prop, "splat2", splatTexPath[1]);
-		JsonHelper::GetValue(prop, "splat3", splatTexPath[2]);
-		JsonHelper::GetValue(prop, "splat4", splatTexPath[3]);
+		JsonHelper::GetValue(prop, "Splat0", diffusePath);
+		JsonHelper::GetValue(prop, "Splat1", splatTexPath[0]);
+		JsonHelper::GetValue(prop, "Splat2", splatTexPath[1]);
+		JsonHelper::GetValue(prop, "Splat3", splatTexPath[2]);
+		JsonHelper::GetValue(prop, "Splat4", splatTexPath[3]);
 
 		heightMap = new Texture(Contents + String::StringToWString(heightMapPath));
 		splatMap = new Texture(Contents + String::StringToWString(splatMapPath));

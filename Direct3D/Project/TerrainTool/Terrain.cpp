@@ -113,7 +113,7 @@ void Terrain::UIRender()
 	{
 		//Save
 		Texture::SaveToFile(Contents + L"HeightMap.png", heightData->GetHeightBuffer()->GetSRV());
-		Texture::SaveToFile(Contents + L"splatMap.png", splat->GetSplatMap()->GetSRV());
+		Texture::SaveToFile(Contents + L"SplatMap.png", splat->GetSplatMap()->GetSRV());
 
 		//heightRatio = 250.f
 		buffer->SetCSBuffer(1);
@@ -138,7 +138,7 @@ void Terrain::UIRender()
 		
 
 		normalData->SetPixel(data, 256, 256);
-		Texture::SaveToFile(Contents + L"normalMap.png", normalData->GetSRV());
+		Texture::SaveToFile(Contents + L"NormalMap.png", normalData->GetSRV());
 
 
 
