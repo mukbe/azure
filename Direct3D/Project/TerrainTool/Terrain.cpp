@@ -258,16 +258,17 @@ void Terrain::UIUpdate()
 
 void Terrain::SaveData(Json::Value * json)
 {
+	GameObject::SaveData(json);
+	//Json::Value value;
+	//{
+	//	JsonHelper::SetValue(value, "Name", this->name);
+	//	string nullString = "Terrain.json";
+	//	JsonHelper::SetValue(value, "FileName", nullString);
+
+	//}
+	//(*json)[this->name.c_str()] = value;
+
 	Json::Value* pJson = new Json::Value();
-	Json::Value value;
-	{
-		JsonHelper::SetValue(value, "Name", this->name);
-		string nullString = "Terrain.json";
-		JsonHelper::SetValue(value, "FileName", nullString);
-
-	}
-	(*json)[this->name.c_str()] = value;
-
 	Json::Value prop;
 	{
 		JsonHelper::SetValue(prop, "HeightMap", (string)"HeightMap.png");

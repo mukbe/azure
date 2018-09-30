@@ -172,7 +172,7 @@ void GameMap::Render()
 	ID3D11ShaderResourceView* diffuseView = diffuseMap->GetSRV();
 	DeviceContext->PSSetShaderResources(0, 1, &diffuseView);
 
-	//DeviceContext->PSSetShaderResources(6, 4, splatTexView);
+	DeviceContext->PSSetShaderResources(6, 4, splatTexView);
 
 	shader->Render();
 	States::SetSampler(1, States::LINEAR_WRAP);
@@ -236,14 +236,12 @@ void GameMap::LoadData(Json::Value * json)
 				splatTex[i] = new Texture(Contents + String::StringToWString(splatTexPath[i]));
 		}
 
-		UINT index = 0;
 		for (int i = 0; i < 4; i++)
 		{
 			if (splatTex[i] != nullptr)
-			{
-				splatTexView[index] = splatTex[i]->GetSRV();
-				index++;
-			}
+				splatTexView[i] = splatTex[i]->GetSRV();
+			else
+				splatTexView[i] = nullptr;
 		}
 	}
 }
