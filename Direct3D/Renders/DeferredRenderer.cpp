@@ -84,7 +84,7 @@ void DeferredRenderer::UIRender()
 {
 	ImGui::Begin("Deferred");
 	{
-		static float fSize = 300.0f;
+		static float fSize = 100.0f;
 		ImGui::SliderFloat("ImageSize",&fSize,50.0f,500.0f);
 		ImVec2 size = ImVec2(fSize, fSize);
 

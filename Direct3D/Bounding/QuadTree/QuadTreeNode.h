@@ -18,9 +18,6 @@ private:
 	vector<QuadTreeNode*> childs;
 	vector<class StaticObject*> objectList;
 public:
-	QuadTreeNode(int level , D3DXVECTOR3 minPos, D3DXVECTOR3 maxPos);			//최초 노드 생성자
-	QuadTreeNode(QuadTreeNode* parent,CornerType cornerType);					//자식 노드 생성자
-	
 	QuadTreeNode(int level, class GameMap* pMap);
 	QuadTreeNode(QuadTreeNode* pParent, CornerType type, class GameMap* pMap);
 	~QuadTreeNode();
@@ -31,7 +28,7 @@ public:
 	void Render();
 	void AddObject(class StaticObject* object);
 private:
-	bool SubDevide();															//아직 level이 0보다 크다면 분리한다.
+	bool SubDevide(class GameMap* pMap);															//아직 level이 0보다 크다면 분리한다.
 	bool IsInFrustum(class BoundingFrustum* pFrustum);							//프러스텀에 포함되는가.
 	void SetIsInfrustum(bool b);
 };

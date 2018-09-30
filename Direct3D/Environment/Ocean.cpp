@@ -81,6 +81,7 @@ void Ocean::Render()
 	//BindBuffers ----------------------------------------------
 	ID3D11ShaderResourceView* srv = fresnelLookUp->GetSRV();
 	DeviceContext->VSSetShaderResources(6,1, &srv);
+	DeviceContext->PSSetShaderResources(6, 1, &srv);
 	
 	material->SetDiffuseColor(oceanColor);
 	material->UpdateBuffer();
@@ -107,8 +108,6 @@ void Ocean::Render()
 	//------------------------------------------------------------------------
 
 	//ReleaseBuffer ---------------------------------------------------------
-	ID3D11ShaderResourceView* nullSrv[1] = { nullptr };
-	DeviceContext->PSSetShaderResources(6, 1, nullSrv);
 	material->UnBindBuffer();
 
 	//-----------------------------------------------------------------------
@@ -130,25 +129,28 @@ void Ocean::UIRender()
 
 void Ocean::SaveData(Json::Value * parent)
 {
-	Json::Value value;
-	{
-		JsonHelper::SetValue(value, "Name", this->name);
-		string nullString = "";
-		JsonHelper::SetValue(value, "FileName", nullString);
-		JsonHelper::SetValue(value, "IsActive", isActive);
+	GameObject::SaveData(parent);
 
-		JsonHelper::SetValue(value, "OceanColor", this->material->GetDiffuseColor());
-		JsonHelper::SetValue(value, "Position", transform->GetWorldPosition());
-		JsonHelper::SetValue(value, "Scale", transform->GetScale());
-	}
-	(*parent)[this->name.c_str()] = value;
+	Json::Value* value = new Json::Value;
+	Json::Value prop;
+
+	JsonHelper::SetValue(prop, "OceanColor", this->material->GetDiffuseColor());
+	JsonHelper::SetValue(prop, "Position", transform->GetWorldPosition());
+	JsonHelper::SetValue(prop, "Scale", transform->GetScale());
+
+	(*value)["Prop"] = prop;
+	//JsonHelper::WriteData(ScenePath + name + ".json", value);
 }
 
 void Ocean::LoadData(Json::Value * parent)
 {
+	GameObject::LoadData(parent);
 	D3DXCOLOR color;
 	D3DXVECTOR3 position, scale;
-	GameObject::LoadData(parent);
+
+	Json::Value* value = new Json::Value;
+	//JsonHelper::ReadData()
+
 	JsonHelper::GetValue(*parent, "OceanColor", oceanColor);
 	JsonHelper::GetValue(*parent, "Position", position);
 	JsonHelper::GetValue(*parent, "Scale", scale);
@@ -179,7 +181,9 @@ void Ocean::InitInstanceShader()
 		D3D11_INPUT_PER_INSTANCE_DATA,1 },
 	};
 	
-	instanceShader = new InstanceShader(ShaderPath + L"005_OceanRaw.hlsl", false);
+	//instanceShader = new InstanceShader(ShaderPath + L"005_OceanRaw.hlsl", false);
+	instanceShader = new InstanceShader(ShaderPath + L"005_OceanDeferred.hlsl", false);
+	
 	instanceShader->CreateInputLayout(inputLayoutDesc, 4);
 
 	worldBuffer = Buffers->FindShaderBuffer<WorldBuffer>();
