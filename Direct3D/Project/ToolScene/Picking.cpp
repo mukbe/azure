@@ -41,7 +41,7 @@ void Picking::Update()
 {
 	if (ImGui::IsMouseHoveringAnyWindow() == false)
 	{
-		if (KeyCode->Down(VK_LBUTTON) && !KeyCode->Press(VK_LSHIFT) && !KeyCode->Press(VK_CONTROL))
+		if (KeyCode->Down(VK_LBUTTON) && KeyCode->Press('A'))
 		{
 			//   0-------1
 			//  /|      /|
