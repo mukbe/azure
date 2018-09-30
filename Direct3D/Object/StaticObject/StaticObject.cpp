@@ -47,10 +47,7 @@ void StaticObject::Release()
 
 void StaticObject::Update()
 {
-	if (Scenes->GetIsTool())
-	{
-		this->isRender = MainCamera->GetFrustum()->IsSphereInFrustum(colliderList[0]);
-	}
+	
 }
 
 void StaticObject::DebugRender()
@@ -66,7 +63,7 @@ void StaticObject::DebugRender()
 void StaticObject::UIUpdate()
 {
 	for (UINT i = 0; i < colliderList.size(); ++i)
-		colliderList[i]->SetFinalMatrix(transform->GetFinalMatrix());
+		colliderList[i]->Update();
 }
 
 void StaticObject::Render()
@@ -84,7 +81,7 @@ void StaticObject::AddCollider(GameCollider * collider)
 	GameCollider* newCollider = nullptr;
 	collider->Clone((void**)&newCollider);
 
-	newCollider->SetFinalMatrix(newCollider->GetFinalMatrix() * transform->GetFinalMatrix());
+	newCollider->SetFinalMatrix(newCollider->GetLocalMatrix() * transform->GetFinalMatrix());
 	newCollider->SetParentObject(this);
 	this->colliderList.push_back(newCollider);
 }

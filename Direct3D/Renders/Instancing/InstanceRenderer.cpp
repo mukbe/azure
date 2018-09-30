@@ -20,6 +20,8 @@
 #include "./Bounding/QuadTree/QuadTreeSystem.h"
 
 
+string InstanceRenderer::Renderer = "InstanceRenderer";
+
 InstanceRenderer::InstanceRenderer(string name,UINT maxInstance)
 	:maxInstanceCount(maxInstance), drawInstanceCount(0)
 {
@@ -32,14 +34,20 @@ InstanceRenderer::InstanceRenderer(string name,UINT maxInstance)
 		{
 			if (instanceList[i]->GetName() == *reinterpret_cast<string*>(msg.data))
 			{
+				Objects->DeleteObject(ObjectType::Type::Static, ObjectType::Tag::Object, instanceList[i]->GetName());
 				instanceList.erase(instanceList.begin() + i);
 				break;
 			}
 		}
 	});
+	this->AddCallback("SaveMaterial", [this](TagMessage msg) {this->SaveMaterial(); });
+
+	string newName = name;
+	String::Replace(&newName, InstanceRenderer::Renderer, "");
+	this->InitializeData(newName);
 }
 
-InstanceRenderer::InstanceRenderer(string name,wstring fileName)
+InstanceRenderer::InstanceRenderer(string name, Json::Value* parent)
 	: drawInstanceCount(0),maxInstanceCount(0)
 {
 	this->name = name;
@@ -51,23 +59,28 @@ InstanceRenderer::InstanceRenderer(string name,wstring fileName)
 		{
 			if (instanceList[i]->GetName() == *reinterpret_cast<string*>(msg.data))
 			{
+				Objects->DeleteObject(ObjectType::Type::Static, ObjectType::Tag::Object, instanceList[i]->GetName());
 				instanceList.erase(instanceList.begin() + i);
 				break;
 			}
 		}
 	});
+	this->AddCallback("SaveMaterial", [this](TagMessage msg) {this->SaveMaterial(); });
 
-	ModelData data = AssetManager->GetModelData(name);
+	string newName = name;
+	String::Replace(&newName, InstanceRenderer::Renderer, "");
+
+	ModelData data = AssetManager->GetModelData(newName);
 	vector<ModelAnimClip*> temp;
 	data.Clone(&materials, &bones, &meshes, &temp, &colliders);
 	temp.clear();
 	this->BindMeshData();
-	this->LoadData();
+	this->LoadData(parent);
 	this->CreateBuffer();
 	this->UpdateBuffer();
 
 	
-	QuadTreeSystem* quadTree = (QuadTreeSystem*)Objects->FindObject(ObjectType::Type::Dynamic, ObjectType::Tag::View, "QuadTreeSystem");
+	QuadTreeSystem* quadTree = (QuadTreeSystem*)Objects->FindObject(ObjectType::Type::Dynamic, ObjectType::Tag::System, "QuadTreeSystem");
 	if (quadTree) {
 		for (UINT i = 0; i < instanceList.size(); ++i)
 			((StaticObject*)instanceList[i])->AttachQuadTree(quadTree);
@@ -191,8 +204,8 @@ void InstanceRenderer::Release()
 
 void InstanceRenderer::PreUpdate()
 {
-	for (UINT i = 0; i < instanceList.size(); ++i)
-		instanceList[i]->SetIsRender(false);
+	//for (UINT i = 0; i < instanceList.size(); ++i)
+	//	instanceList[i]->SetIsRender(false);
 }
 
 void InstanceRenderer::PostUpdate()
@@ -229,6 +242,7 @@ void InstanceRenderer::UpdateBuffer()
 
 void InstanceRenderer::Render()
 {
+	States::SetSampler(0, States::SamplerStates::LINEAR_MIRROR);
 	for (ModelMesh* mesh : meshes)
 	{
 		int index = mesh->ParentBoneIndex();
@@ -256,6 +270,7 @@ void InstanceRenderer::Render()
 			part->material->UnBindBuffer();
 		}
 	}
+	States::SetSampler(0, States::SamplerStates::LINEAR);
 
 }
 
@@ -269,8 +284,8 @@ void InstanceRenderer::UIRender()
 	if (ImGui::Button("AddInstance", ImVec2(100, 20)))
 		this->AddInstance(autoSize);
 	ImGui::SameLine();
-	if (ImGui::Button("SaveData", ImVec2(100, 20)))
-		this->SaveData();
+	if (ImGui::Button("SaveMaterial", ImVec2(100, 20)))
+		this->SendMSG(TagMessage("SaveMaterial",0.1f));
 
 	ImGui::Separator();
 	
@@ -299,7 +314,7 @@ void InstanceRenderer::AddInstanceData(GameObject* object)
 
 void InstanceRenderer::SaveData()
 {
-	wstring file = L"../_Scenes/" + String::StringToWString(name) + L".data";
+	wstring file = L"../_Scenes/Scene01/" + String::StringToWString(name) + L".data";
 
 	UINT size = instanceList.size(); 
 
@@ -319,10 +334,8 @@ void InstanceRenderer::SaveData()
 	SafeDelete(w);
 }
 
-void InstanceRenderer::LoadData()
+void InstanceRenderer::LoadData(wstring file)
 {
-	wstring file = L"../_Scenes/" + String::StringToWString(name) + L".data";
-
 	BinaryReader* r = new BinaryReader();
 	r->Open(file);
 	{
@@ -344,12 +357,45 @@ void InstanceRenderer::LoadData()
 	}
 	r->Close();
 	SafeDelete(r);
+
+	if (maxInstanceCount < 20)
+		maxInstanceCount = 20;
+}
+
+void InstanceRenderer::SaveData(Json::Value * parent)
+{
+	//Binary
+	this->SaveData();
+	string newName = name;
+	String::Replace(&newName, InstanceRenderer::Renderer, "");
+	wstring filePath = AssetManager->GetModelData(newName).file;
+	this->SaveMaterial(filePath + L".material");
+
+	wstring file = L"../_Scenes/Scene01/" + String::StringToWString(name) + L".data";
+
+	Json::Value value;
+	{
+		JsonHelper::SetValue(value, "Name", this->name);
+		JsonHelper::SetValue(value, "FileName", String::WStringToString(file));
+		JsonHelper::SetValue(value, "IsActive", isActive);
+	}
+	(*parent)[this->name.c_str()] = value;
+}
+
+void InstanceRenderer::LoadData(Json::Value * parent)
+{
+	string file;
+	GameObject::LoadData(parent);
+	JsonHelper::GetValue(*parent, "FileName", file);
+	this->LoadData(String::StringToWString(file));
 }
 
 void InstanceRenderer::AddInstance(float autoSize)
 {
 	char str[48];
-	sprintf_s(str, "%s %d", name.c_str(), instanceList.size());
+	string newName = name;
+	String::Replace(&newName, "Renderer", "");
+	sprintf_s(str, "%s %d", newName.c_str(), instanceList.size());
 
 	StaticObject* object = new StaticObject(str);
 	object->GetTransform()->SetWorldPosition(MainCamera->GetTransform()->GetWorldPosition() +
@@ -360,5 +406,64 @@ void InstanceRenderer::AddInstance(float autoSize)
 		object->AddCollider(colliders[i]);
 	object->SetInstanceRenderer(this);
 	this->AddInstanceData(object);
-	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Object, object);
+	Objects->AddObject(ObjectType::Type::Static, ObjectType::Tag::Object, object);
+}
+
+void InstanceRenderer::SaveMaterial(wstring file)
+{
+	if (file.length() > 0)
+	{
+		Json::Value root;
+		for (UINT i = 0; i < materials.size(); ++i)
+		{
+			Material* material = materials[i];
+
+			Json::Value val;
+			JsonHelper::SetValue(val, "Name", String::WStringToString(material->GetName()));
+
+			JsonHelper::SetValue(val, "Ambient", material->GetAmbientColor());
+			JsonHelper::SetValue(val, "Diffuse", material->GetDiffuseColor());
+			JsonHelper::SetValue(val, "Emissive", material->GetEmissiveColor());
+			JsonHelper::SetValue(val, "Specular", material->GetSpecColor());
+			float f = material->GetShiness();
+			JsonHelper::SetValue(val, "Shininess", f);
+
+			string nullString = "";
+			string file = "";
+
+			if (material->GetDiffuseMap())
+				file = String::WStringToString(material->GetDiffuseMap()->GetFilePath());
+			else
+				file = nullString;
+
+			JsonHelper::SetValue(val, "DiffuseFile", file);
+
+			if (material->GetSpecularMap())
+				file = String::WStringToString(material->GetSpecularMap()->GetFilePath());
+			else
+				file = nullString;
+
+			JsonHelper::SetValue(val, "SpecularFile", nullString);
+
+			JsonHelper::SetValue(val, "EmissiveFile", nullString);
+
+			if (material->GetNormalMap())
+				file = String::WStringToString(material->GetNormalMap()->GetFilePath());
+			else
+				file = nullString;
+
+			JsonHelper::SetValue(val, "NormalFile", file);
+
+			JsonHelper::SetValue(val, "DetailFile", nullString);
+
+			root[String::WStringToString(material->GetName()).c_str()] = val;
+		}
+
+		JsonHelper::WriteData(file, &root);
+	}
+	else
+	{
+		function<void(wstring)> func = bind(&InstanceRenderer::SaveMaterial, this, placeholders::_1);
+		Path::SaveFileDialog(L"", Path::MaterialFilter, Assets, func);
+	}
 }

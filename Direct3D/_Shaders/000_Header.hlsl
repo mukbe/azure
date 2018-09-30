@@ -75,6 +75,7 @@ Texture2D _defferedWorld : register(t3);
 Texture2D _deferredDepth : register(t4);
 
 Texture2D _sunLightsahdowMap : register(t5);
+Texture2D _fresnelLookUp : register(t6);
 
 SamplerState _basicSampler : register(s0);
 SamplerComparisonState _shadowSampler : register(s2);
@@ -293,8 +294,7 @@ GBuffer_Data UnpackGBuffer_Loc(int2 location)
     Out.LinearDepth = ConvertZToLinearDepth(depth);
 
     float4 normalSample = _deferredNormal.Load(location3);
-    Out.Normal = normalSample.xyz;
-    Out.Normal = normalize(Out.Normal * 2.0 - 1.0);
+    Out.Normal = normalize(normalSample.rgb * 2.0f - 1.0f);
     Out.RenderType = normalSample.a;
 
     float4 diffuseSample = _deferredAlbedo.Load(location3);
@@ -467,3 +467,10 @@ bool IntersectTri(float3 origin, float3 dir, float3 v0, float3 v1, float3 v2, ou
 }
 
 
+float GetFresnel(float3 V, float3 N)
+{
+    float costhetai = abs(dot(V, N));
+    return _fresnelLookUp.Sample(_basicSampler, float2(costhetai, 0.0f)).a;
+    //float3 texelUV = GetTexelUV(_fresnelLookUp, float2(costhetai, 0.0f));
+    //return _fresnelLookUp.Load(texelUV).a;
+}

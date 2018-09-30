@@ -7,9 +7,11 @@ struct InstanceData
 
 class InstanceRenderer : public GameObject
 {
+public:
+	static string Renderer;
 private:
 	UINT maxInstanceCount;
-	UINT drawInstanceCount;
+	Synthesize(UINT, drawInstanceCount,DrawIntanceCount)
 	class InstanceShader* shader;
 	ID3D11Buffer* instanceBuffer;
 private:
@@ -28,10 +30,10 @@ private:
 	void UpdateBuffer();
 	void AddInstance(float autoSize);
 
-	
+	void SaveMaterial(wstring file = L"");
 public:
 	InstanceRenderer(string name,UINT maxInstance);		//툴작업용 생성자
-	InstanceRenderer(string name,wstring fileName = L"");		//플레이씬용 생정자 
+	InstanceRenderer(string name,Json::Value* parent);		//플레이씬용 생정자 
 	~InstanceRenderer();
 
 	void InitializeData(string keyName);
@@ -46,6 +48,9 @@ public:
 	void AddInstanceData(class GameObject* pOject);
 
 	void SaveData();
-	void LoadData();
+	void LoadData(wstring file);
+
+	virtual void SaveData(Json::Value* parent);
+	virtual void LoadData(Json::Value* parent);
 };
 

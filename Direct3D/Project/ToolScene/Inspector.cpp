@@ -19,7 +19,6 @@ Inspector::Inspector(ToolScene * toolScene)
 {
 	name = "Inspector";
 	debugTransform = new DebugTransform();
-	debugTransform->SetCamera(MainCamera);
 }
 
 Inspector::~Inspector()
@@ -45,7 +44,6 @@ void Inspector::Update()
 	{
 		debugTransform->ConnectTransform(targetObject->GetTransform());
 		debugTransform->Update();
-
 		targetObject->UIUpdate();
 	}
 }
@@ -91,4 +89,12 @@ void Inspector::UIRender()
 		}
 	}
 	ImGui::End();
+}
+
+void Inspector::SaveData()
+{
+}
+
+void Inspector::LoadData()
+{
 }

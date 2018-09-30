@@ -9,7 +9,7 @@
 class ToolBase;
 class ToolScene : public SceneNode
 {
-	enum class ToolType{ Hierarchy = 0 ,Inspector,Unknown,End};
+	enum class ToolType{ Hierarchy = 0 ,Inspector,Factory,Unknown,End};
 private:
 	unordered_map<ToolType, ToolBase*> toolList;
 	typedef unordered_map<ToolType, ToolBase*>::iterator ToolIter;
@@ -30,6 +30,9 @@ public:
 	unordered_map<ToolType, ToolBase*> GetToolList()const { return this->toolList; }
 	template<class T>
 	T* GetTool(string name);
+
+	void SaveData();
+	void LoadData();
 };
 
 template<class T>

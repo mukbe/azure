@@ -8,6 +8,7 @@ struct MeshDatas
 
 struct ModelData
 {
+	wstring file;
 	vector<class Material*>			materials;
 	MeshDatas						meshDatas;
 	vector<class ModelAnimClip*>	animations;
@@ -37,6 +38,7 @@ public:
 	void LoadFolder(const std::string& path, const std::string& filter,bool isAnim = false);
 
 	class Texture* AddTexture(wstring file, string keyName);
+	class Texture* AddTexture(string key, class Texture* texture);
 	class Texture* FindTexture(string keyName);
 	ID3D11ShaderResourceView* GetRsourceView(string keyName);
 

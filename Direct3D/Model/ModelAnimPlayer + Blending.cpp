@@ -116,8 +116,14 @@ void ModelAnimPlayer::UpdateBoneByBlending()
 		matAnimation = S * R * T;
 
 		int parentIndex = bone->ParentIndex();
+
 		if (parentIndex < 0)
-			D3DXMatrixIdentity(&matParentAnimation);
+		{
+			if (transform)
+				matParentAnimation = transform->GetFinalMatrix();
+			else
+				D3DXMatrixIdentity(&matParentAnimation);
+		}
 		else
 			matParentAnimation = boneAnimation[parentIndex];
 

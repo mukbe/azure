@@ -28,7 +28,7 @@ Program::Program()
 	RenderRequest->AddRenderer("alpha", alpha);
 
 	//Scenes->AddScene("anim", new AnimationTool);
-	Scenes->AddScene("tool", new PlayScene);
+	Scenes->AddScene("tool", new ToolScene);
 	//Scenes->AddScene("terrain", new TerrainTool);
 }
 

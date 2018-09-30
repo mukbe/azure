@@ -194,12 +194,8 @@ G_Buffer ModelDeferredPS(ModelPixelInput input)
     G_Buffer output;
 
     float3 diffuse = _diffuseTex.Sample(_basicSampler, input.uv).rgb;
-    
 
-    output.normal = float4(NormalMapSpace(_normalTex.Sample(_basicSampler, input.uv).xyz, input.normal, input.tangent), 1);
-    output.spec = float4(1, 1, 1, 2);
-
-    output = PackGBuffer(output, input.normal, diffuse,SpecColor.rgb,input.depth,Shiness,0.5f);
+    output = PackGBuffer(output, normalize(input.normal), diffuse, SpecColor.rgb, 1.0f, Shiness, 0.9f);
     return output;
 }
 

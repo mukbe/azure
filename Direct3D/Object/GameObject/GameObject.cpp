@@ -79,6 +79,23 @@ void GameObject::ShadowRender()
 {
 }
 
+void GameObject::SaveData(Json::Value * parent)
+{
+	Json::Value value;
+	{
+		JsonHelper::SetValue(value, "Name",this->name);
+		string nullString = "";
+		JsonHelper::SetValue(value, "FileName", nullString);
+		JsonHelper::SetValue(value, "IsActive", isActive);
+	}
+	(*parent)[this->name.c_str()] = value;
+}
+
+void GameObject::LoadData(Json::Value * parent)
+{
+	JsonHelper::GetValue(*parent, "IsActive", isActive);
+}
+
 void GameObject::SendMSG(TagMessage msg)
 {
 	//딜레이타임이 없다면 바로 메세지 처리

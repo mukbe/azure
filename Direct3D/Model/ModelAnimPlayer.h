@@ -60,6 +60,7 @@ private:
 	Synthesize(ModelAnimClip*,currentClip,CurrentClip)
 	Synthesize(Mode	,mode,PlayMode)
 	Synthesize(PlayState,playState,PlayState)
+	Synthesize(class Transform*,transform,Transform)
 
 	Synthesize(vector<D3DXMATRIX> ,skinTransform,SkinTransform)
 	Synthesize(vector<D3DXMATRIX>, boneAnimation,BoneAnimation)

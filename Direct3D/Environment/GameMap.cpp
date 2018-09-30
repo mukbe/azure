@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GameMap.h"
 
-
+#include "./Bounding/QuadTree/QuadTreeSystem.h"
 
 GameMap::GameMap(wstring level)
 {

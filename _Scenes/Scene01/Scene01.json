@@ -1,0 +1,88 @@
+{
+   "ObjectManager" : {
+      "Dynamic" : {
+         "Enviroment" : {
+            "Ocean" : {
+               "FileName" : [ "" ],
+               "IsActive" : true,
+               "Name" : [ "Ocean" ],
+               "OceanColor" : [ 0.020999999716877937, 0.079999998211860657, 0.30899998545646667, 1.0 ],
+               "Position" : [ 0.0, 0.0, 0.0 ],
+               "Scale" : [ 1.0, 1.0, 1.0 ]
+            },
+            "Scattering" : {
+               "FileName" : [ "" ],
+               "IsActive" : true,
+               "Name" : [ "Scattering" ]
+            },
+            "Terrain" : {
+               "FileName" : [ "" ],
+               "IsActive" : false,
+               "Name" : [ "Terrain" ]
+            }
+         },
+         "Instancing" : {
+            "BlacksmeethInstanceRenderer" : {
+               "FileName" : [ "../_Scenes/Scene01/BlacksmeethInstanceRenderer.data" ],
+               "IsActive" : true,
+               "Name" : [ "BlacksmeethInstanceRenderer" ]
+            },
+            "Tree1InstanceRenderer" : {
+               "FileName" : [ "../_Scenes/Scene01/Tree1InstanceRenderer.data" ],
+               "IsActive" : true,
+               "Name" : [ "Tree1InstanceRenderer" ]
+            },
+            "Tree2InstanceRenderer" : {
+               "FileName" : [ "../_Scenes/Scene01/Tree2InstanceRenderer.data" ],
+               "IsActive" : true,
+               "Name" : [ "Tree2InstanceRenderer" ]
+            }
+         },
+         "Object" : null,
+         "System" : {
+            "Camera" : {
+               "FileName" : [ "" ],
+               "IsActive" : true,
+               "Name" : [ "Camera" ],
+               "Position" : [ 149.43780517578125, 21.17243766784668, 71.1881103515625 ],
+               "Rotate" : [ 0.13613556325435638, -0.10122902691364288, 0.0 ]
+            }
+         },
+         "UI" : null,
+         "Unit" : {
+            "Pandaren" : {
+               "FileName" : [ "" ],
+               "IsActive" : true,
+               "Name" : [ "Pandaren" ],
+               "Position" : [ 128.46553039550781, 0.19443169236183167, 121.69284057617188 ],
+               "Rotate" : [ 0.0, 0.22400003671646118, 0.0 ],
+               "Scale" : [ 0.10000000149011612, 0.10000000149011612, 0.10000000149011612 ]
+            }
+         }
+      },
+      "Static" : {
+         "Enviroment" : null,
+         "Instancing" : null,
+         "Object" : {
+            "BlacksmeethInstance 0" : {
+               "FileName" : [ "" ],
+               "IsActive" : true,
+               "Name" : [ "BlacksmeethInstance 0" ]
+            },
+            "Tree1Instance 0" : {
+               "FileName" : [ "" ],
+               "IsActive" : true,
+               "Name" : [ "Tree1Instance 0" ]
+            },
+            "Tree2Instance 0" : {
+               "FileName" : [ "" ],
+               "IsActive" : true,
+               "Name" : [ "Tree2Instance 0" ]
+            }
+         },
+         "System" : null,
+         "UI" : null,
+         "Unit" : null
+      }
+   }
+}

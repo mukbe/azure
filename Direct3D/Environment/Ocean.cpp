@@ -17,16 +17,8 @@ Ocean::Ocean()
 {
 	this->name = "Ocean";
 	this->vertexLength = pow(2, 6);
-	
-	this->InitInstanceShader();
-	this->InitOceansData();
-	this->CreateFresnelLookUpTable();
-	this->InitBuffers();
-
-	this->AddCallback("Delete", [this](TagMessage msg) 
-	{
-		this->isLive = false;
-	});
+	this->oceanColor = D3DXCOLOR(0.021f, 0.08f, 0.309f, 1.0f);
+	material = new Material;
 }
 
 
@@ -58,9 +50,24 @@ Ocean::~Ocean()
 	instanceData.clear();
 	indexData.clear();
 
-	SafeDelete(fresnelLookUp);
+	//SafeDelete(fresnelLookUp);
 	SafeDelete(material);
 	SafeDelete(instanceShader);
+}
+
+void Ocean::Init()
+{
+	this->InitInstanceShader();
+	this->InitOceansData();
+	this->CreateFresnelLookUpTable();
+	this->InitBuffers();
+
+	this->AddCallback("Delete", [this](TagMessage msg)
+	{
+		this->isLive = false;
+	});
+
+	AssetManager->AddTexture("Fresnel", this->fresnelLookUp);
 }
 
 void Ocean::Update()
@@ -114,6 +121,7 @@ void Ocean::UIRender()
 {
 	ImGui::Text("GridX : %d , GridZ : %d", this->gridCountX,this->gridCountZ);
 	ImGui::Text("FPS : %f", Time::Get()->FPS());
+	ImGui::Text("DrawGridCount : %d", drawInsatnceData.size());
 
 	ImGui::ColorEdit4("OceanColor", (float*)&oceanColor.r,
 		ImGuiColorEditFlags_Float | ImGuiColorEditFlags_AlphaPreviewHalf);
@@ -122,9 +130,39 @@ void Ocean::UIRender()
 	
 }
 
+void Ocean::SaveData(Json::Value * parent)
+{
+	Json::Value value;
+	{
+		JsonHelper::SetValue(value, "Name", this->name);
+		string nullString = "";
+		JsonHelper::SetValue(value, "FileName", nullString);
+		JsonHelper::SetValue(value, "IsActive", isActive);
+		JsonHelper::SetValue(value, "OceanColor", this->material->GetDiffuseColor());
+		JsonHelper::SetValue(value, "Position", transform->GetWorldPosition());
+		JsonHelper::SetValue(value, "Scale", transform->GetScale());
+	}
+	(*parent)[this->name.c_str()] = value;
+}
+
+void Ocean::LoadData(Json::Value * parent)
+{
+	D3DXCOLOR color;
+	D3DXVECTOR3 position, scale;
+	GameObject::LoadData(parent);
+	JsonHelper::GetValue(*parent, "OceanColor", oceanColor);
+	JsonHelper::GetValue(*parent, "Position", position);
+	JsonHelper::GetValue(*parent, "Scale", scale);
+
+	this->transform->SetWorldPosition(position);
+	this->transform->SetScale(scale);
+	this->Init();
+}
+
 void Ocean::UpdateBuffer()
 {
 	Buffer::UpdateBuffer(&vertexBuffer, vertexData.data(), sizeof VertexTextureNormal * vertexData.size());
+	//Buffer::UpdateBuffer(&instanceBuffer, drawInsatnceData.data(), sizeof D3DXVECTOR2 * drawInsatnceData.size());
 }
 
 
@@ -146,22 +184,18 @@ void Ocean::InitInstanceShader()
 	instanceShader = new InstanceShader(ShaderPath + L"005_OceanRaw.hlsl", false);
 	instanceShader->CreateInputLayout(inputLayoutDesc, 4);
 
-	material = new Material;
-
 	worldBuffer = Buffers->FindShaderBuffer<WorldBuffer>();
 }
 
 void Ocean::InitOceansData()
 {
-	this->gridCountX = 8;
-	this->gridCountZ = 8;
+	this->gridCountX = 4;
+	this->gridCountZ = 4;
 	this->length = (float)vertexLength;
 	this->waveAmp = 0.0002f;
 	this->windSpeed = D3DXVECTOR2(32.0f, 32.0f);
 	this->windDirection = D3DXVECTOR2(windSpeed.x, windSpeed.y);
 	D3DXVec2Normalize(&windDirection, &windDirection);
-
-	this->oceanColor = D3DXCOLOR(0.021f, 0.08f, 0.309f,1.0f);
 
 }
 

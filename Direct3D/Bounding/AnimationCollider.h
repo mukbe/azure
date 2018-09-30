@@ -5,11 +5,12 @@ class AnimationCollider : public GameCollider
 {
 private:
 	Synthesize(int, parentBoneIndex, ParentBoneIndex)
-	Synthesize(D3DXMATRIX, localMatrix, localMatrix)
 	Synthesize(ModelAnimPlayer*, animation, Animation)
 public:
 	AnimationCollider(class GameObject* parentObject,class ModelAnimPlayer* animation);
 	virtual ~AnimationCollider();
+
+	virtual void Clone(void** clone);
 
 	virtual void Update()override;
 	void DebugUpdate(D3DXMATRIX matLocal,D3DXMATRIX matFinal);

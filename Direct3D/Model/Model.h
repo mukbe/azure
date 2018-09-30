@@ -41,6 +41,7 @@ class Model
 	friend class ModelData;
 public:
 	Model();
+	Model(struct ModelData data);
 	~Model();
 
 	void ReadMaterial(wstring file);
@@ -73,6 +74,8 @@ public:
 	void SaveAnimationData(wstring fileName);
 	void AddAnimationData(wstring fileName);
 	void BindMeshData();
+
+	void UIRender();
 private:
 	Material * GetMaterialByName(wstring name);
 private:

@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Environment\GameMap.h" />
-    <ClInclude Include="Object\Particle\ParticleSystem.h" />
+    <ClInclude Include="Manager\FactoryManager.h" />
+    <ClInclude Include="Project\ToolScene\FactoryTool.h" />
     <ClInclude Include="Renders\GrassRenderer\GrassRenderer.h" />
     <ClInclude Include="Object\GameUnit\GameUnit.h" />
     <ClInclude Include="Particle\ParticleSystem.h" />
@@ -124,9 +124,9 @@
     <ClInclude Include="View\Projection.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Environment\GameMap.cpp" />
-    <ClCompile Include="Object\Particle\ParticleSystem.cpp" />
-    <ClCompile Include="Project\Game\PlayScene + Huynjin.cpp" />
+    <ClCompile Include="Manager\FactoryManager.cpp" />
+    <ClCompile Include="Project\ToolScene\FactoryTool.cpp" />
+    <ClCompile Include="Project\Game\PlayScene + hyunjin.cpp" />
     <ClCompile Include="Project\Game\PlayScene + soonwoo.cpp" />
     <ClCompile Include="Renders\GrassRenderer\GrassRenderer.cpp" />
     <ClCompile Include="Object\GameUnit\GameUnit.cpp" />
@@ -311,11 +311,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="_Shaders\005_OceanHigh.hlsl">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="_Shaders\005_OceanCompute.hlsl">
       <FileType>Document</FileType>
     </None>
@@ -339,12 +334,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="_Shaders\999_Terrain.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    <None Include="_Shaders\005_OceanDeferred.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

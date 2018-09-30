@@ -73,16 +73,33 @@ void Material::BindBuffer()
 	this->buffer->SetVSBuffer(3);
 	this->buffer->SetPSBuffer(3);
 
+	ID3D11ShaderResourceView* view;
 	if (this->diffuseMap)
-		DeviceContext->PSSetShaderResources(0,1,&this->diffuseMap);
+	{
+		view = diffuseMap->GetSRV();
+		DeviceContext->PSSetShaderResources(0, 1, &view);
+	}
 	if (this->specularMap)
-		DeviceContext->PSSetShaderResources(1,1,&this->specularMap);
-	if (this->emissiveMap)
-		DeviceContext->PSSetShaderResources(2,1,&this->emissiveMap);
+	{
+		view = specularMap->GetSRV();
+		DeviceContext->PSSetShaderResources(1, 1, &view);
+	}
+	
+	if (this->emissiveMap) 
+	{
+		view = emissiveMap->GetSRV();
+		DeviceContext->PSSetShaderResources(2, 1, &view);
+	}
 	if (this->normalMap)
-		DeviceContext->PSSetShaderResources(3,1,&this->normalMap);
+	{
+		view = normalMap->GetSRV();
+		DeviceContext->PSSetShaderResources(3, 1, &view);
+	}
 	if (this->detailMap)
-		DeviceContext->PSSetShaderResources(4,1,&this->detailMap);
+	{
+		view = detailMap->GetSRV();
+		DeviceContext->PSSetShaderResources(4, 1, &view);
+	}
 }
 
 void Material::UnBindBuffer()
@@ -102,24 +119,23 @@ void Material::UnBindBuffer()
 
 void Material::UIRender()
 {
-
-	ImGuiHelper::RenderImageButton(diffuseMap);
+	ImGuiHelper::RenderImageButton(&diffuseMap);
 	ImGui::SameLine();
 	ImGui::Text("DiffuseMap");
 
-	ImGuiHelper::RenderImageButton(specularMap);
+	ImGuiHelper::RenderImageButton(&specularMap);
 	ImGui::SameLine();
 	ImGui::Text("SpecularMap");
 
-	ImGuiHelper::RenderImageButton(emissiveMap);
+	ImGuiHelper::RenderImageButton(&emissiveMap);
 	ImGui::SameLine();
 	ImGui::Text("EmissiveMap");
 
-	ImGuiHelper::RenderImageButton(normalMap);
+	ImGuiHelper::RenderImageButton(&normalMap);
 	ImGui::SameLine();
 	ImGui::Text("NormalMap");
 
-	ImGuiHelper::RenderImageButton(detailMap);
+	ImGuiHelper::RenderImageButton(&detailMap);
 	ImGui::SameLine();
 	ImGui::Text("DetailMap");
 
@@ -142,4 +158,10 @@ void Material::UIRender()
 	ImGui::Separator();
 
 	UpdateBuffer();
+}
+
+void Material::SaveData(Json::Value * parent)
+{
+	
+	
 }

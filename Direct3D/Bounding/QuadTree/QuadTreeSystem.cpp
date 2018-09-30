@@ -33,7 +33,7 @@ void QuadTreeSystem::DebugRender()
 
 void QuadTreeSystem::UIRender()
 {
-	
+
 	ImGui::Text("QuadTreeNode : %d", reinterpret_cast<int*>(QuadTreeNode::_renderingNodeCount));
 	
 }

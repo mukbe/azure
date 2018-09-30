@@ -23,7 +23,9 @@ PlayScene::PlayScene()
 	RenderRequest->AddRender("ToolPreRender", bind(&PlayScene::PreRender, this), RenderType::PreRender);
 
 	this->InitSoonwoo();
-	this->InitHuynjin();
+	this->InitHungyn();
+
+	Objects->Init();
 }
 
 
@@ -33,6 +35,7 @@ PlayScene::~PlayScene()
 
 void PlayScene::Init()
 {
+	
 }
 
 void PlayScene::Release()
@@ -79,5 +82,17 @@ void PlayScene::Render()
 
 void PlayScene::UIRender()
 {
-	Objects->FindObject(ObjectType::Type::Dynamic, ObjectType::Tag::View, "QuadTreeSystem")->UIRender();
+	ImGui::Begin("Debug");
+
+	ImGui::Text("FPS : %f", Time::Get()->FPS());
+
+	Objects->FindObject(ObjectType::Type::Dynamic, ObjectType::Tag::System, "QuadTreeSystem")->UIRender();
+	int objectCount = 0;
+	vector<GameObject*>* pList = Objects->GetObjectList(ObjectType::Type::Dynamic, ObjectType::Tag::Instancing);
+	for (UINT i = 0; i < pList->size(); ++i)
+	{
+		objectCount += ((InstanceRenderer*)pList->at(i))->GetDrawIntanceCount();
+	}
+	ImGui::Text("DrawObject : %d", objectCount);
+	ImGui::End();
 }

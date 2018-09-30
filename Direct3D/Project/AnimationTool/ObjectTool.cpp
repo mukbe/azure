@@ -54,6 +54,7 @@ void ObjectTool::Update()
 		{
 			debugTransform->Update();
 			targetCollider->SetFinalMatrix(debugTransform->GetTransform()->GetFinalMatrix());
+			targetCollider->SetLocalMatrix(debugTransform->GetTransform()->GetFinalMatrix());
 		}
 	}
 }
@@ -112,7 +113,6 @@ void ObjectTool::Render()
 
 void ObjectTool::UIRender()
 {
-	AssetManager->UIRender();
 
 	if (ImGui::Begin("ObjectTool"))
 	{
@@ -175,7 +175,7 @@ void ObjectTool::UIRender()
 
 void ObjectTool::SetCamera(FreeCamera * camera)
 {
-	debugTransform->SetCamera(camera);
+	
 }
 
 

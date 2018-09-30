@@ -36,6 +36,9 @@ public:
 	virtual void UIUpdate() {}
 	virtual void DebugRender() {}
 
+	virtual void SaveData(Json::Value* parent);
+	virtual void LoadData(Json::Value* parent);
+
 	void SendMSG(struct TagMessage msg);
 	void AddCallback(string name, CallbackFunc func);
 	D3DXMATRIX GetFinalMatrix();

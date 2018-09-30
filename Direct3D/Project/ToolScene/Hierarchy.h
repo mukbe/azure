@@ -23,5 +23,12 @@ public:
 	virtual void Render();
 	virtual void PreRender();
 	virtual void UIRender();
+
+	virtual void SaveData();
+	virtual void LoadData();
+private:
+	void CreateUnit(string name);
+	void CreateEnviroment(string name);
+	void CreaetInstanceRenderer(wstring fileName = L"");
 };
 

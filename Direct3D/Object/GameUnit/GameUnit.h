@@ -5,9 +5,10 @@ class GameUnit : public GameObject
 protected:
 	class Model* model;
 	class ModelAnimPlayer* animation;
-	vector<class GameCollider*> colliderList;
+	vector<class AnimationCollider*> colliderList;
 public:
 	GameUnit(string name,class Model* model);
+	GameUnit(string name);
 	~GameUnit();
 
 	virtual void Init();
@@ -17,6 +18,11 @@ public:
 	virtual void PostUpdate();
 	virtual void PrevRender();
 	virtual void Render();
-	virtual void PostRender();
+	virtual void UIRender();
+
+	virtual void SaveData(Json::Value* parent);
+	virtual void LoadData(Json::Value* parent);
+private:
+	void SaveMaterial(wstring file);
 };
 

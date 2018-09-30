@@ -12,6 +12,7 @@ GameCollider::GameCollider(GameObject* parentObject,BoundingBox* bounding)
 	:parentObject(parentObject),boundingBox(bounding),name("Collider"),type(UnKnown)
 {
 	D3DXMatrixIdentity(&finalMatrix);
+	D3DXMatrixIdentity(&localMatrix);
 }
 
 
@@ -31,13 +32,15 @@ void GameCollider::Clone(void ** clone)
 	collider->name = this->name;
 	collider->type = this->type;
 	collider->finalMatrix = this->finalMatrix;
+	collider->localMatrix = this->localMatrix;
 
 	*clone = collider;
 }
 
 void GameCollider::Update()
 {
-	
+	if (parentObject)
+		D3DXMatrixMultiply(&finalMatrix, &localMatrix, &parentObject->GetFinalMatrix());
 }
 
 void GameCollider::Render(D3DXCOLOR color,bool bZbufferOn)
@@ -104,7 +107,7 @@ void GameCollider::SaveAnimCollider(BinaryWriter * w, AnimationCollider * collid
 	w->String(collider->name);
 	w->Int(collider->type);
 	w->Int(collider->GetParentBoneIndex());
-	w->Byte(collider->GetlocalMatrix(),sizeof D3DXMATRIX);
+	w->Byte(collider->GetLocalMatrix(),sizeof D3DXMATRIX);
 }
 
 void GameCollider::LoadAnimCollider(BinaryReader * r, AnimationCollider * collider)
@@ -115,7 +118,7 @@ void GameCollider::LoadAnimCollider(BinaryReader * r, AnimationCollider * collid
 	D3DXMATRIX matLocal;
 	void* ptr = &matLocal;
 	r->Byte(&ptr, sizeof D3DXMATRIX);
-	collider->SetlocalMatrix(matLocal);
+	collider->SetLocalMatrix(matLocal);
 }
 
 void GameCollider::SaveCollider(BinaryWriter * w, GameCollider * collider)
@@ -123,6 +126,7 @@ void GameCollider::SaveCollider(BinaryWriter * w, GameCollider * collider)
 	w->String(collider->name);
 	w->Int(collider->type);
 	w->Byte(collider->GetFinalMatrix(), sizeof D3DXMATRIX);
+	w->Byte(collider->GetLocalMatrix(), sizeof D3DXMATRIX);
 
 	collider->boundingBox->SaveData(w);
 }
@@ -131,10 +135,16 @@ void GameCollider::LoadCollider(BinaryReader * r, GameCollider * collider)
 {
 	collider->name = r->String();
 	collider->type = (ColliderType)r->Int();
+
 	D3DXMATRIX matFinal;
 	void* ptr = &matFinal;
 	r->Byte(&ptr, sizeof D3DXMATRIX);
 	collider->SetFinalMatrix(matFinal);
+
+	D3DXMATRIX matLocal;
+	void* ptr2 = &matLocal;
+	r->Byte(&ptr2, sizeof D3DXMATRIX);
+	collider->SetLocalMatrix(matFinal);
 
 	collider->boundingBox->LoadData(r);
 }
