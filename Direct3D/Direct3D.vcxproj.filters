@@ -97,6 +97,8 @@
     <ClCompile Include="Manager\ResourceManager.cpp" />
     <ClCompile Include="Manager\SceneManager.cpp" />
     <ClCompile Include="Manager\ShaderManager.cpp" />
+    <ClCompile Include="Environment\GameMap.cpp" />
+    <ClCompile Include="Project\Game\PlayScene + Huynjin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renders\ShadowRenderer.h" />
@@ -202,6 +204,7 @@
     <ClInclude Include="Manager\SceneManager.h" />
     <ClInclude Include="Manager\SceneNode.h" />
     <ClInclude Include="Manager\ShaderManager.h" />
+    <ClInclude Include="Environment\GameMap.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />
@@ -223,5 +226,6 @@
     <None Include="_Shaders\008_Grass.hlsl" />
     <None Include="Project\Game\Header.hlsli" />
     <None Include="_Shaders\005_OceanDeferred.hlsl" />
+    <None Include="_Shaders\999_Terrain.hlsl" />
   </ItemGroup>
 </Project>

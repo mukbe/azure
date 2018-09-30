@@ -22,7 +22,7 @@ private:
 	};
 
 public:
-	GameMap(wstring level = L"");
+	GameMap(string level = "");
 	virtual~GameMap();
 
 	virtual void Render();

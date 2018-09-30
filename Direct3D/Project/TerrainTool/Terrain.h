@@ -47,6 +47,8 @@ public:
 	void Render();
 	void UIRender();
 	void UIUpdate();
+
+	virtual void SaveData(Json::Value* json);
 private:
 	void CreateTerrain();
 	void CalcuMousePosition();

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Environment\GameMap.h" />
     <ClInclude Include="Manager\FactoryManager.h" />
     <ClInclude Include="Project\ToolScene\FactoryTool.h" />
     <ClInclude Include="Renders\GrassRenderer\GrassRenderer.h" />
@@ -124,7 +125,9 @@
     <ClInclude Include="View\Projection.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Environment\GameMap.cpp" />
     <ClCompile Include="Manager\FactoryManager.cpp" />
+    <ClCompile Include="Project\Game\PlayScene + Huynjin.cpp" />
     <ClCompile Include="Project\ToolScene\FactoryTool.cpp" />
     <ClCompile Include="Project\Game\PlayScene + hyunjin.cpp" />
     <ClCompile Include="Project\Game\PlayScene + soonwoo.cpp" />
@@ -335,6 +338,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\005_OceanDeferred.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\999_Terrain.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

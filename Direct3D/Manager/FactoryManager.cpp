@@ -4,7 +4,7 @@
 #include "./Environment/Ocean.h"
 
 #include "./Project/TerrainTool/Scattering.h"
-#include "./Project/TerrainTool/Terrain.h"
+#include "./Environment/GameMap.h"
 
 #include "./Object/GameUnit/GameUnit.h"
 
@@ -48,8 +48,10 @@ void FactoryManager::Create(string name, Json::Value value)
 	}
 	else if (name =="Terrain")
 	{
-		Terrain* terrain = new Terrain();
-		terrain->LoadData(&value);
+		string fileName;
+		JsonHelper::GetValue(value, "FileName", fileName);
+
+		GameMap* terrain = new GameMap(fileName);
 		Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Enviroment,terrain);
 	}
 	else if (name == "Pandaren")

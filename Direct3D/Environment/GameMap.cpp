@@ -3,12 +3,13 @@
 
 #include "./Bounding/QuadTree/QuadTreeSystem.h"
 
-GameMap::GameMap(wstring level)
+GameMap::GameMap(string level)
 {
 	name = "Terrain";
 
+
 	Json::Value* jsonRoot = new Json::Value();
-	JsonHelper::ReadData(L"Terrain.json", jsonRoot);
+	JsonHelper::ReadData(String::StringToWString(level), jsonRoot);
 	Json::Value prop = (*jsonRoot)["Textures"];
 	if (prop.isNull() == false)
 	{

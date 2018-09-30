@@ -112,7 +112,7 @@ void Terrain::UIRender()
 	if (ImGui::Button("Save", ImVec2(150, 30)))
 	{
 		//Save
-		Texture::SaveToFile(Contents + L"heightTestMap.png", heightData->GetHeightBuffer()->GetSRV());
+		Texture::SaveToFile(Contents + L"HeightMap.png", heightData->GetHeightBuffer()->GetSRV());
 		Texture::SaveToFile(Contents + L"splatMap.png", splat->GetSplatMap()->GetSRV());
 
 		//heightRatio = 250.f
@@ -254,6 +254,17 @@ void Terrain::UIUpdate()
 	//	heightData->Load();
 	//	//TODO  splat Load
 	//}
+}
+
+void Terrain::SaveData(Json::Value * json)
+{
+	Json::Value value;
+	{
+		JsonHelper::SetValue(value, "Name", this->name);
+		string nullString = "Terrain.json";
+		JsonHelper::SetValue(value, "FileName", nullString);
+	}
+	(*json)[this->name.c_str()] = value;
 }
 
 void Terrain::CreateTerrain()
