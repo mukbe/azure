@@ -283,7 +283,10 @@ void ObjectManager::LoadData(Json::Value * parent)
 				Json::Value objectValue = (*listIter);
 				string name;
 				JsonHelper::GetValue(objectValue, "Name", name);
-				
+
+				Json::Value* sibal = new Json::Value();
+				JsonHelper::ReadData(String::StringToWString(name + ".json"), sibal);
+
 				FactoryManager::Get()->Create(name,objectValue);
 			}
 		}
@@ -309,6 +312,7 @@ void ObjectManager::SaveData(Json::Value * parent)
 					for (UINT i = 0; i < listIter->second.size(); ++i)
 					{
 						listIter->second[i]->SaveData(&listValue);
+
 					}
 				}
 				objectTypeValue[this->GetTagName(listIter->first).c_str()] = listValue;

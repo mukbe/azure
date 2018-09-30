@@ -140,23 +140,7 @@ void Terrain::UIRender()
 		normalData->SetPixel(data, 256, 256);
 		Texture::SaveToFile(Contents + L"NormalMap.png", normalData->GetSRV());
 
-		Texture::SaveToFile(Contents + L"Splat0.png", texture->GetSRV());
 
-		int index = 1;
-		string str = "Splat";
-		vector<Texture*> splatTex = splat->GetTextures();
-		for (size_t i = 0; i < splatTex.size(); i++)
-		{
-			if (splatTex[i] != nullptr)
-			{
-				
-				wstring name = String::StringToWString(str + to_string(index));
-
-				Texture::SaveToFile(Contents + name, splatTex[i]->GetSRV());
-
-				index++;
-			}
-		}
 	}
 
 	ImGui::SameLine();
@@ -274,13 +258,40 @@ void Terrain::UIUpdate()
 
 void Terrain::SaveData(Json::Value * json)
 {
+	Json::Value* pJson = new Json::Value();
 	Json::Value value;
 	{
 		JsonHelper::SetValue(value, "Name", this->name);
 		string nullString = "Terrain.json";
 		JsonHelper::SetValue(value, "FileName", nullString);
+
 	}
 	(*json)[this->name.c_str()] = value;
+
+	Json::Value prop;
+	{
+		JsonHelper::SetValue(prop, "HeightMap", (string)"HeightMap.png");
+		JsonHelper::SetValue(prop, "SplatMap", (string)"SplatMap.png");
+		JsonHelper::SetValue(prop, "NormalMap", (string)"NormalMap.png");
+
+		JsonHelper::SetValue(prop, "Splat0", String::WStringToString(texture->GetFilePath()));
+		vector<Texture*> splatTex = splat->GetTextures();
+
+		int index = 0;
+		for (size_t i = 0; i < splatTex.size(); i++)
+		{
+			if (splatTex[i] != nullptr)
+				JsonHelper::SetValue(prop, "Splat" + to_string(index), String::WStringToString(splatTex[i]->GetFilePath()));
+			else 
+				JsonHelper::SetValue(prop, "Splat" + to_string(index), (string)"");
+			index++;
+		}
+
+	}
+
+	(*pJson)["Property"] = prop;
+	JsonHelper::WriteData(L"Terrain.json", pJson);
+
 }
 
 void Terrain::CreateTerrain()

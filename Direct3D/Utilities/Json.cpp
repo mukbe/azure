@@ -121,3 +121,28 @@ void JsonHelper::WriteData(wstring file, Json::Value * root)
 	}
 	stream.close();
 }
+
+void JsonHelper::ReadData(string file, Json::Value * root)
+{
+	ifstream stream;
+
+	stream.open(file);
+	{
+		Json::Reader reader;
+		reader.parse(stream, *root);
+	}
+	stream.close();
+}
+
+void JsonHelper::WriteData(string file, Json::Value * root)
+{
+	ofstream stream;
+
+	stream.open(file);
+	{
+		Json::StyledWriter writer;
+
+		stream << writer.write(*root);
+	}
+	stream.close();
+}

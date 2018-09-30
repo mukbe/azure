@@ -51,8 +51,9 @@ void FactoryManager::Create(string name, Json::Value value)
 		string fileName;
 		JsonHelper::GetValue(value, "FileName", fileName);
 
-		//GameMap* terrain = new GameMap(fileName);
-		//Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Enviroment,terrain);
+		GameMap* terrain = new GameMap(fileName);
+		terrain->LoadData(&value);
+		Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Enviroment,terrain);
 	}
 	else if (name == "Pandaren")
 	{
