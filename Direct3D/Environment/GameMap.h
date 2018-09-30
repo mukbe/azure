@@ -28,6 +28,8 @@ public:
 	virtual void Render();
 	virtual void UIRender();
 
+	virtual void LoadData(Json::Value* json);
+
 private:
 	ID3D11Buffer * vertexBuffer;
 	ID3D11Buffer* indexBuffer;
