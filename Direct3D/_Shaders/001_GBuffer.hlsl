@@ -174,7 +174,6 @@ ModelPixelInput ModelDeferredVS(VertexTextureBlendNT input)
     transform += mul(input.blendWeights.w, _modelBones[(uint) input.blendIndices.w]);
 
     output.position = output.worldPos = mul(input.position, transform);
-    //output.position = output.worldPos = input.position;
    
     output.normal = mul(input.normal, (float3x3) transform);
     output.tangent = mul(input.tangent, (float3x3) transform);
@@ -249,6 +248,7 @@ G_Buffer InstancePS(ModelPixelInput input)
     output = PackGBuffer(output, normal, diffuse4.rgb, SpecColor.rgb, input.depth, specPower, 0.9f);
     return output;
 }
+
 //===================================================
 //Deferred UnInstance Object
 //===================================================

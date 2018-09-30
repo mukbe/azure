@@ -55,7 +55,7 @@ void Ocean::ComputingOcean()
 
 	//-----------------------------------------------------------
 	//GetData --------------------------------------------------
-	vertexDataBuffer->GetDatas(vertexData.data());
+	//vertexDataBuffer->GetDatas(vertexData.data());
 	//-----------------------------------------------------------
 	//ReleaseBuffers -------------------------------------------
 	ID3D11UnorderedAccessView* nullView[1] = { nullptr };

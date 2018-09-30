@@ -4,9 +4,11 @@
 #include "./Bounding/BoundingBox.h"
 #include "./Bounding/BoundingSphere.h"
 #include "./Bounding/BoundingFrustum.h"
+#include "./Bounding/GameCollider.h"
+
 #include "./View/CameraBase.h"
 #include "./Object/StaticObject/StaticObject.h"
-#include "./Bounding/GameCollider.h"
+#include "./Project/TerrainTool/Terrain.h"
 
 UINT QuadTreeNode::_renderingNodeCount = 0;
 
@@ -56,6 +58,21 @@ QuadTreeNode::QuadTreeNode(QuadTreeNode * parent, CornerType cornerType)
 	this->boundingBox = new BoundingBox(newMinPos, newMaxPos);
 	this->level = parent->level - 1;
 	this->SubDevide();
+}
+
+
+
+QuadTreeNode::QuadTreeNode(int level, Terrain * pTerrain)
+	:level(level)
+{
+	D3DXVECTOR3 minPos, maxPos;
+	minPos.x = minPos.z = 0.0f;
+	maxPos.x = maxPos.z = 256.0f;
+
+}
+
+QuadTreeNode::QuadTreeNode(QuadTreeNode * pParent, CornerType cornerType, Terrain * pTerrain)
+{
 }
 
 QuadTreeNode::~QuadTreeNode()

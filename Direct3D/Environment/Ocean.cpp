@@ -73,11 +73,7 @@ void Ocean::Init()
 void Ocean::Update()
 {
 	oceanComputeBuffer->data.time += Time::Delta();
-
 	this->ComputingOcean();
-	this->FrustumCulling();
-	this->UpdateBuffer();
-	
 }
 
 void Ocean::Render()
@@ -91,7 +87,9 @@ void Ocean::Render()
 	material->BindBuffer();
 	worldBuffer->SetMatrix(transform->GetFinalMatrix());
 	worldBuffer->SetVSBuffer(1);
-	
+
+	ID3D11ShaderResourceView* heightView = vertexDataBuffer->GetSRV();
+	DeviceContext->VSSetShaderResources(7, 1, &heightView);
 	// -----------------------------------------------------------
 
 	//Draw ----------------------------------------------------------
@@ -138,6 +136,7 @@ void Ocean::SaveData(Json::Value * parent)
 		string nullString = "";
 		JsonHelper::SetValue(value, "FileName", nullString);
 		JsonHelper::SetValue(value, "IsActive", isActive);
+
 		JsonHelper::SetValue(value, "OceanColor", this->material->GetDiffuseColor());
 		JsonHelper::SetValue(value, "Position", transform->GetWorldPosition());
 		JsonHelper::SetValue(value, "Scale", transform->GetScale());
@@ -161,8 +160,7 @@ void Ocean::LoadData(Json::Value * parent)
 
 void Ocean::UpdateBuffer()
 {
-	Buffer::UpdateBuffer(&vertexBuffer, vertexData.data(), sizeof VertexTextureNormal * vertexData.size());
-	//Buffer::UpdateBuffer(&instanceBuffer, drawInsatnceData.data(), sizeof D3DXVECTOR2 * drawInsatnceData.size());
+
 }
 
 
@@ -189,8 +187,8 @@ void Ocean::InitInstanceShader()
 
 void Ocean::InitOceansData()
 {
-	this->gridCountX = 4;
-	this->gridCountZ = 4;
+	this->gridCountX = 8;
+	this->gridCountZ = 8;
 	this->length = (float)vertexLength;
 	this->waveAmp = 0.0002f;
 	this->windSpeed = D3DXVECTOR2(32.0f, 32.0f);

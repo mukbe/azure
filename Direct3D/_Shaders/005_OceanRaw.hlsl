@@ -16,15 +16,23 @@ struct PixelInput
     float3 color : TEXCOORD0;
 };
 
+struct oceanData
+{
+    float3 position;
+    float2 uv;
+    float3 normal;
+};
+
+Texture2D _fresnelLookUpTable : register(t6);
+StructuredBuffer<oceanData> _heightBuffer : register(t7);
+
 G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float3 specColor,
     float SpecIntensity, float SpecPower, float renderType)
 {
     G_Buffer Out = buffer;
 
-	// Normalize the specular power
     float SpecPowerNorm = max(0.0001, (SpecPower - g_SpecPowerRange.x) / g_SpecPowerRange.y);
 
-	// Pack all the data into the GBuffer structure
     Out.normal = float4(normal * 0.5f + 0.5f, renderType);
     Out.diffuse = float4(diffuse.rgb, SpecIntensity);
     Out.spec = float4(specColor, SpecPowerNorm);
@@ -33,36 +41,38 @@ G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float3 spec
 
 }
 
-Texture2D _fresnelLookUpTable : register(t6);
 
 float Fresnel(float3 V, float3 N)
 {
     float costhetai = abs(dot(V, N));
-    //return _fresnelLookUpTable.Sample(_basicSampler, float2(costhetai, 0.0f));
     float3 texelUV = GetTexelUV(_fresnelLookUpTable, float2(costhetai, 0.0f));
     return _fresnelLookUpTable.Load(texelUV).a;
 }
 
+
 PixelInput InstanceVS(VertexInput input)
 {
     PixelInput output;
+    
+    uint index = input.position.z * 65 + input.position.x;
+    oceanData data = _heightBuffer[index];
 
-    float4 worldPosition = mul(input.position + float4(input.offset.x, 0, input.offset.y, 0.f), World);
+    float4 worldPosition = mul(float4(data.position, 1.0f) + float4(input.offset.x, 0.0f, input.offset.y, 0.f), World);
     float3 worldPos = worldPosition.xyz;
     
     float3 sunDirection = SunDir;
     
     float3 V = normalize(GetCameraPosition() - worldPos.xyz);
-    float3 N = normalize(input.normal);
+    float3 N = normalize(data.normal);
 	
     float fresnel = Fresnel(V, N);
-    float4 specColor = lerp(DiffuseColor, SunColor, fresnel);
+    float4 specColor = lerp(DiffuseColor, SunColor,fresnel);
     
-    float diffuseFactor = saturate(dot(input.normal, -sunDirection));
+    float diffuseFactor = saturate(dot(data.normal, -sunDirection));
     float3 diffuseColor = (DiffuseColor * SunColor * diffuseFactor).rgb;
 
     output.position = mul(float4(worldPosition), ViewProjection);
-    output.normal = input.normal;
+    output.normal = data.normal;
     output.color = diffuseColor.rgb + specColor.rgb;
 
     return output;

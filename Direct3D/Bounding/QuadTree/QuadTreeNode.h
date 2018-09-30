@@ -18,9 +18,12 @@ private:
 	vector<QuadTreeNode*> childs;
 	vector<class StaticObject*> objectList;
 public:
-	//TODO 추후 지형 높이가 들어갈경우 수정
 	QuadTreeNode(int level , D3DXVECTOR3 minPos, D3DXVECTOR3 maxPos);			//최초 노드 생성자
 	QuadTreeNode(QuadTreeNode* parent,CornerType cornerType);					//자식 노드 생성자
+	
+	QuadTreeNode(int level, class Terrain* pTerrain);
+	QuadTreeNode(QuadTreeNode* pParent, CornerType cornerType, class Terrain* pTerrain);
+
 	~QuadTreeNode();
 
 	void Update(class BoundingFrustum* pFrustum);

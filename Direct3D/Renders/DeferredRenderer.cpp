@@ -9,7 +9,8 @@
 
 DeferredRenderer::DeferredRenderer()
 {
-	this->shader = new Shader(ShaderPath + L"002_Deferred.hlsl",Shader::ShaderType::Default,"BasicDeferred");
+	//this->shader = new Shader(ShaderPath + L"002_Deferred.hlsl",Shader::ShaderType::Default,"BasicDeferred");
+	this->shader = Shaders->CreateShader("Deferred",L"002_Deferred.hlsl", Shader::ShaderType::Default, "BasicDeferred");
 	this->alphaRender = nullptr;
 
 	D3DDesc desc;
