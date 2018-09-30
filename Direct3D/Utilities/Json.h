@@ -29,4 +29,8 @@ namespace JsonHelper
 
 	void ReadData(wstring file, Json::Value* root);
 	void WriteData(wstring file, Json::Value* root);
+
+	void ReadData(string file, Json::Value* root);
+	void WriteData(string file, Json::Value* root);
+
 }
