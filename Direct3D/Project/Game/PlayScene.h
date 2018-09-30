@@ -16,7 +16,7 @@ public:
 	void Render();
 	void UIRender();
 
-	void InitHungyn();
+	void InitHuynjin();
 	void InitSoonwoo();
 };
 
