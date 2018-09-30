@@ -87,9 +87,9 @@ void GameObject::SaveData(Json::Value * parent)
 {
 	Json::Value value;
 	{
+		string path = "../_Scenes/Scene01/" + name + ".json";
 		JsonHelper::SetValue(value, "Name",this->name);
-		string nullString = "";
-		JsonHelper::SetValue(value, "FileName", nullString);
+		JsonHelper::SetValue(value, "FileName", path);
 		JsonHelper::SetValue(value, "IsActive", isActive);
 	}
 	(*parent)[this->name.c_str()] = value;

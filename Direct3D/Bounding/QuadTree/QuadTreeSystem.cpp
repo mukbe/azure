@@ -3,11 +3,15 @@
 
 #include "QuadTreeNode.h"
 #include "./View/FreeCamera.h"
+
+#include "./Environment/GameMap.h"
+
 QuadTreeSystem::QuadTreeSystem()
 	:level(3)
 {
 	this->name = "QuadTreeSystem";
-	this->rootNode = new QuadTreeNode(level, D3DXVECTOR3(0.f, 0.f, 0.f), D3DXVECTOR3(256.f, 0.f, 256.f));
+	GameMap* map = nullptr;
+	this->rootNode = new QuadTreeNode(level, map);
 }
 
 

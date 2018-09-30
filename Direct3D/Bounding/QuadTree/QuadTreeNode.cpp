@@ -13,53 +13,6 @@
 
 UINT QuadTreeNode::_renderingNodeCount = 0;
 
-QuadTreeNode::QuadTreeNode(int level , D3DXVECTOR3 minPos, D3DXVECTOR3 maxPos)
-	:level(level)
-{
-	this->boundingBox = new BoundingBox(minPos, maxPos);
-	this->SubDevide();
-}
-
-QuadTreeNode::QuadTreeNode(QuadTreeNode * parent, CornerType cornerType)
-{
-	D3DXVECTOR3 parentMin, parentMax,newMinPos,newMaxPos;
-	float width, height;
-
-	parentMin = parent->boundingBox->minPos;
-	parentMax = parent->boundingBox->maxPos;
-	width = parentMax.x - parentMin.x;
-	height = parentMax.z - parentMin.z;
-
-	switch (cornerType)
-	{
-		case QuadTreeNode::CORNER_LT:
-		{
-			newMinPos = parentMin + D3DXVECTOR3(0.f, 0.f, height * 0.5f);
-		}
-			break;
-		case QuadTreeNode::CORNER_RT:
-		{
-			newMinPos = parentMin + D3DXVECTOR3(width * 0.5f, 0.f, height * 0.5f);
-		}
-			break;
-		case QuadTreeNode::CORNER_LB:
-		{
-			newMinPos = parentMin;
-		}
-			break;
-		case QuadTreeNode::CORNER_RB:
-		{
-			newMinPos = parentMin + D3DXVECTOR3(width * 0.5f, 0.f, 0.f);
-		}
-			break;
-	}
-
-	newMaxPos = newMinPos + D3DXVECTOR3(width * 0.5f, (width + height) * 0.25f, height * 0.5f);
-
-	this->boundingBox = new BoundingBox(newMinPos, newMaxPos);
-	this->level = parent->level - 1;
-	this->SubDevide();
-}
 
 QuadTreeNode::QuadTreeNode(int level, GameMap * pMap)
 	:level(level)
@@ -69,7 +22,7 @@ QuadTreeNode::QuadTreeNode(int level, GameMap * pMap)
 	max.x = max.z = 256.0f;
 	min.y = max.y = 0.0f;
 	this->boundingBox = new BoundingBox(min, max);
-	this->SubDevide();
+	this->SubDevide(pMap);
 }
 
 QuadTreeNode::QuadTreeNode(QuadTreeNode * pParent, CornerType cornerType, GameMap * pMap)
@@ -110,7 +63,7 @@ QuadTreeNode::QuadTreeNode(QuadTreeNode * pParent, CornerType cornerType, GameMa
 
 	this->boundingBox = new BoundingBox(newMinPos, newMaxPos);
 	this->level = pParent->level - 1;
-	this->SubDevide();
+	this->SubDevide(pMap);
 
 	if (this->level == 0)
 	{
@@ -149,8 +102,16 @@ void QuadTreeNode::UpdateHeightData(GameMap * pMap)
 	maxHeight = childs[0]->boundingBox->maxPos.y;
 	for (UINT i = 1; i < childs.size(); ++i)
 	{
-		//if(minHeight <)
+		if (minHeight > childs[i]->boundingBox->minPos.y)
+			minHeight = childs[i]->boundingBox->minPos.y;
+		if (maxHeight < childs[i]->boundingBox->maxPos.y)
+			maxHeight = childs[i]->boundingBox->maxPos.y;
 	}
+
+	this->boundingBox->minPos.y = minHeight;
+	this->boundingBox->maxPos.y = maxHeight;
+	D3DXVECTOR3 center = (boundingBox->minPos + boundingBox->maxPos) / 2.0f;
+	this->boundingBox->halfSize = center - boundingBox->minPos;
 }
 
 void QuadTreeNode::Update(class BoundingFrustum* pFrustum)
@@ -243,13 +204,13 @@ void QuadTreeNode::AddObject(StaticObject * object)
 	}
 }
 
-bool QuadTreeNode::SubDevide()
+bool QuadTreeNode::SubDevide( GameMap* pMap)
 {
 	if (CanDeepInTo(level) == false) return false;
 
 	for (UINT i = 0; i < CornerType::End; ++i)
 	{
-		QuadTreeNode* child = new QuadTreeNode(this, (CornerType)i);
+		QuadTreeNode* child = new QuadTreeNode(this, (CornerType)i, pMap);
 		this->childs.push_back(child);
 	}
 

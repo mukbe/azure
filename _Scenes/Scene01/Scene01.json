@@ -2,22 +2,21 @@
    "ObjectManager" : {
       "Dynamic" : {
          "Enviroment" : {
-            "Ocean" : {
-               "FileName" : [ "" ],
-               "IsActive" : true,
-               "Name" : [ "Ocean" ],
-               "OceanColor" : [ 0.020999999716877937, 0.079999998211860657, 0.30899998545646667, 1.0 ],
-               "Position" : [ -100.0, 0.0, -100.0 ],
-               "Scale" : [ 1.0, 1.0, 1.0 ]
-            },
+          "Ocean": {
+            "FileName": [ "" ],
+            "IsActive": true,
+            "Name": [ "Ocean" ],
+            "OceanColor": [ 0.020999999716877937, 0.079999998211860657, 0.30899998545646667, 1.0 ],
+            "Position": [ -100.0, 0.0, -100.0 ],
+            "Scale": [ 1.0, 1.0, 1.0 ]
+          },
             "Scattering" : {
                "FileName" : [ "" ],
                "IsActive" : true,
                "Name" : [ "Scattering" ]
             },
             "Terrain" : {
-               "FileName" : [ "" ],
-               "IsActive" : false,
+               "FileName" : [ "Terrain.json" ],
                "Name" : [ "Terrain" ]
             }
          },
@@ -40,13 +39,13 @@
          },
          "Object" : null,
          "System" : {
-            "Camera" : {
-               "FileName" : [ "" ],
-               "IsActive" : true,
-               "Name" : [ "Camera" ],
-               "Position" : [ 137.59452819824219, 44.32464599609375, 354.00262451171875 ],
-               "Rotate" : [ 0.090757004916667938, -3.1206443309783936, 0.0 ]
-            }
+          "Camera": {
+            "FileName": [ "" ],
+            "IsActive": true,
+            "Name": [ "Camera" ],
+            "Position": [ 229.08903503417969, 113.10981750488281, -68.7833251953125 ],
+            "Rotate": [ 0.30019617080688477, 5.8259024620056152, 0.0 ]
+          }
          },
          "UI" : null,
          "Unit" : {

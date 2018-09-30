@@ -60,6 +60,7 @@ const wstring Textures = L"../_Contents/Textures/";
 const wstring BinModels = L"../_Contents/BinModels/";
 const wstring FbxModels = L"../_Contents/FbxModels/";
 const wstring ShaderPath = L"_Shaders/";
+const string ScenePath = "../Scenes/Scene01/";
 
 #include "./Environment/Sun.h"
 
