@@ -116,7 +116,6 @@ void Terrain::UIRender()
 		Texture::SaveToFile(Contents + L"splatMap.png", splat->GetSplatMap()->GetSRV());
 
 		//heightRatio = 250.f
-
 		buffer->SetCSBuffer(1);
 		heightData->GetHeightBuffer()->BindCSShaderResourceView(0);
 		heightData->GetTempHeightBuffer()->BindResource(2);
@@ -135,9 +134,8 @@ void Terrain::UIRender()
 		vector<D3DXCOLOR> data;
 		data.assign(256 * 256, D3DXCOLOR(0,0,0,1));
 		for (size_t i = 0; i < vertexData.size(); i++)
-		{
 			memcpy(&data[i], &vertexData[i].normal, sizeof(D3DXVECTOR3));
-		}
+		
 
 		normalData->SetPixel(data, 256, 256);
 		Texture::SaveToFile(Contents + L"normalMap.png", normalData->GetSRV());

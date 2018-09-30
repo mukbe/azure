@@ -23,6 +23,7 @@ namespace JsonHelper
 	void GetValue(Json::Value& parent, string name, string& value);
 	void SetValue(Json::Value& parent, string name, string& value);
 
+
 	void ReadData(wstring file, Json::Value* root);
 	void WriteData(wstring file, Json::Value* root);
 }

@@ -1,5 +1,5 @@
 #include "AtmosphericScattering_Header.hlsl"
-
+#include "000_HeaderProp.hlsl"
 			
 struct VertexINPUT
 {
@@ -30,13 +30,14 @@ PSINPUT VS(VertexINPUT input)
 G_Buffer PS(PSINPUT i)
 {
     G_Buffer output;
+    float3 InvViewAddStartHeight = InvView[3].xyz + float3(0, _startHeight, 0);
 
-    float3 rayStart = InvView[3].xyz;
+    float3 rayStart = InvViewAddStartHeight;
     float3 rayDir = normalize(mul((float3x3) World, i.vertex));
 
     float3 lightDir = _LightDir.xyz;
 
-    float3 planetCenter = InvView[3].xyz;
+    float3 planetCenter = InvViewAddStartHeight;
     planetCenter = float3(0, -_PlanetRadius, 0);
 
     float2 intersection = RaySphereIntersection(rayStart, rayDir, planetCenter, _PlanetRadius + _AtmosphereHeight);
@@ -71,12 +72,14 @@ G_Buffer UseSkyBoxPS(PSINPUT i)
 {
     G_Buffer output;
 
-    float3 rayStart = InvView[3].xyz;
+    float3 InvViewAddStartHeight = InvView[3].xyz + float3(0, _startHeight, 0);
+
+    float3 rayStart = InvViewAddStartHeight;
     float3 rayDir = normalize(mul((float3x3) World, i.vertex));
 
     float3 lightDir = _LightDir.xyz;
 
-    float3 planetCenter = InvView[3].xyz;
+    float3 planetCenter = InvViewAddStartHeight;
     planetCenter = float3(0, -_PlanetRadius, 0);
 
     float4 scatterR = 0;

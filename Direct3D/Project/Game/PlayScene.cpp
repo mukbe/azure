@@ -23,7 +23,7 @@ PlayScene::PlayScene()
 	RenderRequest->AddRender("ToolPreRender", bind(&PlayScene::PreRender, this), RenderType::PreRender);
 
 	this->InitSoonwoo();
-	this->InitHungyn();
+	this->InitHuynjin();
 }
 
 

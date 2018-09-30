@@ -82,6 +82,7 @@ void JsonHelper::SetValue(Json::Value & parent, string name, string & value)
 	parent[name.c_str()].append(value);
 }
 
+
 void JsonHelper::ReadData(wstring file, Json::Value * root)
 {
 	ifstream stream;

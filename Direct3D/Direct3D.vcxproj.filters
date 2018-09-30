@@ -93,9 +93,10 @@
     <ClCompile Include="Project\ToolScene\Picking.cpp" />
     <ClCompile Include="Project\ToolScene\ToolScene.cpp" />
     <ClCompile Include="Object\Particle\ParticleSystem.cpp" />
-    <ClCompile Include="Project\Game\PlayScene + hyunjin.cpp" />
     <ClCompile Include="Project\Game\PlayScene + soonwoo.cpp" />
     <ClCompile Include="Project\Game\PlayScene.cpp" />
+    <ClCompile Include="Project\Game\PlayScene + Huynjin.cpp" />
+    <ClCompile Include="Environment\GameMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renders\ShadowRenderer.h" />
@@ -200,6 +201,7 @@
     <ClInclude Include="Project\ToolScene\ToolScene.h" />
     <ClInclude Include="Object\Particle\ParticleSystem.h" />
     <ClInclude Include="Project\Game\PlayScene.h" />
+    <ClInclude Include="Environment\GameMap.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />
@@ -221,5 +223,6 @@
     <None Include="_Shaders\007_Alpha.hlsl" />
     <None Include="_Shaders\008_Grass.hlsl" />
     <None Include="Project\Game\Header.hlsli" />
+    <None Include="_Shaders\999_Terrain.hlsl" />
   </ItemGroup>
 </Project>
