@@ -18,9 +18,6 @@ public:
 	virtual void Update();
 	virtual void Render();
 
-	virtual void SaveData(Json::Value* parent)override;
-	virtual void LoadData(Json::Value* parent)override;
-
 	virtual D3DXMATRIX GetProjection();
 	class Ray GetRay();
 };

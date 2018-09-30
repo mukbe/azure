@@ -131,32 +131,40 @@ void Ocean::SaveData(Json::Value * parent)
 {
 	GameObject::SaveData(parent);
 
-	Json::Value* value = new Json::Value;
-	Json::Value prop;
-
-	JsonHelper::SetValue(prop, "OceanColor", this->material->GetDiffuseColor());
-	JsonHelper::SetValue(prop, "Position", transform->GetWorldPosition());
-	JsonHelper::SetValue(prop, "Scale", transform->GetScale());
-
-	(*value)["Prop"] = prop;
+	//Json::Value* value = new Json::Value;
+	//Json::Value prop;
+	//
+	//JsonHelper::SetValue(prop, "OceanColor", this->material->GetDiffuseColor());
+	//JsonHelper::SetValue(prop, "Position", transform->GetWorldPosition());
+	//JsonHelper::SetValue(prop, "Scale", transform->GetScale());
+	//
+	//(*value)["Prop"] = prop;
 	//JsonHelper::WriteData(ScenePath + name + ".json", value);
+	//SafeDelete(value);
 }
 
 void Ocean::LoadData(Json::Value * parent)
 {
-	GameObject::LoadData(parent);
-	D3DXCOLOR color;
-	D3DXVECTOR3 position, scale;
+	//string filePath;
+	//JsonHelper::GetValue(*parent, "FileName", filePath);
+	//JsonHelper::GetValue(*parent, "IsActive", isActive);
+	//
+	//D3DXCOLOR color;
+	//D3DXVECTOR3 position, scale;
+	//
+	//Json::Value* root = new Json::Value;
+	//JsonHelper::ReadData(filePath, root);
+	//Json::Value prop = (*root)["Prop"];
+	//
+	//JsonHelper::GetValue(prop, "OceanColor", oceanColor);
+	//JsonHelper::GetValue(prop, "Position", position);
+	//JsonHelper::GetValue(prop, "Scale", scale);
+	//
+	//this->transform->SetWorldPosition(position);
+	//this->transform->SetScale(scale);
+	//
+	//SafeDelete(root);
 
-	Json::Value* value = new Json::Value;
-	//JsonHelper::ReadData()
-
-	JsonHelper::GetValue(*parent, "OceanColor", oceanColor);
-	JsonHelper::GetValue(*parent, "Position", position);
-	JsonHelper::GetValue(*parent, "Scale", scale);
-
-	this->transform->SetWorldPosition(position);
-	this->transform->SetScale(scale);
 	this->Init();
 }
 

@@ -39,6 +39,11 @@ ToolScene::ToolScene()
 	for (; iter != toolList.end(); ++iter)
 		iter->second->Init();
 
+	FreeCamera* camera = new FreeCamera;
+	ObjectManager::Get()->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::System, camera);
+	ObjectManager::Get()->ObjectSortingFront(ObjectType::Type::Dynamic, ObjectType::Tag::System, "Camera");
+	ObjectManager::Get()->SetMainCamera(camera);
+
 	ObjectManager::Get()->LoadData(DataBase::Get()->GetValue());
 }
 
