@@ -12,6 +12,8 @@ Scattering::Scattering(FreeCamera* camera, string level)
 {
 	name = "Scattering";
 
+	D3DXVECTOR3 sunDir;
+
 	jsonRoot = new Json::Value();
 	//TODO level에서 받아오도록
 	JsonHelper::ReadData(L"ScatteringEditor.json", jsonRoot);
@@ -29,6 +31,8 @@ Scattering::Scattering(FreeCamera* camera, string level)
 		JsonHelper::GetValue(prop, "AmbientColorIntensity", AmbientColorIntensity);
 		JsonHelper::GetValue(prop, "SunIntensity", SunIntensity);
 
+		JsonHelper::GetValue(prop, "SunDir", sunDir);
+
 		int renderMode;
 		JsonHelper::GetValue(prop, "RenderMode", renderMode);
 		RenderingMode = (RenderMode)renderMode;
@@ -45,7 +49,8 @@ Scattering::Scattering(FreeCamera* camera, string level)
 	D3DXMatrixIdentity(&mat);
 	world->SetMatrix(mat);
 
-	sun = new Environment::Sun();
+	sun = new Environment::Sun(sunDir);
+
 	buffer = new Buffer;
 
 	_camera = camera;
@@ -76,6 +81,8 @@ Scattering::~Scattering()
 	JsonHelper::SetValue(prop, "LightColorIntensity", LightColorIntensity);
 	JsonHelper::SetValue(prop, "AmbientColorIntensity", AmbientColorIntensity);
 	JsonHelper::SetValue(prop, "SunIntensity", SunIntensity);
+
+	JsonHelper::SetValue(prop, "SunDir", sun->GetForward());
 
 	int renderMode = RenderingMode;
 	JsonHelper::SetValue(prop, "RenderMode", renderMode);

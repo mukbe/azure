@@ -7,6 +7,7 @@ GameMap::GameMap(string level)
 {
 	name = "Terrain";
 
+
 	//Json::Value* jsonRoot = new Json::Value();
 	//JsonHelper::ReadData(String::StringToWString(level), jsonRoot);
 	//Json::Value prop = (*jsonRoot)["Textures"];
@@ -15,23 +16,23 @@ GameMap::GameMap(string level)
 	//	Texture* splatTex[4];
 	//	string heightMapPath, splatMapPath, normalMapPath;
 	//	string splatTexPath[4], diffusePath;
-	//
+
 	//	JsonHelper::GetValue(prop, "HeightMap", heightMapPath);
 	//	JsonHelper::GetValue(prop, "SplatMap", splatMapPath);
 	//	JsonHelper::GetValue(prop, "NormalMap", normalMapPath);
-	//
-	//	JsonHelper::GetValue(prop, "splat0", diffusePath);
-	//	JsonHelper::GetValue(prop, "splat1", splatTexPath[0]);
-	//	JsonHelper::GetValue(prop, "splat2", splatTexPath[1]);
-	//	JsonHelper::GetValue(prop, "splat3", splatTexPath[2]);
-	//	JsonHelper::GetValue(prop, "splat4", splatTexPath[3]);
-	//
+
+	//	JsonHelper::GetValue(prop, "Splat0", diffusePath);
+	//	JsonHelper::GetValue(prop, "Splat1", splatTexPath[0]);
+	//	JsonHelper::GetValue(prop, "Splat2", splatTexPath[1]);
+	//	JsonHelper::GetValue(prop, "Splat3", splatTexPath[2]);
+	//	JsonHelper::GetValue(prop, "Splat4", splatTexPath[3]);
+
 	//	heightMap = new Texture(Contents + String::StringToWString(heightMapPath));
 	//	splatMap = new Texture(Contents + String::StringToWString(splatMapPath));
 	//	normalMap = new Texture(Contents + String::StringToWString(normalMapPath));
-	//
+
 	//	diffuseMap = new Texture(Contents + String::StringToWString(diffusePath));
-	//
+
 	//	for (int i = 0; i < 4; i++)
 	//	{
 	//		if (splatTexPath[i] == "")
@@ -40,7 +41,7 @@ GameMap::GameMap(string level)
 	//		else
 	//			splatTex[i] = new Texture(Contents + String::StringToWString(splatTexPath[i]));
 	//	}
-	//
+
 	//	UINT index = 0;
 	//	for (int i = 0; i < 4; i++)
 	//	{
@@ -52,9 +53,9 @@ GameMap::GameMap(string level)
 	//	}
 	//}
 
-	heightMap = new Texture(Contents + L"heightTestMap.png");
-	splatMap = new Texture(Contents + L"splatMap.png");
-	normalMap = new Texture(Contents +L"normalMap.png");
+	heightMap = new Texture(Contents + L"HeightMap.png");
+	splatMap = new Texture(Contents + L"SplatMap.png");
+	normalMap = new Texture(Contents +L"NormalMap.png");
 
 
 	//heightMap받아와서 정점에 넣어주고 normal은 노멀맵으로 대체한다 uv값은 gpu static에 있는걸 사용
@@ -168,16 +169,14 @@ void GameMap::Render()
 	DeviceContext->DSSetShaderResources(1, 1, &normalView);
 	ID3D11ShaderResourceView* splatView = splatMap->GetSRV();
 	DeviceContext->PSSetShaderResources(5, 1, &splatView);
+	//ID3D11ShaderResourceView* diffuseView = diffuseMap->GetSRV();
+	//DeviceContext->PSSetShaderResources(0, 1, &diffuseView);
 
 	//DeviceContext->PSSetShaderResources(6, 4, splatTexView);
 
 	shader->Render();
-	States::SetRasterizer(States::RasterizerStates::WIRE_CULL_OFF);
-	{
 		States::SetSampler(1, States::LINEAR_WRAP);
 		DeviceContext->DrawIndexed(indexData.size(), 0, 0);
-	}
-	States::SetRasterizer(States::RasterizerStates::SOLID_CULL_ON);
 
 	//Release
 	shader->ReleaseShader();
@@ -189,5 +188,11 @@ void GameMap::Render()
 
 void GameMap::UIRender()
 {
-
+	if (ImGui::InputInt("Edge", &buffer->Data.Edge))
+	{
+		buffer->Data.Inside = buffer->Data.Edge * 0.5f;
+	}
+	ImGuiInputTextFlags flag = 0;
+	flag |= ImGuiInputTextFlags_ReadOnly;
+	ImGui::InputInt("Inside", &buffer->Data.Inside, flag);
 }

@@ -113,7 +113,7 @@ void Terrain::UIRender()
 	{
 		//Save
 		Texture::SaveToFile(Contents + L"HeightMap.png", heightData->GetHeightBuffer()->GetSRV());
-		Texture::SaveToFile(Contents + L"splatMap.png", splat->GetSplatMap()->GetSRV());
+		Texture::SaveToFile(Contents + L"SplatMap.png", splat->GetSplatMap()->GetSRV());
 
 		//heightRatio = 250.f
 		buffer->SetCSBuffer(1);
@@ -138,11 +138,27 @@ void Terrain::UIRender()
 		
 
 		normalData->SetPixel(data, 256, 256);
-		Texture::SaveToFile(Contents + L"normalMap.png", normalData->GetSRV());
+		Texture::SaveToFile(Contents + L"NormalMap.png", normalData->GetSRV());
 
+		Texture::SaveToFile(Contents + L"Splat0.png", texture->GetSRV());
 
+		int index = 1;
+		string str = "Splat";
+		vector<Texture*> splatTex = splat->GetTextures();
+		for (size_t i = 0; i < splatTex.size(); i++)
+		{
+			if (splatTex[i] != nullptr)
+			{
+				
+				wstring name = String::StringToWString(str + to_string(index));
 
+				Texture::SaveToFile(Contents + name, splatTex[i]->GetSRV());
+
+				index++;
+			}
+		}
 	}
+
 	ImGui::SameLine();
 	if (ImGui::Button("Load", ImVec2(150, 30)))
 	{

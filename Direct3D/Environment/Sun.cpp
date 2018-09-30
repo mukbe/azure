@@ -3,12 +3,12 @@
 #include "./Renders/WorldBuffer.h"
 
 
-Environment::Sun::Sun()
+Environment::Sun::Sun(D3DXVECTOR3 vec)
 	:bUpdate(true),height(5)
 {
 	this->sunBuffer = Buffers->FindShaderBuffer<SunBuffer>();
 
-	dir = D3DXVECTOR3(0, 0, 1);
+	dir = vec;
 	angle = D3DXVECTOR3(0, 0, 0);
 	right = D3DXVECTOR3(1, 0, 0);
 	preMousePos = D3DXVECTOR3();
