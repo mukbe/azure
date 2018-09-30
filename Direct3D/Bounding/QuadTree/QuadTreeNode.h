@@ -21,10 +21,11 @@ public:
 	QuadTreeNode(int level , D3DXVECTOR3 minPos, D3DXVECTOR3 maxPos);			//최초 노드 생성자
 	QuadTreeNode(QuadTreeNode* parent,CornerType cornerType);					//자식 노드 생성자
 	
-	QuadTreeNode(int level, class Terrain* pTerrain);
-	QuadTreeNode(QuadTreeNode* pParent, CornerType cornerType, class Terrain* pTerrain);
-
+	QuadTreeNode(int level, class GameMap* pMap);
+	QuadTreeNode(QuadTreeNode* pParent, CornerType type, class GameMap* pMap);
 	~QuadTreeNode();
+
+	void UpdateHeightData(class GameMap* pMap);
 
 	void Update(class BoundingFrustum* pFrustum);
 	void Render();

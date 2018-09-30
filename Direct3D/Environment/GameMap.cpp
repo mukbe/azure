@@ -7,51 +7,50 @@ GameMap::GameMap(string level)
 {
 	name = "Terrain";
 
-
-	Json::Value* jsonRoot = new Json::Value();
-	JsonHelper::ReadData(String::StringToWString(level), jsonRoot);
-	Json::Value prop = (*jsonRoot)["Textures"];
-	if (prop.isNull() == false)
-	{
-		Texture* splatTex[4];
-		string heightMapPath, splatMapPath, normalMapPath;
-		string splatTexPath[4], diffusePath;
-
-		JsonHelper::GetValue(prop, "HeightMap", heightMapPath);
-		JsonHelper::GetValue(prop, "SplatMap", splatMapPath);
-		JsonHelper::GetValue(prop, "NormalMap", normalMapPath);
-
-		JsonHelper::GetValue(prop, "splat0", diffusePath);
-		JsonHelper::GetValue(prop, "splat1", splatTexPath[0]);
-		JsonHelper::GetValue(prop, "splat2", splatTexPath[1]);
-		JsonHelper::GetValue(prop, "splat3", splatTexPath[2]);
-		JsonHelper::GetValue(prop, "splat4", splatTexPath[3]);
-
-		heightMap = new Texture(Contents + String::StringToWString(heightMapPath));
-		splatMap = new Texture(Contents + String::StringToWString(splatMapPath));
-		normalMap = new Texture(Contents + String::StringToWString(normalMapPath));
-
-		diffuseMap = new Texture(Contents + String::StringToWString(diffusePath));
-
-		for (int i = 0; i < 4; i++)
-		{
-			if (splatTexPath[i] == "")
-				splatTex[i] = nullptr;
-			
-			else
-				splatTex[i] = new Texture(Contents + String::StringToWString(splatTexPath[i]));
-		}
-
-		UINT index = 0;
-		for (int i = 0; i < 4; i++)
-		{
-			if (splatTex[i] != nullptr)
-			{
-				splatTexView[index] = splatTex[i]->GetSRV();
-				index++;
-			}
-		}
-	}
+	//Json::Value* jsonRoot = new Json::Value();
+	//JsonHelper::ReadData(String::StringToWString(level), jsonRoot);
+	//Json::Value prop = (*jsonRoot)["Textures"];
+	//if (prop.isNull() == false)
+	//{
+	//	Texture* splatTex[4];
+	//	string heightMapPath, splatMapPath, normalMapPath;
+	//	string splatTexPath[4], diffusePath;
+	//
+	//	JsonHelper::GetValue(prop, "HeightMap", heightMapPath);
+	//	JsonHelper::GetValue(prop, "SplatMap", splatMapPath);
+	//	JsonHelper::GetValue(prop, "NormalMap", normalMapPath);
+	//
+	//	JsonHelper::GetValue(prop, "splat0", diffusePath);
+	//	JsonHelper::GetValue(prop, "splat1", splatTexPath[0]);
+	//	JsonHelper::GetValue(prop, "splat2", splatTexPath[1]);
+	//	JsonHelper::GetValue(prop, "splat3", splatTexPath[2]);
+	//	JsonHelper::GetValue(prop, "splat4", splatTexPath[3]);
+	//
+	//	heightMap = new Texture(Contents + String::StringToWString(heightMapPath));
+	//	splatMap = new Texture(Contents + String::StringToWString(splatMapPath));
+	//	normalMap = new Texture(Contents + String::StringToWString(normalMapPath));
+	//
+	//	diffuseMap = new Texture(Contents + String::StringToWString(diffusePath));
+	//
+	//	for (int i = 0; i < 4; i++)
+	//	{
+	//		if (splatTexPath[i] == "")
+	//			splatTex[i] = nullptr;
+	//		
+	//		else
+	//			splatTex[i] = new Texture(Contents + String::StringToWString(splatTexPath[i]));
+	//	}
+	//
+	//	UINT index = 0;
+	//	for (int i = 0; i < 4; i++)
+	//	{
+	//		if (splatTex[i] != nullptr)
+	//		{
+	//			splatTexView[index] = splatTex[i]->GetSRV();
+	//			index++;
+	//		}
+	//	}
+	//}
 
 	heightMap = new Texture(Contents + L"heightTestMap.png");
 	splatMap = new Texture(Contents + L"splatMap.png");
@@ -170,7 +169,7 @@ void GameMap::Render()
 	ID3D11ShaderResourceView* splatView = splatMap->GetSRV();
 	DeviceContext->PSSetShaderResources(5, 1, &splatView);
 
-	DeviceContext->PSSetShaderResources(6, 4, splatTexView);
+	//DeviceContext->PSSetShaderResources(6, 4, splatTexView);
 
 	shader->Render();
 	States::SetRasterizer(States::RasterizerStates::WIRE_CULL_OFF);
@@ -190,4 +189,5 @@ void GameMap::Render()
 
 void GameMap::UIRender()
 {
+
 }

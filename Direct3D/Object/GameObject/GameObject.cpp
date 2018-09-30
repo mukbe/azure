@@ -7,12 +7,16 @@ GameObject::GameObject(string name)
 	:name(name),isLive(true),isRender(true),isActive(true)
 {
 	transform = new Transform;
+	pair<string, CallbackFunc> p = make_pair("Delete", [this](TagMessage msg) {this->DeleteObject(); });
+	this->callbackList.insert(p);
 }
 
 GameObject::GameObject()
 	: name("Unknown"), isLive(true), isRender(true),isActive(true)
 {
 	transform = new Transform;
+	pair<string, CallbackFunc> p = make_pair("Delete", [this](TagMessage msg) {this->DeleteObject(); });
+	this->callbackList.insert(p);
 }
 
 GameObject::~GameObject()
@@ -121,6 +125,21 @@ void GameObject::AddCallback(string name, CallbackFunc func)
 {
 	pair<string, CallbackFunc> p = make_pair(name, func);
 	this->callbackList.insert(p);
+}
+
+void GameObject::DeleteObject()
+{
+	this->isLive = isActive = false;
+}
+
+void GameObject::DeleteCallback(string name)
+{
+	CallbackIter iter = callbackList.find(name);
+	//찾았다면
+	if (iter != callbackList.end())
+	{
+		callbackList.erase(iter);
+	}
 }
 
 D3DXMATRIX GameObject::GetFinalMatrix()

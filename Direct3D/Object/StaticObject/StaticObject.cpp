@@ -17,6 +17,7 @@
 StaticObject::StaticObject(string name)
 	:GameObject(name), instanceRenderer(nullptr)
 {
+	this->DeleteCallback("Delete");
 	this->AddCallback("Delete", [this](TagMessage msg) 
 	{
 		this->isLive = false;

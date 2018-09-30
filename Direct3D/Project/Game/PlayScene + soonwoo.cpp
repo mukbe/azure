@@ -18,6 +18,7 @@
 #include "./Object/GameUnit/GameUnit.h"
 
 #include "./Bounding/QuadTree/QuadTreeSystem.h"
+#include "./Environment/GameMap.h"
 
 void PlayScene::InitSoonwoo()
 {
@@ -35,4 +36,10 @@ void PlayScene::InitSoonwoo()
 
 	GameUnit* player = new GameUnit("Pandaren");
 	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Unit, player);
+}
+
+void PlayScene::InitHuynjin()
+{
+	GameMap* map = new GameMap;
+	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Enviroment, map);
 }

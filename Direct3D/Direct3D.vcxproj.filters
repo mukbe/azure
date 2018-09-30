@@ -98,7 +98,6 @@
     <ClCompile Include="Manager\SceneManager.cpp" />
     <ClCompile Include="Manager\ShaderManager.cpp" />
     <ClCompile Include="Environment\GameMap.cpp" />
-    <ClCompile Include="Project\Game\PlayScene + Huynjin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renders\ShadowRenderer.h" />

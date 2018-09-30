@@ -4,9 +4,10 @@
 #include "QuadTreeNode.h"
 #include "./View/FreeCamera.h"
 QuadTreeSystem::QuadTreeSystem()
+	:level(3)
 {
 	this->name = "QuadTreeSystem";
-	this->rootNode = new QuadTreeNode(3, D3DXVECTOR3(0.f, 0.f, 0.f), D3DXVECTOR3(256.f, 0.f, 256.f));
+	this->rootNode = new QuadTreeNode(level, D3DXVECTOR3(0.f, 0.f, 0.f), D3DXVECTOR3(256.f, 0.f, 256.f));
 }
 
 
@@ -41,4 +42,9 @@ void QuadTreeSystem::UIRender()
 void QuadTreeSystem::AddObject(StaticObject * object)
 {
 	rootNode->AddObject(object);
+}
+
+UINT QuadTreeSystem::GetNodeCount()
+{
+	return pow(4, level);
 }

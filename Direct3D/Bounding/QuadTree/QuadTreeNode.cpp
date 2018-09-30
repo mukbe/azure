@@ -9,6 +9,7 @@
 #include "./View/CameraBase.h"
 #include "./Object/StaticObject/StaticObject.h"
 #include "./Project/TerrainTool/Terrain.h"
+#include "./Environment/GameMap.h"
 
 UINT QuadTreeNode::_renderingNodeCount = 0;
 
@@ -60,19 +61,66 @@ QuadTreeNode::QuadTreeNode(QuadTreeNode * parent, CornerType cornerType)
 	this->SubDevide();
 }
 
-
-
-QuadTreeNode::QuadTreeNode(int level, Terrain * pTerrain)
+QuadTreeNode::QuadTreeNode(int level, GameMap * pMap)
 	:level(level)
 {
-	D3DXVECTOR3 minPos, maxPos;
-	minPos.x = minPos.z = 0.0f;
-	maxPos.x = maxPos.z = 256.0f;
-
+	D3DXVECTOR3 min, max;
+	min.x = min.z = 0.0f;
+	max.x = max.z = 256.0f;
+	min.y = max.y = 0.0f;
+	this->boundingBox = new BoundingBox(min, max);
+	this->SubDevide();
 }
 
-QuadTreeNode::QuadTreeNode(QuadTreeNode * pParent, CornerType cornerType, Terrain * pTerrain)
+QuadTreeNode::QuadTreeNode(QuadTreeNode * pParent, CornerType cornerType, GameMap * pMap)
 {
+	D3DXVECTOR3 parentMin, parentMax, newMinPos, newMaxPos;
+	float width, height;
+
+	parentMin = pParent->boundingBox->minPos;
+	parentMax = pParent->boundingBox->maxPos;
+	width = parentMax.x - parentMin.x;
+	height = parentMax.z - parentMin.z;
+
+	switch (cornerType)
+	{
+	case QuadTreeNode::CORNER_LT:
+	{
+		newMinPos = parentMin + D3DXVECTOR3(0.f, 0.f, height * 0.5f);
+	}
+	break;
+	case QuadTreeNode::CORNER_RT:
+	{
+		newMinPos = parentMin + D3DXVECTOR3(width * 0.5f, 0.f, height * 0.5f);
+	}
+	break;
+	case QuadTreeNode::CORNER_LB:
+	{
+		newMinPos = parentMin;
+	}
+	break;
+	case QuadTreeNode::CORNER_RB:
+	{
+		newMinPos = parentMin + D3DXVECTOR3(width * 0.5f, 0.f, 0.f);
+	}
+	break;
+	}
+
+	newMaxPos = newMinPos + D3DXVECTOR3(width * 0.5f, 0.0f, height * 0.5f);
+
+	this->boundingBox = new BoundingBox(newMinPos, newMaxPos);
+	this->level = pParent->level - 1;
+	this->SubDevide();
+
+	if (this->level == 0)
+	{
+		D3DXVECTOR2 heightData;
+		//heightData = pMap->GetMinMax(newMinPos.x,newMinPos.z);
+		this->boundingBox->minPos.y = heightData.x;
+		this->boundingBox->maxPos.y = heightData.y;
+		D3DXVECTOR3 center = (boundingBox->minPos + boundingBox->maxPos) / 2.0f;
+		this->boundingBox->halfSize = center - boundingBox->minPos;
+	}
 }
 
 QuadTreeNode::~QuadTreeNode()
@@ -84,7 +132,26 @@ QuadTreeNode::~QuadTreeNode()
 	objectList.clear();
 }
 
+void QuadTreeNode::UpdateHeightData(GameMap * pMap)
+{
+	if (childs.empty())
+		return;
+	else
+	{
+		childs[0]->UpdateHeightData(pMap);
+		childs[1]->UpdateHeightData(pMap);
+		childs[2]->UpdateHeightData(pMap);
+		childs[3]->UpdateHeightData(pMap);
+	}
 
+	float minHeight, maxHeight;
+	minHeight = childs[0]->boundingBox->minPos.y;
+	maxHeight = childs[0]->boundingBox->maxPos.y;
+	for (UINT i = 1; i < childs.size(); ++i)
+	{
+		//if(minHeight <)
+	}
+}
 
 void QuadTreeNode::Update(class BoundingFrustum* pFrustum)
 {

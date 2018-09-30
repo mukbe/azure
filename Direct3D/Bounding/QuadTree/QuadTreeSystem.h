@@ -4,6 +4,7 @@ class QuadTreeSystem : public GameObject
 {
 private:
 	class QuadTreeNode* rootNode;
+	UINT level;
 public:
 	QuadTreeSystem();
 	~QuadTreeSystem();
@@ -14,5 +15,6 @@ public:
 	void UIRender();
 
 	void AddObject(class StaticObject* object);
+	UINT GetNodeCount();
 };
 

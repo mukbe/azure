@@ -41,6 +41,8 @@ public:
 
 	void SendMSG(struct TagMessage msg);
 	void AddCallback(string name, CallbackFunc func);
+	void DeleteObject();
+	void DeleteCallback(string name);
 	D3DXMATRIX GetFinalMatrix();
 };
 
