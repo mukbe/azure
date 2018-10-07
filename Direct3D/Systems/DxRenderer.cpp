@@ -318,7 +318,7 @@ void DxRenderer::OnResize()
 		depthStencilDesc.SampleDesc.Quality = 0;
 	}
 
-	depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;	//	텍스처의 용도
+	depthStencilDesc.Usage = D3D11_USAGE_DEFAULT ;	//	텍스처의 용도
 	//	D3D11_USAGE_DEFAULT : GPU만 읽고 쓸 수 있도록 한다 (CPU X)
 	//	뎁스스텐실 버퍼를 위한 텍스처를 생성할 때는 요걸로 한다
 	//	D3D11_USAGE_IMMUTABLE : 자원을 생성하고 변경하지 않을경우 사용

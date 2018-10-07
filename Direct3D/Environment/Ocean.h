@@ -5,6 +5,7 @@
 class Ocean : public GameObject
 {
 private:
+	class InstanceShader*			shadowShader;
 	class InstanceShader*			instanceShader;
 	class Material*					material;
 	class WorldBuffer*				worldBuffer;
@@ -13,7 +14,6 @@ private:
 	ID3D11Buffer*					indexBuffer;
 
 	vector<D3DXVECTOR2>				instanceData;
-	vector<D3DXVECTOR2>				drawInsatnceData;
 	vector<VertexTextureNormal>		vertexData;
 	vector<UINT>					indexData;
 private:
@@ -50,8 +50,9 @@ public:
 	Ocean();
 	 ~Ocean();
 
-	 virtual void Init()override;
+	virtual void Init()override;
 	virtual void Update()override;
+	virtual void ShadowRender()override;
 	virtual void Render()override;
 	virtual void UIRender()override;
 	virtual void SaveData(Json::Value* parent);

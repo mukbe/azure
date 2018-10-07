@@ -30,6 +30,12 @@ void RenderTargetBuffer::Create()
 	}
 }
 
+void RenderTargetBuffer::BindRenderTarget()
+{
+	DeviceContext->OMSetRenderTargets(arraySize, &rtv, nullptr);
+	DeviceContext->ClearRenderTargetView(rtv, D3DXCOLOR(0.f, 0.f, 0.f, 1.f));
+}
+
 void RenderTargetBuffer::CreateBuffer()
 {
 	//렌더 타겟용으로 사용할 텍스쳐 생성
@@ -64,7 +70,7 @@ void RenderTargetBuffer::CreateBuffer()
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Format = format;
-	srvDesc.Texture2D.MipLevels = -1;
+	srvDesc.Texture2D.MipLevels = 1;
 	srvDesc.Texture2D.MostDetailedMip = 0;
 	hr = Device->CreateShaderResourceView(renderTargetTexture, &srvDesc, &srv);
 	assert(SUCCEEDED(hr));

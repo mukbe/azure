@@ -11,23 +11,22 @@ class DeferredRenderer : public Renderer
 //RenderType -- 0.0f ~ 0.9f == 빛계산 함
 //RenderType -- 1.0f ~ 1.9f == 빛계산 안함(GBuffer로 넘어온 Diffuse출력) 
 private:
-	ID3D11Texture2D * renderTargetTexture[BUFFER_COUNT];
-	ID3D11RenderTargetView* renderTargetView[BUFFER_COUNT];
-	ID3D11ShaderResourceView* shaderResourceView[BUFFER_COUNT];
+	//Multi RenderTarget Values -----------------------------
+	ID3D11Texture2D * mrtTexture[BUFFER_COUNT];
+	ID3D11RenderTargetView* mrtView[BUFFER_COUNT];
+	ID3D11ShaderResourceView* mrtSRV[BUFFER_COUNT];
 
-	ID3D11Texture2D* renderAlphaTexture;
-	ID3D11RenderTargetView* renderAlphaTargetView;
-	ID3D11ShaderResourceView* renderAlphaSRV;
-
-	ID3D11Texture2D* depthBufferTexture;
-	ID3D11ShaderResourceView* depthSRV;
+	ID3D11Texture2D* mrtDepthBufferTexture;
+	ID3D11ShaderResourceView* mrtDepthBufferSRV;
 
 	ID3D11DepthStencilView* depthStencilView;
 	ID3D11DepthStencilState* depthStencilState;
-	D3D11_VIEWPORT viewport;
-	
+	//-------------------------------------------------------
+
+	class RenderTargetBuffer*		deferredRenderingBuffer;
+
+	D3D11_VIEWPORT			viewport;
 	class Shader*			shader;
-	class Shader*			alphaRender;
 	class OrthoWindow*		orthoWindow;
 	class DepthVis*			depthVis;
 	class UnPacker*			unPacker;
@@ -41,6 +40,8 @@ public:
 	void UIRender();
 	void SetUnPackInfo(D3DXMATRIX view, D3DXMATRIX projection);
 	ID3D11DepthStencilView* GetDepthStencilView()const { return this->depthStencilView; }
+	class RenderTargetBuffer* GetRenderTargetBuffer()const { return this->deferredRenderingBuffer; }
+	ID3D11ShaderResourceView* GetRenderTargetSRV();
 private:
 	bool Create();
 

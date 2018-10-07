@@ -4,7 +4,7 @@ class ModelMesh;
 class ModelBone;
 class Material;
 
-#define MaxBoneCount 230
+#define MaxBoneCount 120
 
 class ModelBuffer : public ShaderBuffer
 {

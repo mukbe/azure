@@ -8,9 +8,7 @@
 AlphaRenderer::AlphaRenderer()
 	:renderTargetView(nullptr),depthView(nullptr)
 {
-	renderTargetView = pRenderer->GetRenderTargetView();
-
-
+	
 }
 
 

@@ -4,12 +4,13 @@
 #include "./Renders/DeferredRenderer.h"
 #include "./Renders/ShadowRenderer.h"
 #include "./Renders/AlphaRenderer.h"
+#include "./Renders/RenderTargetBuffer.h"
+#include "./Renders/PostEffect/BloomEffect.h"
 
 #include "./Project/AnimationTool/AnimationTool.h"
 #include "./Project/TerrainTool/TerrainTool.h"
 #include "./Project/ToolScene/ToolScene.h"
 #include "./Project/Game/PlayScene.h"
-
 
 Program::Program()
 {
@@ -25,11 +26,18 @@ Program::Program()
 	RenderRequest->AddRenderer("shadow", new ShadowRenderer);
 	AlphaRenderer* alpha = new AlphaRenderer;
 	alpha->SetDepthStencilView(deferred->GetDepthStencilView());
+	alpha->SetRenderTargetView(pRenderer->GetRenderTargetView());
 	RenderRequest->AddRenderer("alpha", alpha);
+
+	BloomEffect* bloomEffect = new BloomEffect;
+	bloomEffect->SetDeferredSRV(deferred->GetRenderTargetSRV());
+	RenderRequest->AddRenderer("bloom", bloomEffect);
 
 	//Scenes->AddScene("anim", new AnimationTool);
 	Scenes->AddScene("tool", new ToolScene);
 	//Scenes->AddScene("terrain", new TerrainTool);
+
+
 }
 
 Program::~Program()

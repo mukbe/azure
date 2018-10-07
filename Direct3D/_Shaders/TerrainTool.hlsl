@@ -261,6 +261,7 @@ G_Buffer TerrainToolPS(PixelInput input)
 
         output.diffuse = lerp(float4(1, 1, 1, 1), output.diffuse, weight);
     }
+    output.normal.a = 1.5f;
     output.diffuse.a = 1.0f;
 
     return output;

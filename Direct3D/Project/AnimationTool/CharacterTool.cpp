@@ -41,7 +41,7 @@ CharacterTool::CharacterTool()
 	////exporter->ExportAnimation(filePath, L"Blacksmeeth");
 	//SafeDelete(exporter);
 
-	model = AssetManager->GetModel(L"../_Assets/Pandaren/Pandaren", true);
+	model = AssetManager->GetModel(L"../_Assets/Bard2/Bard2", true);
 	animation = new ModelAnimPlayer(model);
 
 	debugTransform = new DebugTransform();

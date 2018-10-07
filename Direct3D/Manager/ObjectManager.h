@@ -38,6 +38,7 @@ public:
 	void Update();
 	void PostUpdate();
 	void PreRender();
+	void ShadowRender();
 	void Render();
 	void PostRender();
 	void DebugRender();

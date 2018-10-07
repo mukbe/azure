@@ -84,7 +84,6 @@
     <ClCompile Include="Project\ToolScene\Inspector.cpp" />
     <ClCompile Include="Project\ToolScene\Picking.cpp" />
     <ClCompile Include="Project\ToolScene\ToolScene.cpp" />
-    <ClCompile Include="Project\Game\PlayScene + hyunjin.cpp" />
     <ClCompile Include="Project\Game\PlayScene + soonwoo.cpp" />
     <ClCompile Include="Project\Game\PlayScene.cpp" />
     <ClCompile Include="Project\ToolScene\FactoryTool.cpp" />
@@ -98,6 +97,8 @@
     <ClCompile Include="Manager\SceneManager.cpp" />
     <ClCompile Include="Manager\ShaderManager.cpp" />
     <ClCompile Include="Environment\GameMap.cpp" />
+    <ClCompile Include="Model\ComputeAnimation\ComputeAnimation.cpp" />
+    <ClCompile Include="Renders\PostEffect\BloomEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renders\ShadowRenderer.h" />
@@ -204,6 +205,8 @@
     <ClInclude Include="Manager\SceneNode.h" />
     <ClInclude Include="Manager\ShaderManager.h" />
     <ClInclude Include="Environment\GameMap.h" />
+    <ClInclude Include="Model\ComputeAnimation\ComputeAnimation.h" />
+    <ClInclude Include="Renders\PostEffect\BloomEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />
@@ -219,12 +222,20 @@
     <None Include="_Shaders\AtmosphericScattering_Header.hlsl" />
     <None Include="_Shaders\AtmosphericScattering_Compute.hlsl" />
     <None Include="_Shaders\005_OceanCompute.hlsl" />
-    <None Include="_Shaders\005_OceanRaw.hlsl" />
     <None Include="_Shaders\006_UI.hlsl" />
     <None Include="_Shaders\007_Alpha.hlsl" />
     <None Include="_Shaders\008_Grass.hlsl" />
     <None Include="Project\Game\Header.hlsli" />
     <None Include="_Shaders\005_OceanDeferred.hlsl" />
     <None Include="_Shaders\999_Terrain.hlsl" />
+    <None Include="_Shaders\010_DeferredAnimation.hlsl" />
+    <None Include="_Shaders\009_ComputeAnimation.hlsl" />
+    <None Include="_Shaders\999_Bloom.hlsl" />
+    <None Include="_Shaders\999_BloomCompute.hlsl" />
+    <None Include="_Shaders\999_BlurCompute.hlsl" />
+    <None Include="_Shaders\999_DownScaleCompute.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="_Shaders\005_OceanShadow.hlsl" />
   </ItemGroup>
 </Project>

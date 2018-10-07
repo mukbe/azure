@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Renders\PostEffect\BloomEffect.h" />
+    <ClInclude Include="Model\ComputeAnimation\ComputeAnimation.h" />
     <ClInclude Include="Environment\GameMap.h" />
     <ClInclude Include="Manager\FactoryManager.h" />
     <ClInclude Include="Project\ToolScene\FactoryTool.h" />
@@ -125,6 +127,8 @@
     <ClInclude Include="View\Projection.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Renders\PostEffect\BloomEffect.cpp" />
+    <ClCompile Include="Model\ComputeAnimation\ComputeAnimation.cpp" />
     <ClCompile Include="Environment\GameMap.cpp" />
     <ClCompile Include="Manager\FactoryManager.cpp" />
     <ClCompile Include="Project\ToolScene\FactoryTool.cpp" />
@@ -317,11 +321,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="_Shaders\005_OceanRaw.hlsl">
-      <FileType>Text</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="_Shaders\006_UI.hlsl">
       <FileType>Document</FileType>
     </None>
@@ -341,6 +340,35 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\999_Terrain.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\009_ComputeAnimation.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\010_DeferredAnimation.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\999_Bloom.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="_Shaders\999_BloomCompute.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="_Shaders\999_BlurCompute.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="_Shaders\999_DownScaleCompute.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\005_OceanShadow.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

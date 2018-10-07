@@ -60,10 +60,25 @@
                "IsActive" : true,
                "Name" : [ "Tree1Instance 0" ]
             },
+            "Tree1Instance 1" : {
+               "FileName" : [ "../_Scenes/Scene01/Tree1Instance 1.json" ],
+               "IsActive" : true,
+               "Name" : [ "Tree1Instance 1" ]
+            },
+            "Tree1Instance 2" : {
+               "FileName" : [ "../_Scenes/Scene01/Tree1Instance 2.json" ],
+               "IsActive" : true,
+               "Name" : [ "Tree1Instance 2" ]
+            },
             "Tree2Instance 0" : {
                "FileName" : [ "../_Scenes/Scene01/Tree2Instance 0.json" ],
                "IsActive" : true,
                "Name" : [ "Tree2Instance 0" ]
+            },
+            "Tree2Instance 1" : {
+               "FileName" : [ "../_Scenes/Scene01/Tree2Instance 1.json" ],
+               "IsActive" : true,
+               "Name" : [ "Tree2Instance 1" ]
             }
          },
          "System" : null,

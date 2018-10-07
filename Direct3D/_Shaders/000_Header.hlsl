@@ -56,7 +56,7 @@ cbuffer SunBuffer : register(b4)
 
 cbuffer ModelBuffer : register(b6)
 {
-    matrix _modelBones[230];
+    matrix _modelBones[120];
 }
 
 //MRT0 Normal.xyz, RenderType(float)
@@ -75,7 +75,7 @@ Texture2D _defferedWorld : register(t3);
 Texture2D _deferredDepth : register(t4);
 
 Texture2D _sunLightsahdowMap : register(t5);
-Texture2D _fresnelLookUp : register(t6);
+Texture2D _fresnelLookUp : register(t14);
 
 SamplerState _basicSampler : register(s0);
 SamplerComparisonState _shadowSampler : register(s2);

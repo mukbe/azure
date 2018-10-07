@@ -114,7 +114,6 @@ void ModelAnimPlayer::UpdateBone()
 	if (boneAnimation.size() < 1)
 		boneAnimation.assign(model->BoneCount(), D3DXMATRIX());
 
-
 	int index = 0;
 	for (UINT i = 0; i < model->BoneCount(); i++)
 	{
@@ -127,7 +126,8 @@ void ModelAnimPlayer::UpdateBone()
 		D3DXMatrixInverse(&matInvBindpose, NULL, &matInvBindpose);
 
 		ModelKeyframe* frame = currentClip->Keyframe(bone->Name());
-		if (frame == nullptr)continue;
+		if (frame == nullptr)
+			continue;
 
 		if (useQuaternionKeyframe == true)
 		{
@@ -135,7 +135,7 @@ void ModelAnimPlayer::UpdateBone()
 
 			ModelKeyframeData current = frame->Datas[currentKeyframe];
 			ModelKeyframeData next = frame->Datas[nextKeyframe];
-
+			
 			//스케일 보간
 			D3DXVECTOR3 s1 = current.Scale;
 			D3DXVECTOR3 s2 = next.Scale;
@@ -183,6 +183,7 @@ void ModelAnimPlayer::UpdateBone()
 
 		++index;
 	}//for(model->BoneCount())
+
 }
 
 

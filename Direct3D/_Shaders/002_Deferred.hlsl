@@ -46,6 +46,7 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
             float3 reflection = normalize(2.0f *  worldNormal - (-SunDir));
             specColor = data.SpecColor * SunColor.rgb * saturate(pow(saturate(dot(reflection, normalize(GetCameraPosition() - worldPos.xyz))), specPower));
         }
+
         return float4(ambient + diffuseColor + specColor, 1.0f);
     }
     else if (data.RenderType > 1.0f && data.RenderType <= 2.0f)

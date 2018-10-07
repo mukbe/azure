@@ -31,11 +31,11 @@
 AnimationTool::AnimationTool()
 	:toolType(0)
 {
-	//wstring filePath = L"../_Assets/Objects/Blacksmeeth/";
-	//Fbx::Exporter* exporter = new Fbx::Exporter(filePath + L"Blacksmeeth.fbx");
-	//exporter->ExportMaterial(filePath, L"Blacksmeeth");
-	//exporter->ExportMesh(filePath, L"Blacksmeeth");
-	////exporter->ExportAnimation(filePath, L"Blacksmeeth");
+	//wstring filePath = L"../_Assets/Bard2/";
+	//Fbx::Exporter* exporter = new Fbx::Exporter(filePath + L"Bard2.fbx");
+	//exporter->ExportMaterial(filePath, L"Bard2");
+	//exporter->ExportMesh(filePath, L"Bard2");
+	//exporter->ExportAnimation(filePath, L"Bard2");
 	//SafeDelete(exporter);
 
 	RenderRequest->AddRender("AnimationToolUIRender", bind(&AnimationTool::UIRender, this), RenderType::UIRender);
@@ -54,8 +54,6 @@ AnimationTool::AnimationTool()
 
 	objectTool = new ObjectTool;
 	objectTool->SetCamera(freeCamera);
-
-
 }
 
 

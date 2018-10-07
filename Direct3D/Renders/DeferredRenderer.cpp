@@ -9,13 +9,12 @@
 
 DeferredRenderer::DeferredRenderer()
 {
-	//this->shader = new Shader(ShaderPath + L"002_Deferred.hlsl",Shader::ShaderType::Default,"BasicDeferred");
 	this->shader = Shaders->CreateShader("Deferred",L"002_Deferred.hlsl", Shader::ShaderType::Default, "BasicDeferred");
-	this->alphaRender = nullptr;
 
-	D3DDesc desc;
-	DxRenderer::GetDesc(&desc);
 	this->orthoWindow = new OrthoWindow(D3DXVECTOR2(-WinSizeX/2, WinSizeY/2),D3DXVECTOR2(WinSizeX,WinSizeY));
+	this->deferredRenderingBuffer = new RenderTargetBuffer(WinSizeX, WinSizeY, DXGI_FORMAT_R16G16B16A16_FLOAT);
+	this->deferredRenderingBuffer->SetArraySize(1);
+	this->deferredRenderingBuffer->Create();
 
 	this->Create();
 	depthVis = new DepthVis;
@@ -27,23 +26,19 @@ DeferredRenderer::DeferredRenderer()
 
 DeferredRenderer::~DeferredRenderer()
 {
-	SafeRelease(renderAlphaSRV);
-	SafeRelease(renderAlphaTargetView);
-	SafeRelease(renderAlphaTexture);
+	SafeDelete(deferredRenderingBuffer);
 
 	for (int i = 0; i < BUFFER_COUNT; ++i)
 	{
-		SafeRelease(this->shaderResourceView[i]);
-		SafeRelease(this->renderTargetView[i]);
-		SafeRelease(this->renderTargetTexture[i]);
+		SafeRelease(this->mrtSRV[i]);
+		SafeRelease(this->mrtView[i]);
+		SafeRelease(this->mrtTexture[i]);
 	}
 
 	
-	SafeRelease(depthSRV);
-	SafeRelease(depthBufferTexture);
+	SafeRelease(mrtDepthBufferSRV);
+	SafeRelease(mrtDepthBufferTexture);
 	SafeRelease(depthStencilView);
-
-	SafeDelete(alphaRender);
 	SafeDelete(shader);
 	SafeDelete(orthoWindow);
 	SafeDelete(unPacker);
@@ -52,14 +47,14 @@ DeferredRenderer::~DeferredRenderer()
 void DeferredRenderer::SetRTV()
 {
 	//렌더타겟을 잡아준다. 
-	DeviceContext->OMSetRenderTargets(BUFFER_COUNT, renderTargetView, depthStencilView);
+	DeviceContext->OMSetRenderTargets(BUFFER_COUNT, mrtView, depthStencilView);
 	DeviceContext->RSSetViewports(1, &viewport);
 	//DeviceContext->OMSetDepthStencilState(depthStencilState, 2);
 	for (int i = 0; i < BUFFER_COUNT; i++)
 	{
-		DeviceContext->ClearRenderTargetView(renderTargetView[i], D3DXCOLOR(0.f, 0.f, 0.f, 1.f));
+		DeviceContext->ClearRenderTargetView(mrtView[i], D3DXCOLOR(0.f, 0.f, 0.f, 1.f));
 	}
-
+	
 	DeviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
@@ -67,16 +62,18 @@ void DeferredRenderer::SetRTV()
 
 void DeferredRenderer::Render()
 {
+	deferredRenderingBuffer->BindRenderTarget();
+
 	pRenderer->ChangeZBuffer(false);
 	orthoWindow->Render();
-	DeviceContext->PSSetShaderResources(0, BUFFER_COUNT, &shaderResourceView[0]);
-	DeviceContext->PSSetShaderResources(4, 1, &depthSRV);
+	DeviceContext->PSSetShaderResources(0, BUFFER_COUNT, &mrtSRV[0]);
+	DeviceContext->PSSetShaderResources(4, 1, &mrtDepthBufferSRV);
 	unPacker->SetPSBuffer(2);
 
 	shader->Render();
 	orthoWindow->DrawIndexed();
 
-	depthVis->CalcuDepth(depthSRV);
+	depthVis->CalcuDepth(mrtDepthBufferSRV);
 	pRenderer->ChangeZBuffer(true);
 }
 
@@ -88,9 +85,9 @@ void DeferredRenderer::UIRender()
 		ImGui::SliderFloat("ImageSize",&fSize,50.0f,500.0f);
 		ImVec2 size = ImVec2(fSize, fSize);
 
-		ImGui::ImageButton(shaderResourceView[0], size); ImGui::SameLine();
-		ImGui::ImageButton(shaderResourceView[1], size);
-		ImGui::ImageButton(shaderResourceView[2], size); ImGui::SameLine();
+		ImGui::ImageButton(mrtSRV[0], size); ImGui::SameLine();
+		ImGui::ImageButton(mrtSRV[1], size);
+		ImGui::ImageButton(mrtSRV[2], size); ImGui::SameLine();
 		ImGui::ImageButton(depthVis->GetSRV(), size);
 	}
 	ImGui::End();
@@ -100,6 +97,13 @@ void DeferredRenderer::SetUnPackInfo(D3DXMATRIX view, D3DXMATRIX projection)
 {
 	unPacker->SetInvView(view);
 	unPacker->SetPerspectiveValues(projection);
+}
+
+ID3D11ShaderResourceView * DeferredRenderer::GetRenderTargetSRV()
+{
+	if (deferredRenderingBuffer)
+		return deferredRenderingBuffer->GetSRV();
+	return nullptr;
 }
 
 bool DeferredRenderer::Create()
@@ -116,7 +120,8 @@ bool DeferredRenderer::Create()
 	textureDesc.Height = desc.Height;
 	textureDesc.MipLevels = 1;
 	textureDesc.ArraySize = 1;
-	textureDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	textureDesc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;		//HDR Rendering
+	//textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	textureDesc.SampleDesc.Count = 1;
 	textureDesc.Usage = D3D11_USAGE_DEFAULT;
 	textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
@@ -125,12 +130,9 @@ bool DeferredRenderer::Create()
 
 	for (int i = 0; i < BUFFER_COUNT; i++)
 	{
-		hr = Device->CreateTexture2D(&textureDesc, NULL, &renderTargetTexture[i]);
+		hr = Device->CreateTexture2D(&textureDesc, NULL, &mrtTexture[i]);
 		assert(SUCCEEDED(hr));
 	}
-
-	hr = Device->CreateTexture2D(&textureDesc, NULL, &renderAlphaTexture);
-	assert(SUCCEEDED(hr));
 
 	//RenderTargetViewDesc 설정
 	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
@@ -140,12 +142,9 @@ bool DeferredRenderer::Create()
 
 	for (int i = 0; i<BUFFER_COUNT; i++)
 	{
-		hr = Device->CreateRenderTargetView(renderTargetTexture[i], &renderTargetViewDesc, &renderTargetView[i]);
+		hr = Device->CreateRenderTargetView(mrtTexture[i], &renderTargetViewDesc, &mrtView[i]);
 		assert(SUCCEEDED(hr));
 	}
-
-	hr = Device->CreateRenderTargetView(renderAlphaTexture, &renderTargetViewDesc, &renderAlphaTargetView);
-	assert(SUCCEEDED(hr));
 
 	//ResourceView 설정 
 	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
@@ -156,12 +155,9 @@ bool DeferredRenderer::Create()
 
 	for (int i = 0; i<BUFFER_COUNT; i++)
 	{
-		hr= Device->CreateShaderResourceView(renderTargetTexture[i], &shaderResourceViewDesc, &shaderResourceView[i]);
+		hr= Device->CreateShaderResourceView(mrtTexture[i], &shaderResourceViewDesc, &mrtSRV[i]);
 		assert(SUCCEEDED(hr));
 	}
-
-	hr = Device->CreateShaderResourceView(renderAlphaTexture, &shaderResourceViewDesc, &renderAlphaSRV);
-	assert(SUCCEEDED(hr));
 
 
 	//깊이 버퍼 텍스쳐 Desc
@@ -179,7 +175,7 @@ bool DeferredRenderer::Create()
 		0,										//UINT CPUAccessFlags;
 		0										//UINT MiscFlags;    
 	};
-	hr = Device->CreateTexture2D(&depthBufferDesc, NULL, &depthBufferTexture);
+	hr = Device->CreateTexture2D(&depthBufferDesc, NULL, &mrtDepthBufferTexture);
 	assert(SUCCEEDED(hr));
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
@@ -190,7 +186,7 @@ bool DeferredRenderer::Create()
 	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	depthStencilViewDesc.Texture2D.MipSlice = 0;
 	
-	hr = Device->CreateDepthStencilView(depthBufferTexture, &depthStencilViewDesc, &depthStencilView);
+	hr = Device->CreateDepthStencilView(mrtDepthBufferTexture, &depthStencilViewDesc, &depthStencilView);
 	assert(SUCCEEDED(hr));
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC depthSRVDesc =
@@ -201,7 +197,7 @@ bool DeferredRenderer::Create()
 		0
 	};
 	depthSRVDesc.Texture2D.MipLevels = 1;
-	hr = Device->CreateShaderResourceView(depthBufferTexture, &depthSRVDesc, &depthSRV);
+	hr = Device->CreateShaderResourceView(mrtDepthBufferTexture, &depthSRVDesc, &mrtDepthBufferSRV);
 	assert(SUCCEEDED(hr));
 
 	D3D11_DEPTH_STENCIL_DESC descDepth;

@@ -95,9 +95,9 @@ void Hierarchy::UIRender()
 			}
 			if (ImGui::TreeNode("Unit"))
 			{
-				if (ImGui::Selectable("Pandaren"))
+				if (ImGui::Selectable("Bard2"))
 				{
-					this->CreateUnit("Pandaren");
+					this->CreateUnit("Bard2");
 					ImGui::CloseCurrentPopup();
 				}
 				ImGui::TreePop();

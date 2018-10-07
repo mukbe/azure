@@ -5,6 +5,14 @@ struct PixelInput
     float4 position : SV_POSITION;
 };
 
+struct ObjectPixelInput
+{
+    float4 position : SV_POSITION;
+    float2 uv : TEXCOORD;
+};
+
+Texture2D _diffuseTex : register(t0);
+
 
 PixelInput ColorShadowVS(VertexColorNormal input)
 {
@@ -26,17 +34,19 @@ PixelInput TextureShadowVS(VertexTextureNormal input)
     return output;
 }
 
-PixelInput ObjectShadowVS(InstanceInputVS input)
+ObjectPixelInput InstanceVS(InstanceInputVS input)
 {
-    PixelInput output;
+    ObjectPixelInput output;
 
     matrix world = DecodeMatrix(float3x4(input.world0, input.world1, input.world2));
     output.position = mul(input.position, world);
     output.position = mul(output.position, SunViewProjection);
+
+    output.uv = input.uv;
     
     return output;
-
 }
+
 
 //ShadowMapPS
 void ColorShadowPS(PixelInput input)
@@ -49,9 +59,12 @@ void TextureShadowPS(PixelInput input)
 
 }
 
-void ObjectShadowPS(PixelInput input)
+void InstancePS(ObjectPixelInput input)
 {
+    float4 diffuse4 = _diffuseTex.Sample(_basicSampler, input.uv);
 
+    if (diffuse4.a < 0.1f)
+        discard;
 }
 
 

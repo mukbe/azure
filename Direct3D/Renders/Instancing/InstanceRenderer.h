@@ -13,6 +13,7 @@ private:
 	UINT maxInstanceCount;
 	Synthesize(UINT, drawInstanceCount,DrawIntanceCount)
 	class InstanceShader* shader;
+	class InstanceShader* shadowShader;
 	ID3D11Buffer* instanceBuffer;
 private:
 	class ModelBone*					root;
@@ -41,6 +42,7 @@ public:
 	virtual void Release()override;
 	virtual void PreUpdate()override;
 	virtual void PostUpdate()override;
+	virtual void ShadowRender()override;
 	virtual void Render()override;
 	virtual void UIRender()override;
 	virtual void UIUpdate()override;

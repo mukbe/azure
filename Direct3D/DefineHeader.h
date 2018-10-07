@@ -1,7 +1,7 @@
 #pragma once
 
 #define WinSizeX 1280
-#define WinSizeY 720
+#define WinSizeY 760
 
 #define SafeRelease(p){ if(p){ (p)->Release(); (p) = NULL; } }
 #define SafeDelete(p){ if(p){ delete (p); (p) = NULL; } }
@@ -91,3 +91,6 @@ void ClassName::Delete()					\
 #define ColorBlue D3DXCOLOR(0.f,0.f,1.f,1.f)
 #define ColorWhite D3DXCOLOR(1.f,1.f,1.f,1.f)
 #define ColorGray(f) D3DXCOLOR(f,f,f,1.0f)
+
+#define SaveJsonPath(n) { std::string("../_Scenes/Scene01/").append(n + ".json") }
+#define SaveBinaryPath(n){std::string("../_Scenes/Scene01/").append(n + ".json") }

@@ -5,7 +5,7 @@
 SingletonCpp(RenderManager)
 
 RenderManager::RenderManager()
-	:deferred(nullptr),shadow(nullptr),alpha(nullptr)
+	:deferred(nullptr),shadow(nullptr),alpha(nullptr), bloomEffect(nullptr)
 {
 }
 
@@ -15,6 +15,7 @@ RenderManager::~RenderManager()
 	SafeDelete(deferred);
 	SafeDelete(shadow);
 	SafeDelete(alpha);
+	SafeDelete(bloomEffect);
 }
 
 void RenderManager::Draw()
@@ -29,6 +30,7 @@ void RenderManager::Draw()
 	pRenderer->BeginDraw();
 	{
 		PostRender();
+		PostEffect();
 		AlphaRender();
 		UIRender();
 	}
@@ -74,6 +76,22 @@ void RenderManager::AddRenderer(string key, Renderer * renderer)
 		deferred = renderer;
 	if (strstr(key.c_str(), "alpha"))
 		alpha = renderer;
+	if (strstr(key.c_str(), "bloom"))
+		bloomEffect = renderer;
+}
+
+Renderer * RenderManager::FindRenderer(string key)
+{
+	if (key == "shader")
+		return shadow;
+	else if (key == "deferred")
+		return deferred;
+	else if (key == "alpha")
+		return alpha;
+	else if (key == "bloom")
+		return bloomEffect;
+
+	return nullptr;
 }
 
 void RenderManager::SetUnPackGBufferProp(D3DXMATRIX view, D3DXMATRIX proj)
@@ -153,6 +171,12 @@ void RenderManager::AlphaRender()
 		alpha->SetRTV();
 		alpha->Render();
 	}
+}
+
+void RenderManager::PostEffect()
+{
+	if (bloomEffect)
+		bloomEffect->Render();
 }
 
 void RenderManager::UIRender()

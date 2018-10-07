@@ -82,7 +82,6 @@ void OrthoWindow::Render()
 	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	buffer->SetVSBuffer(10);
-
 }
 
 void OrthoWindow::DrawIndexed()

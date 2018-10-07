@@ -180,10 +180,10 @@ void CResource1D::CreateUAV()
 }
 void CResource1D::GetDatas(void * datas)
 {
-
 	DeviceContext->CopyResource(readBuffer, rwBuffer);
 
 	D3D11_MAPPED_SUBRESOURCE dat = { 0 };
+	
 	DeviceContext->Map(readBuffer, 0, D3D11_MAP_READ, 0, &dat);
 	{
 		memcpy(datas, dat.pData, byteWidth);
@@ -195,7 +195,6 @@ void CResource1D::GetDatas(void * datas)
 CResource2D::CResource2D(UINT width, UINT height, DXGI_FORMAT format, void* pInitData)
 	:IComputeResource(), rwBuffer(nullptr),readBuffer(nullptr),format(format)
 {
-	
 	CreateBufferForGPU(width, height, pInitData, rwBuffer);
 	CreateBufferForGPU(width, height, nullptr, readBuffer);
 
@@ -288,6 +287,7 @@ void CResource2D::CreateBufferForGPU(UINT width, UINT height, void * pInitData, 
 	desc.Format = format;
 	desc.Width = width;
 	desc.Height = height;
+
 	desc.MipLevels = 1;
 	desc.ArraySize = 1;
 	desc.SampleDesc.Count = 1;
@@ -343,7 +343,6 @@ void CResource2D::CreateUAV()
 	viewDesc.Texture2D.MipSlice = 0;
 	
 	HRESULT hr = Device->CreateUnorderedAccessView(rwBuffer, &viewDesc, &uav);
-
 	assert(SUCCEEDED(hr));
 }
 
