@@ -139,3 +139,22 @@ struct VertexTextureBlendNT
 	D3DXVECTOR3 tangent;
 
 };
+
+struct VertexParticle
+{
+	VertexParticle()
+		: position(0, 0, 0)
+		, uv(0, 0)
+		, color(0, 0, 0, 0)
+		, normal(0, 0, 0)
+		, scale(0, 0)
+
+	{}
+
+	D3DXVECTOR3 position;
+	D3DXVECTOR2 uv;
+	D3DXVECTOR4 color;
+	D3DXVECTOR3 normal;
+	D3DXVECTOR2 scale;
+
+};

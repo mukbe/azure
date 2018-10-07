@@ -35,6 +35,7 @@ public:
 	
 	virtual void GetDatas(void* datas);
 
+	ID3D11Buffer* GetReadBuffer() { return readBuffer; }
 private:
 	void CreateBufferForGPU(UINT elementSize, UINT count, void * pInitData, ID3D11Buffer* buffer);
 	void CreateSRV();
@@ -53,6 +54,7 @@ public:
 
 	virtual void GetDatas(void* datas);
 	void SetDatas(void* datas);
+	ID3D11UnorderedAccessView* GetUAV() { return uav; }
 
 private:
 	void CreateBufferForGPU(UINT elementSize, UINT count, void * pInitData, ID3D11Buffer* buffer);
@@ -62,6 +64,7 @@ private:
 	ID3D11Buffer * rwBuffer;
 	ID3D11Buffer* readBuffer;
 	UINT byteWidth;
+	UINT counts;
 };
 
 class CResource2D : public IComputeResource

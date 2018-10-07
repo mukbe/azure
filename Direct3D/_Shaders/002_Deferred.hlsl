@@ -39,7 +39,7 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
 
         float diffuseFactor = saturate(dot(worldNormal.xyz, -SunDir));
         float3 ambient = albedo * SunColor.rgb * albedoBias;
-        float3 diffuseColor = albedo * SunColor.rgb * diffuseFactor;
+        float3 diffuseColor = albedo * SunColor.rgb * diffuseFactor; //* shadowFactor;
         float3 specColor = float3(0, 0, 0);
        if(diffuseFactor > 0.0f)
         {

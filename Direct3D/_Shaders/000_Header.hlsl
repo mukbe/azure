@@ -319,6 +319,7 @@ float3 CalcWorldPos(float2 csPos, float depth)
     return mul(position, InvView).xyz;
 }
 
+//PCF(Percentage Closer Filtering) Shadow
 float CalcShadowFactor(float4 depthPosition, Texture2D shadowMap, SamplerComparisonState shadowSampler)
 {
     float2 uv;
