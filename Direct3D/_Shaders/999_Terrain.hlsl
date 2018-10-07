@@ -181,7 +181,7 @@ G_Buffer TerrainPS(PixelInput input)
     output.spec = _specularTex.Sample(_basicSampler, input.uv);
 
     output.normal = float4(input.normal.xyz, 1.0f);
-    output.normal.a = 1.5f;
+    output.normal.a = 0.9f;
 
     output.diffuse.a = 0.9f;
 

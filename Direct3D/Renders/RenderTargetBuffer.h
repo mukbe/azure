@@ -15,6 +15,8 @@ public:
 
 	void Create();
 
+	void BindRenderTarget();
+
 private:
 	void CreateBuffer();
 	void CreateArrayBuffer();

@@ -27,11 +27,11 @@ void FactoryManager::Create(string name, Json::Value value)
 {
 	if (name == "Camera")
 	{
-		FreeCamera* freeCamera = new FreeCamera;
-		freeCamera->LoadData(&value);
-		Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::System, freeCamera);
-		Objects->SetMainCamera(freeCamera);
-		Objects->ObjectSortingFront(ObjectType::Type::Dynamic, ObjectType::Tag::System, "Camera");
+		//FreeCamera* freeCamera = new FreeCamera;
+		//freeCamera->LoadData(&value);
+		//Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::System, freeCamera);
+		//Objects->SetMainCamera(freeCamera);
+		//Objects->ObjectSortingFront(ObjectType::Type::Dynamic, ObjectType::Tag::System, "Camera");
 	}
 	else if (name == "Ocean")
 	{

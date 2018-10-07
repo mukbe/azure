@@ -276,7 +276,6 @@ void Models::ReadAnimation(wstring file, vector<ModelAnimClip*>* clips)
 			r->Byte(&ptr, sizeof(ModelKeyframeData) * count);
 
 			clip->keyframeMap.insert(make_pair(keyframe->BoneName, keyframe));
-
 		}//for(frame)
 
 

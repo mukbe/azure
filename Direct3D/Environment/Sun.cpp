@@ -87,7 +87,6 @@ void Environment::Sun::UpdateView()
 	D3DXMATRIX viewProj;
 	D3DXMatrixMultiply(&viewProj, &view, &ortho);
 
-	//set special texture matrix for shadow mapping
 	float fOffsetX = 0.5f + (0.5f / (float)WinSizeX);
 	float fOffsetY = 0.5f + (0.5f / (float)WinSizeY);
 
@@ -97,7 +96,6 @@ void Environment::Sun::UpdateView()
 		fOffsetX, fOffsetY, 0.0f, 1.0f);
 
 	D3DXMatrixMultiply(&shadowMatrix, &viewProj, &toViewport);
-
 
 	sunBuffer->SetView(view);
 	sunBuffer->SetProj(ortho);

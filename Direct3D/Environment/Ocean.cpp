@@ -17,7 +17,7 @@ Ocean::Ocean()
 {
 	this->name = "Ocean";
 	this->vertexLength = pow(2, 6);
-	this->oceanColor = D3DXCOLOR(0.021f, 0.08f, 0.309f, 1.0f);
+	this->oceanColor = D3DXCOLOR(0.004f, 0.049f, 0.221f, 1.0f);
 	material = new Material;
 }
 
@@ -53,6 +53,7 @@ Ocean::~Ocean()
 	//SafeDelete(fresnelLookUp);
 	SafeDelete(material);
 	SafeDelete(instanceShader);
+	SafeDelete(shadowShader);
 }
 
 void Ocean::Init()
@@ -62,12 +63,11 @@ void Ocean::Init()
 	this->CreateFresnelLookUpTable();
 	this->InitBuffers();
 
+	AssetManager->AddTexture("Fresnel", this->fresnelLookUp);
 	this->AddCallback("Delete", [this](TagMessage msg)
 	{
 		this->isLive = false;
 	});
-
-	AssetManager->AddTexture("Fresnel", this->fresnelLookUp);
 }
 
 void Ocean::Update()
@@ -76,12 +76,37 @@ void Ocean::Update()
 	this->ComputingOcean();
 }
 
+void Ocean::ShadowRender()
+{
+	//BindBuffers ----------------------------------------------
+	ID3D11ShaderResourceView* heightView = vertexDataBuffer->GetSRV();
+	DeviceContext->VSSetShaderResources(7, 1, &heightView);
+	// -----------------------------------------------------------
+
+	//Draw ----------------------------------------------------------
+	UINT stride[2] = { sizeof VertexTextureNormal,sizeof D3DXVECTOR2 };
+	UINT offset[2] = { 0 ,0 };
+	ID3D11Buffer* buffers[2] = { vertexBuffer,instanceBuffer };
+
+	DeviceContext->IASetVertexBuffers(0, 2, buffers, stride, offset);
+	DeviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	shadowShader->Render();
+
+	DeviceContext->DrawIndexedInstanced(indexData.size(), instanceData.size(), 0, 0, 0);
+	//------------------------------------------------------------------------
+	heightView = nullptr;
+	DeviceContext->VSSetShaderResources(7, 1, &heightView);
+}
+
 void Ocean::Render()
 {
 	//BindBuffers ----------------------------------------------
+	//TODO 현재 fresnelLookUp이 다른 클래스에서 14번슬롯에 바인딩 하고 있으니 추후 수정
 	ID3D11ShaderResourceView* srv = fresnelLookUp->GetSRV();
-	DeviceContext->VSSetShaderResources(6,1, &srv);
-	DeviceContext->PSSetShaderResources(6, 1, &srv);
+	DeviceContext->VSSetShaderResources(14 ,1, &srv);
+	DeviceContext->PSSetShaderResources(14, 1, &srv);
 	
 	material->SetDiffuseColor(oceanColor);
 	material->UpdateBuffer();
@@ -118,7 +143,6 @@ void Ocean::UIRender()
 {
 	ImGui::Text("GridX : %d , GridZ : %d", this->gridCountX,this->gridCountZ);
 	ImGui::Text("FPS : %f", Time::Get()->FPS());
-	ImGui::Text("DrawGridCount : %d", drawInsatnceData.size());
 
 	ImGui::ColorEdit4("OceanColor", (float*)&oceanColor.r,
 		ImGuiColorEditFlags_Float | ImGuiColorEditFlags_AlphaPreviewHalf);
@@ -131,32 +155,36 @@ void Ocean::SaveData(Json::Value * parent)
 {
 	GameObject::SaveData(parent);
 
-	Json::Value* value = new Json::Value;
+	Json::Value* root = new Json::Value();
 	Json::Value prop;
-
-	JsonHelper::SetValue(prop, "OceanColor", this->material->GetDiffuseColor());
-	JsonHelper::SetValue(prop, "Position", transform->GetWorldPosition());
-	JsonHelper::SetValue(prop, "Scale", transform->GetScale());
-
-	(*value)["Prop"] = prop;
-	//JsonHelper::WriteData(ScenePath + name + ".json", value);
+	{
+		JsonHelper::SetValue(prop, "Position", transform->GetWorldPosition());
+		JsonHelper::SetValue(prop, "Scale", transform->GetScale());
+	}
+	(*root)["Prop"] = prop;
+	JsonHelper::WriteData(SaveJsonPath(this->name), root);
+	SafeDelete(root);
 }
 
 void Ocean::LoadData(Json::Value * parent)
 {
-	GameObject::LoadData(parent);
-	D3DXCOLOR color;
-	D3DXVECTOR3 position, scale;
+	//GameObject::LoadData(parent);
 
-	Json::Value* value = new Json::Value;
-	//JsonHelper::ReadData()
+	string fileName;
+	JsonHelper::GetValue(*parent, "FileName", fileName);
+	JsonHelper::GetValue(*parent, "IsActive", isActive);
 
-	JsonHelper::GetValue(*parent, "OceanColor", oceanColor);
-	JsonHelper::GetValue(*parent, "Position", position);
-	JsonHelper::GetValue(*parent, "Scale", scale);
-
-	this->transform->SetWorldPosition(position);
+	Json::Value* root = new Json::Value;
+	JsonHelper::ReadData(fileName,root);
+	Json::Value prop = (*root)["Prop"];
+	D3DXVECTOR3 pos, scale;
+	JsonHelper::GetValue(prop, "Position", pos);
+	JsonHelper::GetValue(prop, "Scale", scale);
+	
+	this->transform->SetWorldPosition(pos);
 	this->transform->SetScale(scale);
+	SafeDelete(root);
+
 	this->Init();
 }
 
@@ -183,8 +211,10 @@ void Ocean::InitInstanceShader()
 	
 	//instanceShader = new InstanceShader(ShaderPath + L"005_OceanRaw.hlsl", false);
 	instanceShader = new InstanceShader(ShaderPath + L"005_OceanDeferred.hlsl", false);
+	shadowShader = new InstanceShader(ShaderPath + L"005_OceanShadow.hlsl", false);
 	
 	instanceShader->CreateInputLayout(inputLayoutDesc, 4);
+	shadowShader->CreateInputLayout(inputLayoutDesc, 4);
 
 	worldBuffer = Buffers->FindShaderBuffer<WorldBuffer>();
 }

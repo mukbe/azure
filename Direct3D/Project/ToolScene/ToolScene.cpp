@@ -19,6 +19,7 @@
 
 #include "./Figure/Figure.h"
 
+#include "./Model/ComputeAnimation/ComputeAnimation.h"
 
 
 ToolScene::ToolScene()
@@ -39,13 +40,20 @@ ToolScene::ToolScene()
 	for (; iter != toolList.end(); ++iter)
 		iter->second->Init();
 
+	FreeCamera* camera = new FreeCamera;
+	ObjectManager::Get()->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::System, camera);
+	ObjectManager::Get()->ObjectSortingFront(ObjectType::Type::Dynamic, ObjectType::Tag::System, "Camera");
+	ObjectManager::Get()->SetMainCamera(camera);
+
 	ObjectManager::Get()->LoadData(DataBase::Get()->GetValue());
+
 }
 
 
 ToolScene::~ToolScene()
 {
 	this->Release();
+
 }
 
 void ToolScene::Init()
@@ -78,6 +86,7 @@ void ToolScene::Update()
 	{
 		iter->second->Update();
 	}
+
 }
 
 void ToolScene::PostUpdate()
@@ -99,6 +108,7 @@ void ToolScene::Render()
 	{
 		iter->second->Render();
 	}
+
 }
 
 void ToolScene::UIRender()

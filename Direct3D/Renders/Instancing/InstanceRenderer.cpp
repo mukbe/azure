@@ -27,7 +27,7 @@ InstanceRenderer::InstanceRenderer(string name,UINT maxInstance)
 {
 	this->name = name;
 	shader = new InstanceShader(L"./_Shaders/001_GBuffer.hlsl");
-
+	shadowShader = new InstanceShader(ShaderPath + L"004_Shadow.hlsl");
 	this->AddCallback("DeleteObject", [this](TagMessage msg) 
 	{
 		for (UINT i = 0; i < instanceList.size(); ++i)
@@ -52,7 +52,7 @@ InstanceRenderer::InstanceRenderer(string name, Json::Value* parent)
 {
 	this->name = name;
 	shader = new InstanceShader(L"./_Shaders/001_GBuffer.hlsl");
-
+	shadowShader = new InstanceShader(ShaderPath + L"004_Shadow.hlsl");
 	this->AddCallback("DeleteObject", [this](TagMessage msg)
 	{
 		for (UINT i = 0; i < instanceList.size(); ++i)
@@ -181,6 +181,7 @@ void InstanceRenderer::InitializeData(string keyName)
 void InstanceRenderer::Release()
 {
 	SafeDelete(shader);
+	SafeDelete(shadowShader);
 
 	for (ModelMesh* mesh : meshes)
 		SafeDelete(mesh);
@@ -214,6 +215,7 @@ void InstanceRenderer::PostUpdate()
 }
 
 
+
 void InstanceRenderer::UpdateBuffer()
 {
 	this->drawInstanceCount = 0;
@@ -238,6 +240,38 @@ void InstanceRenderer::UpdateBuffer()
 	DeviceContext->Unmap(instanceBuffer, 0);
 }
 
+void InstanceRenderer::ShadowRender()
+{
+	States::SetSampler(0, States::SamplerStates::LINEAR_MIRROR);
+	for (ModelMesh* mesh : meshes)
+	{
+		int index = mesh->ParentBoneIndex();
+		D3DXMATRIX transform = localTransforms[index];
+
+		mesh->SetWorld(transform);
+		mesh->GetWorldBuffer()->SetVSBuffer(1);
+		for (ModelMeshPart* part : mesh->meshParts)
+		{
+			UINT stride[2] = { sizeof VertexTextureBlendNT,sizeof InstanceData };
+			UINT offset[2] = { 0,0 };
+			ID3D11Buffer* buffers[2] = { part->vertexBuffer,instanceBuffer };
+
+			part->material->UpdateBuffer();
+			part->material->BindBuffer();
+
+			DeviceContext->IASetVertexBuffers(0, 2, buffers, stride, offset);
+			DeviceContext->IASetIndexBuffer(part->indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+			DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+			shadowShader->Render();
+
+			DeviceContext->DrawIndexedInstanced(part->GetIndexCount(), this->drawInstanceCount, 0, 0, 0);
+
+			part->material->UnBindBuffer();
+		}
+	}
+	States::SetSampler(0, States::SamplerStates::LINEAR);
+}
 
 
 void InstanceRenderer::Render()

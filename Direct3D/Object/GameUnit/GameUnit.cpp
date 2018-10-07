@@ -101,30 +101,12 @@ void GameUnit::UIRender()
 
 void GameUnit::SaveData(Json::Value * parent)
 {
-	Json::Value value;
-	{
-		JsonHelper::SetValue(value, "Name", this->name);
-		string nullString = "";
-		JsonHelper::SetValue(value, "FileName", nullString);
-		JsonHelper::SetValue(value, "IsActive", isActive);
-		JsonHelper::SetValue(value, "Position", transform->GetWorldPosition());
-		JsonHelper::SetValue(value, "Scale", transform->GetScale());
-		JsonHelper::SetValue(value, "Rotate", transform->GetAngle());
-	}
-	(*parent)[this->name.c_str()] = value;
+
 }
 
 void GameUnit::LoadData(Json::Value * parent)
 {
-	D3DXVECTOR3 position, scale, rotate;
-	GameObject::LoadData(parent);
-	JsonHelper::GetValue(*parent, "Position", position);
-	JsonHelper::GetValue(*parent, "Scale", scale);
-	JsonHelper::GetValue(*parent, "Rotate", rotate);
 
-	transform->SetScale(scale);
-	transform->RotateSelf(rotate);
-	transform->SetWorldPosition(position);
 }
 
 void GameUnit::SaveMaterial(wstring file)

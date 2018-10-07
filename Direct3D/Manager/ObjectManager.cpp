@@ -20,6 +20,8 @@ ObjectManager::ObjectManager()
 		objectContainer.insert(make_pair((ObjectType::Type)i, list));
 	}
 
+	RenderManager::Get()->AddRender("ObjectShadowRender", bind(&ObjectManager::ShadowRender, this),RenderType::Shadow);
+
 }
 
 
@@ -119,6 +121,21 @@ void ObjectManager::PostUpdate()
 
 void ObjectManager::PreRender()
 {
+}
+
+void ObjectManager::ShadowRender()
+{
+	ObjectList* pList = &objectContainer[ObjectType::Type::Dynamic];
+	ObjectListIter listIter = pList->begin();
+	for (; listIter != pList->end(); ++listIter)
+	{
+		for (UINT i = 0; i < listIter->second.size(); ++i)
+		{
+			if (listIter->second[i]->GetisActive())
+				listIter->second[i]->ShadowRender();
+		}
+	}
+	
 }
 
 void ObjectManager::Render()
@@ -283,10 +300,6 @@ void ObjectManager::LoadData(Json::Value * parent)
 				Json::Value objectValue = (*listIter);
 				string name;
 				JsonHelper::GetValue(objectValue, "Name", name);
-
-				Json::Value* sibal = new Json::Value();
-				JsonHelper::ReadData(String::StringToWString(name + ".json"), sibal);
-
 				FactoryManager::Get()->Create(name,objectValue);
 			}
 		}

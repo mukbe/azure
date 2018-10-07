@@ -56,3 +56,4 @@ G_Buffer InstancePS(PixelInput input)
 
     return output;
 }
+

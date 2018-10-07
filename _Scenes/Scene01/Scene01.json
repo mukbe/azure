@@ -3,20 +3,18 @@
       "Dynamic" : {
          "Enviroment" : {
             "Ocean" : {
-               "FileName" : [ "" ],
+               "FileName" : [ "../_Scenes/Scene01/Ocean.json" ],
                "IsActive" : true,
-               "Name" : [ "Ocean" ],
-               "OceanColor" : [ 0.020999999716877937, 0.079999998211860657, 0.30899998545646667, 1.0 ],
-               "Position" : [ -100.0, 0.0, -100.0 ],
-               "Scale" : [ 1.0, 1.0, 1.0 ]
+               "Name" : [ "Ocean" ]
             },
             "Scattering" : {
-               "FileName" : [ "" ],
+               "FileName" : [ "../_Scenes/Scene01/Scattering.json" ],
                "IsActive" : true,
                "Name" : [ "Scattering" ]
             },
             "Terrain" : {
-               "FileName" : [ "Terrain.json" ],
+               "FileName" : [ "../_Scenes/Scene01/Terrain.json" ],
+               "IsActive" : true,
                "Name" : [ "Terrain" ]
             }
          },
@@ -40,43 +38,47 @@
          "Object" : null,
          "System" : {
             "Camera" : {
-               "FileName" : [ "" ],
+               "FileName" : [ "../_Scenes/Scene01/Camera.json" ],
                "IsActive" : true,
-               "Name" : [ "Camera" ],
-               "Position" : [ 195.633056640625, 272.25747680664063, 308.02337646484375 ],
-               "Rotate" : [ 0.94596850872039795, 3.2148947715759277, 0.0 ]
+               "Name" : [ "Camera" ]
             }
          },
          "UI" : null,
-         "Unit" : {
-            "Pandaren" : {
-               "FileName" : [ "" ],
-               "IsActive" : true,
-               "Name" : [ "Pandaren" ],
-               "Position" : [ 128.46553039550781, 0.19443169236183167, 121.69284057617188 ],
-               "Rotate" : [ 0.0, 0.22400003671646118, 0.0 ],
-               "Scale" : [ 0.10000000149011612, 0.10000000149011612, 0.10000000149011612 ]
-            }
-         }
+         "Unit" : null
       },
       "Static" : {
          "Enviroment" : null,
          "Instancing" : null,
          "Object" : {
             "BlacksmeethInstance 0" : {
-               "FileName" : [ "" ],
+               "FileName" : [ "../_Scenes/Scene01/BlacksmeethInstance 0.json" ],
                "IsActive" : true,
                "Name" : [ "BlacksmeethInstance 0" ]
             },
             "Tree1Instance 0" : {
-               "FileName" : [ "" ],
+               "FileName" : [ "../_Scenes/Scene01/Tree1Instance 0.json" ],
                "IsActive" : true,
                "Name" : [ "Tree1Instance 0" ]
             },
+            "Tree1Instance 1" : {
+               "FileName" : [ "../_Scenes/Scene01/Tree1Instance 1.json" ],
+               "IsActive" : true,
+               "Name" : [ "Tree1Instance 1" ]
+            },
+            "Tree1Instance 2" : {
+               "FileName" : [ "../_Scenes/Scene01/Tree1Instance 2.json" ],
+               "IsActive" : true,
+               "Name" : [ "Tree1Instance 2" ]
+            },
             "Tree2Instance 0" : {
-               "FileName" : [ "" ],
+               "FileName" : [ "../_Scenes/Scene01/Tree2Instance 0.json" ],
                "IsActive" : true,
                "Name" : [ "Tree2Instance 0" ]
+            },
+            "Tree2Instance 1" : {
+               "FileName" : [ "../_Scenes/Scene01/Tree2Instance 1.json" ],
+               "IsActive" : true,
+               "Name" : [ "Tree2Instance 1" ]
             }
          },
          "System" : null,

@@ -33,7 +33,7 @@ public:
 	BOOL EraseRender(string name);
 
 	void AddRenderer(string key, Renderer* renderer);
-
+	Renderer* FindRenderer(string key);
 	void SetUnPackGBufferProp(D3DXMATRIX view, D3DXMATRIX proj);
 private:
 	void ShadowRender();
@@ -41,6 +41,7 @@ private:
 	void Render();
 	void PostRender();
 	void AlphaRender();
+	void PostEffect();
 	void UIRender();
 
 	Rendering rendering;
@@ -48,6 +49,7 @@ private:
 	Renderer* shadow;
 	Renderer* deferred;
 	Renderer* alpha;
+	Renderer* bloomEffect;
 };
 
 #define RenderRequest RenderManager::Get()

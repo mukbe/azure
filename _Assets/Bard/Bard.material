@@ -1,0 +1,14 @@
+{
+   "Arissa_MAT" : {
+      "Ambient" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
+      "Diffuse" : [ 1.0, 1.0, 1.0, 1.0 ],
+      "DiffuseFile" : [ "../_Assets/Bard/Arissa_DIFF_diffuse.png" ],
+      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "EmissiveFile" : [ "" ],
+      "Name" : [ "Arissa_MAT" ],
+      "NormalFile" : [ "" ],
+      "Shininess" : 43.076923370361328,
+      "Specular" : [ 0.5, 0.5, 0.5, 1.0 ],
+    "SpecularFile": [ "../_Assets/Bard/Arissa_SPEC_specular.png" ]
+   }
+}

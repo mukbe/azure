@@ -45,7 +45,7 @@ void ModelMesh::Render(Shader * shader)
 {
 	for (ModelMeshPart* part : meshParts)
 	{
-		worldBuffer->SetVSBuffer(1);
+		//worldBuffer->SetVSBuffer(1);
 
 		part->Render(shader);
 	}

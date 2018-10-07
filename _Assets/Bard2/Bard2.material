@@ -1,0 +1,74 @@
+{
+   "Akai_MAT" : {
+      "Ambient" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "Diffuse" : [ 1.0, 1.0, 1.0, 1.0 ],
+      "DiffuseFile" : [ "../_Assets/Bard2/Erika_Archer_Clothes_diffuse.png" ],
+      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "EmissiveFile" : [ "" ],
+      "Name" : [ "Akai_MAT" ],
+      "NormalFile" : [ "" ],
+      "Shininess" : 5.0,
+      "Specular" : [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ],
+      "SpecularFile" : [ "" ]
+   },
+   "Arrow_MAT" : {
+      "Ambient" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "Diffuse" : [ 1.0, 1.0, 1.0, 1.0 ],
+    "DiffuseFile": [ "../_Assets/Bard2/Arrow_DIFF.png" ],
+      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "EmissiveFile" : [ "" ],
+      "Name" : [ "Arrow_MAT" ],
+      "NormalFile" : [ "" ],
+      "Shininess" : 20.0,
+      "Specular" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "SpecularFile" : [ "" ]
+   },
+   "Body_MAT" : {
+      "Ambient" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "Diffuse" : [ 1.0, 1.0, 1.0, 1.0 ],
+    "DiffuseFile": [ "../_Assets/Bard2/FemaleFitA_Body_diffuse.png" ],
+      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "EmissiveFile" : [ "" ],
+      "Name" : [ "Body_MAT" ],
+      "NormalFile" : [ "" ],
+      "Shininess" : 6.311790943145752,
+      "Specular" : [ 0.29913786053657532, 0.29913786053657532, 0.29913786053657532, 1.0 ],
+      "SpecularFile" : [ "" ]
+   },
+   "Bow_MAT" : {
+      "Ambient" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "Diffuse" : [ 1.0, 1.0, 1.0, 1.0 ],
+    "DiffuseFile": [ "../_Assets/Bard2/Bow_DIFF.jpg" ],
+      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "EmissiveFile" : [ "" ],
+      "Name" : [ "Bow_MAT" ],
+      "NormalFile" : [ "" ],
+      "Shininess" : 13.136363983154297,
+      "Specular" : [ 0.11363393813371658, 0.11363393813371658, 0.11363393813371658, 1.0 ],
+      "SpecularFile" : [ "" ]
+   },
+   "EyeSpec_MAT" : {
+      "Ambient" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "Diffuse" : [ 1.0, 1.0, 1.0, 1.0 ],
+    "DiffuseFile": [ "../_Assets/Bard2/FemaleFitA_Body_diffuse.png" ],
+      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "EmissiveFile" : [ "" ],
+      "Name" : [ "EyeSpec_MAT" ],
+      "NormalFile" : [ "" ],
+      "Shininess" : 51.418804168701172,
+      "Specular" : [ 1.0, 1.0, 1.0, 1.0 ],
+      "SpecularFile" : [ "" ]
+   },
+   "Lashes_MAT" : {
+      "Ambient" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "Diffuse" : [ 1.0, 1.0, 1.0, 1.0 ],
+    "DiffuseFile": [ "../_Assets/Bard2/FemaleFitA_Body_diffuse.png" ],
+      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "EmissiveFile" : [ "" ],
+      "Name" : [ "Lashes_MAT" ],
+      "NormalFile" : [ "" ],
+      "Shininess" : 0.0,
+      "Specular" : [ 0.0, 0.0, 0.0, 0.0 ],
+      "SpecularFile" : [ "" ]
+   }
+}

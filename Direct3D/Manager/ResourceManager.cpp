@@ -53,7 +53,9 @@ void ResourceManager::LoadAsset()
 	this->LoadFolder("../_Assets/Objects/FishingBox/", "*.material");
 	this->LoadFolder("../_Assets/Objects/Blacksmeeth/", "*.png");
 	this->LoadFolder("../_Assets/Objects/Blacksmeeth/", "*.material");
-	
+
+	this->LoadFolder("../_Assets/Bard2/", "*.material", true);
+	this->LoadFolder("../_Assets/Bard2/", "*.png");
 	this->LoadFolder("../_Assets/Pandaren/", "*.material",true);
 	this->LoadFolder("../_Assets/Pandaren/", "*.png");
 }

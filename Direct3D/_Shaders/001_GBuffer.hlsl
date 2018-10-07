@@ -275,7 +275,6 @@ G_Buffer ObjectPS(ModelPixelInput input)
 
     float3 diffuse = _diffuseTex.Sample(_basicSampler, input.uv).rgb;
 
-
     //output.worldPos = input.worldPos;
     output.normal = float4(NormalMapSpace(_normalTex.Sample(_basicSampler, input.uv).xyz, input.normal, input.tangent), 1);
     output.spec = float4(1, 1, 1, 2);
