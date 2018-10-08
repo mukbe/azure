@@ -70,6 +70,7 @@ void TerrainTool::Render()
 
 	//Render
 	test->Render();
+	freeCamera->Render();
 	Particletest->Render();
 	terrain->Render();
 }

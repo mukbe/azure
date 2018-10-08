@@ -34,6 +34,13 @@ public:
 		DeviceContext->DSSetConstantBuffers(slot, 1, &buffer);
 	}
 
+	void SetGSBuffer(UINT slot)
+	{
+		MapData(data, dataSize);
+
+		DeviceContext->GSSetConstantBuffers(slot, 1, &buffer);
+	}
+
 	void SetCSBuffer(UINT slot)
 	{
 		MapData(data, dataSize);

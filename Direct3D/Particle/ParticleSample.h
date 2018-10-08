@@ -74,5 +74,8 @@ private:
 	class FreeCamera* camera;
 	Buffer* buffer;
 	Shader* shader;
+	ID3D11Buffer* vertexBuffer;
+
+	WorldBuffer* world;
 };
 

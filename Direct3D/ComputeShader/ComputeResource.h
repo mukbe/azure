@@ -36,6 +36,7 @@ public:
 	virtual void GetDatas(void* datas);
 
 	ID3D11Buffer* GetReadBuffer() { return readBuffer; }
+	ID3D11Buffer* GetRWBuffer() { return rwBuffer; }
 private:
 	void CreateBufferForGPU(UINT elementSize, UINT count, void * pInitData, ID3D11Buffer* buffer);
 	void CreateSRV();

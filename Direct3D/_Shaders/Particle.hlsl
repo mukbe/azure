@@ -19,16 +19,36 @@ struct v2f
 };
 
 StructuredBuffer<ParticleData> _Particles : register(t8);
+//TODO 
+//인덱스버퍼를 컴퓨트에서 계산해 가져온다 
+//그러고 드로우를 콜 할때 인덱스의 크기많큼 해주고 id값으로 파티클의 id를 찾는다
 //sampler2D _MainTex;
 			
-v2f ParticleVS(uint id : SV_VertexID)
+
+struct Vertex
+{
+    float4 position : POSITION0;
+};
+
+//struct Vertex
+//{
+//    uint id : SV_VertexID;
+//};
+
+//v2f ParticleVS(uint id : SV_VertexID)
+v2f ParticleVS(Vertex input)
 {
     v2f o;
+    
+    uint id = input.position.x;
+    //uint id = input.id;
     o.pos = float4(_Particles[id].position, 1);
+    o.pos = float4(float3(0, 0, 0), 1);
     o.uv = float2(0, 0);
     o.col = _Particles[id].color;
+    o.col = float4(1, 1, 1, 1);
     o.scale = _Particles[id].isActive ? _Particles[id].scale : 0;
-			
+    o.scale = 1.f;
 
     return o;
 }
@@ -53,7 +73,9 @@ void ParticleGS(point v2f input[1], inout TriangleStream<v2f> outStream)
             float2 uv = float2(x, y);
             o.uv = uv;
 
-            o.pos = pos + mul(float4((uv * 2 - float2(1, 1)) * input[0].scale, 0, 1), billboardMatrix);
+            o.pos = pos + mul(float4((uv * 2 - float2(1, 1)) * input[0].scale, 0, 1), World);
+            //o.pos = pos + float4((uv * 2 - float2(1, 1)) * input[0].scale, 0, 1);
+           // o.pos = mul(o.pos, World);
             o.pos = mul(ViewProjection, o.pos);
 
             o.col = col;
@@ -87,7 +109,7 @@ G_Buffer ParticlePS(v2f input)
     G_Buffer output;
 
     //output.worldPos = float4(SplitMap.Sample(wrapSamp, input.uv / UvAmount).rgb, 1); //input.oPosition; //  SplitMap.Sample(wrapSamp, input.uv / UvAmount);
-    output.diffuse = input.col;
+    output.diffuse = input.col * 10.f;
 
     output = PackGBuffer(output, float3(0, 1, 0), output.diffuse.rgb, 0.25f, 250.0f);
 

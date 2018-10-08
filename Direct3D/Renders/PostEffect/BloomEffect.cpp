@@ -201,6 +201,7 @@ void BloomEffect::Blur()
 
 void BloomEffect::FinalRendering()
 {
+	pRenderer->ChangeZBuffer(false);
 	pRenderer->BeginDraw();
 
 	finalRenderingBuffer->data.middleGrey = middleGrey;
@@ -231,4 +232,6 @@ void BloomEffect::FinalRendering()
 
 	ID3D11ShaderResourceView* arrView[3] = { nullptr,nullptr,nullptr };
 	DeviceContext->PSSetShaderResources(0, 3, arrView);
+	pRenderer->ChangeZBuffer(true);
+
 }

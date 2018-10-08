@@ -7,6 +7,33 @@ ParticleSample::ParticleSample()
 {
 	buffer = new Buffer;
 	shader = Shaders->CreateShader("Particle", L"Particle.hlsl", Shader::ShaderType::useGS,"Particle");
+
+	world = Buffers->FindShaderBuffer<WorldBuffer>();
+
+	UINT vertexCount = 1024;
+	vector<Vertex> vertexData;
+	vertexData.assign(vertexCount, Vertex());
+
+	for (UINT z = 0; z < 1024; z++)
+	{
+		vertexData[z].position.x = z;
+		vertexData[z].position.y = 0.f;
+		vertexData[z].position.z = 0.f;
+	}
+	{
+		D3D11_BUFFER_DESC desc = { 0 };
+		desc.Usage = D3D11_USAGE_DEFAULT;
+		desc.ByteWidth = sizeof(Vertex) * vertexData.size();
+		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+
+		D3D11_SUBRESOURCE_DATA data = { 0 };
+		data.pSysMem = &vertexData[0];
+
+		HRESULT hr;
+		hr = Device->CreateBuffer(&desc, &data, &vertexBuffer);
+		assert(SUCCEEDED(hr));
+	}
+
 }
 
 
@@ -17,7 +44,7 @@ ParticleSample::~ParticleSample()
 void ParticleSample::Update()
 {
 
-	if (Mouse::Get()->Press(0))
+	if (Mouse::Get()->Down(0))
 	{
 		EmitParticle(D3DXVECTOR3(0, 0, 0));
 	}
@@ -36,11 +63,25 @@ void ParticleSample::Render()
 {
 	States::SetRasterizer(States::RasterizerStates::SOLID_CULL_OFF);
 
-	//DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	UINT stride = sizeof(Vertex);
+	UINT offset = 0;
+
+
+	DeviceContext->IASetInputLayout(nullptr);
 	shader->Render();
+
+	DeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 	ID3D11ShaderResourceView* view = particleBuffer->GetSRV();
-	DeviceContext->VSGetShaderResources(8, 1, &view);
-	DeviceContext->Draw(particleNum,0);
+	DeviceContext->VSSetShaderResources(8, 1, &view);
+	//DeviceContext->Draw(particleNum,0);
+	D3DXMATRIX mat;
+	D3DXMatrixIdentity(&mat);
+	world->SetMatrix(mat);
+	world->SetGSBuffer(1);
+
+	DeviceContext->DrawIndexed(particleNum, 0,0);
 
 	shader->ReleaseShader();
 	States::SetRasterizer(States::RasterizerStates::SOLID_CULL_ON);
@@ -72,12 +113,14 @@ void ParticleSample::EmitParticle(D3DXVECTOR3 pos)
 	//particleCountBuffer.GetData(particleCounts);
 	//particlePoolNum = particleCounts[0];
 	//if (particleCounts[0] < emitNum) return;  
-	DeviceContext->CopyStructureCount(particleCountBuffer->GetReadBuffer(), 0, particlePoolBuffer->GetUAV());
+
+	//vector<int> data;
+	//data.assign(4, int(0));
+	//particleCountBuffer->GetDatas(&particleCounts);
 	//if (particleCounts[0] < emitNum) return;
 
 	buffer->Data._EmitPosition = pos;
 	buffer->Data._VelocityMax = velocityMax;
-	buffer->Data._LifeTime = 1.f;
 	buffer->Data._ScaleMin = scaleMin;
 	buffer->Data._ScaleMax = scaleMax;
 	buffer->Data._Sai = sai;

@@ -71,14 +71,14 @@ void Emit(uint3 id : SV_DispatchThreadID)
     _Particles[no].velocity = (rnd3(seed + 3.15)) * speed;
     _Particles[no].color = float4(hsv_to_rgb(float3(h, _Sai, _Val)), 1);
     _Particles[no].duration = _LifeTime;
-    _Particles[no].scale = _ScaleMin;
+    _Particles[no].scale = scale;
     _Particles[no].isActive = true;
     
 
 }
 
 [numthreads(THREAD_NUM_X, 1, 1)]
-void Update(uint id : SV_GroupIndex)//SV_DispatchThreadID
+void Update(uint3 id : SV_DispatchThreadID)//SV_DispatchThreadID SV_GroupIndex
 {
     
     uint no = id.x;
@@ -86,7 +86,7 @@ void Update(uint id : SV_GroupIndex)//SV_DispatchThreadID
     if (_Particles[no].isActive)
     {
         _Particles[no].velocity.y -= _Gravity * _DT;
-        _Particles[no].position += _Particles[no].velocity; //* _DT;
+        _Particles[no].position += _Particles[no].velocity* _DT;
         _Particles[no].duration -= _DT;
         _Particles[no].color.a = max(_Particles[no].duration / _LifeTime, 0);
         if (_Particles[no].duration <= 0)
