@@ -10,30 +10,6 @@ ParticleSample::ParticleSample()
 
 	world = Buffers->FindShaderBuffer<WorldBuffer>();
 
-	UINT vertexCount = 1024;
-	vector<Vertex> vertexData;
-	vertexData.assign(vertexCount, Vertex());
-
-	for (UINT z = 0; z < 1024; z++)
-	{
-		vertexData[z].position.x = z;
-		vertexData[z].position.y = 0.f;
-		vertexData[z].position.z = 0.f;
-	}
-	{
-		D3D11_BUFFER_DESC desc = { 0 };
-		desc.Usage = D3D11_USAGE_DEFAULT;
-		desc.ByteWidth = sizeof(Vertex) * vertexData.size();
-		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-
-		D3D11_SUBRESOURCE_DATA data = { 0 };
-		data.pSysMem = &vertexData[0];
-
-		HRESULT hr;
-		hr = Device->CreateBuffer(&desc, &data, &vertexBuffer);
-		assert(SUCCEEDED(hr));
-	}
-
 }
 
 
@@ -67,21 +43,21 @@ void ParticleSample::Render()
 	UINT offset = 0;
 
 
-	DeviceContext->IASetInputLayout(nullptr);
 	shader->Render();
 
-	DeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	//DeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	DeviceContext->IASetInputLayout(nullptr);
 	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	ID3D11ShaderResourceView* view = particleBuffer->GetSRV();
 	DeviceContext->VSSetShaderResources(8, 1, &view);
-	//DeviceContext->Draw(particleNum,0);
 	D3DXMATRIX mat;
 	D3DXMatrixIdentity(&mat);
 	world->SetMatrix(mat);
 	world->SetGSBuffer(1);
 
-	DeviceContext->DrawIndexed(particleNum, 0,0);
+	DeviceContext->Draw(particleNum, 0);
+	//DeviceContext->DrawIndexed(particleNum, 0,0);
 
 	shader->ReleaseShader();
 	States::SetRasterizer(States::RasterizerStates::SOLID_CULL_ON);

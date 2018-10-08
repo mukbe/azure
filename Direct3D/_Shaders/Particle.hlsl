@@ -25,23 +25,23 @@ StructuredBuffer<ParticleData> _Particles : register(t8);
 //sampler2D _MainTex;
 			
 
-struct Vertex
-{
-    float4 position : POSITION0;
-};
-
 //struct Vertex
 //{
-//    uint id : SV_VertexID;
+//    float4 position : POSITION0;
 //};
+
+struct Vertex
+{
+    uint id : SV_VertexID;
+};
 
 //v2f ParticleVS(uint id : SV_VertexID)
 v2f ParticleVS(Vertex input)
 {
     v2f o;
     
-    uint id = input.position.x;
-    //uint id = input.id;
+    //uint id = input.position.x;
+    uint id = input.id;
     o.pos = float4(_Particles[id].position, 1);
     o.pos = float4(float3(0, 0, 0), 1);
     o.uv = float2(0, 0);
