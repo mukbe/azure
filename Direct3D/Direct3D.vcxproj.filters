@@ -99,6 +99,9 @@
     <ClCompile Include="Environment\GameMap.cpp" />
     <ClCompile Include="Model\ComputeAnimation\ComputeAnimation.cpp" />
     <ClCompile Include="Renders\PostEffect\BloomEffect.cpp" />
+    <ClCompile Include="Particle\Particle.cpp" />
+    <ClCompile Include="Particle\ParticleInfo.cpp" />
+    <ClCompile Include="Particle\ParticleSample.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renders\ShadowRenderer.h" />
@@ -207,6 +210,11 @@
     <ClInclude Include="Environment\GameMap.h" />
     <ClInclude Include="Model\ComputeAnimation\ComputeAnimation.h" />
     <ClInclude Include="Renders\PostEffect\BloomEffect.h" />
+    <ClInclude Include="Particle\Particle.h" />
+    <ClInclude Include="Particle\ParticleBase.h" />
+    <ClInclude Include="Particle\ParticleInfo.h" />
+    <ClInclude Include="Particle\ParticleProp.h" />
+    <ClInclude Include="Particle\ParticleSample.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />
@@ -234,8 +242,8 @@
     <None Include="_Shaders\999_BloomCompute.hlsl" />
     <None Include="_Shaders\999_BlurCompute.hlsl" />
     <None Include="_Shaders\999_DownScaleCompute.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="_Shaders\005_OceanShadow.hlsl" />
+    <None Include="_Shaders\005_OceanShadow.hlsl" />
+    <None Include="_Shaders\Particle.hlsl" />
+    <None Include="_Shaders\Particle_Compute.hlsl" />
   </ItemGroup>
 </Project>

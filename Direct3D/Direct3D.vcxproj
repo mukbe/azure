@@ -19,6 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Particle\Particle.h" />
+    <ClInclude Include="Particle\ParticleBase.h" />
+    <ClInclude Include="Particle\ParticleInfo.h" />
+    <ClInclude Include="Particle\ParticleProp.h" />
+    <ClInclude Include="Particle\ParticleSample.h" />
     <ClInclude Include="Renders\PostEffect\BloomEffect.h" />
     <ClInclude Include="Model\ComputeAnimation\ComputeAnimation.h" />
     <ClInclude Include="Environment\GameMap.h" />
@@ -127,6 +132,9 @@
     <ClInclude Include="View\Projection.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Particle\Particle.cpp" />
+    <ClCompile Include="Particle\ParticleInfo.cpp" />
+    <ClCompile Include="Particle\ParticleSample.cpp" />
     <ClCompile Include="Renders\PostEffect\BloomEffect.cpp" />
     <ClCompile Include="Model\ComputeAnimation\ComputeAnimation.cpp" />
     <ClCompile Include="Environment\GameMap.cpp" />
@@ -369,6 +377,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\005_OceanShadow.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\Particle.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="_Shaders\Particle_Compute.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

@@ -350,6 +350,7 @@ CAppendResource1D::CAppendResource1D(UINT elementSize, UINT count, void * pInitD
 	:IComputeResource(), byteWidth(0), rwBuffer(nullptr), readBuffer(nullptr)
 {
 	byteWidth = elementSize * count;
+	counts = count;
 	CreateBufferForGPU(elementSize, count, pInitData, rwBuffer);
 	CreateBufferForGPU(elementSize, count, nullptr, readBuffer);
 	CreateSRV();
@@ -396,6 +397,7 @@ void CAppendResource1D::CreateBufferForGPU(UINT elementSize, UINT count, void * 
 		desc.StructureByteStride = elementSize;
 		desc.ByteWidth = elementSize * count;
 		desc.Usage = D3D11_USAGE_DEFAULT;
+		desc.CPUAccessFlags = 0;
 
 		D3D11_SUBRESOURCE_DATA InitData = { 0 };
 		InitData.pSysMem = pInitData;
@@ -419,62 +421,20 @@ void CAppendResource1D::CreateBufferForGPU(UINT elementSize, UINT count, void * 
 
 void CAppendResource1D::CreateSRV()
 {
-	D3D11_BUFFER_DESC bufDesc;
-	ZeroMemory(&bufDesc, sizeof(D3D11_BUFFER_DESC));
-	rwBuffer->GetDesc(&bufDesc);
 
-	D3D11_SHADER_RESOURCE_VIEW_DESC desc;
-	ZeroMemory(&desc, sizeof(desc));
-	desc.ViewDimension = D3D11_SRV_DIMENSION_BUFFEREX;
-	desc.BufferEx.FirstElement = 0;
-
-	if (bufDesc.MiscFlags & D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS)
-	{
-		// This is a Raw Buffer
-
-		desc.Format = DXGI_FORMAT_R32_TYPELESS;
-		desc.BufferEx.Flags = D3D11_BUFFEREX_SRV_FLAG_RAW;
-		desc.BufferEx.NumElements = bufDesc.ByteWidth / 4;
-	}
-	else if (bufDesc.MiscFlags & D3D11_RESOURCE_MISC_BUFFER_STRUCTURED)
-	{
-		// This is a Structured Buffer
-
-		desc.Format = DXGI_FORMAT_UNKNOWN;
-		desc.BufferEx.NumElements = bufDesc.ByteWidth / bufDesc.StructureByteStride;
-	}
-	HRESULT hr = Device->CreateShaderResourceView(rwBuffer, &desc, &srv);
-	assert(SUCCEEDED(hr));
 }
 
 void CAppendResource1D::CreateUAV()
 {
-	D3D11_BUFFER_DESC bufDesc;
-	ZeroMemory(&bufDesc, sizeof(D3D11_BUFFER_DESC));
-	rwBuffer->GetDesc(&bufDesc);
 
 	D3D11_UNORDERED_ACCESS_VIEW_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
 	desc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
+
+	desc.Format = DXGI_FORMAT_UNKNOWN;
 	desc.Buffer.FirstElement = 0;
-
-	if (bufDesc.MiscFlags & D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS)
-	{
-		// This is a Raw Buffer
-
-		desc.Format = DXGI_FORMAT_R32_TYPELESS; // Format must be DXGI_FORMAT_R32_TYPELESS, when creating Raw Unordered Access View
-		desc.Buffer.Flags = D3D11_BUFFER_UAV_FLAG_APPEND;
-		desc.Buffer.NumElements = bufDesc.ByteWidth / 4;
-	}
-	else if (bufDesc.MiscFlags & D3D11_RESOURCE_MISC_BUFFER_STRUCTURED)
-	{
-		desc.Format = DXGI_FORMAT_UNKNOWN;      // Format must be must be DXGI_FORMAT_UNKNOWN, when creating a View of a Structured Buffer
-		desc.Buffer.NumElements = bufDesc.ByteWidth / bufDesc.StructureByteStride;
-
-	}
-	//desc.Format = DXGI_FORMAT_UNKNOWN;      
-	//desc.Buffer.NumElements = bufDesc.ByteWidth / bufDesc.StructureByteStride;
-
+	desc.Buffer.NumElements = counts;
+	desc.Buffer.Flags = D3D11_BUFFER_UAV_FLAG_APPEND;
 
 
 	HRESULT hr = Device->CreateUnorderedAccessView(rwBuffer, &desc, &uav);

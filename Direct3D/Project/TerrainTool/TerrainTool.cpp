@@ -5,6 +5,7 @@
 #include "./View/FreeCamera.h"
 
 #include "Scattering.h"
+#include "./Particle/ParticleSample.h"
 
 TerrainTool::TerrainTool()
 {
@@ -15,6 +16,8 @@ TerrainTool::TerrainTool()
 	freeCamera = new FreeCamera;
 	sun = new Environment::Sun;
 	test = new Scattering(freeCamera, "level");
+	Particletest = new ParticleSample;
+
 }
 
 
@@ -41,6 +44,7 @@ void TerrainTool::Update()
 {
 	terrain->Update();
 	test->Update();
+	Particletest->Update();
 }
 
 void TerrainTool::PostUpdate()
@@ -66,7 +70,8 @@ void TerrainTool::Render()
 
 	//Render
 	test->Render();
-
+	freeCamera->Render();
+	Particletest->Render();
 	terrain->Render();
 }
 

@@ -34,8 +34,8 @@ Program::Program()
 	RenderRequest->AddRenderer("bloom", bloomEffect);
 
 	//Scenes->AddScene("anim", new AnimationTool);
-	Scenes->AddScene("tool", new ToolScene);
-	//Scenes->AddScene("terrain", new TerrainTool);
+	//Scenes->AddScene("tool", new ToolScene);
+	Scenes->AddScene("terrain", new TerrainTool);
 
 
 }
