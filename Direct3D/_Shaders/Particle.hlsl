@@ -23,19 +23,16 @@ StructuredBuffer<ParticleData> _Particles : register(t8);
 //인덱스버퍼를 컴퓨트에서 계산해 가져온다 
 //그러고 드로우를 콜 할때 인덱스의 크기많큼 해주고 id값으로 파티클의 id를 찾는다
 			
-struct Vertex
-{
-    uint id : SV_VertexID;
-};
 
-v2f ParticleVS(Vertex input)
+v2f ParticleVS(uint id : SV_VertexID)
 {
     v2f o;
     
-    uint id = input.id;
+   // uint id = input.id;
     o.pos = float4(_Particles[id].position, 1);
     o.uv = float2(0, 0);
     o.col = _Particles[id].color;
+    o.col.a = 1.0f;
     o.scale = _Particles[id].isActive ? _Particles[id].scale : 0;
 
     return o;
@@ -63,7 +60,7 @@ void ParticleGS(point v2f input[1], inout TriangleStream<v2f> outStream)
             planeNormal = normalize(planeNormal);
 
             float3 upVector = float3(0, 1, 0) * input[0].scale;
-            float3 rightVector = normalize(cross(planeNormal, upVector)) * input[0].scale;
+            float3 rightVector = normalize(cross(planeNormal, upVector))  * input[0].scale;
             
 
             float2 rate = float2(1, 1) - uv * 2;

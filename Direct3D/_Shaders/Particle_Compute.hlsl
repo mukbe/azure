@@ -1,4 +1,4 @@
-#define THREAD_NUM_X 16
+#define THREAD_NUM_X 1
 
 struct ParticleData
 {
@@ -73,10 +73,10 @@ void Emit(uint3 id : SV_DispatchThreadID)
     _Particles[no].velocity = (rnd3(seed + 3.15)) * speed;
     _Particles[no].color = float4(hsv_to_rgb(float3(h, _Sai, _Val)), 1);
     _Particles[no].duration = _LifeTime;
-    _Particles[no].scale = scale;
+    _Particles[no].scale = abs(scale);
     _Particles[no].isActive = true;
-    
 
+    InterlockedAdd(counter[0].x, 1);
 }
 
 [numthreads(THREAD_NUM_X, 1, 1)]
@@ -95,14 +95,16 @@ void Update(uint3 id : SV_DispatchThreadID)//SV_DispatchThreadID SV_GroupIndex
         {
             _Particles[no].isActive = false;
             _DeadList.Append(no);
+            InterlockedAdd(counter[0].x, -1);
+
         }
     }
-    GroupMemoryBarrierWithGroupSync();
-    if(no == 0)
-    {
-        uint2 data;
-        _DeadList.GetDimensions(data.x, data.y);
-        counter[0].x = data.x;
+    //GroupMemoryBarrierWithGroupSync();
+    //if(no == 0)
+    //{
+    //    uint2 data;
+    //    _DeadList.GetDimensions(data.x, data.y);
+    //    counter[0].x = data.x;
 
-    }
+    //}
 }

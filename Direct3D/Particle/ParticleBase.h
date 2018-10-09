@@ -38,8 +38,8 @@ public:
 	virtual CResource1D* GetParticleBuffer() { return particleBuffer; }
 
 protected:
-	int particleMax = 2048;
-	int emitMax = 16;
+	int particleMax = 32;
+	int emitMax = 1;
 	CAppendResource1D* particlePoolBuffer;
 	CResource1D* particleBuffer;
 	CResource1D* particleCountBuffer;
@@ -52,6 +52,6 @@ protected:
 	ComputeShader* emitCompute;
 	ComputeShader* updateCompute;
 
-	const int THREAD_NUM_X = 16;
+	const int THREAD_NUM_X = 1;
 };
 
