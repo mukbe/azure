@@ -32,13 +32,18 @@ ObjectManager::~ObjectManager()
 
 void ObjectManager::Init()
 {
-	ObjectList* pList = &objectContainer[ObjectType::Type::Dynamic];
-	ObjectListIter listIter = pList->begin();
-	for (; listIter != pList->end(); ++listIter)
+	ObjectContainerIter containerIter = objectContainer.begin();
+
+	for (; containerIter != objectContainer.end(); ++containerIter)
 	{
-		for (UINT i = 0; i < listIter->second.size(); ++i)
+		ObjectList* pList = &containerIter->second;
+		ObjectListIter listIter = pList->begin();
+		for (; listIter != pList->end(); ++listIter)
 		{
-			listIter->second[i]->Init();
+			for (UINT i = 0; i < listIter->second.size(); ++i)
+			{
+				listIter->second[i]->Init();
+			}
 		}
 	}
 }
