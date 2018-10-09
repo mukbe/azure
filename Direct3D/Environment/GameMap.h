@@ -30,6 +30,8 @@ public:
 
 	virtual void LoadData(Json::Value* json);
 
+	virtual void ShadowRender();
+	void GetMinMax() {}
 private:
 	ID3D11Buffer * vertexBuffer;
 	ID3D11Buffer* indexBuffer;
@@ -47,6 +49,7 @@ private:
 
 	WorldBuffer* worldBuffer;
 	Shader* shader;
+	Shader* shadowShader;
 	Buffer* buffer;
 };
 

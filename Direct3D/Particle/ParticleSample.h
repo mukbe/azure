@@ -53,28 +53,25 @@ public:
 	ParticleSample();
 	virtual~ParticleSample();
 	
-	void SetCamera(class FreeCamera* cam) { camera = cam; }
 
 	void Update();
 
 	void Render();
-
+	void UIRender();
 	void UpdateParticle();
 	void EmitParticle(D3DXVECTOR3 pos);
 private:
 	float velocityMax = 1.f;
 	float lifeTime = 1;
-	float scaleMin = 1;
-	float scaleMax = 10;
+	float scaleMin = 0.01f;
+	float scaleMax = 0.01f;
 	float gravity = 0.f;
 
 	float sai = 1;   
 	float val = 1;   
 
-	class FreeCamera* camera;
 	Buffer* buffer;
 	Shader* shader;
 
-	WorldBuffer* world;
 };
 

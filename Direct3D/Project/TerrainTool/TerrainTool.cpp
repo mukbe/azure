@@ -80,5 +80,6 @@ void TerrainTool::UIRender()
 	terrain->UIRender();
 	test->UIRender();
 	AssetManager->UIRender();
+	Particletest->UIRender();
 }
 

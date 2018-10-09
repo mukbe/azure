@@ -22,33 +22,21 @@ StructuredBuffer<ParticleData> _Particles : register(t8);
 //TODO 
 //인덱스버퍼를 컴퓨트에서 계산해 가져온다 
 //그러고 드로우를 콜 할때 인덱스의 크기많큼 해주고 id값으로 파티클의 id를 찾는다
-//sampler2D _MainTex;
 			
-
-//struct Vertex
-//{
-//    float4 position : POSITION0;
-//};
-
 struct Vertex
 {
     uint id : SV_VertexID;
 };
 
-//v2f ParticleVS(uint id : SV_VertexID)
 v2f ParticleVS(Vertex input)
 {
     v2f o;
     
-    //uint id = input.position.x;
     uint id = input.id;
     o.pos = float4(_Particles[id].position, 1);
-    o.pos = float4(float3(0, 0, 0), 1);
     o.uv = float2(0, 0);
     o.col = _Particles[id].color;
-    o.col = float4(1, 1, 1, 1);
     o.scale = _Particles[id].isActive ? _Particles[id].scale : 0;
-    o.scale = 1.f;
 
     return o;
 }
@@ -67,16 +55,20 @@ void ParticleGS(point v2f input[1], inout TriangleStream<v2f> outStream)
     {
         for (int y = 0; y < 2; y++)
         {
-            float4x4 billboardMatrix = View;
-            billboardMatrix._m03 = billboardMatrix._m13 = billboardMatrix._m23 = billboardMatrix._m33 = 0;
-
             float2 uv = float2(x, y);
             o.uv = uv;
 
-            o.pos = pos + mul(float4((uv * 2 - float2(1, 1)) * input[0].scale, 0, 1), World);
-            //o.pos = pos + float4((uv * 2 - float2(1, 1)) * input[0].scale, 0, 1);
-           // o.pos = mul(o.pos, World);
-            o.pos = mul(ViewProjection, o.pos);
+            float3 planeNormal = input[0].pos.xyz - GetCameraPosition();
+            planeNormal.y = 0.f;
+            planeNormal = normalize(planeNormal);
+
+            float3 upVector = float3(0, 1, 0) * input[0].scale;
+            float3 rightVector = normalize(cross(planeNormal, upVector)) * input[0].scale;
+            
+
+            float2 rate = float2(1, 1) - uv * 2;
+            o.pos = pos + float4(rate.y * upVector * 0.5f + rate.x * rightVector * 0.5f, 0);
+            o.pos = mul(o.pos,ViewProjection);
 
             o.col = col;
 

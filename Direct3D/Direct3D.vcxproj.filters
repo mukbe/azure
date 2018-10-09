@@ -245,5 +245,6 @@
     <None Include="_Shaders\005_OceanShadow.hlsl" />
     <None Include="_Shaders\Particle.hlsl" />
     <None Include="_Shaders\Particle_Compute.hlsl" />
+    <None Include="_Shaders\999_TerrainShadow.hlsl" />
   </ItemGroup>
 </Project>

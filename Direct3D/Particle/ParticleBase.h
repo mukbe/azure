@@ -22,25 +22,12 @@ public:
 		emitCompute = new ComputeShader(ShaderPath + L"Particle_Compute.hlsl", "Emit");
 		updateCompute = new ComputeShader(ShaderPath + L"Particle_Compute.hlsl", "Update");
 
-
-		//vector<ParticleData> temp;
-		//temp.assign(particleMax, ParticleData());
-		//particleBuffer->GetDatas(temp.data());
-		//int a = 10;
-		vector<int> test;
-		test.assign(particleNum, int(0));
-		particlePoolBuffer->GetDatas(test.data());
-		int aa = 10;
-
 		initCompute->BindShader();
 		particleBuffer->BindResource(0);
 		particlePoolBuffer->BindResource(1);
 		initCompute->Dispatch(particleNum / THREAD_NUM_X, 1, 1);
 		particleBuffer->ReleaseResource(0);
 		particlePoolBuffer->ReleaseResource(1);
-
-		particlePoolBuffer->GetDatas(test.data());
-		int aaa = 10;
 
 	}
 	virtual~ParticleBase() {}
@@ -51,7 +38,7 @@ public:
 	virtual CResource1D* GetParticleBuffer() { return particleBuffer; }
 
 protected:
-	int particleMax = 1024;
+	int particleMax = 2048;
 	int emitMax = 16;
 	CAppendResource1D* particlePoolBuffer;
 	CResource1D* particleBuffer;

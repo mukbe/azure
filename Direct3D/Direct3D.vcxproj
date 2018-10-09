@@ -388,6 +388,11 @@
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\999_TerrainShadow.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F89A7778-CBF0-4E22-B019-B7729ABB8281}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

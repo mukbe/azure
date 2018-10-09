@@ -32,6 +32,8 @@ RWStructuredBuffer<ParticleData> _Particles : register(u0);
 AppendStructuredBuffer<uint> _DeadList : register(u1);
 ConsumeStructuredBuffer<uint> _ParticlePool : register(u2);
 
+RWStructuredBuffer<uint> counter : register(u3);
+
 cbuffer ParticleBuffer : register(b0)
 {
     float3 _EmitPosition;
@@ -95,5 +97,12 @@ void Update(uint3 id : SV_DispatchThreadID)//SV_DispatchThreadID SV_GroupIndex
             _DeadList.Append(no);
         }
     }
+    GroupMemoryBarrierWithGroupSync();
+    if(no == 0)
+    {
+        uint2 data;
+        _DeadList.GetDimensions(data.x, data.y);
+        counter[0].x = data.x;
 
+    }
 }

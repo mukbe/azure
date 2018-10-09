@@ -131,7 +131,7 @@ GameMap::GameMap(string level)
 	worldBuffer = Buffers->FindShaderBuffer<WorldBuffer>();
 
 	shader = Shaders->CreateShader("Terrain", L"999_Terrain.hlsl", Shader::ShaderType::useHS, "Terrain");
-
+	shadowShader = Shaders->CreateShader("TerrainShadow", L"999_TerrainShadow.hlsl", Shader::ShaderType::useHS, "TerrainShadow");
 	buffer = new Buffer;
 	buffer->Data.Edge = 16;
 	buffer->Data.Inside = 8;
@@ -244,4 +244,40 @@ void GameMap::LoadData(Json::Value * json)
 				splatTexView[i] = nullptr;
 		}
 	}
+}
+
+void GameMap::ShadowRender()
+{
+	UINT stride = sizeof(VertexTextureNormal);
+	UINT offset = 0;
+
+	DeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	DeviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST);
+
+	D3DXMATRIX mat;
+	D3DXMatrixIdentity(&mat);
+	worldBuffer->SetMatrix(mat);
+
+	worldBuffer->SetVSBuffer(1);
+	worldBuffer->SetDSBuffer(1);
+
+	buffer->SetVSBuffer(5);
+	buffer->SetHSBuffer(5);
+	buffer->SetDSBuffer(5);
+
+	//Bind Textures
+	ID3D11ShaderResourceView* heightView = heightMap->GetSRV();
+	DeviceContext->DSSetShaderResources(0, 1, &heightView);
+
+	shadowShader->Render();
+	States::SetSampler(1, States::LINEAR_WRAP);
+	DeviceContext->DrawIndexed(indexData.size(), 0, 0);
+
+	//Release
+	shadowShader->ReleaseShader();
+	ID3D11ShaderResourceView* nullsrv[1] = { nullptr };
+	DeviceContext->DSSetShaderResources(0, 1, nullsrv);
+	DeviceContext->PSSetShaderResources(0, 1, nullsrv);
+
 }

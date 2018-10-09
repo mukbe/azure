@@ -8,7 +8,6 @@ ParticleSample::ParticleSample()
 	buffer = new Buffer;
 	shader = Shaders->CreateShader("Particle", L"Particle.hlsl", Shader::ShaderType::useGS,"Particle");
 
-	world = Buffers->FindShaderBuffer<WorldBuffer>();
 
 }
 
@@ -20,48 +19,41 @@ ParticleSample::~ParticleSample()
 void ParticleSample::Update()
 {
 
-	if (Mouse::Get()->Down(0))
+	if (Mouse::Get()->Press(0))
 	{
 		EmitParticle(D3DXVECTOR3(0, 0, 0));
 	}
 	UpdateParticle();
 
-	if (Keyboard::Get()->Down('H'))
-	{
-		vector<ParticleData> temp;
-		temp.assign(particleMax, ParticleData());
-		particleBuffer->GetDatas(temp.data());
-		int a = 10;
-	}
+
 }
 
 void ParticleSample::Render()
 {
-	States::SetRasterizer(States::RasterizerStates::SOLID_CULL_OFF);
-
-	UINT stride = sizeof(Vertex);
-	UINT offset = 0;
-
-
 	shader->Render();
 
-	//DeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-	DeviceContext->IASetInputLayout(nullptr);
 	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	ID3D11ShaderResourceView* view = particleBuffer->GetSRV();
 	DeviceContext->VSSetShaderResources(8, 1, &view);
-	D3DXMATRIX mat;
-	D3DXMatrixIdentity(&mat);
-	world->SetMatrix(mat);
-	world->SetGSBuffer(1);
 
-	DeviceContext->Draw(particleNum, 0);
-	//DeviceContext->DrawIndexed(particleNum, 0,0);
-
-	shader->ReleaseShader();
+	States::SetRasterizer(States::RasterizerStates::SOLID_CULL_OFF);
+	{
+		DeviceContext->Draw(particleNum, 0);
+	}
 	States::SetRasterizer(States::RasterizerStates::SOLID_CULL_ON);
 
+	shader->ReleaseShader();
+}
+
+void ParticleSample::UIRender()
+{
+	ImGui::Begin("particle");
+	vector<int> data;
+	data.assign(4, int(0));
+	particleCountBuffer->GetDatas(&data[0]);
+	ImGui::Text("count : %d", data[0]);
+	ImGui::End();
 }
 
 void ParticleSample::UpdateParticle()
@@ -74,11 +66,13 @@ void ParticleSample::UpdateParticle()
 	buffer->SetCSBuffer(0);
 	particleBuffer->BindResource(0);
 	particlePoolBuffer->BindResource(1);
+	particleCountBuffer->BindResource(3);
 	updateCompute->Dispatch(particleNum / THREAD_NUM_X, 1, 1);
 
 	ID3D11UnorderedAccessView* nullUAV[1] = { nullptr };
 	DeviceContext->CSSetUnorderedAccessViews(0, 1, nullUAV, nullptr);
 	DeviceContext->CSSetUnorderedAccessViews(1, 1, nullUAV, nullptr);
+	DeviceContext->CSSetUnorderedAccessViews(3, 1, nullUAV, nullptr);
 }
 
 void ParticleSample::EmitParticle(D3DXVECTOR3 pos)
@@ -106,25 +100,11 @@ void ParticleSample::EmitParticle(D3DXVECTOR3 pos)
 	buffer->Data._Gravity = gravity;
 	buffer->Data._Time = Time::Get()->GetWorldTime();
 
-	vector<int> test;
-	test.assign(particleNum, int(0));
-	particlePoolBuffer->GetDatas(test.data());
-	int aa = 10;
-
 	emitCompute->BindShader();
 	buffer->SetCSBuffer(0);
 	particleBuffer->BindResource(0);
 	particlePoolBuffer->BindResource(2);
 	emitCompute->Dispatch(1, 1, 1);
-
-	particlePoolBuffer->GetDatas(test.data());
-	int aaa = 10;
-
-	vector<ParticleData> temp;
-	temp.assign(particleMax, ParticleData());
-	particleBuffer->GetDatas(temp.data());
-	int a = 10;
-
 
 
 	ID3D11UnorderedAccessView* nullUAV[1] = { nullptr };
