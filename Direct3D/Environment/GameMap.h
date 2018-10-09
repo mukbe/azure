@@ -27,7 +27,6 @@ public:
 
 	virtual void Render();
 	virtual void UIRender();
-
 	virtual void LoadData(Json::Value* json);
 
 private:
@@ -48,5 +47,7 @@ private:
 	WorldBuffer* worldBuffer;
 	Shader* shader;
 	Buffer* buffer;
+
+	bool wireFrame = false;
 };
 

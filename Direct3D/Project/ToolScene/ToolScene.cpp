@@ -20,7 +20,7 @@
 #include "./Figure/Figure.h"
 
 #include "./Model/ComputeAnimation/ComputeAnimation.h"
-
+#include "./Renders/GrassRenderer/GrassRenderer.h"
 
 ToolScene::ToolScene()
 {
@@ -45,8 +45,11 @@ ToolScene::ToolScene()
 	ObjectManager::Get()->ObjectSortingFront(ObjectType::Type::Dynamic, ObjectType::Tag::System, "Camera");
 	ObjectManager::Get()->SetMainCamera(camera);
 
+	ObjectManager::Get()->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Instancing, new GrassRenderer);
+
 	ObjectManager::Get()->LoadData(DataBase::Get()->GetValue());
 
+	ObjectManager::Get()->Init();
 }
 
 

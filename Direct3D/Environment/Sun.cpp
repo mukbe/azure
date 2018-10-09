@@ -64,10 +64,10 @@ void Environment::Sun::Update()
 void Environment::Sun::UpdateView()
 {
 	//TODO 보는 방향 조정해야됨
-	D3DXVECTOR3 center(0, 0, 0), origin;
+	D3DXVECTOR3 center(150.0f, 0, 150.0f), origin;
 	D3DXVec3Normalize(&dir, &dir);
 	sunBuffer->SetDirection(dir);
-	origin = -dir * 50.f;
+	origin = -dir * 250.f;
 
 	D3DXVECTOR3 up;
 	D3DXVec3Cross(&up, &D3DXVECTOR3(1.f, 0.f, 0.f), &dir);
@@ -106,6 +106,7 @@ void Environment::Sun::UpdateView()
 void Environment::Sun::Render()
 {
 	sunBuffer->SetVSBuffer(4);
+	sunBuffer->SetDSBuffer(4);
 	sunBuffer->SetPSBuffer(4);
 }
 

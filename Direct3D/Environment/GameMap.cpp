@@ -144,6 +144,9 @@ GameMap::~GameMap()
 
 void GameMap::Render()
 {
+	if (wireFrame)
+		States::SetRasterizer(States::RasterizerStates::WIRE_CULL_ON);
+
 	UINT stride = sizeof(VertexTextureNormal);
 	UINT offset = 0;
 
@@ -184,10 +187,15 @@ void GameMap::Render()
 	DeviceContext->DSSetShaderResources(0, 1, nullsrv);
 	DeviceContext->PSSetShaderResources(0, 1, nullsrv);
 
+	if (wireFrame)
+		States::SetRasterizer(States::RasterizerStates::SOLID_CULL_ON);
+
 }
 
 void GameMap::UIRender()
 {
+	ImGui::Checkbox("WireFrame", &wireFrame);
+	
 	if (ImGui::InputInt("Edge", &buffer->Data.Edge))
 	{
 		buffer->Data.Inside = buffer->Data.Edge * 0.5f;

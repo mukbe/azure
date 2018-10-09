@@ -26,7 +26,7 @@ G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float3 spec
 
 }
 
-Texture2D _grassTexture[10] : register(s0);
+Texture2D _grassTexture[5] : register(s0);
 
 struct VS_INPUT
 {
@@ -90,7 +90,7 @@ G_Buffer PS(PS_INPUT input)
 {
     G_Buffer output;
 
-    float4 diffuseSample = _grassTexture[input.textureIndex].Sample(_basicSampler, input.uv);
+    float4 diffuseSample = float4(1, 0, 0, 1); // = _grassTexture[input.textureIndex].Sample(_basicSampler, input.uv);
 
     if (diffuseSample.a < 0.1f)
         discard;

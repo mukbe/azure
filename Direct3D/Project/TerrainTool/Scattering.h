@@ -57,6 +57,7 @@ public:
 
 	virtual void Update();
 	virtual void Render();
+	virtual void ShadowRender();
 	virtual void UIUpdate();
 	virtual void UIRender();
 private:

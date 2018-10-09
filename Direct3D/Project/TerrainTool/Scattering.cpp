@@ -153,6 +153,11 @@ void Scattering::Render()
 
 }
 
+void Scattering::ShadowRender()
+{
+	sun->Render();
+}
+
 void Scattering::UIUpdate()
 {
 	sun->Update();

@@ -11,13 +11,14 @@ private:
 	typedef map<string, CallbackFunc>			CallbackList;
 	typedef map<string, CallbackFunc>::iterator CallbackIter;
 protected:
+	CallbackList callbackList;
+	vector<struct TagMessage> reserveMessageList;
+protected:
 	Synthesize(string, name, Name)
 	Synthesize(bool, isActive, isActive)
 	Synthesize(bool,isLive,IsLive)
 	Synthesize(bool,isRender,IsRender)
 	Synthesize(Transform*,transform,Transform)
-	CallbackList callbackList;
-	vector<struct TagMessage> reserveMessageList;
 public:
 	bool* GetPIsActive() { return &isActive; }
 public:

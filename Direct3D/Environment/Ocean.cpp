@@ -78,26 +78,26 @@ void Ocean::Update()
 
 void Ocean::ShadowRender()
 {
-	//BindBuffers ----------------------------------------------
-	ID3D11ShaderResourceView* heightView = vertexDataBuffer->GetSRV();
-	DeviceContext->VSSetShaderResources(7, 1, &heightView);
-	// -----------------------------------------------------------
-
-	//Draw ----------------------------------------------------------
-	UINT stride[2] = { sizeof VertexTextureNormal,sizeof D3DXVECTOR2 };
-	UINT offset[2] = { 0 ,0 };
-	ID3D11Buffer* buffers[2] = { vertexBuffer,instanceBuffer };
-
-	DeviceContext->IASetVertexBuffers(0, 2, buffers, stride, offset);
-	DeviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	shadowShader->Render();
-
-	DeviceContext->DrawIndexedInstanced(indexData.size(), instanceData.size(), 0, 0, 0);
-	//------------------------------------------------------------------------
-	heightView = nullptr;
-	DeviceContext->VSSetShaderResources(7, 1, &heightView);
+	////BindBuffers ----------------------------------------------
+	//ID3D11ShaderResourceView* heightView = vertexDataBuffer->GetSRV();
+	//DeviceContext->VSSetShaderResources(7, 1, &heightView);
+	//// -----------------------------------------------------------
+	//
+	////Draw ----------------------------------------------------------
+	//UINT stride[2] = { sizeof VertexTextureNormal,sizeof D3DXVECTOR2 };
+	//UINT offset[2] = { 0 ,0 };
+	//ID3D11Buffer* buffers[2] = { vertexBuffer,instanceBuffer };
+	//
+	//DeviceContext->IASetVertexBuffers(0, 2, buffers, stride, offset);
+	//DeviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	//DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//
+	//shadowShader->Render();
+	//
+	//DeviceContext->DrawIndexedInstanced(indexData.size(), instanceData.size(), 0, 0, 0);
+	////------------------------------------------------------------------------
+	//heightView = nullptr;
+	//DeviceContext->VSSetShaderResources(7, 1, &heightView);
 }
 
 void Ocean::Render()

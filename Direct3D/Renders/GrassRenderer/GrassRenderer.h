@@ -10,6 +10,8 @@ typedef struct GrassData
 
 	GrassData()
 		:position(0.f, 0.f, 0.f), normal(0.f, 0.f, 0.f), scale(1.f, 1.f), textureID(0) {}
+	GrassData(D3DXVECTOR3 pos, D3DXVECTOR2 scale, D3DXVECTOR3 normal, UINT id)
+		:position(pos), scale(scale), normal(normal), textureID(id) {}
 }*LPGRASSDATA;
 
 class GrassRenderer : public GameObject
@@ -20,7 +22,8 @@ private:
 	ID3D11Buffer*				grassBuffer;
 	class Shader*				shader;
 	vector<class Texture*>		textureList;
-	ID3D11ShaderResourceView* nullView[10];
+private:
+	class Texture* currentTexture;
 public:
 	GrassRenderer(UINT maxGrass = 300);
 	virtual ~GrassRenderer();
@@ -32,9 +35,9 @@ public:
 	virtual void PostUpdate();
 	virtual void PrevRender();
 	virtual void Render();
+	virtual void UIUpdate();
 	virtual void UIRender();
 	virtual void ShadowRender();
-	virtual void UIUpdate() {}
 	virtual void DebugRender() {}
 
 public:
