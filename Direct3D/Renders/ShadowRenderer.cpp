@@ -51,6 +51,8 @@ void ShadowRenderer::SetRTV()
 	ID3D11RenderTargetView* nullRenderTarget = NULL;
 	DeviceContext->OMSetRenderTargets(1, &nullRenderTarget,directionalDSV);
 
+	States::SetRasterizer(States::RasterizerStates::SHADOW);
+
 	if (this->renderFunc != NULL)
 		this->renderFunc();
 }

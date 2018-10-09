@@ -1,6 +1,7 @@
 #include "000_Header.hlsl"
 
 static const float albedoBias = 0.5f;
+static const float shadowBias = 0.08f;
 
 struct BasicPixelInput
 {
@@ -20,6 +21,43 @@ BasicPixelInput BasicDeferredVS(VertexTexture input)
     return output;
 }
 
+cbuffer DeferredBuffer : register(b10)
+{
+    float ShadowBias;
+    float3 ShadowPadding;
+}
+
+//PCF(Percentage Closer Filtering) Shadow
+float CalcShadowFactor(float4 depthPosition, Texture2D shadowMap, SamplerComparisonState shadowSampler, float3 sunDir)
+{
+    float2 uv;
+    float3 shadowPos = depthPosition.xyz / depthPosition.w;
+    uv.x = shadowPos.x * 0.5f + 0.5f;
+    uv.y = shadowPos.y * -0.5f + 0.5f;
+
+    float shadow; // = shadowMap.SampleCmpLevelZero(shadowSampler, uv, shadowPos.z).r;
+
+    //return shadow;
+    float offsetX = 1.0f / (1280.0f);
+    float offsetY = 1.0f / (720.0f);
+
+    float3 biasRight = float3(0, 0, 1);
+    float fac = asin(abs(SunDir.y)) / PI - 0.5f ; // -0.5~  0.5  0.5에서 sun의 기울기가 극대
+    
+    (exp(abs(fac)) - 1.f) * 0.1f;
+
+    float bias = abs(dot(sunDir, biasRight)) * ShadowBias;
+
+    for (int i = -1; i < 2; ++i)
+    {
+        for (int j = -1; j < 2; ++j)
+        {
+            shadow += shadowMap.SampleCmpLevelZero(shadowSampler, uv + float2(offsetX * j, offsetY * i), shadowPos.z + ShadowBias).r;
+        }
+    }
+
+    return clamp(shadow / 9.0f, 0.4f, 1.0f);
+}
 
 float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
 {
@@ -34,8 +72,7 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
     if(data.RenderType <= 1.0f)
     {
         float4 projectionToLight = mul(worldPos, SunViewProjection);
-     
-        float shadowFactor = CalcShadowFactor(projectionToLight, _sunLightsahdowMap, _shadowSampler);
+        float shadowFactor = CalcShadowFactor(projectionToLight, _sunLightsahdowMap, _shadowSampler,SunDir);
 
         float diffuseFactor = saturate(dot(worldNormal.xyz, -SunDir));
         float3 ambient = albedo * SunColor.rgb * albedoBias;

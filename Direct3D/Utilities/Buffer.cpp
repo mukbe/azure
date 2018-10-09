@@ -159,14 +159,8 @@ void Buffer::CreateTextureArray(ID3D11ShaderResourceView** pOut, vector<wstring>
 	hr = Device->CreateTexture2D(&texArrayDesc, 0, &texArray);
 	assert(SUCCEEDED(hr));
 
-	//
-	// Copy individual texture elements into texture array.
-	//
-
-	// for each texture element...
 	for (UINT texElement = 0; texElement < size; ++texElement)
 	{
-		// for each mipmap level...
 		for (UINT mipLevel = 0; mipLevel < texElementDesc.MipLevels; ++mipLevel)
 		{
 			D3D11_MAPPED_SUBRESOURCE mappedTex2D;
@@ -180,9 +174,6 @@ void Buffer::CreateTextureArray(ID3D11ShaderResourceView** pOut, vector<wstring>
 		}
 	}
 
-	//
-	// Create a resource view to the texture array.
-	//
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc;
 	viewDesc.Format = texArrayDesc.Format;
@@ -219,6 +210,7 @@ void Buffer::CreateDepthStencilSurface(ID3D11Texture2D ** ppDepthStencilTexture,
 			break;
 
 		case DXGI_FORMAT_D16_UNORM:
+		case DXGI_FORMAT_R16_TYPELESS : 
 			TextureFormat = DXGI_FORMAT_R16_TYPELESS;
 			break;
 		case  DXGI_FORMAT_R8G8B8A8_UINT :
@@ -230,7 +222,6 @@ void Buffer::CreateDepthStencilSurface(ID3D11Texture2D ** ppDepthStencilTexture,
 		}
 		assert(TextureFormat != DXGI_FORMAT_UNKNOWN);
 
-		// Create depth stencil texture
 		D3D11_TEXTURE2D_DESC descDepth;
 		descDepth.Width = uWidth;
 		descDepth.Height = uHeight;
@@ -238,7 +229,7 @@ void Buffer::CreateDepthStencilSurface(ID3D11Texture2D ** ppDepthStencilTexture,
 		descDepth.ArraySize = 1;
 		descDepth.Format = TextureFormat;
 		descDepth.SampleDesc.Count = uSampleCount;
-		descDepth.SampleDesc.Quality = 0;//( uSampleCount > 1 ) ? ( D3D10_STANDARD_MULTISAMPLE_PATTERN ) : ( 0 );
+		descDepth.SampleDesc.Quality = 0;
 		descDepth.Usage = D3D11_USAGE_DEFAULT;
 		descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 

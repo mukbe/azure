@@ -319,30 +319,7 @@ float3 CalcWorldPos(float2 csPos, float depth)
     return mul(position, InvView).xyz;
 }
 
-//PCF(Percentage Closer Filtering) Shadow
-float CalcShadowFactor(float4 depthPosition, Texture2D shadowMap, SamplerComparisonState shadowSampler)
-{
-    float2 uv;
-    float3 shadowPos = depthPosition.xyz / depthPosition.w;
-    uv.x = shadowPos.x * 0.5f + 0.5f;
-    uv.y = shadowPos.y * -0.5f + 0.5f;
 
-    float shadow; // = shadowMap.SampleCmpLevelZero(shadowSampler, uv, shadowPos.z).r;
-
-    //return shadow;
-    float offsetX = 1.0f / (1280.0f);
-    float offsetY = 1.0f / (720.0f);
-
-    for (int i = -1; i < 2; ++i)
-    {
-        for (int j = -1; j < 2; ++j)
-        {
-            shadow += shadowMap.SampleCmpLevelZero(shadowSampler, uv + float2(offsetX * j, offsetY * i), shadowPos.z).r;
-        }
-    }
-
-    return clamp(shadow / 9.0f, 0.5f, 1.0f);
-}
 
 
 matrix DecodeMatrix(float3x4 encodedMatrix)

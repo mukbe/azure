@@ -30,6 +30,8 @@ private:
 	class OrthoWindow*		orthoWindow;
 	class DepthVis*			depthVis;
 	class UnPacker*			unPacker;
+	
+	class DeferredBuffer* deferredBuffer;
 public:
 	DeferredRenderer();
 	virtual~DeferredRenderer();
@@ -47,3 +49,19 @@ private:
 
 };
 
+#include "ShaderBuffer.h"
+
+class DeferredBuffer : public ShaderBuffer
+{
+public:
+	struct Struct
+	{
+		float shadowBias;
+		D3DXVECTOR3 padding;
+	}data;
+
+	DeferredBuffer()
+		:ShaderBuffer(&data, sizeof Struct) {
+		data.shadowBias = 0.007f;
+	}
+};
