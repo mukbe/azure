@@ -303,7 +303,7 @@ void States::CreateRasterizerDesc()
 
 	ZeroMemory(&desc, sizeof D3D11_RASTERIZER_DESC);
 	desc.FillMode = D3D11_FILL_SOLID;
-	desc.CullMode = D3D11_CULL_BACK;
+	desc.CullMode = D3D11_CULL_NONE;
 	desc.DepthBias = 700;
 	desc.DepthBiasClamp = 0.0f;
 	desc.SlopeScaledDepthBias = 1.0f;
@@ -380,6 +380,26 @@ void States::CreateSamplerDesc()
 
 	desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	States::CreateSampler(&desc, &samplerStates[LINEAR_BORDER]);
+
+	//ZeroMemory(&desc, sizeof D3D11_SAMPLER_DESC);
+	//desc.ComparisonFunc = D3D11_COMPARISON_LESS_EQUAL;
+	//desc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+	//desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	//desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	//desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	//desc.MaxAnisotropy = 1;
+
+	ZeroMemory(&desc, sizeof D3D11_SAMPLER_DESC);
+	desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	desc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+	desc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+	desc.MaxAnisotropy = 1;
+	desc.ComparisonFunc = D3D11_COMPARISON_LESS_EQUAL;
+	desc.MinLOD = 0;
+	desc.MaxLOD = D3D11_FLOAT32_MAX;
+	States::CreateSampler(&desc, &samplerStates[SAMPLE_LEVELZERO]);
+
 }
 
 void States::CreateBlendDesc()

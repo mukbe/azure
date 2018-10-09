@@ -5,3 +5,5 @@ static const float _heightRatio = 250.0f;
 static const float _startHeight = 750.0f;
 
 static const float UvAmount = 128.f;
+
+#define PI 3.14159265359

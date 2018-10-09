@@ -176,11 +176,10 @@ G_Buffer TerrainPS(PixelInput input)
     //==========================TEST
     output.diffuse = CalCuSplat(output.diffuse, input.uv);
     //==============================
-    output = PackGBuffer(output, input.normal, output.diffuse.rgb, 0.25f, 250.0f);
+    output = PackGBuffer(output, input.normal,2.f* output.diffuse.rgb, 0.25f, 250.0f);
 
     output.spec = _specularTex.Sample(_basicSampler, input.uv);
 
-    output.normal = float4(input.normal.xyz, 1.0f);
     output.normal.a = 0.9f;
 
     output.diffuse.a = 0.9f;

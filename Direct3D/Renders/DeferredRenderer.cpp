@@ -19,7 +19,7 @@ DeferredRenderer::DeferredRenderer()
 	this->Create();
 	depthVis = new DepthVis;
 	unPacker = new UnPacker;
-
+	deferredBuffer = new DeferredBuffer;
 	RenderRequest->AddRender("deui", bind(&DeferredRenderer::UIRender, this), RenderType::UIRender);
 }
 
@@ -63,12 +63,15 @@ void DeferredRenderer::SetRTV()
 void DeferredRenderer::Render()
 {
 	deferredRenderingBuffer->BindRenderTarget();
-
+	deferredBuffer->SetPSBuffer(10);
 	pRenderer->ChangeZBuffer(false);
+
 	orthoWindow->Render();
 	DeviceContext->PSSetShaderResources(0, BUFFER_COUNT, &mrtSRV[0]);
 	DeviceContext->PSSetShaderResources(4, 1, &mrtDepthBufferSRV);
 	unPacker->SetPSBuffer(2);
+
+	States::SetSampler(2, States::SamplerStates::SAMPLE_LEVELZERO);
 
 	shader->Render();
 	orthoWindow->DrawIndexed();
@@ -89,6 +92,8 @@ void DeferredRenderer::UIRender()
 		ImGui::ImageButton(mrtSRV[1], size);
 		ImGui::ImageButton(mrtSRV[2], size); ImGui::SameLine();
 		ImGui::ImageButton(depthVis->GetSRV(), size);
+
+		ImGui::InputFloat("ShadowBias", &deferredBuffer->data.shadowBias, -1.0f, 1.0f);
 	}
 	ImGui::End();
 }

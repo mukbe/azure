@@ -55,32 +55,32 @@ void GrassRenderer::PrevRender()
 void GrassRenderer::Render()
 {
 	//Bind ---------------------------------------------------------------
-	States::SetRasterizer(States::RasterizerStates::SOLID_CULL_OFF);
-
-	ID3D11ShaderResourceView* view[5];
-	UINT i;
-	for (i = 0; i < textureList.size(); ++i)
-	{
-		view[i] = textureList[i]->GetSRV();
-	}
-	// -------------------------------------------------------------------
-
-	DeviceContext->PSSetShaderResources(0, textureList.size(), view);
-
-	UINT stride = sizeof GrassData;
-	UINT offset = 0;
-
-	DeviceContext->IASetVertexBuffers(0, 1, &grassBuffer, &stride, &offset);
-	DeviceContext->IASetIndexBuffer(nullptr, DXGI_FORMAT_R32_UINT, 0);
-	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-
-	shader->Render();
-
-	DeviceContext->Draw(grassList.size(), 0);
-
-	shader->ReleaseShader();
-
-	States::SetRasterizer(States::RasterizerStates::SOLID_CULL_ON);
+	//States::SetRasterizer(States::RasterizerStates::SOLID_CULL_OFF);
+	//
+	//ID3D11ShaderResourceView* view[5];
+	//UINT i;
+	//for (i = 0; i < textureList.size(); ++i)
+	//{
+	//	view[i] = textureList[i]->GetSRV();
+	//}
+	//// -------------------------------------------------------------------
+	//
+	//DeviceContext->PSSetShaderResources(0, textureList.size(), view);
+	//
+	//UINT stride = sizeof GrassData;
+	//UINT offset = 0;
+	//
+	//DeviceContext->IASetVertexBuffers(0, 1, &grassBuffer, &stride, &offset);
+	//DeviceContext->IASetIndexBuffer(nullptr, DXGI_FORMAT_R32_UINT, 0);
+	//DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+	//
+	//shader->Render();
+	//
+	//DeviceContext->Draw(grassList.size(), 0);
+	//
+	//shader->ReleaseShader();
+	//
+	//States::SetRasterizer(States::RasterizerStates::SOLID_CULL_ON);
 }
 
 void GrassRenderer::UIUpdate()
