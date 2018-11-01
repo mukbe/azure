@@ -61,10 +61,10 @@ public:
 	void UpdateParticle();
 	void EmitParticle(D3DXVECTOR3 pos);
 private:
-	float velocityMax = 1.f;
-	float lifeTime = 1;
-	float scaleMin = 0.01f;
-	float scaleMax = 0.01f;
+	float velocityMax = 2.f;
+	float lifeTime = 3;
+	float scaleMin = 1.f;
+	float scaleMax = 1.f;
 	float gravity = 0.f;
 
 	float sai = 1;   

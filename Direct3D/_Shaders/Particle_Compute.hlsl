@@ -1,8 +1,8 @@
-#define THREAD_NUM_X 16
+#define THREAD_NUM_X 1
 
 struct ParticleData
 {
-    bool isActive; 
+    uint isActive; 
     float3 position; 
     float3 velocity;  
     float4 color; 
@@ -34,6 +34,10 @@ ConsumeStructuredBuffer<uint> _ParticlePool : register(u2);
 
 RWStructuredBuffer<uint> counter : register(u3);
 
+AppendStructuredBuffer<uint> _ActiveIndex : register(u4);
+
+
+
 cbuffer ParticleBuffer : register(b0)
 {
     float3 _EmitPosition;
@@ -55,7 +59,7 @@ void Init(uint3 id : SV_DispatchThreadID)
 {
     uint no = id.x;
     
-    _Particles[no].isActive = false;
+    _Particles[no].isActive = 0;
     _DeadList.Append(no);
 }
 
@@ -69,14 +73,14 @@ void Emit(uint3 id : SV_DispatchThreadID)
     float scale = (rnd(seed + 3) - 0.5) * 2.0 * (_ScaleMax - _ScaleMin) + _ScaleMin;
     float h = rnd(seed + 5); 
     
-    _Particles[no].position = _EmitPosition;
+    _Particles[no].position = _EmitPosition + 
     _Particles[no].velocity = (rnd3(seed + 3.15)) * speed;
     _Particles[no].color = float4(hsv_to_rgb(float3(h, _Sai, _Val)), 1);
     _Particles[no].duration = _LifeTime;
-    _Particles[no].scale = scale;
+    _Particles[no].scale = abs(scale);
     _Particles[no].isActive = true;
-    
 
+    InterlockedAdd(counter[0].x, 1);
 }
 
 [numthreads(THREAD_NUM_X, 1, 1)]
@@ -95,14 +99,26 @@ void Update(uint3 id : SV_DispatchThreadID)//SV_DispatchThreadID SV_GroupIndex
         {
             _Particles[no].isActive = false;
             _DeadList.Append(no);
+
+            InterlockedAdd(counter[0].x, -1);
+
+        }
+        else
+        {
+            _ActiveIndex.Append(no);
         }
     }
-    GroupMemoryBarrierWithGroupSync();
-    if(no == 0)
-    {
-        uint2 data;
-        _DeadList.GetDimensions(data.x, data.y);
-        counter[0].x = data.x;
+    //GroupMemoryBarrierWithGroupSync();
+    //if(no == 0)
+    //{
+    //    uint2 data;
+    //    _DeadList.GetDimensions(data.x, data.y);
+    //    counter[0].x = data.x;
 
-    }
+    //}
+}
+
+[numthreads(THREAD_NUM_X, 1, 1)]
+void AppendParticleIndex(uint3 id : SV_DispatchThreadID)//SV_DispatchThreadID SV_GroupIndex
+{
 }

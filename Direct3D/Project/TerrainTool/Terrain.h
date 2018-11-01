@@ -49,6 +49,7 @@ public:
 	void UIUpdate();
 
 	virtual void SaveData(Json::Value* json);
+	D3DXVECTOR3 PickPos() { return buffer->Data.PickPos; }
 private:
 	void CreateTerrain();
 	void CalcuMousePosition();

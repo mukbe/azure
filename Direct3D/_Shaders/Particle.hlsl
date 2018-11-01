@@ -2,7 +2,7 @@
 
 struct ParticleData
 {
-    bool isActive; // 
+    uint isActive; // 
     float3 position; // 
     float3 velocity; // 
     float4 color; // 
@@ -19,24 +19,32 @@ struct v2f
 };
 
 StructuredBuffer<ParticleData> _Particles : register(t8);
+StructuredBuffer<uint> _List : register(t9);
 //TODO 
 //인덱스버퍼를 컴퓨트에서 계산해 가져온다 
 //그러고 드로우를 콜 할때 인덱스의 크기많큼 해주고 id값으로 파티클의 id를 찾는다
-			
-struct Vertex
-{
-    uint id : SV_VertexID;
-};
 
-v2f ParticleVS(Vertex input)
+//일부가 안그려지는 현상			
+
+v2f ParticleVS(uint id : SV_VertexID)
 {
     v2f o;
-    
-    uint id = input.id;
-    o.pos = float4(_Particles[id].position, 1);
+    //_List[id]
+    ParticleData data = _Particles[id];
+    o.pos = float4(data.position, 1);
     o.uv = float2(0, 0);
-    o.col = _Particles[id].color;
-    o.scale = _Particles[id].isActive ? _Particles[id].scale : 0;
+    o.col = data.color;
+    o.col.a = 1.0f;
+    bool t = (bool) data.isActive;
+    o.scale = t ? data.scale : 0;
+
+
+    //o.pos = float4(_Particles[id].position, 1);
+    //o.uv = float2(0, 0);
+    //o.col = _Particles[id].color;
+    //o.col.a = 1.0f;
+    //bool t = (bool)_Particles[id].isActive;
+    //o.scale = t ? _Particles[id].scale : 0;
 
     return o;
 }
@@ -62,9 +70,12 @@ void ParticleGS(point v2f input[1], inout TriangleStream<v2f> outStream)
             planeNormal.y = 0.f;
             planeNormal = normalize(planeNormal);
 
+            //float4x4 cameraView = View;
+            //float4 cameraUp = mul(float3(0, 1, 0), (float3x3) View);
+
             float3 upVector = float3(0, 1, 0) * input[0].scale;
-            float3 rightVector = normalize(cross(planeNormal, upVector)) * input[0].scale;
-            
+            float3 rightVector = normalize(cross(planeNormal, upVector))  * input[0].scale;
+            upVector = normalize(cross(planeNormal, rightVector)) * input[0].scale;
 
             float2 rate = float2(1, 1) - uv * 2;
             o.pos = pos + float4(rate.y * upVector * 0.5f + rate.x * rightVector * 0.5f, 0);

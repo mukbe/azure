@@ -19,11 +19,27 @@ ParticleSample::~ParticleSample()
 void ParticleSample::Update()
 {
 
-	if (Mouse::Get()->Press(0))
+	if (Mouse::Get()->Down(0))
 	{
 		EmitParticle(D3DXVECTOR3(0, 0, 0));
 	}
-	UpdateParticle();
+	static bool b = true;
+
+	if (Keyboard::Get()->Down('H'))
+	{
+		b = !b;
+	}
+	if (Keyboard::Get()->Down('G'))
+	{
+		vector<ParticleData> temp;
+		temp.assign(particleMax, ParticleData());
+		particleBuffer->GetDatas(temp.data());
+		int a = 10;
+	}
+
+
+	if(b)
+		UpdateParticle();
 
 
 }
@@ -33,13 +49,20 @@ void ParticleSample::Render()
 	shader->Render();
 
 	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
 	ID3D11ShaderResourceView* view = particleBuffer->GetSRV();
 	DeviceContext->VSSetShaderResources(8, 1, &view);
 
+	ID3D11ShaderResourceView* view2 = particleActiveBuffer->GetSRV();
+	DeviceContext->VSSetShaderResources(9, 1, &view2);
+
 	States::SetRasterizer(States::RasterizerStates::SOLID_CULL_OFF);
 	{
-		DeviceContext->Draw(particleNum, 0);
+		vector<int> data;
+		data.assign(4, int(0));
+		particleCountBuffer->GetDatas(&data[0]);
+
+		//DeviceContext->Draw(data[0], 0);
+		DeviceContext->Draw(particleMax, 0);
 	}
 	States::SetRasterizer(States::RasterizerStates::SOLID_CULL_ON);
 
@@ -62,17 +85,22 @@ void ParticleSample::UpdateParticle()
 	buffer->Data._LifeTime = lifeTime;
 	buffer->Data._Gravity = gravity;
 
+	UINT  test = 0;
+
 	updateCompute->BindShader();
 	buffer->SetCSBuffer(0);
 	particleBuffer->BindResource(0);
 	particlePoolBuffer->BindResource(1);
 	particleCountBuffer->BindResource(3);
-	updateCompute->Dispatch(particleNum / THREAD_NUM_X, 1, 1);
+	
+	particleActiveBuffer->BindResource(4, &test);
+	updateCompute->Dispatch(particleMax / THREAD_NUM_X, 1, 1);
 
 	ID3D11UnorderedAccessView* nullUAV[1] = { nullptr };
 	DeviceContext->CSSetUnorderedAccessViews(0, 1, nullUAV, nullptr);
 	DeviceContext->CSSetUnorderedAccessViews(1, 1, nullUAV, nullptr);
 	DeviceContext->CSSetUnorderedAccessViews(3, 1, nullUAV, nullptr);
+	DeviceContext->CSSetUnorderedAccessViews(4, 1, nullUAV, nullptr);
 }
 
 void ParticleSample::EmitParticle(D3DXVECTOR3 pos)
@@ -104,7 +132,14 @@ void ParticleSample::EmitParticle(D3DXVECTOR3 pos)
 	buffer->SetCSBuffer(0);
 	particleBuffer->BindResource(0);
 	particlePoolBuffer->BindResource(2);
+	particleCountBuffer->BindResource(3);
+
 	emitCompute->Dispatch(1, 1, 1);
+
+	vector<ParticleData> temp;
+	temp.assign(particleMax, ParticleData());
+	particleBuffer->GetDatas(temp.data());
+	int a = 10;
 
 
 	ID3D11UnorderedAccessView* nullUAV[1] = { nullptr };

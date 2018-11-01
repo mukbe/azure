@@ -50,9 +50,9 @@ void IComputeResource::ReleaseDSshaderResorceView(int slot)
 	DeviceContext->DSSetShaderResources(slot, 1, nullSRV);
 }
 
-void IComputeResource::BindResource(int slot)
+void IComputeResource::BindResource(int slot, UINT* init)
 {
-	DeviceContext->CSSetUnorderedAccessViews(slot, 1, &uav, nullptr);
+	DeviceContext->CSSetUnorderedAccessViews(slot, 1, &uav, init);
 }
 
 void IComputeResource::ReleaseResource(int slot)

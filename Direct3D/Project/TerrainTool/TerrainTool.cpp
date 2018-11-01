@@ -69,10 +69,10 @@ void TerrainTool::Render()
 	//sun->Render();
 
 	//Render
-	test->Render();
+	//test->Render();
 	freeCamera->Render();
 	Particletest->Render();
-	terrain->Render();
+	//terrain->Render();
 }
 
 void TerrainTool::UIRender()

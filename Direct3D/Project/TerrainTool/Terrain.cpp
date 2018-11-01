@@ -111,9 +111,10 @@ void Terrain::UIRender()
 
 	if (ImGui::Button("Save", ImVec2(150, 30)))
 	{
-		//Save
 		Texture::SaveToFile(Contents + L"HeightMap.png", heightData->GetHeightBuffer()->GetSRV());
 		Texture::SaveToFile(Contents + L"SplatMap.png", splat->GetSplatMap()->GetSRV());
+		//TODO 스플레팅에 쓴 텍스처목록도 저장
+
 
 		//heightRatio = 250.f
 		buffer->SetCSBuffer(1);
@@ -146,11 +147,13 @@ void Terrain::UIRender()
 	ImGui::SameLine();
 	if (ImGui::Button("Load", ImVec2(150, 30)))
 	{
-		//Load
-		Texture* tex = new Texture(Contents + L"heightTestMap.png");
+		Texture* tex = new Texture(Contents + L"HeightMap.png");
 		tex->SetCSResource(0);
 		heightData->Load();
 		SafeDelete(tex);
+
+		//스플레팅 텍스처와 파일명들 로드
+
 	}
 	ImGui::Separator();
 

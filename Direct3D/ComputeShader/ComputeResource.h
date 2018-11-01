@@ -17,7 +17,7 @@ public:
 	virtual void UpdateSRV() {};
 
 
-	virtual void BindResource(int slot);
+	virtual void BindResource(int slot, UINT* init = nullptr);
 	virtual void ReleaseResource(int slot);
 
 	virtual ID3D11ShaderResourceView* GetSRV() { return srv; }
