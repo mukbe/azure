@@ -31,6 +31,8 @@ public:
 
 	virtual void ShadowRender();
 	void GetMinMax() {}
+	
+	
 private:
 	ID3D11Buffer * vertexBuffer;
 	ID3D11Buffer* indexBuffer;

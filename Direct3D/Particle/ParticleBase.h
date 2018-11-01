@@ -14,6 +14,7 @@ public:
 
 		particleBuffer = new CResource1D(sizeof(T), particleNum, nullptr);
 		particlePoolBuffer = new CAppendResource1D(sizeof(UINT), particleNum, nullptr);
+		particleActiveBuffer = new CAppendResource1D(sizeof(UINT), particleNum, nullptr);
 
 		particleCounts = new int[4]{ 0,1,0,0 };
 		particleCountBuffer = new CResource1D(sizeof(int), 4, particleCounts);
@@ -41,6 +42,7 @@ protected:
 	int particleMax = 32;
 	int emitMax = 1;
 	CAppendResource1D* particlePoolBuffer;
+	CAppendResource1D* particleActiveBuffer;
 	CResource1D* particleBuffer;
 	CResource1D* particleCountBuffer;
 	int particleNum ;

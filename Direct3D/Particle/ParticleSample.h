@@ -63,8 +63,8 @@ public:
 private:
 	float velocityMax = 2.f;
 	float lifeTime = 3;
-	float scaleMin = 0.1f;
-	float scaleMax = 0.1f;
+	float scaleMin = 1.f;
+	float scaleMax = 1.f;
 	float gravity = 0.f;
 
 	float sai = 1;   
