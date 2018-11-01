@@ -12,7 +12,7 @@ GrassRenderer::GrassRenderer(UINT maxGrass)
 	shader = new Shader(ShaderPath + L"008_Grass.hlsl",Shader::ShaderType::useGS);
 
 	this->grassList.push_back(GrassData(D3DXVECTOR3(), D3DXVECTOR2(), D3DXVECTOR3(), UINT()));
-	this->CreateBuffer();
+	this->CreateBuffer(true);
 }
 
 GrassRenderer::~GrassRenderer()
@@ -55,32 +55,30 @@ void GrassRenderer::PrevRender()
 void GrassRenderer::Render()
 {
 	//Bind ---------------------------------------------------------------
-	//States::SetRasterizer(States::RasterizerStates::SOLID_CULL_OFF);
-	//
-	//ID3D11ShaderResourceView* view[5];
-	//UINT i;
-	//for (i = 0; i < textureList.size(); ++i)
-	//{
-	//	view[i] = textureList[i]->GetSRV();
-	//}
-	//// -------------------------------------------------------------------
-	//
-	//DeviceContext->PSSetShaderResources(0, textureList.size(), view);
-	//
-	//UINT stride = sizeof GrassData;
-	//UINT offset = 0;
-	//
-	//DeviceContext->IASetVertexBuffers(0, 1, &grassBuffer, &stride, &offset);
-	//DeviceContext->IASetIndexBuffer(nullptr, DXGI_FORMAT_R32_UINT, 0);
-	//DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-	//
-	//shader->Render();
-	//
-	//DeviceContext->Draw(grassList.size(), 0);
-	//
-	//shader->ReleaseShader();
-	//
-	//States::SetRasterizer(States::RasterizerStates::SOLID_CULL_ON);
+	ID3D11ShaderResourceView* tempView[5] = { nullptr,nullptr,nullptr,nullptr,nullptr };
+	for (size_t i = 0; i < textureList.size(); ++i)
+		tempView[i] = textureList[i]->GetSRV();
+
+	States::SetRasterizer(States::RasterizerStates::SOLID_CULL_OFF);
+
+	// -------------------------------------------------------------------
+	
+	DeviceContext->PSSetShaderResources(0, textureList.size(), tempView);
+	
+	UINT stride = sizeof GrassData;
+	UINT offset = 0;
+	
+	DeviceContext->IASetVertexBuffers(0, 1, &grassBuffer, &stride, &offset);
+	DeviceContext->IASetIndexBuffer(nullptr, DXGI_FORMAT_R32_UINT, 0);
+	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+	
+	shader->Render();
+	
+	DeviceContext->Draw(grassList.size(), 0);
+	
+	shader->ReleaseShader();
+	
+	States::SetRasterizer(States::RasterizerStates::SOLID_CULL_ON);
 }
 
 void GrassRenderer::UIUpdate()

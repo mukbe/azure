@@ -15,6 +15,7 @@
 #include "./Environment/Ocean.h"
 
 #include "./Renders/Instancing/InstanceRenderer.h"
+#include "./Renders/GrassRenderer/GrassRenderer.h"
 
 
 Hierarchy::Hierarchy(ToolScene * toolScene)
@@ -25,6 +26,8 @@ Hierarchy::Hierarchy(ToolScene * toolScene)
 	//freeCamera = new FreeCamera;
 	//Objects->SetMainCamera(freeCamera);
 	//Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::System, freeCamera);
+
+
 }
 
 Hierarchy::~Hierarchy()

@@ -56,7 +56,7 @@ float CalcShadowFactor(float4 depthPosition, Texture2D shadowMap, SamplerCompari
         }
     }
 
-    return clamp(shadow / 9.0f, 0.4f, 1.0f);
+    return clamp(shadow / 9.0f, 0.0f, 1.0f);
 }
 
 float4 BasicDeferredPS(BasicPixelInput input) : SV_Target

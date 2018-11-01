@@ -16,7 +16,7 @@ ModelAnimPlayer::ModelAnimPlayer(Model * model)
 {
 	//TODO 모델 세이더 추가 시에 작업
 	shader = Shaders->FindShader("modelShader");
-	//shadowShader = new Shader(L"");
+	shadowShader = new Shader(ShaderPath + L"004_Shadow.hlsl",Shader::ShaderType::Default,"ModelDeferred");
 
 	if (model == nullptr)return;
 
@@ -77,6 +77,16 @@ void ModelAnimPlayer::Render()
 
 	for (ModelMesh* mesh : model->Meshes())
 		mesh->Render(this->shader);
+}
+
+void ModelAnimPlayer::ShadowRender()
+{
+	if (model == nullptr)return;
+
+	model->Buffer()->SetVSBuffer(6);
+
+	for (ModelMesh* mesh : model->Meshes())
+		mesh->Render(this->shadowShader);
 }
 
 

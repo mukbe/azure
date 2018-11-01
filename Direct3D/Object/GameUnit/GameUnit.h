@@ -17,6 +17,7 @@ public:
 	virtual void Update();
 	virtual void PostUpdate();
 	virtual void PrevRender();
+	virtual void ShadowRender();
 	virtual void Render();
 	virtual void UIRender();
 

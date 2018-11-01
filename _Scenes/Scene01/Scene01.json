@@ -24,6 +24,11 @@
                "IsActive" : true,
                "Name" : [ "BlacksmeethInstanceRenderer" ]
             },
+            "GrassRenderer" : {
+               "FileName" : [ "../_Scenes/Scene01/GrassRenderer.json" ],
+               "IsActive" : true,
+               "Name" : [ "GrassRenderer" ]
+            },
             "Tree1InstanceRenderer" : {
                "FileName" : [ "../_Scenes/Scene01/Tree1InstanceRenderer.data" ],
                "IsActive" : true,
@@ -70,6 +75,21 @@
                "IsActive" : true,
                "Name" : [ "Tree1Instance 2" ]
             },
+            "Tree1Instance 3" : {
+               "FileName" : [ "../_Scenes/Scene01/Tree1Instance 3.json" ],
+               "IsActive" : true,
+               "Name" : [ "Tree1Instance 3" ]
+            },
+            "Tree1Instance 4" : {
+               "FileName" : [ "../_Scenes/Scene01/Tree1Instance 4.json" ],
+               "IsActive" : true,
+               "Name" : [ "Tree1Instance 4" ]
+            },
+            "Tree1Instance 5" : {
+               "FileName" : [ "../_Scenes/Scene01/Tree1Instance 5.json" ],
+               "IsActive" : true,
+               "Name" : [ "Tree1Instance 5" ]
+            },
             "Tree2Instance 0" : {
                "FileName" : [ "../_Scenes/Scene01/Tree2Instance 0.json" ],
                "IsActive" : true,
@@ -79,6 +99,21 @@
                "FileName" : [ "../_Scenes/Scene01/Tree2Instance 1.json" ],
                "IsActive" : true,
                "Name" : [ "Tree2Instance 1" ]
+            },
+            "Tree2Instance 2" : {
+               "FileName" : [ "../_Scenes/Scene01/Tree2Instance 2.json" ],
+               "IsActive" : true,
+               "Name" : [ "Tree2Instance 2" ]
+            },
+            "Tree2Instance 3" : {
+               "FileName" : [ "../_Scenes/Scene01/Tree2Instance 3.json" ],
+               "IsActive" : true,
+               "Name" : [ "Tree2Instance 3" ]
+            },
+            "Tree2Instance 4" : {
+               "FileName" : [ "../_Scenes/Scene01/Tree2Instance 4.json" ],
+               "IsActive" : true,
+               "Name" : [ "Tree2Instance 4" ]
             }
          },
          "System" : null,

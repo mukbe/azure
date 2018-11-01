@@ -134,10 +134,6 @@ void Buffer::CreateTextureArray(ID3D11ShaderResourceView** pOut, vector<wstring>
 		assert(SUCCEEDED(hr));
 	}
 
-	//
-	// Create the texture array.  Each element in the texture 
-	// array has the same format/dimensions.
-	//
 
 	D3D11_TEXTURE2D_DESC texElementDesc;
 	srcTex[0]->GetDesc(&texElementDesc);

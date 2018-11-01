@@ -14,7 +14,6 @@ BloomEffect::BloomEffect()
 	this->CreateBuffers();
 
 	RenderRequest->AddRender("BloomUIRender", bind(&BloomEffect::UIRender, this), RenderType::UIRender);
-
 }
 
 
@@ -70,8 +69,8 @@ void BloomEffect::Render()
 {
 	this->BindConstantBuffer();
 	this->DonwScale();
-	this->Bloom();
-	this->Blur();
+	//this->Bloom();
+	//this->Blur();
 	this->FinalRendering();
 }
 
