@@ -5,8 +5,8 @@
 #include "./View/FreeCamera.h"
 
 #include "Scattering.h"
-#include "./Particle/ParticleSample.h"
 
+#include "./Particle/Particle.h"
 TerrainTool::TerrainTool()
 {
 	RenderRequest->AddRender("TerrainToolUIRender", bind(&TerrainTool::UIRender, this), RenderType::UIRender);
@@ -16,8 +16,7 @@ TerrainTool::TerrainTool()
 	freeCamera = new FreeCamera;
 	sun = new Environment::Sun;
 	test = new Scattering(freeCamera, "level");
-	Particletest = new ParticleSample;
-
+	particle = new ParticleEmitterBase(1);
 }
 
 
@@ -44,7 +43,7 @@ void TerrainTool::Update()
 {
 	terrain->Update();
 	test->Update();
-	Particletest->Update();
+	particle->Update(freeCamera);
 }
 
 void TerrainTool::PostUpdate()
@@ -69,17 +68,17 @@ void TerrainTool::Render()
 	//sun->Render();
 
 	//Render
-	//test->Render();
+	test->Render();
 	freeCamera->Render();
-	Particletest->Render();
-	//terrain->Render();
+	particle->Render();
+	terrain->Render();
 }
 
 void TerrainTool::UIRender()
 {
 	terrain->UIRender();
 	test->UIRender();
+	particle->UIRender();
 	AssetManager->UIRender();
-	Particletest->UIRender();
 }
 

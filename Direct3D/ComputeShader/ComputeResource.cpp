@@ -520,3 +520,89 @@ void CResource3D::CreateUAV()
 
 	assert(SUCCEEDED(hr));
 }
+
+CResourceIndirect::CResourceIndirect( void * pInitData)
+	:rwBuffer(nullptr)
+{
+
+	CreateBufferForGPU(pInitData, rwBuffer);
+	CreateBufferForGPU(pInitData, readBuffer);
+	CreateUAV();
+}
+
+CResourceIndirect::~CResourceIndirect()
+{
+}
+
+void CResourceIndirect::GetDatas(void * datas)
+{
+	DeviceContext->CopyResource(readBuffer, rwBuffer);
+
+	D3D11_MAPPED_SUBRESOURCE dat = { 0 };
+	DeviceContext->Map(readBuffer, 0, D3D11_MAP_READ, 0, &dat);
+	{
+		memcpy(datas, dat.pData, sizeof(int) * 4);
+	}
+	DeviceContext->Unmap(readBuffer, 0);
+}
+
+void CResourceIndirect::CreateBufferForGPU(void * pInitData, ID3D11Buffer * buffer)
+{
+	D3D11_BUFFER_DESC desc;
+	ZeroMemory(&desc, sizeof(desc));
+	HRESULT hr = S_OK;
+
+	if (pInitData == nullptr)
+		hr = E_FAIL;
+
+	assert(SUCCEEDED(hr));
+
+	if (rwBuffer == nullptr)
+	{
+		//desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS;
+		desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
+		desc.MiscFlags = D3D11_RESOURCE_MISC_DRAWINDIRECT_ARGS;
+		desc.ByteWidth = 4 * sizeof(UINT);
+		desc.Usage = D3D11_USAGE_DEFAULT;
+
+		D3D11_SUBRESOURCE_DATA InitData = { 0 };
+		InitData.pSysMem = pInitData;
+
+		hr = Device->CreateBuffer(&desc, &InitData, &rwBuffer);
+	}
+	else
+	{
+		desc.Usage = D3D11_USAGE_STAGING;
+		desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+		desc.ByteWidth = 4 * sizeof(UINT);
+
+		D3D11_SUBRESOURCE_DATA InitData = { 0 };
+		InitData.pSysMem = pInitData;
+
+		hr = Device->CreateBuffer(&desc, &InitData, &readBuffer);
+	}
+	assert(SUCCEEDED(hr));
+
+}
+
+void CResourceIndirect::CreateSRV()
+{
+
+}
+
+void CResourceIndirect::CreateUAV()
+{
+	D3D11_UNORDERED_ACCESS_VIEW_DESC desc;
+	ZeroMemory(&desc, sizeof(desc));
+	desc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
+
+	desc.Format = DXGI_FORMAT_R32_UINT; 
+	desc.Buffer.Flags = 0;
+	desc.Buffer.FirstElement = 0;
+	desc.Buffer.NumElements = 4;
+
+	HRESULT hr = Device->CreateUnorderedAccessView(rwBuffer, &desc, &uav);
+	assert(SUCCEEDED(hr));
+
+
+}

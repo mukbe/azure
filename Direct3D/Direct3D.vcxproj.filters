@@ -247,4 +247,11 @@
     <None Include="_Shaders\Particle_Compute.hlsl" />
     <None Include="_Shaders\999_TerrainShadow.hlsl" />
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="_Shaders\Particle_Compute_001.hlsl" />
+    <FxCompile Include="_Shaders\Particle_Compute_Emit.hlsl" />
+    <FxCompile Include="_Shaders\Particle_Header.hlsl" />
+    <FxCompile Include="_Shaders\Particle_Compute_Update.hlsl" />
+    <FxCompile Include="_Shaders\Particle_Render.hlsl" />
+  </ItemGroup>
 </Project>

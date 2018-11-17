@@ -22,7 +22,7 @@ private:
 	class FreeCamera *freeCamera;
 	class Environment::Sun* sun;
 	class Scattering* test;
-	class ParticleSample* Particletest;
 
+	class ParticleEmitterBase* particle;
 };
 
