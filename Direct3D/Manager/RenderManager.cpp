@@ -20,7 +20,6 @@ RenderManager::~RenderManager()
 
 void RenderManager::Draw()
 {
-	//ÄÄÇ»ÆÃ
 	PreRender();
 
 	ShadowRender();
@@ -169,6 +168,21 @@ void RenderManager::AlphaRender()
 	if (alpha)
 	{
 		alpha->SetRTV();
+
+		Rendering::iterator renderingIter = rendering.begin();
+		for (; renderingIter != rendering.end(); ++renderingIter)
+		{
+			Renders renders = renderingIter->second;
+			RenderFunc funcs = renders[RenderType::AlphaRender];
+			for (size_t i = 0; i < funcs.size(); i++)
+			{
+				for (size_t j = 0; j < funcs[i].first; j++)
+				{
+					funcs[i].second();
+				}
+			}
+		}
+
 		alpha->Render();
 	}
 }

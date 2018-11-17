@@ -16,7 +16,7 @@ protected:
 
 enum class RenderType : short
 {
-	PreRender, Shadow, Render, UIRender
+	PreRender, Shadow, Render,AlphaRender, UIRender
 };
 
 class RenderManager

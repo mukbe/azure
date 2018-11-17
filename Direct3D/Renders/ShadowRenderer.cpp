@@ -76,4 +76,45 @@ void ShadowRenderer::CreateDirectionalRenderer()
 {
 	Buffer::CreateDepthStencilSurface(&directionalTexture2D, &directionalSRV, &directionalDSV, DXGI_FORMAT_D16_UNORM, DXGI_FORMAT_R16_UNORM,
 		WinSizeX , WinSizeY , 1);
+
+	////깊이 버퍼 텍스쳐 Desc
+	//D3D11_TEXTURE2D_DESC depthBufferDesc =
+	//{
+	//	WinSizeX,						//UINT Width;
+	//	WinSizeY,						//UINT Height;
+	//	1,										//UINT MipLevels;
+	//	1,										//UINT ArraySize;
+	//	DXGI_FORMAT_R24G8_TYPELESS,				 //DXGI_FORMAT Format;
+	//	1,										//DXGI_SAMPLE_DESC SampleDesc;
+	//	0,
+	//	D3D11_USAGE_DEFAULT,					//D3D11_USAGE Usage;
+	//	D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE ,//UINT BindFlags;
+	//	0,										//UINT CPUAccessFlags;
+	//	0										//UINT MiscFlags;    
+	//};
+	//HRESULT hr = Device->CreateTexture2D(&depthBufferDesc, NULL, &directionalTexture2D);
+	//assert(SUCCEEDED(hr));
+	//
+	//D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
+	//ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
+	//
+	//depthStencilViewDesc.Flags = 0;
+	//depthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	//depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	//depthStencilViewDesc.Texture2D.MipSlice = 0;
+	//
+	//hr = Device->CreateDepthStencilView(directionalTexture2D, &depthStencilViewDesc, &directionalDSV);
+	//assert(SUCCEEDED(hr));
+	//
+	//D3D11_SHADER_RESOURCE_VIEW_DESC depthSRVDesc =
+	//{
+	//	DXGI_FORMAT_R24_UNORM_X8_TYPELESS,
+	//	D3D11_SRV_DIMENSION_TEXTURE2D,
+	//	0,
+	//	0
+	//};
+	//depthSRVDesc.Texture2D.MipLevels = 1;
+	//hr = Device->CreateShaderResourceView(directionalTexture2D, &depthSRVDesc, &directionalSRV);
+	//assert(SUCCEEDED(hr));
+
 }

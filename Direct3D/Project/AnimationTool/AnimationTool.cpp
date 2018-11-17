@@ -32,10 +32,10 @@ AnimationTool::AnimationTool()
 	:toolType(0)
 {
 	//wstring filePath = L"../_Assets/Bard2/";
-	//Fbx::Exporter* exporter = new Fbx::Exporter(filePath + L"Bard2.fbx");
+	//Fbx::Exporter* exporter = new Fbx::Exporter(filePath + L"Walking.fbx");
 	//exporter->ExportMaterial(filePath, L"Bard2");
 	//exporter->ExportMesh(filePath, L"Bard2");
-	//exporter->ExportAnimation(filePath, L"Bard2");
+	//exporter->ExportAnimation(filePath, L"Walking");
 	//SafeDelete(exporter);
 
 	RenderRequest->AddRender("AnimationToolUIRender", bind(&AnimationTool::UIRender, this), RenderType::UIRender);

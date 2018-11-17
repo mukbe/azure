@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Utilities\DebugHelper.h" />
     <ClInclude Include="Particle\Particle.h" />
     <ClInclude Include="Particle\ParticleBase.h" />
     <ClInclude Include="Particle\ParticleInfo.h" />
@@ -132,6 +133,7 @@
     <ClInclude Include="View\Projection.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Utilities\DebugHelper.cpp" />
     <ClCompile Include="Particle\Particle.cpp" />
     <ClCompile Include="Particle\ParticleInfo.cpp" />
     <ClCompile Include="Particle\ParticleSample.cpp" />

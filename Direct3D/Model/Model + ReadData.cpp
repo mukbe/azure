@@ -71,6 +71,8 @@ void Model::BindMeshData()
 
 void Model::UIRender()
 {
+	
+
 	for (UINT i = 0; i < materials.size(); ++i)
 	{
 		string name = String::WStringToString(materials[i]->GetName());

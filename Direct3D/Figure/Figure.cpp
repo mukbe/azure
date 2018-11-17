@@ -119,7 +119,7 @@ void Figure::ShadowRender()
 
 	shadowShader->Render();
 
-	worldBuffer->SetMatrix(transform->GetFinalMatrix());
+	worldBuffer->SetMatrix(transform->GetFinalMatrix());	
 	worldBuffer->SetVSBuffer(1);
 
 	DeviceContext->DrawIndexed(indexCount, 0, 0);

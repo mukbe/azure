@@ -24,6 +24,7 @@ public:
 
 	void Update();
 	void Render();
+	void ShadowRender();
 
 	void Play();
 	void Pause();

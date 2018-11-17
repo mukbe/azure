@@ -37,16 +37,18 @@ cbuffer FinalPassConstants : register(b1)
     float3 padding;
 }
 
-static const float3 LUM_FACTOR = float3(0.299, 0.587, 0.114);
-
+static const float3 LUM_FACTOR = float3(0.299, 0.45987, 0.114);
 float3 ToneMapping(float3 HDRColor)
 {
-	// Find the luminance scale for the current pixel
     float LScale = dot(HDRColor, LUM_FACTOR);
+
     LScale *= MiddleGrey / AvgLum[0];
     LScale = (LScale + LScale * LScale / LumWhiteSqr) / (1.0 + LScale);
-    return HDRColor * LScale; // Apply the luminance scale to the pixels color
+
+    return HDRColor * LScale;
 }
+
+
 
 VS_OUTPUT VS(uint VertexID : SV_VertexID)
 {
@@ -73,3 +75,5 @@ float4 PS(VS_OUTPUT In) : SV_TARGET
 
     return float4(color, 1.0);
 }
+
+

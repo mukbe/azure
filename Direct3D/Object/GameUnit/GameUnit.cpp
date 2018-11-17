@@ -3,6 +3,7 @@
 
 #include "./Model/Model.h"
 #include "./Model/ModelAnimPlayer.h"
+#include "./Model/ModelAnimClip.h"
 #include "../../Bounding/GameCollider.h"
 #include "./Bounding/AnimationCollider.h"
 #include "./Object/GameObject/TagMessage.h"
@@ -79,6 +80,11 @@ void GameUnit::PrevRender()
 {
 }
 
+void GameUnit::ShadowRender()
+{
+	this->animation->ShadowRender();
+}
+
 void GameUnit::Render()
 {
 	this->animation->Render();
@@ -95,8 +101,35 @@ void GameUnit::UIRender()
 	if (ImGui::Button("SaveMaterial", ImVec2(100, 20)))
 		this->SaveMaterial(L"");
 
-	if (model)
-		model->UIRender();
+	if (ImGui::CollapsingHeader("Material"))
+	{
+		if(model)
+			model->UIRender();
+	}
+	if (ImGui::CollapsingHeader("Animation"))
+	{
+		static float blendTime = 0.2f;
+		ImGui::SliderFloat("BlendTime", &blendTime, 0.0f, 1.0f);
+		vector<ModelAnimClip*> clips = model->GetClips();
+		static wstring targetName = clips[0]->Name();
+		if (ImGui::BeginCombo("List", String::WStringToString(targetName).c_str()))
+		{
+			for (UINT i = 0; i < clips.size(); ++i)
+			{
+				wstring name = clips[i]->Name();
+				if (ImGui::Selectable(String::WStringToString(name).c_str()))
+				{
+					targetName = clips[i]->Name();
+					animation->ChangeAnimation(targetName, blendTime);
+					ImGui::SetItemDefaultFocus();
+				}
+					
+			}
+
+			ImGui::EndCombo();
+		}
+
+	}
 }
 
 void GameUnit::SaveData(Json::Value * parent)

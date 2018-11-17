@@ -29,7 +29,7 @@ void AnimationCollider::Clone(void ** clone)
 	collider->finalMatrix = this->finalMatrix;
 	collider->localMatrix = this->localMatrix;
 	collider->parentBoneIndex = this->parentBoneIndex;
-
+	
 	*clone = collider;
 }
 

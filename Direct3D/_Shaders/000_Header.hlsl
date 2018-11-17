@@ -59,6 +59,8 @@ cbuffer ModelBuffer : register(b6)
     matrix _modelBones[120];
 }
 
+
+
 //MRT0 Normal.xyz, RenderType(float)
 //MRT1 Diffuse.rgb,Depth
 //MRT2 Specr.rgb, SpecPower(float)

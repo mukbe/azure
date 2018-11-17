@@ -56,7 +56,7 @@ ToolScene::ToolScene()
 ToolScene::~ToolScene()
 {
 	this->Release();
-
+	DebugHelper::Delete();
 }
 
 void ToolScene::Init()
@@ -90,6 +90,9 @@ void ToolScene::Update()
 		iter->second->Update();
 	}
 
+	if (KeyCode->Down(VK_SPACE))
+		DebugHelper::Log("Test Log");
+
 }
 
 void ToolScene::PostUpdate()
@@ -121,6 +124,7 @@ void ToolScene::UIRender()
 	static bool isInspectorOn = true;
 	static bool isFactory = false;
 	static bool isAssetOn = false;
+	static bool isDebugOn = false;
 
 	ImGui::BeginMainMenuBar();
 	{
@@ -128,6 +132,8 @@ void ToolScene::UIRender()
 		{
 			if(ImGui::MenuItem("Save"))
 				DataBase::Get()->Save();
+			if (ImGui::MenuItem("DebugLog"))
+				isDebugOn = !isDebugOn;
 			if (ImGui::MenuItem("Demo"))
 				isDemoOn = !isDemoOn;
 			ImGui::EndMenu();
@@ -151,6 +157,8 @@ void ToolScene::UIRender()
 
 	if (isDemoOn)
 		ImGui::ShowDemoWindow();
+	if (isDebugOn)
+		DebugHelper::UIRender();
 	if (isHierarchyOn)
 		toolList[ToolType::Hierarchy]->UIRender();
 	if (isInspectorOn)

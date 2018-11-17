@@ -67,26 +67,6 @@
     <ClCompile Include="Particle\ParticleSystem.cpp" />
     <ClCompile Include="Object\GameUnit\GameUnit.cpp" />
     <ClCompile Include="Renders\GrassRenderer\GrassRenderer.cpp" />
-    <ClCompile Include="Project\AnimationTool\FBX\Exporter.cpp" />
-    <ClCompile Include="Project\AnimationTool\FBX\FbxUtility.cpp" />
-    <ClCompile Include="Project\AnimationTool\AnimationTool.cpp" />
-    <ClCompile Include="Project\AnimationTool\CharacterTool + ImGui.cpp" />
-    <ClCompile Include="Project\AnimationTool\CharacterTool.cpp" />
-    <ClCompile Include="Project\AnimationTool\ObjectTool.cpp" />
-    <ClCompile Include="Project\LoadingScene\LoadingScene.cpp" />
-    <ClCompile Include="Project\TerrainTool\Scattering.cpp" />
-    <ClCompile Include="Project\TerrainTool\Terrain.cpp" />
-    <ClCompile Include="Project\TerrainTool\TerrainHeight.cpp" />
-    <ClCompile Include="Project\TerrainTool\TerrainSmooth.cpp" />
-    <ClCompile Include="Project\TerrainTool\TerrainSplat.cpp" />
-    <ClCompile Include="Project\TerrainTool\TerrainTool.cpp" />
-    <ClCompile Include="Project\ToolScene\Hierarchy.cpp" />
-    <ClCompile Include="Project\ToolScene\Inspector.cpp" />
-    <ClCompile Include="Project\ToolScene\Picking.cpp" />
-    <ClCompile Include="Project\ToolScene\ToolScene.cpp" />
-    <ClCompile Include="Project\Game\PlayScene + soonwoo.cpp" />
-    <ClCompile Include="Project\Game\PlayScene.cpp" />
-    <ClCompile Include="Project\ToolScene\FactoryTool.cpp" />
     <ClCompile Include="Object\StaticObject\StaticObject.cpp" />
     <ClCompile Include="Manager\BufferManager.cpp" />
     <ClCompile Include="Manager\DataBase.cpp" />
@@ -102,6 +82,27 @@
     <ClCompile Include="Particle\Particle.cpp" />
     <ClCompile Include="Particle\ParticleInfo.cpp" />
     <ClCompile Include="Particle\ParticleSample.cpp" />
+    <ClCompile Include="Project\AnimationTool\FBX\Exporter.cpp" />
+    <ClCompile Include="Project\AnimationTool\FBX\FbxUtility.cpp" />
+    <ClCompile Include="Project\AnimationTool\AnimationTool.cpp" />
+    <ClCompile Include="Project\AnimationTool\CharacterTool + ImGui.cpp" />
+    <ClCompile Include="Project\AnimationTool\CharacterTool.cpp" />
+    <ClCompile Include="Project\AnimationTool\ObjectTool.cpp" />
+    <ClCompile Include="Project\Game\PlayScene + soonwoo.cpp" />
+    <ClCompile Include="Project\Game\PlayScene.cpp" />
+    <ClCompile Include="Project\LoadingScene\LoadingScene.cpp" />
+    <ClCompile Include="Project\TerrainTool\Scattering.cpp" />
+    <ClCompile Include="Project\TerrainTool\Terrain.cpp" />
+    <ClCompile Include="Project\TerrainTool\TerrainHeight.cpp" />
+    <ClCompile Include="Project\TerrainTool\TerrainSmooth.cpp" />
+    <ClCompile Include="Project\TerrainTool\TerrainSplat.cpp" />
+    <ClCompile Include="Project\TerrainTool\TerrainTool.cpp" />
+    <ClCompile Include="Project\ToolScene\FactoryTool.cpp" />
+    <ClCompile Include="Project\ToolScene\Hierarchy.cpp" />
+    <ClCompile Include="Project\ToolScene\Inspector.cpp" />
+    <ClCompile Include="Project\ToolScene\Picking.cpp" />
+    <ClCompile Include="Project\ToolScene\ToolScene.cpp" />
+    <ClCompile Include="Utilities\DebugHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renders\ShadowRenderer.h" />
@@ -176,27 +177,6 @@
     <ClInclude Include="Particle\ParticleSystem.h" />
     <ClInclude Include="Object\GameUnit\GameUnit.h" />
     <ClInclude Include="Renders\GrassRenderer\GrassRenderer.h" />
-    <ClInclude Include="Project\AnimationTool\FBX\BoneWeights.h" />
-    <ClInclude Include="Project\AnimationTool\FBX\Exporter.h" />
-    <ClInclude Include="Project\AnimationTool\FBX\FbxUtility.h" />
-    <ClInclude Include="Project\AnimationTool\FBX\Type.h" />
-    <ClInclude Include="Project\AnimationTool\AnimationTool.h" />
-    <ClInclude Include="Project\AnimationTool\CharacterTool.h" />
-    <ClInclude Include="Project\AnimationTool\ObjectTool.h" />
-    <ClInclude Include="Project\LoadingScene\LoadingScene.h" />
-    <ClInclude Include="Project\TerrainTool\Scattering.h" />
-    <ClInclude Include="Project\TerrainTool\Terrain.h" />
-    <ClInclude Include="Project\TerrainTool\TerrainHeight.h" />
-    <ClInclude Include="Project\TerrainTool\TerrainSmooth.h" />
-    <ClInclude Include="Project\TerrainTool\TerrainSplat.h" />
-    <ClInclude Include="Project\TerrainTool\TerrainTool.h" />
-    <ClInclude Include="Project\ToolScene\Hierarchy.h" />
-    <ClInclude Include="Project\ToolScene\Inspector.h" />
-    <ClInclude Include="Project\ToolScene\Picking.h" />
-    <ClInclude Include="Project\ToolScene\ToolBase.h" />
-    <ClInclude Include="Project\ToolScene\ToolScene.h" />
-    <ClInclude Include="Project\Game\PlayScene.h" />
-    <ClInclude Include="Project\ToolScene\FactoryTool.h" />
     <ClInclude Include="Object\StaticObject\StaticObject.h" />
     <ClInclude Include="Manager\BufferManager.h" />
     <ClInclude Include="Manager\DataBase.h" />
@@ -215,6 +195,28 @@
     <ClInclude Include="Particle\ParticleInfo.h" />
     <ClInclude Include="Particle\ParticleProp.h" />
     <ClInclude Include="Particle\ParticleSample.h" />
+    <ClInclude Include="Project\AnimationTool\FBX\BoneWeights.h" />
+    <ClInclude Include="Project\AnimationTool\FBX\Exporter.h" />
+    <ClInclude Include="Project\AnimationTool\FBX\FbxUtility.h" />
+    <ClInclude Include="Project\AnimationTool\FBX\Type.h" />
+    <ClInclude Include="Project\AnimationTool\AnimationTool.h" />
+    <ClInclude Include="Project\AnimationTool\CharacterTool.h" />
+    <ClInclude Include="Project\AnimationTool\ObjectTool.h" />
+    <ClInclude Include="Project\Game\PlayScene.h" />
+    <ClInclude Include="Project\LoadingScene\LoadingScene.h" />
+    <ClInclude Include="Project\TerrainTool\Scattering.h" />
+    <ClInclude Include="Project\TerrainTool\Terrain.h" />
+    <ClInclude Include="Project\TerrainTool\TerrainHeight.h" />
+    <ClInclude Include="Project\TerrainTool\TerrainSmooth.h" />
+    <ClInclude Include="Project\TerrainTool\TerrainSplat.h" />
+    <ClInclude Include="Project\TerrainTool\TerrainTool.h" />
+    <ClInclude Include="Project\ToolScene\FactoryTool.h" />
+    <ClInclude Include="Project\ToolScene\Hierarchy.h" />
+    <ClInclude Include="Project\ToolScene\Inspector.h" />
+    <ClInclude Include="Project\ToolScene\Picking.h" />
+    <ClInclude Include="Project\ToolScene\ToolBase.h" />
+    <ClInclude Include="Project\ToolScene\ToolScene.h" />
+    <ClInclude Include="Utilities\DebugHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />
@@ -233,7 +235,6 @@
     <None Include="_Shaders\006_UI.hlsl" />
     <None Include="_Shaders\007_Alpha.hlsl" />
     <None Include="_Shaders\008_Grass.hlsl" />
-    <None Include="Project\Game\Header.hlsli" />
     <None Include="_Shaders\005_OceanDeferred.hlsl" />
     <None Include="_Shaders\999_Terrain.hlsl" />
     <None Include="_Shaders\010_DeferredAnimation.hlsl" />
@@ -246,6 +247,7 @@
     <None Include="_Shaders\Particle.hlsl" />
     <None Include="_Shaders\Particle_Compute.hlsl" />
     <None Include="_Shaders\999_TerrainShadow.hlsl" />
+    <None Include="Project\Game\Header.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Particle_Compute_001.hlsl" />

@@ -199,7 +199,6 @@ void Fbx::Exporter::ReadBoneData(FbxNode * node, int index, int parent)
 				converter->Triangulate(attribute, true, true);
 
 				ReadMeshData(node, index);
-
 			}
 		}
 	}

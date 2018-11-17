@@ -134,10 +134,6 @@ void Buffer::CreateTextureArray(ID3D11ShaderResourceView** pOut, vector<wstring>
 		assert(SUCCEEDED(hr));
 	}
 
-	//
-	// Create the texture array.  Each element in the texture 
-	// array has the same format/dimensions.
-	//
 
 	D3D11_TEXTURE2D_DESC texElementDesc;
 	srcTex[0]->GetDesc(&texElementDesc);
@@ -192,7 +188,8 @@ void Buffer::CreateTextureArray(ID3D11ShaderResourceView** pOut, vector<wstring>
 		SafeDeleteArray(srcTex[i]);
 }
 
-void Buffer::CreateDepthStencilSurface(ID3D11Texture2D ** ppDepthStencilTexture, ID3D11ShaderResourceView ** ppDepthStencilSRV, ID3D11DepthStencilView ** ppDepthStencilView, DXGI_FORMAT DSFormat, DXGI_FORMAT SRVFormat, UINT uWidth, UINT uHeight, UINT uSampleCount)
+void Buffer::CreateDepthStencilSurface(ID3D11Texture2D ** ppDepthStencilTexture, ID3D11ShaderResourceView ** ppDepthStencilSRV, ID3D11DepthStencilView ** ppDepthStencilView, 
+	DXGI_FORMAT DSFormat, DXGI_FORMAT SRVFormat, UINT uWidth, UINT uHeight, UINT uSampleCount)
 {
 	HRESULT hr;
 	DXGI_FORMAT TextureFormat;

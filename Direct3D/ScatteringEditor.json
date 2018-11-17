@@ -4,13 +4,13 @@
       "IncomingLight" : [ 4.0, 4.0, 4.0, 4.0 ],
       "LightColorIntensity" : 1.0430001020431519,
       "MieExtinctionCoef" : 1.0670000314712524,
-      "MieG" : 0.66100001335144043,
+      "MieG" : 0.20000000298023224,
       "MieScatterCoef" : 1.2650001049041748,
       "RayleighExtinctionCoef" : 1.1860001087188721,
       "RayleighScatterCoef" : 2.6480002403259277,
       "RenderMode" : 1,
       "SampleCount" : 16,
-      "SunDir" : [ -0.83623588085174561, -0.52268654108047485, 0.16585597395896912 ],
-      "SunIntensity" : 0.93000006675720215
+      "SunDir" : [ -0.14660085737705231, -0.23606784641742706, 0.96061444282531738 ],
+      "SunIntensity" : 0.63000005483627319
    }
 }

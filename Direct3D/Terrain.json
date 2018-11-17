@@ -1,0 +1,11 @@
+{
+   "Property" : {
+      "HeightMap" : [ "HeightMap.png" ],
+      "NormalMap" : [ "NormalMap.png" ],
+      "Splat0" : [ "../_Contents/Dirt2.png", "../_Contents/Dirt.png" ],
+      "Splat1" : [ "" ],
+      "Splat2" : [ "" ],
+      "Splat3" : [ "" ],
+      "SplatMap" : [ "SplatMap.png" ]
+   }
+}

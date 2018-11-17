@@ -313,7 +313,6 @@ void CResource2D::CreateBufferForGPU(UINT width, UINT height, void * pInitData, 
 
 void CResource2D::CreateSRV()
 {
-
 	D3D11_TEXTURE2D_DESC bufDesc;
 	ZeroMemory(&bufDesc, sizeof(D3D11_TEXTURE2D_DESC));
 	rwBuffer->GetDesc(&bufDesc);

@@ -250,6 +250,7 @@ void InstanceRenderer::ShadowRender()
 
 		mesh->SetWorld(transform);
 		mesh->GetWorldBuffer()->SetVSBuffer(1);
+
 		for (ModelMeshPart* part : mesh->meshParts)
 		{
 			UINT stride[2] = { sizeof VertexTextureBlendNT,sizeof InstanceData };

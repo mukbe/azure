@@ -28,35 +28,29 @@ cbuffer DeferredBuffer : register(b10)
 }
 
 //PCF(Percentage Closer Filtering) Shadow
-float CalcShadowFactor(float4 depthPosition, Texture2D shadowMap, SamplerComparisonState shadowSampler, float3 sunDir)
+float CalcShadowFactor(float4 depthPosition, Texture2D shadowMap, SamplerComparisonState shadowSampler)
 {
     float2 uv;
     float3 shadowPos = depthPosition.xyz / depthPosition.w;
     uv.x = shadowPos.x * 0.5f + 0.5f;
     uv.y = shadowPos.y * -0.5f + 0.5f;
 
-    float shadow; // = shadowMap.SampleCmpLevelZero(shadowSampler, uv, shadowPos.z).r;
+    float shadow = 0.0f;
 
-    //return shadow;
     float offsetX = 1.0f / (1280.0f);
     float offsetY = 1.0f / (720.0f);
 
-    float3 biasRight = float3(0, 0, 1);
-    float fac = asin(abs(SunDir.y)) / PI - 0.5f ; // -0.5~  0.5  0.5에서 sun의 기울기가 극대
-    
-    (exp(abs(fac)) - 1.f) * 0.1f;
-
-    float bias = abs(dot(sunDir, biasRight)) * ShadowBias;
-
+    [unroll]
     for (int i = -1; i < 2; ++i)
     {
+        [unroll]
         for (int j = -1; j < 2; ++j)
         {
             shadow += shadowMap.SampleCmpLevelZero(shadowSampler, uv + float2(offsetX * j, offsetY * i), shadowPos.z + ShadowBias).r;
         }
     }
 
-    return clamp(shadow / 9.0f, 0.4f, 1.0f);
+    return clamp(shadow / 9.0f, 0.0f, 1.0f);
 }
 
 float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
@@ -69,10 +63,10 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
     float3 specColor = data.SpecColor;
     float specPower = data.SpecPow;
 
-    if(data.RenderType <= 1.0f)
+    if(data.RenderType <= 1.0f)     //Default Shading
     {
         float4 projectionToLight = mul(worldPos, SunViewProjection);
-        float shadowFactor = CalcShadowFactor(projectionToLight, _sunLightsahdowMap, _shadowSampler,SunDir);
+        float shadowFactor = CalcShadowFactor(projectionToLight, _sunLightsahdowMap, _shadowSampler);
 
         float diffuseFactor = saturate(dot(worldNormal.xyz, -SunDir));
         float3 ambient = albedo * SunColor.rgb * albedoBias;
@@ -86,11 +80,11 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
 
         return float4(ambient + diffuseColor * shadowFactor + specColor * shadowFactor, 1.0f);
     }
-    else if (data.RenderType > 1.0f && data.RenderType <= 2.0f)
+    else if (data.RenderType > 1.0f && data.RenderType <= 2.0f)     //Debug Shading
     {
         return float4(albedo, 1.0f);
     }
-    else if(data.RenderType > 2.0f && data.RenderType <= 3.0f)      //OceanRendering
+    else if(data.RenderType > 2.0f && data.RenderType <= 3.0f)      //Ocean Shading
     {
         float3 sunDirection = SunDir;
     
@@ -105,8 +99,13 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
 
         return float4(diffuseColor + specColor, 1.0f);
     }
- 
-   
-    return float4(albedo, 1.0f);
+    else if(data.RenderType > 3.0f && data.RenderType <= 4.0f)      //Grass Shading
+    {
+        float4 projectionToLight = mul(worldPos, SunViewProjection);
+        float shadowFactor = CalcShadowFactor(projectionToLight, _sunLightsahdowMap, _shadowSampler);
+        float3 ambient = albedo * SunColor.rgb * albedoBias;
+        return float4(ambient + albedo * SunColor.rgb * shadowFactor, 1.0f);
+    }
+        return float4(albedo, 1.0f);
 }
 

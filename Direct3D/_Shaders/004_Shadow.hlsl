@@ -47,6 +47,29 @@ ObjectPixelInput InstanceVS(InstanceInputVS input)
     return output;
 }
 
+struct ModelPixelInput
+{
+    float4 position : SV_POSITION;
+};
+
+
+ModelPixelInput ModelDeferredVS(VertexTextureBlendNT input)
+{
+    ModelPixelInput output;
+
+    float4x4 transform = 0;
+    transform += mul(input.blendWeights.x, _modelBones[(uint) input.blendIndices.x]);
+    transform += mul(input.blendWeights.y, _modelBones[(uint) input.blendIndices.y]);
+    transform += mul(input.blendWeights.z, _modelBones[(uint) input.blendIndices.z]);
+    transform += mul(input.blendWeights.w, _modelBones[(uint) input.blendIndices.w]);
+    output.position = mul(input.position, transform);
+    output.position = mul(output.position, SunViewProjection);
+
+    return output;
+}
+
+
+
 
 //ShadowMapPS
 void ColorShadowPS(PixelInput input)
@@ -69,3 +92,7 @@ void InstancePS(ObjectPixelInput input)
 
 
 
+void ModelDeferredPS(ModelPixelInput input)
+{
+  
+}
