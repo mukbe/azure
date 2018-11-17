@@ -24,14 +24,7 @@ void AlphaRenderer::SetRTV()
 
 void AlphaRenderer::Render()
 {
-	//Binding
-	States::SetBlend(States::BlendStates::BLENDING_ON);
-	{
-		
-	}
-	//Unbinding
 	States::SetBlend(States::BlendStates::BLENDING_OFF);
-
 	DeviceContext->OMSetRenderTargets(1, &renderTargetView, pRenderer->GetDepthStencilView());
 }
 

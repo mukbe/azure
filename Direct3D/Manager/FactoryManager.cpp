@@ -9,6 +9,7 @@
 #include "./Object/GameUnit/GameUnit.h"
 
 #include "./Renders/Instancing/InstanceRenderer.h"
+#include "./Renders/GrassRenderer/GrassRenderer.h"
 
 #include "./View/FreeCamera.h"
 
@@ -60,6 +61,11 @@ void FactoryManager::Create(string name, Json::Value value)
 		GameUnit* unit = new GameUnit(name);
 		unit->LoadData(&value);
 		Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Unit, unit);
+	}
+	else if (name == "GrassRenderer")
+	{
+		GrassRenderer* grassRenderer = (GrassRenderer*)Objects->FindObject(ObjectType::Type::Dynamic, ObjectType::Tag::Instancing, "GrassRenderer");
+		grassRenderer->LoadData(&value);
 	}
 
 	if (strstr(name.c_str(), InstanceRenderer::Renderer.c_str()))

@@ -102,6 +102,7 @@
     <ClCompile Include="Project\ToolScene\Inspector.cpp" />
     <ClCompile Include="Project\ToolScene\Picking.cpp" />
     <ClCompile Include="Project\ToolScene\ToolScene.cpp" />
+    <ClCompile Include="Utilities\DebugHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renders\ShadowRenderer.h" />
@@ -215,6 +216,7 @@
     <ClInclude Include="Project\ToolScene\Picking.h" />
     <ClInclude Include="Project\ToolScene\ToolBase.h" />
     <ClInclude Include="Project\ToolScene\ToolScene.h" />
+    <ClInclude Include="Utilities\DebugHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />

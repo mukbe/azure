@@ -21,9 +21,14 @@ private:
 	vector<GrassData>			grassList;
 	ID3D11Buffer*				grassBuffer;
 	class Shader*				shader;
+	class Shader*				shadowShader;
 	vector<class Texture*>		textureList;
+
+	class Terrain* terrain;
 private:
 	class Texture* currentTexture;
+	UINT currentTextureIndex;
+	GrassData createData;
 public:
 	GrassRenderer(UINT maxGrass = 300);
 	virtual ~GrassRenderer();
@@ -40,10 +45,15 @@ public:
 	virtual void ShadowRender();
 	virtual void DebugRender() {}
 
+	virtual void SaveData(Json::Value* parent)override;
+	virtual void LoadData(Json::Value* parent)override;
 public:
+	void AddCrossGrass(GrassData data);
 	void AddGrass(GrassData data);
+	void LinkTerrain();
 private:
 	void CreateBuffer(bool mapTool = true);
 	void UpdateBuffer();
+	void ResetData();
 };
 

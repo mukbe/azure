@@ -25,7 +25,7 @@
                "Name" : [ "BlacksmeethInstanceRenderer" ]
             },
             "GrassRenderer" : {
-               "FileName" : [ "../_Scenes/Scene01/GrassRenderer.json" ],
+               "FileName" : [ "../_Scenes/Scene01/GrassRenderer.bin" ],
                "IsActive" : true,
                "Name" : [ "GrassRenderer" ]
             },

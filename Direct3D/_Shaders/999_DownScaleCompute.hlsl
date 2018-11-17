@@ -26,6 +26,7 @@ static const float4 Lum_Factor = float4(0.299, 0.587, 0.114, 0); //휘도 연산 값(
 DownScale First Pass
 라이틴 연산이 끝난 텍스처를 다운 샘플링한다. 
 다운 샘플링이 끝나면 다운샘플링 된 픽셀의 평균 휘도값도 같이 구해준다.
+계속해서 휘도값을
 **************************************************************/
 
 [numthreads(1024, 1, 1)]
@@ -53,9 +54,9 @@ void CSMain0(uint3 groupId : SV_GroupID, uint3 groupThreadId : SV_GroupThreadID,
         }
          //평균
         downScaledColor /= 16.0f;
-        //1/4 해상도 이미지 저장
+        //1/16 해상도 이미지 저장
         DownScaleTexture[curPixel.xy] = downScaledColor;
-        //1/4 이미지의 휘도값 계산
+        //1/16 이미지의 휘도값 계산
         avgLum = dot(downScaledColor, Lum_Factor);
     }
    

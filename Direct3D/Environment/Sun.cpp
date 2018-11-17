@@ -106,6 +106,7 @@ void Environment::Sun::UpdateView()
 void Environment::Sun::Render()
 {
 	sunBuffer->SetVSBuffer(4);
+	sunBuffer->SetGSBuffer(4);
 	sunBuffer->SetDSBuffer(4);
 	sunBuffer->SetPSBuffer(4);
 }

@@ -91,7 +91,7 @@ void FreeCamera::ControlCamera()
 			D3DXVec3Normalize(&inputVector, &inputVector);
 
 		D3DXVECTOR3 target = inputVector * maxSpeed;
-		transform->MovePositionLocal(target*DeltaTime);
+		transform->MovePositionLocal(target * DeltaTime);
 		int screenCenterX = WinSizeX / 2;
 		int screenCenterY = WinSizeY / 2;
 

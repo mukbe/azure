@@ -13,6 +13,7 @@
 #include "./Utilities/Json.h"
 #include "./Utilities/String.h"
 #include "./Utilities/Path.h"
+#include "./Utilities/DebugHelper.h"
 
 #include "./Manager/BufferManager.h"
 #include "./Manager/ShaderManager.h"
