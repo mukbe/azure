@@ -115,11 +115,6 @@ void Update(uint3 id : SV_DispatchThreadID)//SV_DispatchThreadID SV_GroupIndex
             particle.NowFrame = ++particle.NowFrame % (int) (MaxIndex.x * MaxIndex.y);
 
         }
-        //float time = particle.LifeTime - particle.RemainTime;
-        //float frameCount = time / unit;
-        //float frame = frameCount % (MaxIndex.x * MaxIndex.y);
-        //particle.NowFrame = (int) frame;
-
     }
     else
     {
@@ -136,22 +131,7 @@ void Update(uint3 id : SV_DispatchThreadID)//SV_DispatchThreadID SV_GroupIndex
             particle.LoopCount -= 1;
 
         }
-
-
     }
-
-
-    //if (FrameOverTime > 1)
-    //{
-    //    particle.FrameTimer += DeltaTime;
-    //    float frameInterval = particle.OriginLifeTime / Cycles / FrameOverTime;
-    //    if (particle.FrameTimer >= frameInterval)
-    //    {
-    //        particle.FrameTimer = 0.0f;
-    //        particle.NowFrame = ++particle.NowFrame % (int) (TextureTile.x * TextureTile.y);
-    //    }
-    //}
-
 
     //라이프 타임에 따른 보간처리
     float ratio = 1.0f - (particle.LifeTime / particle.RemainTime);

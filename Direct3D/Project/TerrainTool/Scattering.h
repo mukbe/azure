@@ -52,7 +52,7 @@ private:
 		}Data;
 	};
 public:
-	Scattering(class FreeCamera * camera , string level);
+	Scattering(class CameraBase * camera , string level);
 	~Scattering();
 
 	virtual void Update();
@@ -132,7 +132,7 @@ private:
 	const D3DXVECTOR3 MieSct = D3DXVECTOR3(2.0f, 2.0f, 2.0f) * 0.00001f;
 
 
-	FreeCamera* _camera;
+	CameraBase* _camera;
 	ID3D11Buffer* vertexBuffer, *indexBuffer;
 	struct GeometryGenerator::MeshData meshData;
 

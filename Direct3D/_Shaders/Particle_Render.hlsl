@@ -94,45 +94,43 @@ G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float SpecI
 
 
 
-G_Buffer PS(GS_OUTPUT input) 
+float4 PS(GS_OUTPUT input)  : SV_Target0
 {
-    G_Buffer output;
+    float4 output;
 
-    //float2 uvRange = float2(1.0f / TextureTile.x, 1.0f / TextureTile.y);
-    //int row = input.nowFrame / (int) TextureTile.x;
-    //int col = input.nowFrame - row * (int) TextureTile.x;
+    if(MaxIndex.x * MaxIndex.y <= 0)
+    {
+        output = input.color * 5.f;
+    }
+    else
+    {
+        float2 uvUnit = float2(1.0f, 1.0f) / MaxIndex;
+        uint2 frame = uint2(0, 0);
+        frame.y = (uint) (input.nowFrame / MaxIndex.x);
+        frame.x = (uint) input.nowFrame - frame.y * (uint) MaxIndex.x;
 
-    //float2 uv = float2((float) col * uvRange.x, (float) row * uvRange.y);
-    //uv += input.uv * uvRange;
+        float2 uv = input.uv * uvUnit;
 
-    //float4 color = particleTexture.Sample(samp, uv);
-    //return color * input.color;
+        uv += uvUnit * (float2) frame;
 
+        output = particleTexture.Sample(samp, uv);
 
-    float2 uvUnit = float2(1.0f, 1.0f) / MaxIndex;
-    uint2 frame = uint2(0, 0);
-    frame.y = (uint)(input.nowFrame / MaxIndex.x);
-    frame.x = (uint) input.nowFrame - frame.y * (uint) MaxIndex.x;
+    }
 
-    float2 uv = input.uv * uvUnit;
+    if (output.a < 0.1f)
+        discard;
 
-    uv += uvUnit * (float2)frame;
-
-    output.diffuse = particleTexture.Sample(samp, uv);
-
-    //output.worldPos = float4(SplitMap.Sample(wrapSamp, input.uv / UvAmount).rgb, 1); //input.oPosition; //  SplitMap.Sample(wrapSamp, input.uv / UvAmount);
-    //output.diffuse = input.color * 5.f;
-
-    output = PackGBuffer(output, float3(0, 1, 0), output.diffuse.rgb, 0.25f, 250.0f);
-
-    output.spec = float4(0, 0, 0, 0);
-
-    output.normal = float4(float3(0, 1, 0), 1.0f);
-    output.normal.a = 1.5f;
-
-    output.diffuse.a = 1.5f;
 
     return output;
+
+    //output.diffuse = input.color * 5.f;
+
+    //output = PackGBuffer(output, float3(0, 1, 0), output.diffuse.rgb, 0.25f, 250.0f);
+
+    //output.spec = float4(0, 0, 0, 0);
+
+    //output.normal = float4(float3(0, 1, 0), 1.0f);
+    //output.normal.a = 1.5f;
 
 }
 

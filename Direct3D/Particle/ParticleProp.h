@@ -1,53 +1,51 @@
 #pragma once
 #include "stdafx.h"
 
+enum class EmitterMode { Play, Pause, Stop };
+enum class RenderMode { Billboard = 0, StretchedBillboard, HorizontalQuad, End };
+enum class ShaderMode { ADDITIVE, MULTIFLY, POW, ALPHABLEND, End };
+enum class ShapeType { None = 0, Circle, Sphere, Box, End };
 
-//struct TimeSequenceData
-//{
-//
-//};
-//
-//enum BlendTypes { NoBlend = 0, Addtive = 1, Multiply = 2, End };
-//
-//struct ParticleRenderInfoData
-//{
-//	bool Billborad;
-//	BlendTypes BlendType;
-//	UINT TexFrameX;
-//	UINT TexFrameY;
-//	wstring TextureFile;
-//	ID3D11BlendState* BlendState;
-//	ID3D11ShaderResourceView* Texture;
-//
-//};
-//struct ParticleInfoData
-//{
-//	TimeSequenceData TimeInfo;
-//	VertexParticle Vertex;
-//};
-//
-//enum ParticleSystemShapes : short
-//{
-//	Sphere = 0,Cone,Box,End
-//};
-//
-//struct ParticleSystemInfoData
-//{
-//	string Name;
-//	ParticleSystemShapes Shape;
-//	float VelocityMax;
-//	float Radius;
-//	float Lenght;
-//	bool RandomDirection;
-//	bool Loop;
-//	float RadiationTime;
-//	float LifeTime;
-//	float StartDelay;
-//	float ScaleMin;
-//	float ScaleMax;
-//	UINT MaxConut;
-//	UINT CreatCount;
-//	ParticleRenderInfoData RenderInfo;
-//	CResource1D *ParticlePool;
-//};
+
+struct ParticleData
+{
+	D3DXVECTOR3 Position;
+	D3DXCOLOR Color;
+	D3DXVECTOR2 Size;
+	float Rotation;
+
+	D3DXVECTOR3 Direction;	//방향
+	D3DXVECTOR3 Speed;	//가중치
+
+	float LifeTime;	//이놈의 살아있을 시간
+	float RemainTime;	//남아있는 수명
+
+	D3DXVECTOR3 Gravity;
+	D3DXVECTOR3 Force;
+
+	int NowFrame;
+	float FrameTimer;
+	float Fps;
+	int LoopCount;
+	UINT bLoop;
+
+	D3DXVECTOR3 QuadPositions[4];
+};
+
+struct BurstInfo
+{
+	float Time;
+	int Count;
+
+	int Cycles;
+	float Intervals;
+
+	float Timer;
+};
+
+struct ShapeInfo
+{
+	ShapeType type;
+
+};
 

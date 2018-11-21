@@ -1,4 +1,4 @@
-#define THREAD_NUM_X 64
+#define THREAD_NUM_X 16
 
 struct ParticleData
 {

@@ -8,7 +8,7 @@
 #include "./Utilities/Transform.h"
 
 
-Scattering::Scattering(FreeCamera* camera, string level)
+Scattering::Scattering(CameraBase* camera, string level)
 {
 	name = "Scattering";
 

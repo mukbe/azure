@@ -64,7 +64,6 @@
     <ClCompile Include="Utilities\String.cpp" />
     <ClCompile Include="Utilities\Transform.cpp" />
     <ClCompile Include="Renders\AlphaRenderer.cpp" />
-    <ClCompile Include="Particle\ParticleSystem.cpp" />
     <ClCompile Include="Object\GameUnit\GameUnit.cpp" />
     <ClCompile Include="Renders\GrassRenderer\GrassRenderer.cpp" />
     <ClCompile Include="Object\StaticObject\StaticObject.cpp" />
@@ -80,8 +79,6 @@
     <ClCompile Include="Model\ComputeAnimation\ComputeAnimation.cpp" />
     <ClCompile Include="Renders\PostEffect\BloomEffect.cpp" />
     <ClCompile Include="Particle\Particle.cpp" />
-    <ClCompile Include="Particle\ParticleInfo.cpp" />
-    <ClCompile Include="Particle\ParticleSample.cpp" />
     <ClCompile Include="Project\AnimationTool\FBX\Exporter.cpp" />
     <ClCompile Include="Project\AnimationTool\FBX\FbxUtility.cpp" />
     <ClCompile Include="Project\AnimationTool\AnimationTool.cpp" />
@@ -103,6 +100,8 @@
     <ClCompile Include="Project\ToolScene\Picking.cpp" />
     <ClCompile Include="Project\ToolScene\ToolScene.cpp" />
     <ClCompile Include="Utilities\DebugHelper.cpp" />
+    <ClCompile Include="Manager\CameraManager.cpp" />
+    <ClCompile Include="Particle\ParticleTool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renders\ShadowRenderer.h" />
@@ -174,7 +173,6 @@
     <ClInclude Include="Utilities\String.h" />
     <ClInclude Include="Utilities\Transform.h" />
     <ClInclude Include="Renders\AlphaRenderer.h" />
-    <ClInclude Include="Particle\ParticleSystem.h" />
     <ClInclude Include="Object\GameUnit\GameUnit.h" />
     <ClInclude Include="Renders\GrassRenderer\GrassRenderer.h" />
     <ClInclude Include="Object\StaticObject\StaticObject.h" />
@@ -191,10 +189,6 @@
     <ClInclude Include="Model\ComputeAnimation\ComputeAnimation.h" />
     <ClInclude Include="Renders\PostEffect\BloomEffect.h" />
     <ClInclude Include="Particle\Particle.h" />
-    <ClInclude Include="Particle\ParticleBase.h" />
-    <ClInclude Include="Particle\ParticleInfo.h" />
-    <ClInclude Include="Particle\ParticleProp.h" />
-    <ClInclude Include="Particle\ParticleSample.h" />
     <ClInclude Include="Project\AnimationTool\FBX\BoneWeights.h" />
     <ClInclude Include="Project\AnimationTool\FBX\Exporter.h" />
     <ClInclude Include="Project\AnimationTool\FBX\FbxUtility.h" />
@@ -217,6 +211,9 @@
     <ClInclude Include="Project\ToolScene\ToolBase.h" />
     <ClInclude Include="Project\ToolScene\ToolScene.h" />
     <ClInclude Include="Utilities\DebugHelper.h" />
+    <ClInclude Include="Manager\CameraManager.h" />
+    <ClInclude Include="Particle\ParticleTool.h" />
+    <ClInclude Include="Particle\ParticleProp.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />
@@ -248,12 +245,10 @@
     <None Include="_Shaders\Particle_Compute.hlsl" />
     <None Include="_Shaders\999_TerrainShadow.hlsl" />
     <None Include="Project\Game\Header.hlsli" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="_Shaders\Particle_Compute_001.hlsl" />
-    <FxCompile Include="_Shaders\Particle_Compute_Emit.hlsl" />
-    <FxCompile Include="_Shaders\Particle_Header.hlsl" />
-    <FxCompile Include="_Shaders\Particle_Compute_Update.hlsl" />
-    <FxCompile Include="_Shaders\Particle_Render.hlsl" />
+    <None Include="_Shaders\Particle_Compute_CopyIndirect.hlsl" />
+    <None Include="_Shaders\Particle_Compute_Emit.hlsl" />
+    <None Include="_Shaders\Particle_Compute_Update.hlsl" />
+    <None Include="_Shaders\Particle_Header.hlsl" />
+    <None Include="_Shaders\Particle_Render.hlsl" />
   </ItemGroup>
 </Project>

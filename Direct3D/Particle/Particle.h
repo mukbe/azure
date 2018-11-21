@@ -1,53 +1,11 @@
 #pragma once
-#include "stdafx.h"
-
+#include "ParticleProp.h"
 
 
 class ParticleEmitterBase : public GameObject
 {
 public:
-	struct ParticleData
-	{
-		D3DXVECTOR3 Position;
-		D3DXCOLOR Color;
-		D3DXVECTOR2 Size;
-		float Rotation;
-
-		D3DXVECTOR3 Direction;	//방향
-		D3DXVECTOR3 Speed;	//가중치
-
-		float LifeTime;	//이놈의 살아있을 시간
-		float RemainTime;	//남아있는 수명
-
-		D3DXVECTOR3 Gravity;
-		D3DXVECTOR3 Force;
-
-		int NowFrame;
-		float FrameTimer;
-		float Fps;
-		int LoopCount;
-		UINT bLoop;
-
-		D3DXVECTOR3 QuadPositions[4];
-	};
-
-	struct BurstInfo
-	{
-		float Time;
-		int Count;
-
-		int Cycles;
-		float Intervals;
-
-		float Timer;
-	};
-	enum class EmitterMode { Play , Pause, Stop };
-	enum class RenderMode { Billboard  = 0, StretchedBillboard, HorizontalQuad, End };
-	enum class ShaderMode { ADDITIVE , MULTIFLY, POW, ALPHABLEND, End };
-	enum class ShapeType  { None = 0 , Circle, Sphere, Box, End };
-
-public:
-	ParticleEmitterBase(bool bDefault);
+	ParticleEmitterBase(bool bDefault,UINT count);
 
 	virtual~ParticleEmitterBase();
 
@@ -75,19 +33,21 @@ public:
 
 	void Init();
 
-	void Update(class CameraBase* cam);
-	void Render();
+	virtual void Update();
+	virtual void Render();
 	void SetMode(EmitterMode mode);
 	void Emit(int count);
 
 	void UpdateProperty();
 
-	void UIRender();
+	virtual void UIRender();
+
+	virtual void SaveData(Json::Value* parent);
+	virtual void LoadData(Json::Value* parent);
 
 protected:
 	friend class ParticleTool;
-
-	const int THREAD_NUM_X = 64;
+	const int THREAD_NUM_X = 16;
 
 	ComputeShader * particleEmitter;
 	ComputeShader * particleUpdater;
@@ -99,25 +59,10 @@ protected:
 	CResource1D * particleBuffer[2];
 	CResource1D * counterBuffer[2];
 	CResourceIndirect* indirectBuffer;
+
 	int currentIndex;
-
-	int maxParticles;
-	//int numParticles;
-
-	float playTime;
-	int countPerSec; //1초동안 생성하는 파티클 총량
-	int countPerDis; //거리 변화에 따른 파티클 생성 (100m 당 몇개인지.)
 	float loadedGenerateCount;
 	float loadedDistanceCount;
-
-
-	EmitterMode mode;
-	bool bLoop;
-	bool bFinishEmit;
-	bool bAutoRandomSeed;
-
-	float duration;
-	float delay;
 
 	//파티클 생성 및 업데이트
 	class CS_EmitData* emitData;
@@ -125,14 +70,30 @@ protected:
 	class CS_InterpolationData* interpolationData;
 	class ParticleAnimation* textureAnimation;
 
-	vector<BurstInfo> burstDatas;
-	vector<BurstInfo> bursts;
-	UINT randomSeed;
-	D3DXVECTOR3 oldEmitterPos;
+	EmitterMode mode;
+	int maxParticles;
+	float playTime;
+	int countPerSec; //1초동안 생성하는 파티클 총량
+	int countPerDis; //거리 변화에 따른 파티클 생성
+
+
+	bool bLoop;
+	bool bFinishEmit;
+	bool bAutoRandomSeed;
+
+	float duration;
+	float delay;
 
 	bool bUpdate;
 	bool bDraw;
 	float lastLifeTime;
+
+
+	vector<BurstInfo> burstDatas;
+	vector<BurstInfo> bursts;
+	UINT randomSeed;
+	//D3DXVECTOR3 oldEmitterPos;
+
 
 	//렌더링
 	RenderMode renderMode;
@@ -146,6 +107,8 @@ protected:
 	float lengthScale;
 
 	//Shape
+	
+
 	ShapeType shapeType;
 	//ShapeData shapeData;
 
@@ -159,6 +122,8 @@ public:
 
 private:
 	friend class ParticleEmitterBase;
+	friend class ParticleTool;
+
 	struct Struct
 	{
 		float Time;
@@ -168,7 +133,7 @@ private:
 		D3DXVECTOR3 Gravity;
 
 		D3DXVECTOR3 Force; //가속도
-		int ShapeType;
+		int ShapeType = 0;
 
 		D3DXVECTOR3 Position;
 		int EmitCount;
@@ -179,7 +144,7 @@ private:
 		float VelocityMax;
 		float VelocityMin;
 		int RandomRotation;
-		float padding;
+		int UseRandom;
 
 		//ParticleEmitterBase::ShapeData ShapeData;
 		D3DXMATRIX EmitterRotation;
@@ -187,7 +152,9 @@ private:
 
 		float Saturation;
 		float Value;
-		D3DXVECTOR2 padding2;
+		float Alpha;
+		float Color;
+
 	}Data;
 };
 
@@ -198,6 +165,7 @@ public:
 
 private:
 	friend class ParticleEmitterBase;
+	friend class ParticleTool;
 
 	struct Struct
 	{
@@ -217,7 +185,7 @@ public:
 	CS_InterpolationData() : ShaderBuffer(&Data, sizeof(Data)) {}
 
 private:
-	friend class ParticleEmitter;
+	friend class ParticleEmitterBase;
 	struct Struct
 	{
 		D3DXVECTOR4 CurveCounts;
@@ -233,13 +201,15 @@ class ParticleAnimation : public ShaderBuffer
 public:
 	ParticleAnimation() : ShaderBuffer(&Data, sizeof(Data))
 	{
-		ZeroMemory(Data.MaxIndex, ARRAYSIZE(Data.MaxIndex));
+		Data.MaxIndex[0] = Data.MaxIndex[1] = 0;
 		Data.LoopCount = D3DXVECTOR2(1, 0);
 		Data.Fps = D3DXVECTOR3(60.f, 60.f, 80.f);
 	}
 
 private:
 	friend class ParticleEmitterBase;
+	friend class ParticleTool;
+
 	struct Struct
 	{
 		int MaxIndex[2];

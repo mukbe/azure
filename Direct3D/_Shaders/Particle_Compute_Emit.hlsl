@@ -39,7 +39,7 @@ cbuffer CS_GenerateData : register(b0)
     float VelocityMax;
     float VelocityMin;
     int RandomRotation;
-    float Padding;
+    int UseRandom;
 
     //ShapeData Shape;
 
@@ -48,7 +48,8 @@ cbuffer CS_GenerateData : register(b0)
 
     float Saturation;
     float Value;
-    float2 Padding2;
+    float Alpha;
+    float Color;
 };
 
 cbuffer ParticleAnimation : register(b3)
@@ -134,33 +135,52 @@ void Emit(uint3 id : SV_DispatchThreadID)
     //if (Shape.Inverse > 0)
     //    particle.Direction = -particle.Direction;
 
-    //사이즈
-    if (StartSize.x == EndSize.x && StartSize.y == EndSize.y)
-        particle.Size = float2(StartSize.x, StartSize.y);
-    else
-    {
-        float2 randSize = GetRandomVector2((uint)(rnd(Time + id.x + 1.58f) * 50000), StartSize, EndSize, false);
-        particle.Size = randSize;
-    }
-
-    //스피드
-    uint no = id.x;
-    float2 seed = float2(no + Time, no + 1.583 + Time);
-    float speed = clamp(rnd(seed) * VelocityMax, VelocityMin, VelocityMax);
-    
-    particle.Speed = normalize(StartDirection) * speed;
-    particle.Speed = normalize(rnd3(seed)) * speed;
 
     //Life Time
-    //if (LifeTime.x == LifeTime.y)
-    //    particle.LifeTime = float2(LifeTime.x, LifeTime.x);
-    //else
-    //    particle.LifeTime = Random(RandomSeed + id.x + 2, LifeTime.x, LifeTime.y);
     particle.RemainTime = particle.LifeTime = LifeTime;
 
-    //색상
-    float h = rnd(seed + 5);
-    particle.Color = float4(hsv_to_rgb(float3(h, Saturation, Value)), 1);
+    uint no = id.x;
+    float2 seed = float2(no + Time, no + 1.583 + Time);
+
+    if(UseRandom == 1)
+    {
+        //사이즈
+        if (StartSize.x == EndSize.x && StartSize.y == EndSize.y)
+            particle.Size = float2(StartSize.x, StartSize.y);
+        else
+        {
+            float2 randSize = GetRandomVector2((uint) (rnd(Time + id.x + 1.58f) * 50000), StartSize, EndSize, false);
+            particle.Size = randSize;
+        }
+
+         //스피드
+        float speed = clamp(rnd(seed) * VelocityMax, VelocityMin, VelocityMax);
+    
+        particle.Speed = normalize(StartDirection) * speed;
+
+
+         //색상
+        float h = rnd(seed + 5);
+        particle.Color = float4(hsv_to_rgb(float3(h, Saturation, Value)), Alpha);
+
+    }
+    else    //랜덤이 아닐 때
+    {
+        //사이즈
+        particle.Size = float2(StartSize.x, StartSize.y);
+
+        //스피드
+        uint no = id.x;
+        float2 seed = float2(no + Time, no + 1.583 + Time);
+        float speed = clamp(rnd(seed) * VelocityMax, VelocityMax, VelocityMax);
+    
+        particle.Speed = normalize(StartDirection) * speed;
+
+
+        //색상
+        particle.Color = float4(hsv_to_rgb(float3(Color, Saturation, Value)), Alpha);
+
+    }
 
     //가속도
     particle.Gravity = Gravity;

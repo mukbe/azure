@@ -1,8 +1,8 @@
 #include "Particle.h"
+#include "./Utilities/ImGuiHelper.h"
 
-#include "./View/FreeCamera.h"
 
-ParticleEmitterBase::ParticleEmitterBase(bool bDefault)
+ParticleEmitterBase::ParticleEmitterBase(bool bDefault, UINT count)
 	:currentIndex(0), maxParticles(0), bUpdate(true), bDraw(true)
 	, bFinishEmit(false), countPerSec(0), countPerDis(0), loadedGenerateCount(0), loadedDistanceCount(0)
 	, playTime(0.f)
@@ -14,11 +14,10 @@ ParticleEmitterBase::ParticleEmitterBase(bool bDefault)
 	copyIndirect = Shaders->CreateComputeShader("CopyIndirect", L"Particle_Compute_CopyIndirect.hlsl", "CopyIndirect");
 	resetCounter = Shaders->CreateComputeShader("ResetCounter", L"Particle_Compute_CopyIndirect.hlsl", "ResetCounter");
 	particleRenderer = new Shader(ShaderPath + L"Particle_Render.hlsl", Shader::ShaderType::useGS);
-	//particleTexture = ResourceManager::Get()->GetTexture(Textures + L"Particles/glow.png");
 
 	//파티클의 키가 달라지면 또 할당하기 때문에 조김해야한다
 	//디폴트로 Temp이미지를 둔다
-	particleTexture = AssetManager->AddTexture(Assets + L"Temp.png", "Temp");
+	particleTexture = AssetManager->AddTexture(Assets + L"Temp3.png", "Temp3");
 
 	for (int i = 0; i < 2; ++i)
 	{
@@ -36,7 +35,7 @@ ParticleEmitterBase::ParticleEmitterBase(bool bDefault)
 	textureAnimation = new ParticleAnimation;
 
 	if (bDefault == true)
-		SetParticleMaxCount<ParticleData>();
+		SetParticleMaxCount<ParticleData>(count);
 
 	Init();
 
@@ -82,11 +81,12 @@ void ParticleEmitterBase::Init()
 	lastLifeTime = 0.0;
 
 
-	SetMode(EmitterMode::Play);
+	mode = EmitterMode::Stop;
 
 	//===================test
-	delay = 5.0f;
-	countPerSec = 5;
+	delay = 0.0f;
+	countPerSec = 20;
+	countPerDis = 0;
 	duration = 10.f;
 	bLoop = true;
 	UpdateProperty();
@@ -95,7 +95,7 @@ void ParticleEmitterBase::Init()
 
 }
 
-void ParticleEmitterBase::Update(CameraBase* cam)
+void ParticleEmitterBase::Update()
 {
 	//발생기의 모드
 	if (mode != EmitterMode::Play) return;
@@ -111,7 +111,11 @@ void ParticleEmitterBase::Update(CameraBase* cam)
 	CResource1D* needUpdateCounter = counterBuffer[currentIndex];
 	CResource1D* updatedCounter = counterBuffer[!currentIndex];
 	
+	D3DXVECTOR3 position = this->GetTransform()->GetWorldPosition();
+	float distance = D3DXVec3Length(&(emitData->Data.Position - position));
+
 	float emitCount = (float)countPerSec * delta;
+	float distanceCount = (float)countPerDis * distance;
 
 	//딜레이가 있는지
 	bool bEmit = playTime >= delay;
@@ -130,6 +134,9 @@ void ParticleEmitterBase::Update(CameraBase* cam)
 	loadedGenerateCount += emitCount - (int)emitCount;
 	emitCount = (float)((int)emitCount);
 
+	loadedDistanceCount += distanceCount - (int)distanceCount;
+	distanceCount = (float)((int)distanceCount);
+
 	if (loadedGenerateCount >= 1.0f)
 	{
 		++emitCount;
@@ -137,8 +144,8 @@ void ParticleEmitterBase::Update(CameraBase* cam)
 	}
 	if (loadedDistanceCount >= 1.0f)
 	{
-		//++distanceCount;
-		//loadedDistanceCount = 0.0f;
+		++distanceCount;
+		loadedDistanceCount = 0.0f;
 	}
 
 	//방사
@@ -146,6 +153,10 @@ void ParticleEmitterBase::Update(CameraBase* cam)
 	{
 		if (emitCount > 0)
 			Emit((int)emitCount);
+		if (distanceCount > 0)
+			Emit((int)distanceCount);
+
+		//자동생성 추가
 	}
 
 
@@ -161,11 +172,12 @@ void ParticleEmitterBase::Update(CameraBase* cam)
 		updateData->Data.StretchedScale = D3DXVECTOR3(cameraScale, speedScale, lengthScale);
 
 		updateData->SetCSBuffer(2);
+		textureAnimation->SetCSBuffer(3);
 		//interpolationData->SetCSBuffer(2);
-		//textureAnimation->SetCSBuffer(3);
+
 
 		emitData->SetCSBuffer(1);
-		cam->Render();
+		Cameras->BindGPU("FreeCamera");
 		//=========================================================
 
 		needUpdateBuffer->BindResource(0);
@@ -215,24 +227,26 @@ void ParticleEmitterBase::Render()
 	States::SetRasterizer(States::SOLID_CULL_OFF);
 	//switch (shaderMode)
 	//{
-	//case ParticleEmitter::ShaderMode::ADDITIVE:
+	//case ShaderMode::ADDITIVE:
 	//	States::SetBlend(States::BLENDING_ADDITIVE);
 	//	break;
-	//case ParticleEmitter::ShaderMode::MULTIFLY:
+	//case ShaderMode::MULTIFLY:
 	//	States::SetBlend(States::BLENDING_MULTIFLY);
 	//	break;
-	//case ParticleEmitter::ShaderMode::POW:
+	//case ShaderMode::POW:
 	//	States::SetBlend(States::BLENDING_POW);
 	//	break;
-	//case ParticleEmitter::ShaderMode::ALPHABLEND:
+	//case ShaderMode::ALPHABLEND:
 	//	States::SetBlend(States::BLENDING_ON);
 	//	break;
 	//}
+	States::SetBlend(States::BLENDING_ON);
+
 	{
 		DeviceContext->DrawInstancedIndirect(indirectBuffer->GetIndirectBuffer(), 0);
 	}
 	//States::SetDepthStencil(States::DEPTH_ON);
-	//States::SetBlend(States::BLENDING_OFF);
+	States::SetBlend(States::BLENDING_OFF);
 	States::SetRasterizer(States::SOLID_CULL_ON);
 
 	DeviceContext->VSSetShaderResources(0, 1, &nullView);
@@ -246,41 +260,26 @@ void ParticleEmitterBase::SetMode(EmitterMode mode)
 	this->mode = mode;
 	switch (mode)
 	{
-		case ParticleEmitterBase::EmitterMode::Play:	bUpdate = true;
+		case EmitterMode::Play:		bUpdate = true;
 		break;
-		case ParticleEmitterBase::EmitterMode::Pause:	bUpdate = false;
+		case EmitterMode::Pause:	bUpdate = false;
 		break;
-		case ParticleEmitterBase::EmitterMode::Stop:
+		case EmitterMode::Stop:
+		{
+			Init();
+		}
 		break;
 	}
 }
 
 void ParticleEmitterBase::Emit(int count)
 {
-	Transform* trans = this->GetTransform();
 	
 	//emitData->Data.GenerateCount = (int)count;
 	emitData->Data.Time = Time::Get()->GetWorldTime();
-	emitData->Data.Position = trans->GetWorldPosition();
-	emitData->Data.StartDirection = trans->GetForward();
-	emitData->Data.ShapeType = 0;
-	emitData->Data.LifeTime = 3.f;
-	//emitData->Data.ShapeData = shapeData;
-	//emitData->Data.ShapeData.CircleAngle = Math::ToRadian(shapeData.CircleAngle);
 
-	//D3DXQUATERNION qRot = trans->get ->GetLocalQuaternion();
-	//D3DXMatrixRotationQuaternion(&generateData->Data.EmitterRotation, &qRot);
-	//D3DXMatrixTranspose(&generateData->Data.EmitterRotation, &generateData->Data.EmitterRotation);
-
-
-	D3DXVECTOR3 localScale = trans->GetScale();
-	emitData->Data.EmitterScale = { localScale.x, localScale.y, localScale.z, 1.0f };
-
-	//emitData->UpdateData();
 	emitData->SetCSBuffer(0);
 	textureAnimation->SetCSBuffer(3);
-
-
 
 	particleBuffer[currentIndex]->BindResource(0);
 	counterBuffer[currentIndex]->BindResource(1);
@@ -300,14 +299,34 @@ void ParticleEmitterBase::Emit(int count)
 
 void ParticleEmitterBase::UpdateProperty()
 {
-	emitData->Data.Gravity = D3DXVECTOR3(0,0,0);
+	Transform* trans = this->GetTransform();
+
+	emitData->Data.Position = trans->GetWorldPosition();
+	emitData->Data.StartDirection = trans->GetForward();
+	emitData->Data.ShapeType = 0;
+	emitData->Data.LifeTime = 3.f;
+	D3DXVECTOR3 localScale = trans->GetScale();
+	emitData->Data.EmitterScale = { localScale.x, localScale.y, localScale.z, 1.0f };
+
+	//emitData->Data.ShapeData = shapeData;
+	//emitData->Data.ShapeData.CircleAngle = Math::ToRadian(shapeData.CircleAngle);
+
+	//D3DXQUATERNION qRot = trans->get ->GetLocalQuaternion();
+	//D3DXMatrixRotationQuaternion(&generateData->Data.EmitterRotation, &qRot);
+	//D3DXMatrixTranspose(&generateData->Data.EmitterRotation, &generateData->Data.EmitterRotation);
+
+	emitData->Data.Gravity = D3DXVECTOR3(0,1.0f,0);
 	emitData->Data.Force = D3DXVECTOR3(0,0,0);
 	emitData->Data.Position = D3DXVECTOR3(0,0,0);
 	emitData->Data.StartSize = D3DXVECTOR2(0.01f, 0.01f);
 	emitData->Data.EndSize = D3DXVECTOR2(0.01f, 0.01f);
+	emitData->Data.UseRandom = 1;
 
 	emitData->Data.Saturation = 0.1f;
 	emitData->Data.Value = 0.1f;
+	emitData->Data.Alpha = 1.f;
+	emitData->Data.Color = 0.f;
+
 
 	emitData->Data.VelocityMax = 1.5f;
 	emitData->Data.VelocityMin = 0.1f;
@@ -315,14 +334,76 @@ void ParticleEmitterBase::UpdateProperty()
 
 void ParticleEmitterBase::UIRender()
 {
-	ImGui::SliderFloat("Saturation", &emitData->Data.Saturation, 0.0001f, 1.0f);
-	ImGui::SliderFloat("Value", &emitData->Data.Value, 0.0001f, 1.0f);
-	ImGui::SliderFloat2("StartSize", &emitData->Data.StartSize.x, 0.0001f, 1.0f);
-	ImGui::SliderFloat2("EndSize", &emitData->Data.EndSize.x, 0.0001f, 1.0f);
-	ImGui::SliderFloat("VelocityMax", &emitData->Data.VelocityMax, 0.0f, 10.0f);
-	ImGui::SliderFloat("VelocityMin", &emitData->Data.VelocityMin, 0.0f, 10.0f);
+	static bool emitterMode = false;
+	if (ImGui::Checkbox("EmitterMode", &emitterMode))
+	{
+		if (emitterMode == true) mode = EmitterMode::Play;
+		else mode = EmitterMode::Pause;
+	}
+	ImGui::Checkbox("Loop", &bLoop);
+	ImGui::Checkbox("Update", &bUpdate);
+	ImGui::Checkbox("Render", &bDraw);
 
-	ImGui::SliderInt2("MaxIndex", (&textureAnimation->Data.MaxIndex[0]), 0, 10);
-	ImGui::SliderFloat("FPS", &textureAnimation->Data.Fps.x, 0.f, 80.f);
+	ImGui::InputFloat("delayTime", &delay, 0.5f, 1.0f);
+	ImGui::InputFloat("duration", &duration, 0.5f, 1.0f);
+	ImGui::InputInt("CountPerSec", &countPerSec, 0.5f, 1.0f);
+	ImGui::InputInt("CountPerDis", &countPerDis, 0.5f, 1.0f);
+
+	static int maxCount = maxParticles;
+	ImGuiInputTextFlags flag = ImGuiInputTextFlags_EnterReturnsTrue;
+	if (ImGui::InputInt("MaxParticles", &maxCount,1,100, flag))
+	{
+		SetParticleMaxCount<ParticleData>(maxCount);
+		SetMode(EmitterMode::Stop);
+	}
+
+
+	static bool random = (bool)emitData->Data.UseRandom;
+	if (ImGui::Checkbox("Random", &random))
+	{
+		emitData->Data.UseRandom = !emitData->Data.UseRandom;
+	}
+	ImGui::SliderFloat("Saturation", &emitData->Data.Saturation, 0.0001f, 1.0f, "%.3f");
+	ImGui::SliderFloat("Value", &emitData->Data.Value, 0.0001f, 1.0f, "%.3f");
+	ImGui::SliderFloat("Alpha", &emitData->Data.Alpha, 0.0001f, 1.0f, "%.3f");
+	ImGui::SliderFloat("Color", &emitData->Data.Color, 0.0f, 1.0f, "%.2f");
+
+	ImGui::InputFloat("LifeTime", &emitData->Data.LifeTime, 1.f, 5.f, -1, flag);
+	ImGui::InputFloat3("EmitterScale", &emitData->Data.EmitterScale.x, -1, flag);
+	ImGui::InputFloat2("StartSize", &emitData->Data.StartSize.x, -1, flag);
+	ImGui::InputFloat2("EndSize", &emitData->Data.EndSize.x, -1, flag);
+	ImGui::InputFloat("VelocityMax", &emitData->Data.VelocityMax, 1.0f, 10.0f,-1 , flag);
+	ImGui::InputFloat("VelocityMin", &emitData->Data.VelocityMin, 1.0f, 10.0f,-1 , flag);
+	ImGui::InputFloat3("Gravity", &emitData->Data.Gravity.x, -1, flag);
+	ImGui::InputFloat3("Force", &emitData->Data.Force.x, -1, flag);
+	ImGui::InputInt("Shape", &emitData->Data.ShapeType, 1, 2, flag);
+
+	if (ImGui::InputInt2("MaxIndex", (&textureAnimation->Data.MaxIndex[0]), flag))
+	{
+		textureAnimation->Data.MaxIndex[0] = Math::Clamp(textureAnimation->Data.MaxIndex[0], 0, 15);
+		textureAnimation->Data.MaxIndex[1] = Math::Clamp(textureAnimation->Data.MaxIndex[1], 0, 15);
+	}
+
+	if (ImGui::InputFloat("TextureLoop", &textureAnimation->Data.LoopCount.x, 1, 2, -1, flag))
+		textureAnimation->Data.LoopCount.x = Math::Clamp(textureAnimation->Data.LoopCount.x, 0, 1);
+
+	ImGui::InputFloat("TextureLoopCount", &textureAnimation->Data.LoopCount.y, 1.0f, 2.0f, flag);
+	if (ImGui::InputFloat("FPS", &textureAnimation->Data.Fps.x, 1.f, 10.f, -1, flag))
+		textureAnimation->Data.Fps.x = Math::Clamp(textureAnimation->Data.Fps.x, 0.f, 360.f);
+
+
+	ImGuiHelper::RenderImageButton(&particleTexture, ImVec2(100, 100));
+
+}
+
+void ParticleEmitterBase::SaveData(Json::Value * parent)
+{
+	Json::Value prop;
+
+
+}
+
+void ParticleEmitterBase::LoadData(Json::Value * parent)
+{
 }
 
