@@ -313,7 +313,7 @@ GBuffer_Data UnpackGBuffer_Loc(int2 location)
 float3 CalcWorldPos(float2 csPos, float depth)
 {
     float4 position;
-
+    
     position.xy = csPos.xy * UnPackPerspectiveValues.xy * depth;
     position.z = depth;
     position.w = 1.0;
@@ -330,6 +330,24 @@ matrix DecodeMatrix(float3x4 encodedMatrix)
                   float4(encodedMatrix[1].xyz, 0),
                   float4(encodedMatrix[2].xyz, 0),
                   float4(encodedMatrix[0].w, encodedMatrix[1].w, encodedMatrix[2].w, 1));
+}
+
+inline float rnd(float2 p)
+{
+    return frac(sin(dot(p, float2(12.9898, 78.233))) * 43758.5453);
+}
+
+inline float3 rnd3(float2 p)
+{
+    return 2.0 * (float3(rnd(p * 1), rnd(p * 2), rnd(p * 3)) - 0.5);
+}
+
+// 색상(Hue), 채도(Saturation), 명도(Value)  HSV 공간을 RGB공간으로
+float3 hsv_to_rgb(float3 HSV)
+{
+    float4 k = float4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    float3 p = abs(frac(HSV.xxx + k.xyz) * 6.0 - k.www);
+    return HSV.z * lerp(k.xxx, clamp(p - k.xxx, 0.0, 1.0), HSV.y);
 }
 
 bool IntersectTri(float3 origin, float3 dir, float3 v0, float3 v1, float3 v2, out float u, out float v, out float distance)

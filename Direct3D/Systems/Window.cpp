@@ -37,6 +37,7 @@ WPARAM Window::Run()
 	ObjectManager::Create();
 	FactoryManager::Create();
 	DataBase::Create();
+	CameraManager::Create();
 
 	ImGui::Create(desc.Handle, Device, DeviceContext);
 	ImGui::StyleColorsDark();
@@ -76,6 +77,8 @@ WPARAM Window::Run()
 
 //================Release Manager===============================
 	ImGui::Delete();
+
+	CameraManager::Delete();
 	DataBase::Delete();
 	FactoryManager::Delete();
 	ObjectManager::Get()->Release();

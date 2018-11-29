@@ -20,6 +20,7 @@
 #include "./Manager/SceneManager.h"
 #include "./Manager/RenderManager.h"
 #include "./Manager/ObjectManager.h"
+#include "./Manager/CameraManager.h"
 
 #include "./Renders/Gizmo.h"
 #include "./Manager/FactoryManager.h"

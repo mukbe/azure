@@ -19,12 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Manager\CameraManager.h" />
+    <ClInclude Include="Particle\ParticleProp.h" />
     <ClInclude Include="Utilities\DebugHelper.h" />
     <ClInclude Include="Particle\Particle.h" />
-    <ClInclude Include="Particle\ParticleBase.h" />
-    <ClInclude Include="Particle\ParticleInfo.h" />
-    <ClInclude Include="Particle\ParticleProp.h" />
-    <ClInclude Include="Particle\ParticleSample.h" />
     <ClInclude Include="Renders\PostEffect\BloomEffect.h" />
     <ClInclude Include="Model\ComputeAnimation\ComputeAnimation.h" />
     <ClInclude Include="Environment\GameMap.h" />
@@ -32,7 +30,7 @@
     <ClInclude Include="Project\ToolScene\FactoryTool.h" />
     <ClInclude Include="Renders\GrassRenderer\GrassRenderer.h" />
     <ClInclude Include="Object\GameUnit\GameUnit.h" />
-    <ClInclude Include="Particle\ParticleSystem.h" />
+    <ClInclude Include="Particle\ParticleTool.h" />
     <ClInclude Include="Renders\AlphaRenderer.h" />
     <ClInclude Include="Bounding\AnimationCollider.h" />
     <ClInclude Include="Bounding\BoundingFrustum.h" />
@@ -133,10 +131,9 @@
     <ClInclude Include="View\Projection.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Manager\CameraManager.cpp" />
     <ClCompile Include="Utilities\DebugHelper.cpp" />
     <ClCompile Include="Particle\Particle.cpp" />
-    <ClCompile Include="Particle\ParticleInfo.cpp" />
-    <ClCompile Include="Particle\ParticleSample.cpp" />
     <ClCompile Include="Renders\PostEffect\BloomEffect.cpp" />
     <ClCompile Include="Model\ComputeAnimation\ComputeAnimation.cpp" />
     <ClCompile Include="Environment\GameMap.cpp" />
@@ -145,7 +142,7 @@
     <ClCompile Include="Project\Game\PlayScene + soonwoo.cpp" />
     <ClCompile Include="Renders\GrassRenderer\GrassRenderer.cpp" />
     <ClCompile Include="Object\GameUnit\GameUnit.cpp" />
-    <ClCompile Include="Particle\ParticleSystem.cpp" />
+    <ClCompile Include="Particle\ParticleTool.cpp" />
     <ClCompile Include="Renders\AlphaRenderer.cpp" />
     <ClCompile Include="Bounding\AnimationCollider.cpp" />
     <ClCompile Include="Bounding\BoundingFrustum.cpp" />
@@ -392,6 +389,59 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\999_TerrainShadow.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\Particle_Compute_CopyIndirect.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\Particle_Compute_Emit.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <FileType>Document</FileType>
+    </None>
+    <None Include="_Shaders\Particle_Compute_Update.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <FileType>Document</FileType>
+    </None>
+    <None Include="_Shaders\Particle_Header.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\Particle_Render.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

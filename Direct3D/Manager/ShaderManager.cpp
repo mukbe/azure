@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "ShaderManager.h"
-
+#include "./ComputeShader/ComputeShader.h"
 
 SingletonCpp(ShaderManager)
 
@@ -61,6 +61,34 @@ void ShaderManager::BindShader(string key)
 void ShaderManager::ReleaseShader()
 {
 	currentShader->ReleaseShader();
+}
+
+ComputeShader * ShaderManager::CreateComputeShader(string key, wstring fileName, string entryPoint)
+{
+
+	ComputeShader* shader;
+	shader = FindComputeShader(key);
+
+	if (shader == nullptr)
+	{
+		shader = new ComputeShader(ShaderPath + fileName, entryPoint);
+		computeShaders.insert(make_pair(key, shader));
+	}
+
+	return shader;
+}
+
+ComputeShader * ShaderManager::FindComputeShader(string key)
+{
+	ComputeShadersIter Iter = computeShaders.begin();
+
+	for (Iter; Iter != computeShaders.end(); ++Iter)
+	{
+		if (key == Iter->first)
+			return Iter->second;
+	}
+
+	return nullptr;
 }
 
 void ShaderManager::ShaderRelease()

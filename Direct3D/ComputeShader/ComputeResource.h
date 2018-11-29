@@ -113,3 +113,24 @@ private:
 	UINT depth;
 };
 
+class CResourceIndirect : public IComputeResource
+{
+public:
+	CResourceIndirect(void* pInitData);
+	virtual~CResourceIndirect();
+
+
+	ID3D11Buffer* GetReadBuffer() { return readBuffer; }
+	ID3D11Buffer* GetRWBuffer() { return rwBuffer; }
+	ID3D11Buffer* GetIndirectBuffer() { return rwBuffer; }
+
+	void GetDatas(void* datas);
+
+private:
+	void CreateBufferForGPU(void * pInitData, ID3D11Buffer* buffer);
+	void CreateSRV();
+	void CreateUAV();
+
+	ID3D11Buffer * rwBuffer;
+	ID3D11Buffer* readBuffer;
+};

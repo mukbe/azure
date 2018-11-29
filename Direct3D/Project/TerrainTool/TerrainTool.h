@@ -12,6 +12,8 @@ public:
 	virtual void Update();
 	virtual void PostUpdate();
 
+	void AlphaRender();
+
 	void PreRender();
 	void Render();
 	void UIRender();
@@ -19,10 +21,10 @@ public:
 private:
 
 	class Terrain* terrain;
-	class FreeCamera *freeCamera;
+	class CameraBase *freeCamera;
 	class Environment::Sun* sun;
-	class Scattering* test;
-	class ParticleSample* Particletest;
+	class Scattering* sky;
 
+	class ParticleEmitterBase* particle;
 };
 
