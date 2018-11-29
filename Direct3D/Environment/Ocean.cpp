@@ -142,12 +142,18 @@ void Ocean::Render()
 void Ocean::UIRender()
 {
 	ImGui::Text("GridX : %d , GridZ : %d", this->gridCountX,this->gridCountZ);
-	ImGui::Text("FPS : %f", Time::Get()->FPS());
+	//ImGui::Text("FPS : %f", Time::Get()->FPS());
 
 	ImGui::ColorEdit4("OceanColor", (float*)&oceanColor.r,
 		ImGuiColorEditFlags_Float | ImGuiColorEditFlags_AlphaPreviewHalf);
 
 	ImGui::Separator();
+
+	ImGui::Begin("Debug");
+	
+	ImGui::Text("FPS : %2.f", Time::Get()->FPS());
+
+	ImGui::End();
 	
 }
 

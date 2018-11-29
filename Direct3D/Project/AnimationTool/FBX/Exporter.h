@@ -40,6 +40,5 @@ namespace Fbx
 		vector<struct FbxMeshData *> meshDatas;
 		vector<struct FbxBoneData *> boneDatas;
 		vector<struct FbxAnimation *> animDatas;
-
 	};
 }

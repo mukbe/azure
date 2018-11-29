@@ -33,7 +33,7 @@ private:
 
 	void SaveMaterial(wstring file = L"");
 public:
-	InstanceRenderer(string name,UINT maxInstance);		//툴작업용 생성자
+	InstanceRenderer(string name,UINT maxInstance);			//툴작업용 생성자
 	InstanceRenderer(string name,Json::Value* parent);		//플레이씬용 생정자 
 	~InstanceRenderer();
 

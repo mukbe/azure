@@ -31,11 +31,12 @@ public:
 	void Stop();
 
 	//NoBlending
-	void ChangeAnimation(wstring animName, function<void()> func = NULL);
-	void ChangeAnimation(UINT index);
+	void ChangeAnimation(wstring animName, function<void()> func = nullptr);
 	//UseBlending
 	void ChangeAnimation(wstring animName, float blendTime);
 	void ChangeAnimation(UINT index, float blendTime);
+
+	void ChangeAnimation(UINT index);
 	
 	void TPose();
 

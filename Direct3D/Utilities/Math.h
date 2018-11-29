@@ -25,6 +25,8 @@ public:
 
 	static float Modulo(float val1, float val2);
 
+	static D3DXCOLOR RandomColor();
+
 	template<typename T>
 	static T Min(const T& a, const T& b)
 	{

@@ -138,7 +138,7 @@ void ModelAnimPlayer::UpdateBone()
 		ModelKeyframe* frame = currentClip->Keyframe(bone->Name());
 		if (frame == nullptr)
 			continue;
-
+		
 		if (useQuaternionKeyframe == true)
 		{
 			D3DXMATRIX S, R, T;
