@@ -185,6 +185,25 @@ void ObjectManager::DebugRender()
 	}
 }
 
+void ObjectManager::AlphaRender()
+{
+	ObjectContainerIter containerIter = objectContainer.begin();
+
+	for (; containerIter != objectContainer.end(); ++containerIter)
+	{
+		ObjectList* pList = &containerIter->second;
+		ObjectListIter listIter = pList->begin();
+		for (; listIter != pList->end(); ++listIter)
+		{
+			for (UINT i = 0; i < listIter->second.size(); ++i)
+			{
+				if (listIter->second[i]->GetisActive())
+					listIter->second[i]->AlphaRender();
+			}
+		}
+	}
+}
+
 void ObjectManager::AddObject(ObjectType::Type type, ObjectType::Tag tag, class GameObject* object)
 {
 	objectContainer[type][tag].push_back(object);

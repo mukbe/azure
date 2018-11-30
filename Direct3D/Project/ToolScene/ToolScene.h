@@ -23,6 +23,7 @@ public:
 	virtual void PreUpdate();
 	virtual void Update();
 	virtual void PostUpdate();
+	virtual void AlphaRender();
 
 	void PreRender();
 	void Render();

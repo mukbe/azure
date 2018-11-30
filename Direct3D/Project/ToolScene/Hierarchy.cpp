@@ -17,6 +17,8 @@
 #include "./Renders/Instancing/InstanceRenderer.h"
 #include "./Renders/GrassRenderer/GrassRenderer.h"
 
+#include "./Particle/Particle.h"
+
 
 Hierarchy::Hierarchy(ToolScene * toolScene)
 	:ToolBase(toolScene)
@@ -110,6 +112,15 @@ void Hierarchy::UIRender()
 				if (ImGui::Selectable("InstanceRenderer"))
 				{
 					this->CreaetInstanceRenderer();
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("Effect"))
+			{
+				if (ImGui::Selectable("ParticleSystem"))
+				{
+					this->CreateEffect("sad");
 					ImGui::CloseCurrentPopup();
 				}
 				ImGui::TreePop();
@@ -212,6 +223,12 @@ void Hierarchy::CreaetInstanceRenderer(wstring fileName)
 		function<void(wstring)> func = bind(&Hierarchy::CreaetInstanceRenderer, this, placeholders::_1);
 		Path::OpenFileDialog(L"", Path::MaterialFilter, Assets, func);
 	}
+}
+
+void Hierarchy::CreateEffect(string name)
+{
+	ParticleEmitterBase* newParticle = new ParticleEmitterBase(true, 1024);
+	Objects->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Object, newParticle);
 }
 
 

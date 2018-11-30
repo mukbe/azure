@@ -30,6 +30,7 @@ ToolScene::ToolScene()
 	RenderRequest->AddRender("ToolUIRender", bind(&ToolScene::UIRender, this), RenderType::UIRender);
 	RenderRequest->AddRender("ToolRender", bind(&ToolScene::Render, this), RenderType::Render);
 	RenderRequest->AddRender("ToolPreRender", bind(&ToolScene::PreRender, this), RenderType::PreRender);
+	RenderRequest->AddRender("Particle", std::bind(&ToolScene::AlphaRender, this), RenderType::AlphaRender);
 
 	toolList.insert(make_pair(ToolType::Hierarchy, new Hierarchy(this)));
 	toolList.insert(make_pair(ToolType::Inspector, new Inspector(this)));
@@ -98,6 +99,11 @@ void ToolScene::Update()
 void ToolScene::PostUpdate()
 {
 	Objects->PostUpdate();
+}
+
+void ToolScene::AlphaRender()
+{
+	//Objects->AlphaRender();
 }
 
 void ToolScene::PreRender()

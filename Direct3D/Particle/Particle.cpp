@@ -8,7 +8,6 @@ ParticleEmitterBase::ParticleEmitterBase(bool bDefault, UINT count)
 	, playTime(0.f)
 
 {
-
 	particleEmitter = Shaders->CreateComputeShader("ParticleEmitter", L"Particle_Compute_Emit.hlsl", "Emit");
 	particleUpdater = Shaders->CreateComputeShader("particleUpdater", L"Particle_Compute_Update.hlsl", "Update");
 	copyIndirect = Shaders->CreateComputeShader("CopyIndirect", L"Particle_Compute_CopyIndirect.hlsl", "CopyIndirect");
@@ -40,13 +39,14 @@ ParticleEmitterBase::ParticleEmitterBase(bool bDefault, UINT count)
 	Init();
 
 	renderMode = RenderMode::Billboard;
+
 }
 
 ParticleEmitterBase::~ParticleEmitterBase()
 {
 	SafeDelete(emitData);
 	SafeDelete(updateData);
-	SafeDelete(interpolationData);
+	//SafeDelete(interpolationData);
 	SafeDelete(textureAnimation);
 
 	for (int i = 0; i < 2; ++i)
@@ -210,6 +210,12 @@ void ParticleEmitterBase::Update()
 
 void ParticleEmitterBase::Render()
 {
+	
+
+}
+
+void ParticleEmitterBase::AlphaRender()
+{
 	if (!bDraw) return;
 
 	//파티클 렌더링
@@ -251,7 +257,6 @@ void ParticleEmitterBase::Render()
 	DeviceContext->VSSetShaderResources(0, 1, &nullView);
 	DeviceContext->PSSetShaderResources(0, 1, &nullView);
 	particleRenderer->ReleaseShader();
-
 }
 
 void ParticleEmitterBase::SetMode(EmitterMode mode)

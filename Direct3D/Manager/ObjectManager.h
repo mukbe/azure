@@ -42,6 +42,7 @@ public:
 	void Render();
 	void PostRender();
 	void DebugRender();
+	void AlphaRender();
 
 	void AddObject(ObjectType::Type type , ObjectType::Tag tag, class GameObject* object);
 	void DeleteObject(ObjectType::Type type, ObjectType::Tag tag, string name);

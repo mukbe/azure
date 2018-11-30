@@ -35,6 +35,7 @@ public:
 
 	virtual void Update();
 	virtual void Render();
+	virtual void AlphaRender();
 	void SetMode(EmitterMode mode);
 	void Emit(int count);
 

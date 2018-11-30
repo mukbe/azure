@@ -26,8 +26,8 @@ void AlphaRenderer::SetRTV()
 {
 	DeviceContext->OMSetRenderTargets(1, &renderTargetView, depthView);
 	States::SetBlend(States::BlendStates::BLENDING_ON);
-	for (UINT i = 0; i < figures.size(); ++i)
-		figures[i]->Render();
+	//for (UINT i = 0; i < figures.size(); ++i)
+	//	figures[i]->Render();
 }
 
 void AlphaRenderer::Render()

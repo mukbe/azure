@@ -37,6 +37,7 @@ public:
 	virtual void ShadowRender();
 	virtual void UIUpdate() {}
 	virtual void DebugRender() {}
+	virtual void AlphaRender() {}
 
 	virtual void SaveData(Json::Value* parent);
 	virtual void LoadData(Json::Value* parent);

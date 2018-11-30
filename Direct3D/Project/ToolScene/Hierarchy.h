@@ -30,5 +30,6 @@ private:
 	void CreateUnit(string name);
 	void CreateEnviroment(string name);
 	void CreaetInstanceRenderer(wstring fileName = L"");
+	void CreateEffect(string name);
 };
 

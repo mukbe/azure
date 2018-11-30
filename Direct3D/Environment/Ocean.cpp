@@ -149,12 +149,6 @@ void Ocean::UIRender()
 
 	ImGui::Separator();
 
-	ImGui::Begin("Debug");
-	
-	ImGui::Text("FPS : %2.f", Time::Get()->FPS());
-
-	ImGui::End();
-	
 }
 
 void Ocean::SaveData(Json::Value * parent)
