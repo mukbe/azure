@@ -75,8 +75,8 @@ Figure::Figure(FigureType type, float radius,D3DXCOLOR color)
 	}
 
 
-	shader = Shaders->FindShader("colorGBuffer");
-	//shader = new Shader(ShaderPath + L"007_Alpha.hlsl");
+	//shader = Shaders->FindShader("colorGBuffer");
+	shader = new Shader(ShaderPath + L"007_Alpha.hlsl");
 	worldBuffer = Buffers->FindShaderBuffer<WorldBuffer>();
 	transform = new Transform;
 

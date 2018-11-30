@@ -62,6 +62,15 @@ float Math::Modulo(float val1, float val2)
 	return val1;
 }
 
+D3DXCOLOR Math::RandomColor()
+{
+	float r = Math::Random(0.0f, 1.0f);
+	float g = Math::Random(0.f, 1.0f);
+	float b = Math::Random(0.f, 1.0f);
+	float a = Math::Random(0.3f, 0.5f);
+	return D3DXCOLOR(r,g,b,a);
+}
+
 
 int Math::Random(int r1, int r2)
 {
