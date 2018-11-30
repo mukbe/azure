@@ -67,16 +67,15 @@ cbuffer ParticleAnimation : register(b3)
 
 };
 
-RWStructuredBuffer<ParticleData> consumeBuffer : register(u0);
-RWStructuredBuffer<ParticleData> appendBuffer : register(u1);
-
-RWStructuredBuffer<uint> consumeCounter : register(u2);
-RWStructuredBuffer<uint> appendCounter : register(u3);
-
 float GetRadianFromDirection(float3 direction)
 {
     return atan2(direction.x, direction.z);
 }
+
+RWStructuredBuffer<ParticleData> consumeBuffer : register(u0);
+RWStructuredBuffer<ParticleData> appendBuffer : register(u1);
+RWStructuredBuffer<uint> consumeCounter : register(u2);
+RWStructuredBuffer<uint> appendCounter : register(u3);
 
 [numthreads(32, 32, 1)]
 void Update(uint3 id : SV_DispatchThreadID)//SV_DispatchThreadID SV_GroupIndex
@@ -232,7 +231,7 @@ void Update(uint3 id : SV_DispatchThreadID)//SV_DispatchThreadID SV_GroupIndex
     uint currentCount = 0;
     InterlockedAdd(appendCounter[0], 1, currentCount);
 
-    currentCount = currentCount % 1000;
+    currentCount = currentCount % 1024;
     appendBuffer[currentCount] = particle;
 
 }

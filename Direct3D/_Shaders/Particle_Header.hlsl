@@ -26,7 +26,7 @@ struct ParticleData
 };
 
 
-struct ShapeData
+struct ShapeInfo
 {
     float CircleAngle;
     uint Inverse;

@@ -106,10 +106,10 @@ void ParticleEmitterBase::Update()
 	float delta = Time::Delta();
 	playTime += delta;
 
-	CResource1D* needUpdateBuffer = particleBuffer[currentIndex];
-	CResource1D* updatedBuffer = particleBuffer[!currentIndex];
-	CResource1D* needUpdateCounter = counterBuffer[currentIndex];
-	CResource1D* updatedCounter = counterBuffer[!currentIndex];
+	CResource1D* consumeBuffer = particleBuffer[currentIndex];
+	CResource1D* appendBuffer = particleBuffer[!currentIndex];
+	CResource1D* consumeCounter = counterBuffer[currentIndex];
+	CResource1D* appendCounter = counterBuffer[!currentIndex];
 	
 	D3DXVECTOR3 position = this->GetTransform()->GetWorldPosition();
 	float distance = D3DXVec3Length(&(emitData->Data.Position - position));
@@ -180,17 +180,17 @@ void ParticleEmitterBase::Update()
 		Cameras->BindGPU("FreeCamera");
 		//=========================================================
 
-		needUpdateBuffer->BindResource(0);
-		updatedBuffer->BindResource(1);
-		needUpdateCounter->BindResource(2);
-		updatedCounter->BindResource(3);
+		consumeBuffer->BindResource(0);
+		appendBuffer->BindResource(1);
+		consumeCounter->BindResource(2);
+		appendCounter->BindResource(3);
 
 		particleUpdater->BindShader();
 		particleUpdater->Dispatch(1, 1, 1);
 
 
 		//Indirect Buffer °»½Å
-		updatedCounter->BindResource(0);
+		appendCounter->BindResource(0);
 		indirectBuffer->BindResource(4);
 
 		copyIndirect->BindShader();
@@ -221,8 +221,6 @@ void ParticleEmitterBase::Render()
 	particleRenderer->Render();
 	particleTexture->SetShaderResource(0);
 
-	DeviceContext->VSSetShaderResources(0, 1, &particleData);
-	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 
 	States::SetRasterizer(States::SOLID_CULL_OFF);
 	//switch (shaderMode)
@@ -242,10 +240,11 @@ void ParticleEmitterBase::Render()
 	//}
 	States::SetBlend(States::BLENDING_ON);
 
+	DeviceContext->VSSetShaderResources(0, 1, &particleData);
+	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 	{
 		DeviceContext->DrawInstancedIndirect(indirectBuffer->GetIndirectBuffer(), 0);
 	}
-	//States::SetDepthStencil(States::DEPTH_ON);
 	States::SetBlend(States::BLENDING_OFF);
 	States::SetRasterizer(States::SOLID_CULL_ON);
 
@@ -305,15 +304,16 @@ void ParticleEmitterBase::UpdateProperty()
 	emitData->Data.StartDirection = trans->GetForward();
 	emitData->Data.ShapeType = 0;
 	emitData->Data.LifeTime = 3.f;
+
 	D3DXVECTOR3 localScale = trans->GetScale();
 	emitData->Data.EmitterScale = { localScale.x, localScale.y, localScale.z, 1.0f };
 
 	//emitData->Data.ShapeData = shapeData;
 	//emitData->Data.ShapeData.CircleAngle = Math::ToRadian(shapeData.CircleAngle);
 
-	//D3DXQUATERNION qRot = trans->get ->GetLocalQuaternion();
+	D3DXMATRIX mat = trans->GetRotateMatrix();
 	//D3DXMatrixRotationQuaternion(&generateData->Data.EmitterRotation, &qRot);
-	//D3DXMatrixTranspose(&generateData->Data.EmitterRotation, &generateData->Data.EmitterRotation);
+	D3DXMatrixTranspose(&emitData->Data.EmitterRotation, &mat);
 
 	emitData->Data.Gravity = D3DXVECTOR3(0,1.0f,0);
 	emitData->Data.Force = D3DXVECTOR3(0,0,0);
@@ -377,6 +377,11 @@ void ParticleEmitterBase::UIRender()
 	ImGui::InputFloat3("Gravity", &emitData->Data.Gravity.x, -1, flag);
 	ImGui::InputFloat3("Force", &emitData->Data.Force.x, -1, flag);
 	ImGui::InputInt("Shape", &emitData->Data.ShapeType, 1, 2, flag);
+	ImGui::InputFloat2("RadiusSize", &emitData->Data.ShapeData.RadiusRange.x, -1, flag);
+	static bool inverse = (bool)emitData->Data.ShapeData.Inverse;
+	if (ImGui::Checkbox("Inverse", &inverse))
+		emitData->Data.ShapeData.Inverse = inverse ? 1 : 0;
+	ImGui::SliderAngle("Range", &emitData->Data.ShapeData.CircleAngle, 0.f);
 
 	if (ImGui::InputInt2("MaxIndex", (&textureAnimation->Data.MaxIndex[0]), flag))
 	{

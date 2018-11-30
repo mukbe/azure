@@ -144,6 +144,7 @@ GameMap::~GameMap()
 
 void GameMap::Render()
 {
+	//wireFrame = true;
 	if (wireFrame)
 		States::SetRasterizer(States::RasterizerStates::WIRE_CULL_ON);
 
@@ -164,6 +165,7 @@ void GameMap::Render()
 	buffer->SetVSBuffer(5);
 	buffer->SetHSBuffer(5);
 	buffer->SetDSBuffer(5);
+	Cameras->BindGPU("FreeCamera");
 
 	//Bind Textures
 	ID3D11ShaderResourceView* heightView = heightMap->GetSRV();
@@ -274,12 +276,13 @@ void GameMap::ShadowRender()
 	buffer->SetHSBuffer(5);
 	buffer->SetDSBuffer(5);
 
+
 	//Bind Textures
 	ID3D11ShaderResourceView* heightView = heightMap->GetSRV();
 	DeviceContext->DSSetShaderResources(0, 1, &heightView);
 
 	shadowShader->Render();
-	States::SetSampler(1, States::LINEAR_WRAP);
+	States::SetSampler(0, States::LINEAR);
 	DeviceContext->DrawIndexed(indexData.size(), 0, 0);
 
 	//Release

@@ -46,6 +46,7 @@ void TerrainTool::Update()
 	terrain->Update();
 	sky->Update();
 	particle->Update();
+	sky->UIUpdate();
 }
 
 void TerrainTool::PostUpdate()
@@ -79,13 +80,13 @@ void TerrainTool::Render()
 	//Render
 	sky->Render();
 	freeCamera->Render();
-	terrain->Render();
+	//terrain->Render();
 }
 
 void TerrainTool::UIRender()
 {
 	//terrain->UIRender();
-	//sky->UIRender();
+	sky->UIRender();
 	particle->UIRender();
 	AssetManager->UIRender();
 }

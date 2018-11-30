@@ -50,6 +50,9 @@ cbuffer CS_GenerateData : register(b0)
     float Value;
     float Alpha;
     float Color;
+
+    ShapeInfo ShapeData;
+
 };
 
 cbuffer ParticleAnimation : register(b3)
@@ -82,65 +85,12 @@ void Emit(uint3 id : SV_DispatchThreadID)
 
     particle.Position = Position;
 
-
-    //Shape 데이터를 확인해서, Position과 DIrection을 결정한다.
-    switch (ShapeType)
-    {
-        case SHAPE_CIRCLE:
-        {
-            //    float randomAngle = Random(RandomSeed + id.x + 5,
-            //0, Shape.CircleAngle); //Radian
-
-            //    particle.Direction = float3(sin(randomAngle), 0, cos(randomAngle));
-            //    particle.Direction = mul(particle.Direction, (float3x3) EmitterRotation);
-
-            //    float distanceScale = Random(RandomSeed + id.x + 6, Shape.RadiusRange.x, Shape.RadiusRange.y);
-            //    particle.Position = GeneratePosition + particle.Direction * EmitterScale.x * 0.5f * distanceScale;
-        }
-        break;
-
-        case SHAPE_SPHERE:
-        {
-                //particle.Direction = GetRandomVector3(RandomSeed + id.x + 5);
-            
-                //float distanceScale = Random(RandomSeed + id.x + 6, Shape.RadiusRange.x, Shape.RadiusRange.y);
-                //particle.Position = GeneratePosition + particle.Direction * EmitterScale.x * 0.5f * distanceScale;
-        }
-        break;
-
-        case SHAPE_BOX:
-        {           
-                //float3 distanceScale = float3(
-                //    Random(RandomSeed + id.x + 5, -0.5f, 0.5f),
-                //    Random(RandomSeed + id.x + 6, -0.5f, 0.5f),
-                //    Random(RandomSeed + id.x + 7, -0.5f, 0.5f));
-
-                float3 emitterUp = EmitterRotation._21_22_23;
-                float3 emitterRight = EmitterRotation._11_12_13;
-                float3 emitterForward = StartDirection;
-
-            //    particle.Position = Position + EmitterScale.x * distanceScale.x * emitterRight
-            //+ EmitterScale.y * distanceScale.y * emitterUp
-            //+ EmitterScale.z * distanceScale.z * emitterForward;
-
-                particle.Direction = emitterForward;
-        }
-        break;
-
-        default:
-            particle.Position = Position;
-            particle.Direction = StartDirection;
-        break;
-    }
-    //if (Shape.Inverse > 0)
-    //    particle.Direction = -particle.Direction;
-
+    uint no = id.x;
+    float2 seed = float2(no + Time, no + 1.583 + Time);
 
     //Life Time
     particle.RemainTime = particle.LifeTime = LifeTime;
 
-    uint no = id.x;
-    float2 seed = float2(no + Time, no + 1.583 + Time);
 
     if(UseRandom == 1)
     {
@@ -180,6 +130,65 @@ void Emit(uint3 id : SV_DispatchThreadID)
         //색상
         particle.Color = float4(hsv_to_rgb(float3(Color, Saturation, Value)), Alpha);
 
+    }
+
+
+    if (ShapeData.Inverse > 0)
+        particle.Direction = -particle.Direction;
+
+    //Shape 데이터를 확인해서, Position과 DIrection을 결정한다.
+    switch (ShapeType)
+    {
+        case SHAPE_CIRCLE:
+        {
+
+            float randomAngle = clamp(rnd(seed) * ShapeData.CircleAngle, 0, ShapeData.CircleAngle);
+
+            float directFactor = ShapeData.Inverse ? -1 : 1;
+            particle.Direction = float3(sin(randomAngle), 0, cos(randomAngle)) * directFactor;
+            particle.Direction = mul(particle.Direction, (float3x3) EmitterRotation);
+                
+            float distanceScale = Random(id.x + Time + 7, ShapeData.RadiusRange.x, ShapeData.RadiusRange.y); 
+            particle.Position = Position + particle.Direction * EmitterScale.x * 0.5f * distanceScale;
+
+            particle.Direction = normalize(particle.Position - Position);
+            particle.Speed = Random(id.x + Time + 7, VelocityMin, VelocityMax) * particle.Direction;
+
+        }
+        break;
+
+        case SHAPE_SPHERE:
+        {
+                //particle.Direction = GetRandomVector3(RandomSeed + id.x + 5);
+            
+                //float distanceScale = Random(RandomSeed + id.x + 6, Shape.RadiusRange.x, Shape.RadiusRange.y);
+                //particle.Position = GeneratePosition + particle.Direction * EmitterScale.x * 0.5f * distanceScale;
+            }
+            break;
+
+        case SHAPE_BOX:
+        {           
+                //float3 distanceScale = float3(
+                //    Random(RandomSeed + id.x + 5, -0.5f, 0.5f),
+                //    Random(RandomSeed + id.x + 6, -0.5f, 0.5f),
+                //    Random(RandomSeed + id.x + 7, -0.5f, 0.5f));
+
+                float3 emitterUp = EmitterRotation._21_22_23;
+                float3 emitterRight = EmitterRotation._11_12_13;
+                float3 emitterForward = StartDirection;
+
+            //    particle.Position = Position + EmitterScale.x * distanceScale.x * emitterRight
+            //+ EmitterScale.y * distanceScale.y * emitterUp
+            //+ EmitterScale.z * distanceScale.z * emitterForward;
+
+                particle.Direction = emitterForward;
+            }
+            break;
+
+        default:
+            particle.Position = Position;
+            particle.Direction = StartDirection;
+            break;
     }
 
     //가속도

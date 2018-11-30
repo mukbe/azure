@@ -79,7 +79,7 @@ DomainInput TerrainShadowHS(InputPatch<HullInput, 4> inputPatch, uint pointId : 
 //patch  : lb , rb, lt, rt
 Texture2D heightMap : register(t0);
 Texture2D normalMap : register(t1);
-SamplerState samp;
+SamplerState samp : register(s0);
 
 [domain("quad")]
 PixelInput TerrainShadowDS(ConstantType input, float2 uv : SV_DomainLocation, const OutputPatch<DomainInput, 4> patch)

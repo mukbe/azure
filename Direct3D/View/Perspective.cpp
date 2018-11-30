@@ -27,6 +27,7 @@ void Perspective::Render()
 {
 	viewProjectionBuffer->SetVSBuffer(0);
 	viewProjectionBuffer->SetPSBuffer(0);
+	viewProjectionBuffer->SetHSBuffer(0);
 	viewProjectionBuffer->SetDSBuffer(0);
 	viewProjectionBuffer->SetGSBuffer(0);
 	viewProjectionBuffer->SetCSBuffer(0);

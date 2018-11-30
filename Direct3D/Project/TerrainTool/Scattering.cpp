@@ -166,6 +166,7 @@ void Scattering::UIUpdate()
 void Scattering::UIRender()
 {
 	//ImGui::Begin("Scattering");
+	ImGui::Text("FPS : %f", Time::Get()->FPS());
 
 	D3DXMATRIX mat = _camera->GetTransform()->GetFinalMatrix();
 	ImGui::Text("CameraX : %.2f , CameraY : %.2f, CameraZ : %.2f", mat._41, mat._42, mat._43);

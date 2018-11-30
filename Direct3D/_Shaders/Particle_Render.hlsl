@@ -1,7 +1,6 @@
 #include "000_Header.hlsl"
 #include "Particle_Header.hlsl"
 
-StructuredBuffer<ParticleData> Particles : register(t0);
 
 cbuffer ParticleAnimation : register(b3)
 {
@@ -21,6 +20,7 @@ struct VS_OUTPUT
     int NowFrame : FRAME0;
 };
 
+StructuredBuffer<ParticleData> Particles : register(t0);
 VS_OUTPUT VS(uint input : SV_VertexID)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;

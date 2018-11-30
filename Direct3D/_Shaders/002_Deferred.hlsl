@@ -37,8 +37,8 @@ float CalcShadowFactor(float4 depthPosition, Texture2D shadowMap, SamplerCompari
 
     float shadow = 0.0f;
 
-    float offsetX = 1.0f / (1280.0f);
-    float offsetY = 1.0f / (720.0f);
+    float offsetX = 1.0f / WINSIZE.x;
+    float offsetY = 1.0f / WINSIZE.y;
 
     [unroll]
     for (int i = -1; i < 2; ++i)

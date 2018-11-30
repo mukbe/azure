@@ -45,26 +45,53 @@ HullInput TerrainVS(VertexTextureNormal input)
 
     return output;
 }
+float2 GetScreenSpacePosition(float3 position, float4x4 viewProjection)
+{
+    float4 projectPosition = mul(float4(position, 1.0f), viewProjection);
+    
+    float2 screenPosition = projectPosition.xy / projectPosition.ww;
 
+    screenPosition = (screenPosition + 1.0f) * 0.5f * float2(WINSIZE.x, WINSIZE.y);
+    
+    return screenPosition;
+
+}
+
+//0아래 1왼쪽 2위 3오른쪽
 ConstantType PatchFunc(InputPatch<HullInput, 4> inputPatch, uint patchId : SV_PrimitiveID)
 {
     ConstantType output = (ConstantType) 0;
-    output.edges[0] = Edge; //edge;
-    output.edges[1] = Edge; //edge;
-    output.edges[2] = Edge; //edge;
-    output.edges[3] = Edge; //edge;
+
+    //float4 edge0 = (inputPatch[0].position + inputPatch[1].position) * 0.5f;
+    //float4 edge1 = (inputPatch[1].position + inputPatch[2].position) * 0.5f;
+    //float4 edge2 = (inputPatch[2].position + inputPatch[3].position) * 0.5f;
+    //float4 edge3 = (inputPatch[3].position + inputPatch[0].position) * 0.5f;
+
+    //float2 factor;
+
+    //factor.x = 256 / distance(edge0.xyz, GetCameraPosition());
+    //factor.y = 256 / distance(edge1.xyz, GetCameraPosition());
+
+    
+    //float inside = (factor.x + factor.y )*0.5f ;
+    output.edges[0] = Edge; //factor.x; 
+    output.edges[1] = Edge; 
+    output.edges[2] = Edge; //factor.x;
+    output.edges[3] = Edge;
 
     output.inside[0] = Inside; //inside;
     output.inside[1] = Inside; //inside;
-    
+
     return output;
 }
+
 
 [domain("quad")]
 [partitioning("fractional_odd")]
 [outputtopology("triangle_cw")]
 [outputcontrolpoints(4)]
 [patchconstantfunc("PatchFunc")]
+[maxtessfactor(15.0)]
 DomainInput TerrainHS(InputPatch<HullInput, 4> inputPatch, uint pointId : SV_OutputControlPointID, uint patchId : SV_PrimitiveID)
 {
     DomainInput output = (DomainInput) 0;
@@ -102,8 +129,7 @@ PixelInput TerrainDS(ConstantType input, float2 uv : SV_DomainLocation, const Ou
     float2 UV = output.uv;
     position.y = heightMap.SampleLevel(samp, UV, 0).r * _heightRatio;
     float3 normal;
-    normal = normalMap.SampleLevel(samp, UV, 0).rgb;
-
+    normal = normalMap.SampleLevel(samp, UV, 0).rgb ;
     output.uv *= UvAmount;
     
 
@@ -116,6 +142,7 @@ PixelInput TerrainDS(ConstantType input, float2 uv : SV_DomainLocation, const Ou
 
     return output;
 }
+
 
 Texture2D _diffuseTex : register(t0);
 Texture2D _specularTex : register(t1);

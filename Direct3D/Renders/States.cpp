@@ -237,6 +237,7 @@ void States::SetSampler(UINT slot, UINT count, ID3D11SamplerState * state)
 void States::SetSampler(UINT slot, SamplerStates state)
 {
 	DeviceContext->PSSetSamplers(slot, 1, &samplerStates[state]);
+	DeviceContext->DSSetSamplers(slot, 1, &samplerStates[state]);
 }
 
 ID3D11SamplerState * States::GetSampler(SamplerStates state)

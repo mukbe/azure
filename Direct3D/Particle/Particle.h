@@ -146,7 +146,6 @@ private:
 		int RandomRotation;
 		int UseRandom;
 
-		//ParticleEmitterBase::ShapeData ShapeData;
 		D3DXMATRIX EmitterRotation;
 		D3DXVECTOR4 EmitterScale;
 
@@ -155,6 +154,7 @@ private:
 		float Alpha;
 		float Color;
 
+		ShapeInfo ShapeData;
 	}Data;
 };
 
