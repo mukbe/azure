@@ -40,7 +40,8 @@ OrthoWindow::OrthoWindow(D3DXVECTOR2 pos, D3DXVECTOR2 size)
 	Buffer::CreateDynamicVertexBuffer(&vertexBuffer, vertexData.data(), sizeof VertexType * vertexCount);
 	Buffer::CreateIndexBuffer(&indexBuffer, indexData.data(), indexCount);
 
-	D3DXMatrixOrthoLH(&projection, size.x, size.y, 0.f, 1000.f);
+	//1000¿¡¼­ 1·Î ¹Ù²Þ
+	D3DXMatrixOrthoLH(&projection, size.x, size.y, 0.f, 1.0f);
 
 	buffer = BufferManager::Get()->FindShaderBuffer<OrthoBuffer>();
 }

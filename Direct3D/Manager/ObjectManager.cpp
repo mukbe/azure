@@ -187,21 +187,26 @@ void ObjectManager::DebugRender()
 
 void ObjectManager::AlphaRender()
 {
-	ObjectContainerIter containerIter = objectContainer.begin();
+	//ObjectContainerIter containerIter = objectContainer.begin();
+	//
+	//for (; containerIter != objectContainer.end(); ++containerIter)
+	//{
+	//	ObjectList* pList = &containerIter->second;
+	//	ObjectListIter listIter = pList->begin();
+	//	for (; listIter != pList->end(); ++listIter)
+	//	{
+	//		for (UINT i = 0; i < listIter->second.size(); ++i)
+	//		{
+	//			if (listIter->second[i]->GetisActive())
+	//				listIter->second[i]->AlphaRender();
+	//		}
+	//	}
+	//}
 
-	for (; containerIter != objectContainer.end(); ++containerIter)
-	{
-		ObjectList* pList = &containerIter->second;
-		ObjectListIter listIter = pList->begin();
-		for (; listIter != pList->end(); ++listIter)
-		{
-			for (UINT i = 0; i < listIter->second.size(); ++i)
-			{
-				if (listIter->second[i]->GetisActive())
-					listIter->second[i]->AlphaRender();
-			}
-		}
-	}
+	vector<GameObject*> container = objectContainer[ObjectType::Type::Dynamic][ObjectType::Tag::Object];
+
+	for (UINT i = 0; i < container.size();++i)
+		container[i]->AlphaRender();
 }
 
 void ObjectManager::AddObject(ObjectType::Type type, ObjectType::Tag tag, class GameObject* object)

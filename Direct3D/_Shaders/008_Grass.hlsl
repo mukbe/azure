@@ -19,7 +19,7 @@ G_Buffer PackGBuffer(G_Buffer buffer, float3 normal, float3 diffuse, float3 spec
 
 	// Pack all the data into the GBuffer structure
     Out.normal = float4(normal * 0.5f + 0.5f, renderType);
-    Out.diffuse = float4(diffuse.rgb, depth);
+    Out.diffuse = float4(diffuse.rgb, 1.0f);
     Out.spec = float4(specColor, SpecPowerNorm);
 
     return Out;

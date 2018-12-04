@@ -59,7 +59,7 @@ void TerrainTool::PostUpdate()
 void TerrainTool::AlphaRender()
 {
 	freeCamera->Render();
-	particle->Render();
+	particle->AlphaRender();
 
 }
 
