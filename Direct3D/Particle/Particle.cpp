@@ -14,6 +14,8 @@ ParticleEmitterBase::ParticleEmitterBase(bool bDefault, UINT count)
 	resetCounter = Shaders->CreateComputeShader("ResetCounter", L"Particle_Compute_CopyIndirect.hlsl", "ResetCounter");
 	particleRenderer = new Shader(ShaderPath + L"Particle_Render.hlsl", Shader::ShaderType::useGS);
 
+	name = "particleSystem";
+
 	//파티클의 키가 달라지면 또 할당하기 때문에 조김해야한다
 	//디폴트로 Temp이미지를 둔다
 	particleTexture = AssetManager->AddTexture(Assets + L"Temp3.png", "Temp3");

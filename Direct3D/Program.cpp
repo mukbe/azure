@@ -11,6 +11,7 @@
 #include "./Project/TerrainTool/TerrainTool.h"
 #include "./Project/ToolScene/ToolScene.h"
 #include "./Project/Game/PlayScene.h"
+#include "./Project/TestScene/TestScene.h"
 
 Program::Program()
 {
@@ -34,8 +35,9 @@ Program::Program()
 	RenderRequest->AddRenderer("bloom", bloomEffect);
 
 	//Scenes->AddScene("anim", new AnimationTool);
-	Scenes->AddScene("tool", new ToolScene);
+	//Scenes->AddScene("tool", new ToolScene);
 	//Scenes->AddScene("terrain", new TerrainTool);
+	Scenes->AddScene("TestScene", new TestScene);
 
 
 }

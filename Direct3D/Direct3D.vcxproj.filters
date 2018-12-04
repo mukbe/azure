@@ -102,7 +102,11 @@
     <ClCompile Include="Utilities\DebugHelper.cpp" />
     <ClCompile Include="Manager\CameraManager.cpp" />
     <ClCompile Include="Particle\ParticleTool.cpp" />
-    <ClCompile Include="Environment\Fog.cpp" />
+    <ClCompile Include="Physics\DebugDraw.cpp" />
+    <ClCompile Include="Physics\Physics.cpp" />
+    <ClCompile Include="Project\TestScene\TestScene.cpp" />
+    <ClCompile Include="Project\TestScene\TestClass.cpp" />
+    <ClCompile Include="Renders\Font.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renders\ShadowRenderer.h" />
@@ -215,7 +219,13 @@
     <ClInclude Include="Manager\CameraManager.h" />
     <ClInclude Include="Particle\ParticleTool.h" />
     <ClInclude Include="Particle\ParticleProp.h" />
-    <ClInclude Include="Environment\Fog.h" />
+    <ClInclude Include="Physics\DebugDraw.h" />
+    <ClInclude Include="Physics\IShapes.h" />
+    <ClInclude Include="Physics\Physics.h" />
+    <ClInclude Include="Physics\RigidShapes.h" />
+    <ClInclude Include="Project\TestScene\TestScene.h" />
+    <ClInclude Include="Project\TestScene\TestClass.h" />
+    <ClInclude Include="Renders\Font.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />
@@ -252,5 +262,7 @@
     <None Include="_Shaders\Particle_Compute_Update.hlsl" />
     <None Include="_Shaders\Particle_Header.hlsl" />
     <None Include="_Shaders\Particle_Render.hlsl" />
+    <None Include="_Shaders\TestBT.hlsl" />
+    <None Include="_Shaders\Font.hlsl" />
   </ItemGroup>
 </Project>

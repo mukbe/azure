@@ -49,6 +49,15 @@ using namespace fbxsdk;
 #include <DirectXTex.h>
 #pragma comment(lib, "directxtex.lib")
 
+//BP
+#include <btBulletCollisionCommon.h>
+#include <btBulletDynamicsCommon.h>
+//#include <BulletSoftBody/btSoftBody.h>
+#pragma comment(lib, "BulletCollision.lib")
+#pragma comment(lib, "BulletDynamics.lib")
+#pragma comment(lib, "LinearMath.lib")
+//#pragma comment(lib, "BulletSoftBody.lib")
+
 
 #include "DefineHeader.h"
 #include "./Systems/DxRenderer.h"

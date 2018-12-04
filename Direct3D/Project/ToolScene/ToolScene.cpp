@@ -106,7 +106,7 @@ void ToolScene::PostUpdate()
 
 void ToolScene::AlphaRender()
 {
-	//Objects->AlphaRender();
+	Objects->AlphaRender();
 }
 
 void ToolScene::PreRender()

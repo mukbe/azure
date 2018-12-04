@@ -22,6 +22,13 @@
     <ClInclude Include="Environment\Fog.h" />
     <ClInclude Include="Manager\CameraManager.h" />
     <ClInclude Include="Particle\ParticleProp.h" />
+    <ClInclude Include="Physics\DebugDraw.h" />
+    <ClInclude Include="Physics\IShapes.h" />
+    <ClInclude Include="Physics\Physics.h" />
+    <ClInclude Include="Physics\RigidShapes.h" />
+    <ClInclude Include="Project\TestScene\TestScene.h" />
+    <ClInclude Include="Project\TestScene\TestClass.h" />
+    <ClInclude Include="Renders\Font.h" />
     <ClInclude Include="Utilities\DebugHelper.h" />
     <ClInclude Include="Particle\Particle.h" />
     <ClInclude Include="Renders\PostEffect\BloomEffect.h" />
@@ -134,6 +141,11 @@
   <ItemGroup>
     <ClCompile Include="Environment\Fog.cpp" />
     <ClCompile Include="Manager\CameraManager.cpp" />
+    <ClCompile Include="Physics\DebugDraw.cpp" />
+    <ClCompile Include="Physics\Physics.cpp" />
+    <ClCompile Include="Project\TestScene\TestScene.cpp" />
+    <ClCompile Include="Project\TestScene\TestClass.cpp" />
+    <ClCompile Include="Renders\Font.cpp" />
     <ClCompile Include="Utilities\DebugHelper.cpp" />
     <ClCompile Include="Particle\Particle.cpp" />
     <ClCompile Include="Renders\PostEffect\BloomEffect.cpp" />
@@ -443,6 +455,32 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\TestBT.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Shaders\Font.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
       <FileType>Document</FileType>
     </None>
