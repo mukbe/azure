@@ -53,6 +53,15 @@ cbuffer SunBuffer : register(b4)
     matrix ShadowMatrix;
 }
 
+cbuffer FogBuffer : register(b5)
+{
+    float FogStart;
+    float FogEnd;
+    float FogOn;
+    float FogPadding;
+    float4 FogColor;
+}
+
 
 cbuffer ModelBuffer : register(b6)
 {
@@ -240,7 +249,10 @@ float GetFogFactor(float start, float end, float3 viewPosition)
 
 float4 GetFogColor(float4 diffuse, float4 color, float factor)
 {
-    return factor * diffuse + (1.0f - factor) * color;
+    if (FogOn >= 1.0f)
+        return factor * diffuse + (1.0f - factor) * color;
+    else
+        return diffuse;
 }
 
 float ConvertZToLinearDepth(float depth)

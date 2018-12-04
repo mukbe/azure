@@ -21,6 +21,7 @@
 
 #include "./Model/ComputeAnimation/ComputeAnimation.h"
 #include "./Renders/GrassRenderer/GrassRenderer.h"
+#include "./Environment/Fog.h"
 
 ToolScene::ToolScene()
 {
@@ -51,6 +52,8 @@ ToolScene::ToolScene()
 	ObjectManager::Get()->LoadData(DataBase::Get()->GetValue());
 
 	ObjectManager::Get()->Init();
+
+	ObjectManager::Get()->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Enviroment, new Fog);
 }
 
 

@@ -63,7 +63,8 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
     float3 specColor = data.SpecColor;
     float specPower = data.SpecPow;
 
-    if(data.RenderType <= 1.0f)     //Default Shading
+     //Default Shading -------------------------------------------------------------------------------------------------
+    if(data.RenderType <= 1.0f)    
     {
         float4 projectionToLight = mul(worldPos, SunViewProjection);
         float shadowFactor = CalcShadowFactor(projectionToLight, _sunLightsahdowMap, _shadowSampler);
@@ -75,16 +76,26 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
        if(diffuseFactor > 0.0f)
         {
             float3 reflection = normalize(2.0f *  worldNormal - (-SunDir));
-            specColor = data.SpecColor * SunColor.rgb * saturate(pow(saturate(dot(reflection, normalize(GetCameraPosition() - worldPos.xyz))), specPower));
+            specColor = data.SpecColor * SunColor.rgb * 
+                saturate(pow(saturate(dot(reflection, normalize(GetCameraPosition() - worldPos.xyz))), specPower));
         }
 
-        return float4(ambient + diffuseColor * shadowFactor + specColor * shadowFactor, 1.0f);
+        float4 outputColor = float4(ambient + diffuseColor * shadowFactor + specColor * shadowFactor, 1.0f);
+        float fogFactor = GetFogFactor(FogStart, FogEnd, mul(worldPos, View).xyz);
+        return GetFogColor(outputColor, FogColor, fogFactor);
     }
-    else if (data.RenderType > 1.0f && data.RenderType <= 2.0f)     //Debug Shading
+    //------------------------------------------------------------------------------------------------------
+    //Debug Shading-----------------------------------------------------------------------------------------
+    else if (data.RenderType > 1.0f && data.RenderType <= 2.0f)     
     {
-        return float4(albedo, 1.0f);
+        float4 outputColor = float4(albedo, 1.0f);
+        float fogFactor = GetFogFactor(FogStart, FogEnd, mul(worldPos, View).xyz);
+        return GetFogColor(outputColor, FogColor, fogFactor);
+        //return float4(albedo, 1.0f);
     }
-    else if(data.RenderType > 2.0f && data.RenderType <= 3.0f)      //Ocean Shading
+    //-------------------------------------------------------------------------------------------------------
+    //Ocean Shading -----------------------------------------------------------------------------------------
+    else if(data.RenderType > 2.0f && data.RenderType <= 3.0f)      
     {
         float3 sunDirection = SunDir;
     
@@ -97,15 +108,29 @@ float4 BasicDeferredPS(BasicPixelInput input) : SV_Target
         float diffuseFactor = saturate(dot(data.Normal, -sunDirection));
         float3 diffuseColor = (albedo * SunColor.rgb * diffuseFactor).rgb;
 
-        return float4(diffuseColor + specColor, 1.0f);
+        float4 outputColor = float4(diffuseColor + specColor, 1.0f);
+        float fogFactor = GetFogFactor(FogStart, FogEnd, mul(worldPos, View).xyz);
+        return GetFogColor(outputColor, FogColor, fogFactor);
+
+        //return float4(diffuseColor + specColor, 1.0f);
     }
-    else if(data.RenderType > 3.0f && data.RenderType <= 4.0f)      //Grass Shading
+    //--------------------------------------------------------------------------------------------------------
+    //Grass Shading ------------------------------------------------------------------------------------------
+    else if(data.RenderType > 3.0f && data.RenderType <= 4.0f)      
     {
         float4 projectionToLight = mul(worldPos, SunViewProjection);
         float shadowFactor = CalcShadowFactor(projectionToLight, _sunLightsahdowMap, _shadowSampler);
         float3 ambient = albedo * SunColor.rgb * albedoBias;
-        return float4(ambient + albedo * SunColor.rgb * shadowFactor, 1.0f);
+
+        float4 outputColor = float4(ambient + albedo * SunColor.rgb * shadowFactor, 1.0f);
+        float fogFactor = GetFogFactor(FogStart, FogEnd, mul(worldPos, View).xyz);
+        return GetFogColor(outputColor, FogColor, fogFactor);
+
+        //return float4(ambient + albedo * SunColor.rgb * shadowFactor, 1.0f);
     }
-        return float4(albedo, 1.0f);
+    //---------------------------------------------------------------------------------------------------------
+
+
+       return float4(albedo, 1.0f);
 }
 

@@ -102,6 +102,7 @@
     <ClCompile Include="Utilities\DebugHelper.cpp" />
     <ClCompile Include="Manager\CameraManager.cpp" />
     <ClCompile Include="Particle\ParticleTool.cpp" />
+    <ClCompile Include="Environment\Fog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renders\ShadowRenderer.h" />
@@ -214,6 +215,7 @@
     <ClInclude Include="Manager\CameraManager.h" />
     <ClInclude Include="Particle\ParticleTool.h" />
     <ClInclude Include="Particle\ParticleProp.h" />
+    <ClInclude Include="Environment\Fog.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_Shaders\000_Header.hlsl" />

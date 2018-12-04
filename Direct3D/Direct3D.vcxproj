@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Environment\Fog.h" />
     <ClInclude Include="Manager\CameraManager.h" />
     <ClInclude Include="Particle\ParticleProp.h" />
     <ClInclude Include="Utilities\DebugHelper.h" />
@@ -131,6 +132,7 @@
     <ClInclude Include="View\Projection.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Environment\Fog.cpp" />
     <ClCompile Include="Manager\CameraManager.cpp" />
     <ClCompile Include="Utilities\DebugHelper.cpp" />
     <ClCompile Include="Particle\Particle.cpp" />

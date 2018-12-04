@@ -93,7 +93,7 @@ void DeferredRenderer::UIRender()
 		ImGui::ImageButton(mrtSRV[2], size); ImGui::SameLine();
 		ImGui::ImageButton(depthVis->GetSRV(), size);
 
-		ImGui::InputFloat("ShadowBias", &deferredBuffer->data.shadowBias, -1.0f, 1.0f);
+		//ImGui::InputFloat("ShadowBias", &deferredBuffer->data.shadowBias, -1.0f, 1.0f);
 	}
 	ImGui::End();
 }
