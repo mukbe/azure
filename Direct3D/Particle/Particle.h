@@ -156,6 +156,7 @@ private:
 		float Color;
 
 		ShapeInfo ShapeData;
+
 	}Data;
 };
 

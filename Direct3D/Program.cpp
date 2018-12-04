@@ -36,8 +36,8 @@ Program::Program()
 
 	//Scenes->AddScene("anim", new AnimationTool);
 	//Scenes->AddScene("tool", new ToolScene);
-	//Scenes->AddScene("terrain", new TerrainTool);
-	Scenes->AddScene("TestScene", new TestScene);
+	Scenes->AddScene("terrain", new TerrainTool);
+	//Scenes->AddScene("TestScene", new TestScene);
 
 
 }

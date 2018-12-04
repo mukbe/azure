@@ -6,6 +6,7 @@
 Fog::Fog()
 {
 	fogBuffer = new FogBuffer;
+	name = "Fog";
 }
 
 

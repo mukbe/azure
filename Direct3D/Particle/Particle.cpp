@@ -370,25 +370,27 @@ void ParticleEmitterBase::UIRender()
 	{
 		emitData->Data.UseRandom = !emitData->Data.UseRandom;
 	}
-	ImGui::SliderFloat("Saturation", &emitData->Data.Saturation, 0.0001f, 1.0f, "%.3f");
-	ImGui::SliderFloat("Value", &emitData->Data.Value, 0.0001f, 1.0f, "%.3f");
-	ImGui::SliderFloat("Alpha", &emitData->Data.Alpha, 0.0001f, 1.0f, "%.3f");
-	ImGui::SliderFloat("Color", &emitData->Data.Color, 0.0f, 1.0f, "%.2f");
-
 	ImGui::InputFloat("LifeTime", &emitData->Data.LifeTime, 1.f, 5.f, -1, flag);
-	ImGui::InputFloat3("EmitterScale", &emitData->Data.EmitterScale.x, -1, flag);
-	ImGui::InputFloat2("StartSize", &emitData->Data.StartSize.x, -1, flag);
-	ImGui::InputFloat2("EndSize", &emitData->Data.EndSize.x, -1, flag);
-	ImGui::InputFloat("VelocityMax", &emitData->Data.VelocityMax, 1.0f, 10.0f,-1 , flag);
-	ImGui::InputFloat("VelocityMin", &emitData->Data.VelocityMin, 1.0f, 10.0f,-1 , flag);
-	ImGui::InputFloat3("Gravity", &emitData->Data.Gravity.x, -1, flag);
-	ImGui::InputFloat3("Force", &emitData->Data.Force.x, -1, flag);
 	ImGui::InputInt("Shape", &emitData->Data.ShapeType, 1, 2, flag);
 	ImGui::InputFloat2("RadiusSize", &emitData->Data.ShapeData.RadiusRange.x, -1, flag);
 	static bool inverse = (bool)emitData->Data.ShapeData.Inverse;
 	if (ImGui::Checkbox("Inverse", &inverse))
 		emitData->Data.ShapeData.Inverse = inverse ? 1 : 0;
 	ImGui::SliderAngle("Range", &emitData->Data.ShapeData.CircleAngle, 0.f);
+
+	ImGui::SliderFloat("Saturation", &emitData->Data.Saturation, 0.0001f, 1.0f, "%.3f");
+	ImGui::SliderFloat("Value", &emitData->Data.Value, 0.0001f, 1.0f, "%.3f");
+	ImGui::SliderFloat("Alpha", &emitData->Data.Alpha, 0.0001f, 1.0f, "%.3f");
+	ImGui::SliderFloat("Color", &emitData->Data.Color, 0.0f, 1.0f, "%.2f");
+
+	ImGui::InputFloat3("EmitterScale", &emitData->Data.EmitterScale.x, -1, flag);
+	ImGui::InputFloat2("StartSize", &emitData->Data.StartSize.x, -1, flag);
+	ImGui::InputFloat2("EndSize", &emitData->Data.EndSize.x, -1, flag);
+
+	ImGui::InputFloat("VelocityMax", &emitData->Data.VelocityMax, 1.0f, 10.0f,-1 , flag);
+	ImGui::InputFloat("VelocityMin", &emitData->Data.VelocityMin, 1.0f, 10.0f,-1 , flag);
+	ImGui::InputFloat3("Gravity", &emitData->Data.Gravity.x, -1, flag);
+	ImGui::InputFloat3("Force", &emitData->Data.Force.x, -1, flag);
 
 	if (ImGui::InputInt2("MaxIndex", (&textureAnimation->Data.MaxIndex[0]), flag))
 	{
