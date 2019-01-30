@@ -44,9 +44,9 @@ public:
 		if (pHeightData == nullptr)
 		{
 			float* temp = new float[x*y];
-			for (int i = 0; i < y;i++)
+			for (UINT i = 0; i < y;i++)
 			{
-				for (int j = 0; j < x;j++)
+				for (UINT j = 0; j < x;j++)
 				{
 					int index = i * y + j;
 					temp[index] = 0.1f;

@@ -53,7 +53,7 @@ ToolScene::ToolScene()
 
 	ObjectManager::Get()->Init();
 
-	ObjectManager::Get()->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Enviroment, new Fog);
+	//ObjectManager::Get()->AddObject(ObjectType::Type::Dynamic, ObjectType::Tag::Enviroment, new Fog);
 }
 
 

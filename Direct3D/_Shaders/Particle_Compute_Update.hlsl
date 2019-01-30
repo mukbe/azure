@@ -132,43 +132,9 @@ void Update(uint3 id : SV_DispatchThreadID)//SV_DispatchThreadID SV_GroupIndex
         }
     }
 
-    //라이프 타임에 따른 보간처리
+    //TODO 보간처리
     float ratio = 1.0f - (particle.LifeTime / particle.RemainTime);
-    float pointUnit, interpolate, startIndex, endIndex;
 
-    //스피드
-    //if (CurveCounts.x > 0)
-    //{
-    //    pointUnit = 1.0f / (CurveCounts.x);
-    //    interpolate = frac(ratio / pointUnit);
-    //    startIndex = (int) (ratio / pointUnit);
-    //    endIndex = min(startIndex + 1, CurveCounts.x - 1);
-
-    //    particle.SimulationForce = lerp(SpeedCurvePoint[startIndex],
-    //    SpeedCurvePoint[endIndex], interpolate);
-    //}
-    //사이즈
-    //if (CurveCounts.y > 0)
-    //{
-    //    pointUnit = 1.0f / (CurveCounts.y);
-    //    interpolate = frac(ratio / pointUnit);
-    //    startIndex = (int) (ratio / pointUnit);
-    //    endIndex = min(startIndex + 1, CurveCounts.y - 1);
-
-    //    particle.Size = lerp(SizeCurvePoint[startIndex],
-    //    SizeCurvePoint[endIndex], interpolate);
-    //}
-    //색상
-    //if (CurveCounts.z > 0)
-    //{
-    //    pointUnit = 1.0f / (CurveCounts.z);
-    //    interpolate = frac(ratio / pointUnit);
-    //    startIndex = (int) (ratio / pointUnit);
-    //    endIndex = min(startIndex + 1, CurveCounts.z - 1);
-
-    //    particle.Color = lerp(ColorCurvePoint[startIndex],
-    //    ColorCurvePoint[endIndex], interpolate);
-    //}
 
     particle.Speed += (particle.Force + particle.Gravity) * Delta;
     particle.Position += particle.Speed * Delta;
@@ -176,6 +142,7 @@ void Update(uint3 id : SV_DispatchThreadID)//SV_DispatchThreadID SV_GroupIndex
 
     //빌보드 적용
     float3 forward, up, right, halfWidth, halfHeight;
+
     //일반 빌보드
     if (RenderMode == 0)
     {
@@ -207,7 +174,7 @@ void Update(uint3 id : SV_DispatchThreadID)//SV_DispatchThreadID SV_GroupIndex
         halfHeight = particle.Size.y * 0.5f;
     }
 
-    //회전 변환
+    
     if (particle.Rotation > 0)
     {
         float3x3 matRotation;
@@ -236,3 +203,4 @@ void Update(uint3 id : SV_DispatchThreadID)//SV_DispatchThreadID SV_GroupIndex
 
 }
 
+//TODO Bitonic Sort

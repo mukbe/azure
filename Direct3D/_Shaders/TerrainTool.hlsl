@@ -209,8 +209,7 @@ Texture2D srcTex[4] : register(t6);
 
 float4 CalCuSplat(float4 diffuse, float2 uv)
 {
-    //TODO 수누꺼로 바꾸기로~
-
+    
     float4 color = diffuse;
 
     float4 splatMap = SplitMap.Sample(wrapSamp, uv / UvAmount);

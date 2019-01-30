@@ -46,7 +46,7 @@ struct GS_OUTPUT
     int nowFrame : FRAME0;
 };
 
-static const float2 g_texcoords[4] =
+static const float2 Texcoords[4] =
 {
     float2(0, 0),
     float2(0, 1),
@@ -55,19 +55,19 @@ static const float2 g_texcoords[4] =
 };
 
 [maxvertexcount(4)]
-void GS(point VS_OUTPUT input[1],
-             inout TriangleStream<GS_OUTPUT> outputStream)
+void GS(point VS_OUTPUT input[1], inout TriangleStream<GS_OUTPUT> outputStream)
 {
+    GS_OUTPUT output = (GS_OUTPUT)0;
+
     for (int i = 0; i < 4; ++i)
     {
-        GS_OUTPUT gsOut = (GS_OUTPUT) 0;
 
-        gsOut.position = mul(input[0].QuadPositions[i], ViewProjection);
-        gsOut.uv = g_texcoords[i];
-        gsOut.color = input[0].Color;
-        gsOut.nowFrame = input[0].NowFrame;
+        output.position = mul(input[0].QuadPositions[i], ViewProjection);
+        output.uv = Texcoords[i];
+        output.color = input[0].Color;
+        output.nowFrame = input[0].NowFrame;
 
-        outputStream.Append(gsOut);
+        outputStream.Append(output);
     }
     outputStream.RestartStrip();
 }

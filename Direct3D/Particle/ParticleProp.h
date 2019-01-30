@@ -49,7 +49,7 @@ struct ShapeInfo
 	UINT Inverse;
 	D3DXVECTOR2 RadiusRange;
 
-	ShapeInfo() { CircleAngle = D3DX_PI * 2; Inverse = 0;  RadiusRange = D3DXVECTOR2(1.f, 3.f); }
+	ShapeInfo() { CircleAngle = (float)(D3DX_PI * 2); Inverse = 0;  RadiusRange = D3DXVECTOR2(1.f, 3.f); }
 
 };
 

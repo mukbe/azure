@@ -236,6 +236,7 @@ void Emit(uint3 id : SV_DispatchThreadID)
     InterlockedAdd(counterBuffer[0], 1, currentCount);
 
     //TODO currentCount + id.x 값 확인 왜 더하는건지 안더하는게 맞는거 같은데
+    //결국 고치기는 했으나 과연..
     currentCount = currentCount % 1000;
     generateBuffer[currentCount] = particle;
 
